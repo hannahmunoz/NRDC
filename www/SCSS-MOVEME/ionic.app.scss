@@ -1,0 +1,14 @@
+$positive: #84BCDA;
+$dark: #041932;
+$stable: #f8f8f8;
+$link-color: $stable;
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+@import "../www/lib/ionic/scss";
+ion-view,.pane,.view {
+	background-color: #0471A6;
+}
+
+body {
+	color: #033860;
+}
+
