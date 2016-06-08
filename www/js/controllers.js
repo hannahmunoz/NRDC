@@ -1,8 +1,49 @@
-angular.module('app.controllers', [])
-  
-.controller('peopleCtrl', function($scope) {
+angular.module('app.controllers', ['app.services', 'angularUUID2' ])
 
-})
+//the controller for the people view  
+.controller('peopleCtrl',['$scope', function($scope) {
+
+	// variables stored in people
+	$scope.people = {};
+
+	//logging function, to check that the values are being filled correctly
+	$scope.savePeopleJSON = function (){
+			peopleJSON = {}
+			peopleJSON ["Creation Date"] = new Date();
+			peopleJSON ["Modification Date"] = new Date();
+			peopleJSON ["Unique Identifier"] = uuid2.newuuid();
+
+			peopleJSON ["First Name"] = $scope.people.firstName;
+			peopleJSON ["Last Name"] = $scope.people.lastName;
+			peopleJSON ["Organization"] = $scope.people.organization;
+			peopleJSON ["Email"] = $scope.people.email;
+			peopleJSON ["Phone"] = $scope.people.phone;
+
+			peopleJSON ["Photo"] = $scope.photo;
+
+
+		if (typeof console == "undefined") {
+    		window.console = {
+       		 log: function () {}
+   			 };
+		}
+
+		console.log( JSON.stringify(peopleJSON));
+	}
+
+	$scope.uploadFile = function(files) {
+    var photo = new FormData();
+    //Take the first selected file
+    photo.append("file", files[0]);
+    console.log( photo);
+	}
+
+	// resets the forms. Currently only empties the people varaible. Needs to be edited to set all forms pristine
+	$scope.resetForm = function (){
+		$scope.people = {}; 
+	}
+
+}])
    
 .controller('viewPeopleCtrl', function($scope) {
 
@@ -67,4 +108,4 @@ angular.module('app.controllers', [])
 .controller('mainMenuCtrl', function($scope) {
 
 })
-    
+

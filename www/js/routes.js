@@ -10,7 +10,7 @@ angular.module('app.routes', [])
     
   
 
-      .state('createNew.people', {
+    .state('createNew.people', {
     url: '/CreateNewPeople',
     views: {
       'side-menu21': {
@@ -156,6 +156,5 @@ angular.module('app.routes', [])
 
 $urlRouterProvider.otherwise('/CreateNew/mainMenu')
 
-  
 
 });
