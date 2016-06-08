@@ -1,0 +1,22 @@
+/* 
+	Custom Stylesheet for NRDC QA app 
+*/
+
+/*Disables Scroll Bar Globally*/
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none;
+}
+
+.big-text{
+	font-size: 40px;
+}
+
+.fill-parent{
+	height: 100%;
+	width: 100%;
+}
+
+.opaque-overlay{
+	background: #46494A;
+}
