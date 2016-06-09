@@ -1,14 +1,15 @@
-angular.module('app.controllers', ['app.services', 'angularUUID2' ])
+angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload'])
 
 //the controller for the people view  
-.controller('peopleCtrl',['$scope', function($scope) {
+.controller('peopleCtrl', function($scope, uuid2, Upload, logger, convertImage) {
 
 	// variables stored in people
 	$scope.people = {};
+	$scope.imageData;
 
-	//logging function, to check that the values are being filled correctly
+	//JSON fucntion for people
 	$scope.savePeopleJSON = function (){
-			peopleJSON = {}
+			peopleJSON = {};
 			peopleJSON ["Creation Date"] = new Date();
 			peopleJSON ["Modification Date"] = new Date();
 			peopleJSON ["Unique Identifier"] = uuid2.newuuid();
@@ -19,37 +20,55 @@ angular.module('app.controllers', ['app.services', 'angularUUID2' ])
 			peopleJSON ["Email"] = $scope.people.email;
 			peopleJSON ["Phone"] = $scope.people.phone;
 
-			peopleJSON ["Photo"] = $scope.photo;
+			peopleJSON ["Photo"] = $scope.imageData;
 
-
-		if (typeof console == "undefined") {
-    		window.console = {
-       		 log: function () {}
-   			 };
-		}
-
-		console.log( JSON.stringify(peopleJSON));
+			// print json to console for debugging
+			logger.log (JSON.stringify(peopleJSON))
 	}
 
-	$scope.uploadFile = function(files) {
-    var photo = new FormData();
-    //Take the first selected file
-    photo.append("file", files[0]);
-    console.log( photo);
+	//wrapper for the image convert factory so we can call it from a button
+	$scope.converts = function (file){
+		$scope.imageData = convertImage.convert (file);
 	}
+
 
 	// resets the forms. Currently only empties the people varaible. Needs to be edited to set all forms pristine
 	$scope.resetForm = function (){
-		$scope.people = {}; 
+		$scope.people = {};
 	}
 
-}])
+})
    
 .controller('viewPeopleCtrl', function($scope) {
 
 })
    
-.controller('projectCtrl', function($scope) {
+.controller('projectCtrl', function($scope, uuid2, logger) {
+	//variables stored in projects
+	$scope.project = {};
+
+	// JSON function for project
+	$scope.saveProjectJSON = function (){
+		projectJSON = {};
+
+		projectJSON ["Creation Date"] = new Date();
+		projectJSON ["Started Date"] = new Date();
+		projectJSON ["Modification Date"] = new Date();
+		projectJSON ["Unique Identifier"] = uuid2.newuuid();
+
+		projectJSON ["Name"] = $scope.project.name;
+		projectJSON ["Institution Name"] = $scope.project.institution;
+		projectJSON ["Original Funding Agency"] = $scope.project.funding;
+		projectJSON ["Grant Number"] = $scope.project.grantNumber;
+
+		// print json to console for debugging
+		logger.log (JSON.stringify(projectJSON))
+	}
+
+	// resets the forms. Currently only empties the people varaible. Needs to be edited to set all forms pristine
+	$scope.resetForm = function (){
+		$scope.project = {};
+	}
 
 })
    

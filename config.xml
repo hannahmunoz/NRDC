@@ -4,11 +4,14 @@
   <description>
         A QA App for the technicians of the Nevada Nexus Project
     </description>
-  <author email="hannahmunoz@nevada.unr.edu" href="http://example.com.com/">
-      Hannah Munoz
+  <author email="hannahmunoz@nevada.unr.edu, csulley-allison@nevada.unr.edu" href="http://example.com.com/">
+      Hannah Munoz, Connor Scully-Allison
     </author>
   <content src="index.html"/>
   <access origin="*"/>
+  <allow-navigation href="http://*/*"/>
+  <allow-navigation href="https://*/*"/>
+  <allow-navigation href="data:*"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>

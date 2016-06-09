@@ -1,41 +1,79 @@
-<style type="text/css">
-
-        </style>
 <ion-view title="Project" id="page10" style="background-color:#0471A6;" class=" ">
     <ion-content padding="true" class="has-header">
-        <form id="project-form71" class="list ">
-            <label class="item item-input " id="project-input63" name="projectName">
-                <span class="input-label">Name</span>
-                <input type="text" placeholder="">
+
+    <!--controller scope var: project
+        var name: name
+        type: text
+        error checking: no
+        min|max req: not implemented -->
+
+        <form name ="nameForm" class="list " novalidate>
+            <label class="item item-input " id="project-input63">
+                <input type="text" placeholder="Name"  name="projectName" ng-model = "project.name" required>
             </label>
         </form>
-        <form id="project-form72" class="list ">
-            <label class="item item-input " id="project-input64" name="institution">
-                <span class="input-label">Institution Name</span>
-                <input type="text" placeholder="">
+
+    <!--controller scope var: project
+        var name: institution
+        type: text
+        error checking: no
+        min|max req: not implemented -->
+
+        <form name ="institutionForm" class="list " novalidate>
+            <label class="item item-input " id="project-input64" >
+                <input type="text" placeholder="Institution Name" name="institution" ng-model = "project.institution" required>
             </label>
         </form>
-        <form id="project-form73" class="list ">
-            <div class="spacer" style="width: 283px; height: 2px;"></div>
-            <label class="item item-input " id="project-input65" name="fundingAgency">
-                <span class="input-label">Original Funding Agency</span>
-                <input type="text" placeholder="">
+
+    <!--controller scope var: project
+        var name: funding
+        type: text
+        error checking: no
+        min|max req: not implemented -->
+
+        <form name ="fundingForm" class="list " novalidate>
+            <label class="item item-input " id="project-input65" >
+                <input type="text" placeholder="Original Funding Agency" name="funding" ng-model = "project.funding" required>
             </label>
         </form>
-        <form id="project-form74" class="list ">
-            <label class="item item-input " id="project-input66" name="grantNumber">
-                <span class="input-label">Grant Number</span>
-                <input type="number" placeholder="">
+
+    <!--controller scope var: project
+        var name: grantNumber
+        type: number
+        error checking: no
+        min|max req: not implemented -->
+
+        <form name ="grantForm" class="list " novalidate>
+            <label class="item item-input " id="project-input66" ">
+                <input type="number" placeholder="Grant Number" name="grantNumber" ng-model = project.grantNumber required>
             </label>
         </form>
-        <form id="project-form75" class="list ">
+
+    <!--controller scope var: project
+        var name: investigator
+        type: spinner
+        error checking: no
+        min|max req: not implemented -->
+
+        <form name ="investigatorForm" class="list " novalidate >
             <label class="item item-select " id="project-select19" name="investigator">
                 <span class="input-label">Prinicipal Investigator</span>
                 <select></select>
             </label>
         </form>
-        <a ui-sref="createNew.mainMenu" id="project-button12" class=" button button-positive button-large button-block ">Save</a>
 
+    <!--var name: n/a
+        type: button
+        onclick fucntion: saveProjectJSON()
+        error checking: checks if all input are of valid types and lengths -->
+
+        <a ui-sref="createNew.mainMenu" id="project-button12" class=" button button-positive button-large button-block" ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid " ng-click = "saveProjectJSON(); resetForm();">Save</a>
+
+    <!-- error handling for the above forms -->
+    
+    <div class="padding">
+         <p ng-show= "nameForm.name.$error.required || institutionForm.institution.$error.required || fundingForm.funding.$error.required || grantForm.grantNumber.$error.required || investigatorForm.investigator.$error.required "> *All inputs must be completed </p>
+   </div>
 
     </ion-content>
 </ion-view>

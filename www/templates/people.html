@@ -61,7 +61,7 @@
             </label> 
         </form>
 
-<!--    controller scope var: people
+<!--    controller scope var: n/a
         var name: photo
         type: file upload
         error checking: onchange -->
@@ -69,7 +69,7 @@
         <form name="photoForm" class="list" novalidate>
             <label class= "myLabel button button-positive button-large button-block" id = "site-photo1" name="photo" >
                 <span>Photo</span>
-                <input type="file" accept="image/*" onchange="angular.element(this).scope().uploadFile(this.files)" required>
+                <input type="file" accept="image/*" onchange= "angular.element(this).scope().converts(this.files)" ng-model ="image" valid-file name="userImage" required>
 
             </label>
         </form>
@@ -79,8 +79,7 @@
         type: button
         onclick fucntion: savePeopleJSON()
         error checking: checks if all input are of valid types and lengths -->
-
-        <a ui-sref="createNew.mainMenu" id="people-button1" style="border-radius:6px 6px 6px 6px;" class=" button button-positive button-large button-block" ng-disabled="phoneForm.$invalid || emailForm.$invalid || organizationForm.$invalid || lastNameForm.$invalid || firstNameForm.$invalid " ng-click = "savePeopleJSON(); resetForm();">Save</a>
+        <a ui-sref="createNew.mainMenu" id="people-button1" class=" button button-positive button-large button-block" ng-disabled="phoneForm.$invalid || emailForm.$invalid || organizationForm.$invalid || lastNameForm.$invalid || firstNameForm.$invalid || photoForm.$invalid" ng-click = "savePeopleJSON(); resetForm();">Save</a>
 
 
 <!-- error handling for the above forms -->
@@ -89,7 +88,7 @@
         <p ng-show="emailForm.email.$invalid && emailForm.email.$dirty">* Email address not valid</p>
         <p ng-show="phoneForm.phone.$error.minlength || phoneForm.phone.$error.maxlength">* Phone number must be 10 digits</p>
         <p ng-show="firstNameForm.firstName.$error.required || lastNameForm.lastName.$error.required || organizationForm.organization.$error.required || emailForm.email.$error.required || phoneForm.phone.$error.required" >* All inputs must be completed</p>
-        <!-- <p ng-show = "photoForm.photo.$pristine"> Photo of user required</p> -->
+        <p ng-show = "photoForm.$invalid"> * Photo of user required</p>
 
    </div>
 
