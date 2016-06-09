@@ -1,13 +1,15 @@
-<ion-view title="Deployment" id="page6" style="background-color:#0471A6;" class=" ">
- <!--
+<ion-view ng-controller="scrollController" title="Deployment" id="page6" style="background-color:#0471A6;" class=" ">
+ <!-- 
+********Under Construction*********
     <ion-content>
         <div class="overlay header">
             <div class="arrow-up pull-right translucent">
             </div>  
         </div>
     </ion-content>
+***********************************
 -->
-    <ion-content padding="true" class="has-header">
+    <ion-content delegate-handle="scrollable" padding="true" class="has-header">
         <form id="deployment-form31" class="list ">
             <label class="item item-input " id="deployment-input37" name="deploymentName">
                 <span class="input-label">Name</span>
@@ -69,8 +71,13 @@
     </ion-content>
     
     <!-- Small arrow on the bottom indicating scrollability-->
+    <!-- Functionality: Enables user to scroll rapidly to bottom of page
+         Hides upon full scroll down-->
     <div class="overlay footer">
-            <div class="arrow-down pull-right translucent"></div>  
+            <div
+              delegate-handle="arrow-btn"
+              ng-click="scrlBot()"
+              class="arrow-down pull-right translucent"></div>  
     </div>
    
 </ion-view>

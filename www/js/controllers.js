@@ -128,5 +128,30 @@ angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload
     
 })
 
-.controller('scrollController', function($scope, $ionicScrollDelegate))
+/**
+    Controller handles scroll functionality,
+    binds to arrow objects,
+    hides arrow objects
+*/
+.controller('scrollController', function($scope, $ionicScrollDelegate, logger) {
+    var maxScroll;
+    var currentScroll;
+    
+    maxScroll = $ionicScrollDelegate.$getByHandle('scrollable').getScrollMax;
+    
+    $scope.scrlBot = function(){
+        $ionicScrollDelegate.$getByHandle('scrollable').scrollBottom(true);
+    }
+    
+    $scope.fullScroll = function(){
+        currentScroll = $ionicScrollDelegate.$getByHandle('scrollable').getScrollPosition().top;
+        
+        logger.log(currentScroll);
+        
+        if(currentScroll === maxScroll){
+            return true;
+        }
+        
+    }
+})
 

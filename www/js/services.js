@@ -27,3 +27,4 @@ angular.module('app.services', ['base64'])
 	
 	return{convert: convert};
 });
+
