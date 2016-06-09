@@ -18,11 +18,16 @@ angular.module('app.services', ['base64'])
 	return {log: log};
 })
 
+// factory: convertImage
+// fucntion(s): convert
+// 		purpose: converts an image to base 64
+// 		var: file (image)
+//		return: base 64 string
 .factory ('convertImage', function($base64){
 	var imageData;
 	function convert (file){
 		imageData = $base64.encode (file);	
-    	return imageData;
+       	return imageData;
 	}	
 	
 	return{convert: convert};

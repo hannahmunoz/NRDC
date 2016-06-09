@@ -51,13 +51,13 @@
 
 <!--    controller scope var: people
         var name: phone
-        type: tel
+        type: text
         error checking: yes, for 10 digit phone number. Else: error is shown, user is not allowed to save
         min|max req : 10|10 -->
 
         <form name="phoneForm" class="list" novalidate>
             <label class="item item-input " id="people-input10">
-                <input type="number" placeholder="Phone" ng-minlength = "10" ng-maxlength = "10" name = "phone" ng-model="people.phone" required>
+                <input type="text" placeholder="Phone" ng-minlength = "10" ng-maxlength = "10" name = "phone" ng-model="people.phone" required>
             </label> 
         </form>
 
