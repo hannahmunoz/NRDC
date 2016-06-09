@@ -1,4 +1,12 @@
 {
   "name": "NRDC",
-  "app_id": "cb090522"
+  "app_id": "cb090522",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
 }

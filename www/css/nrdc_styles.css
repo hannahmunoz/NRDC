@@ -2,13 +2,20 @@
 	Custom Stylesheet for NRDC QA app 
 */
 
+<<<<<<< HEAD
 /*Disables Ugly Scroll Bar Globally*/
 /*
+=======
+/*Disables Scroll Bar Globally*/
+>>>>>>> master
 ::-webkit-scrollbar,
 *::-webkit-scrollbar {
   display: none;
 }
+<<<<<<< HEAD
 */
+=======
+>>>>>>> master
 
 .big-text{
 	font-size: 40px;
