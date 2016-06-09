@@ -8266,6 +8266,7 @@ ionic.scroll = {
     },
     setTranslateX: ionic.animationFrameThrottle(function(x) {
       this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + x + 'px, 0, 0)';
+      this.el.style[ionic.CSS.background] = "#ffffff";
     })
   });
 

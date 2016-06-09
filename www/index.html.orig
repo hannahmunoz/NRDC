@@ -29,9 +29,12 @@
 
     <link href="css/ionic.app.css" rel="stylesheet">
 
+<<<<<<< HEAD
+=======
     <link rel="stylesheet" type="text/css" href="../css/styles.css">
  
 
+>>>>>>> 53332ba4740b609e0844a5a390fa8ee0831d2f80
     <style type="text/css">
       .platform-ios .manual-ios-statusbar-padding{
         padding-top:20px;
