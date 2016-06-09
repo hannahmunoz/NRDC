@@ -105,7 +105,7 @@ angular.module('app.controllers', ['app.services', 'angularUUID2' ])
 
 })
    
-.controller('mainMenuCtrl', function($scope) {
+.controller('mainMenuCtrl', function($scope, $ionicSideMenuDelegate) {
 
 })
 
