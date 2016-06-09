@@ -64,17 +64,15 @@
     float: right;
 }
 
-
-.transparent{
-    opacity: 0.0;
-}
-
-.visible{
-    opacity: 1.0;
-}
-
 /*makes a div fill it's parent block*/
 .fill-parent{
 	height: 100%;
 	width: 100%;
+}
+
+/*css transformations*/
+
+/*make arrow clickable*/
+div.arrow-down:active{
+    opacity: 1.0;
 }
