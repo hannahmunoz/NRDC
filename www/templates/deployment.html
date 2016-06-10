@@ -9,7 +9,11 @@
     </ion-content>
 ***********************************
 -->
-    <ion-content delegate-handle="scrollable" padding="true" class="has-header">
+    <ion-content 
+      delegate-handle="scrollable" 
+      padding="true" 
+      class="has-header"
+      on-scroll="cndHideArrow()">
         <form id="deployment-form31" class="list ">
             <label class="item item-input " id="deployment-input37" name="deploymentName">
                 <span class="input-label">Name</span>
