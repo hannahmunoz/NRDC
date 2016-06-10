@@ -134,6 +134,7 @@ angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload
     hides arrow objects
 */
 .controller('scrollController', function($scope, $ionicScrollDelegate, logger) {
+    $scope.isBottom = false;
     
     //scrolls the content window to the bottom
     $scope.scrlBot = function(){
@@ -141,22 +142,18 @@ angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload
     }
     
     //hide arrow when user scrolls nearly to bottom
-    //hides using jQuery and DOM manip
-    //not ideal for Angular Structure
+    //hides using angular logic
+    //updates bool evaluated by ng-hide
     $scope.cndHideArrow = function(){        
         if($ionicScrollDelegate.getScrollPosition().top >= 
             $ionicScrollDelegate.getScrollView().__maxScrollTop - 10){
-           $('.arrow-down')[0].style.visibility = "hidden";     
-        } 
-        
-        else if(
-            $ionicScrollDelegate.getScrollPosition().top < 
-            $ionicScrollDelegate.getScrollView().__maxScrollTop - 10
-        ) {
-            
-            $('.arrow-down')[0].style.visibility = "visible";
-            
+            $scope.isBottom = true;
         }
+        else if($ionicScrollDelegate.getScrollPosition().top < 
+            $ionicScrollDelegate.getScrollView().__maxScrollTop - 10){
+            $scope.isBottom = false;
+        }
+        $scope.$apply();
     }
 })
 
