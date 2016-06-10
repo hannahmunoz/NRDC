@@ -125,8 +125,10 @@ angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload
 })
    
 .controller('mainMenuCtrl', function($scope) {
-    
+	//wrapper for the sync factory so we can call it from a button
+	$scope.uploadJSONS = function (JSON){
+		uploadJSONS.sync (JSON);
+	}
 })
 
-.controller('scrollController', function($scope, $ionicScrollDelegate))
 

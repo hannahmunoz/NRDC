@@ -31,4 +31,27 @@ angular.module('app.services', ['base64'])
 	}	
 	
 	return{convert: convert};
+})
+
+
+// factory: sync
+// fucntion(s): 
+//		create
+// 		purpose: post request to http link 
+// 		var: string (url), JSON
+//		return: empty JSON upon success
+
+//		read
+// 		purpose: retreive info from http link 
+// 		var: string (url), empty JSON
+//		return: filled JSON upon success
+.factory ('sync', function(JSON){
+
+	function create (JSON){
+	}	
+
+	function read (JSON){
+	}	
+	
+	return{create: create};
 });
