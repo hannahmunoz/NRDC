@@ -1,4 +1,4 @@
-<ion-view title="Main Menu" hide-back-button="true" id="page3" style="background-color:#0471A6;" class="">
+<ion-view title="Main Menu" hide-back-button="true" id="page3" class="accent">
     <!-- Upload button only on main menu -->
     <ion-nav-buttons side="right">
                     <button id="upload-btn" class="" ng-click = "uploadJSONS()">Upload</button>
@@ -9,17 +9,61 @@
       padding="true"
       has-footer="true"
       class="has-header"
+      ng-init="setRndTimingOffsets()"
       >
-        <ion-list id="mainMenu-list2" class=" ">
-            <ion-item id="mainMenu-list-item0" href="#" class="  ">People</ion-item>
-            <ion-item id="mainMenu-list-item1" href="#" class="  ">Projects</ion-item>
-            <ion-item id="mainMenu-list-item2" href="#" class="  ">Sites</ion-item>
-            <ion-item id="mainMenu-list-item3" href="#" class="  ">Systems</ion-item>
-            <ion-item id="mainMenu-list-item4" href="#" class="  ">Deployments</ion-item>
-            <ion-item id="mainMenu-list-item5" href="#" class="  ">Components</ion-item>
-            <ion-item id="mainMenu-list-item6" href="#" class="  ">Documents</ion-item>
-            <ion-item id="mainMenu-list-item7" href="#" class="  ">Service Entries</ion-item>
-        </ion-list>
+        <div class="row quarter-fill no-padding">
+            <div class="col tile-btn primary animated flipInY"
+                 ng-style="randomTimingOffset[0]">
+                <h3 class="text"></h3>
+             </div>
+            <div class="col tile-btn secondary animated flipInY"
+                 ng-style="randomTimingOffset[1]">
+                <h3 class="text"></h3>
+             </div>
+        </div>
+        <div class="row quarter-fill no-padding animated flipInY"
+             ng-style="randomTimingOffset[2]">
+            <div class="col tile-btn secondary">
+                <h3 class="text"></h3>
+             </div>
+            <div class="col tile-btn primary animated flipInY"
+                 ng-style="randomTimingOffset[3]">
+                <h3 class="text"></h3>
+             </div>
+        </div>
+         <div class="row quarter-fill no-padding">
+            <div class="col tile-btn primary animated flipInY"
+                 ng-style="randomTimingOffset[4]">
+                <h3 class="text"></h3>
+             </div>
+            <div class="col tile-btn secondary animated flipInY"
+                 ng-style="randomTimingOffset[5]">
+                <h3 class="text"></h3>
+             </div>
+        </div>
+        <div class="row quarter-fill no-padding">
+            <div class="col tile-btn secondary animated flipInY"
+                 ng-style="randomTimingOffset[6]">
+                <h3 class="text"></h3>
+             </div>
+            <div class="col tile-btn primary animated flipInY"
+                 ng-style="randomTimingOffset[7]">
+                <h3 class="text"></h3>
+             </div>
+        </div>
+            <!--
+            <ion-list id="mainMenu-list2" class="secondary">
+                <ion-item id="mainMenu-list-item0" href="#" class="  ">People</ion-item>
+                <ion-item id="mainMenu-list-item1" href="#" class="  ">Projects</ion-item>
+                <ion-item id="mainMenu-list-item2" href="#" class="  ">Sites</ion-item>
+                <ion-item id="mainMenu-list-item3" href="#" class="  ">Systems</ion-item>
+                <ion-item id="mainMenu-list-item4" href="#" class="  ">Deployments</ion-item>
+                <ion-item id="mainMenu-list-item5" href="#" class="  ">Components</ion-item>
+                <ion-item id="mainMenu-list-item6" href="#" class="  ">Documents</ion-item>
+                <ion-item id="mainMenu-list-item7" href="#" class="  ">Service Entries</ion-item>
+            </ion-list>
+            -->
+            
     </ion-content>
 
 </ion-view>

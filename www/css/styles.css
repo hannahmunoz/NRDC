@@ -26,7 +26,38 @@
     transform: rotate(-135deg);    
 }
 
-/*utiliatiran definitions*/
+
+/*Color Pallette*/
+/*Blue Grey*/
+.primary{
+    background-color: #60809F;
+}
+
+/*light blue-grey*/
+.secondary{
+    background-color: #DFE5EC;
+}
+
+/*UNR Dark Blue*/
+.accent{
+    background-color: #003366;
+}
+
+/*Black*/
+.text{
+    text-decoration-color: #000;
+    color: #000;
+}
+
+/*very light silver*/
+.content-bg{
+    background-color: #F2F2F2;
+}
+
+
+
+
+/*Preset Transparencies*/
 .transparent{
     opacity: 0.0;
 }
@@ -66,13 +97,28 @@
 
 /*makes a div fill it's parent block*/
 .fill-parent{
-	height: 100%;
+	min-height: 100%;
 	width: 100%;
 }
 
-/*css transformations*/
+.quarter-fill{
+    min-height: 25%;
+}
+
+.no-padding{
+    padding: 0.0px;
+}
 
 /*make arrow clickable*/
 div.arrow-down:active{
     opacity: 1.0;
 }
+
+/*tile button*/
+.tile-btn{
+    margin: 5px;
+}
+
+
+
+/*Animation tools*/

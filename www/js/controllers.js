@@ -138,11 +138,17 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 })
    
-.controller('mainMenuCtrl', function($scope) {
-	//wrapper for the sync factory so we can call it from a button
-	$scope.uploadJSONS = function (JSON){
-		uploadJSONS.sync (JSON);
-	}
+.controller('mainMenuCtrl', function($scope, $window) {
+    $scope.randomTimingOffset = [];
+    
+    $scope.setRndTimingOffsets = function(){
+        numTiles = $window.document.getElementsByClassName("tile-btn").length;
+        for( tile = 0; tile < numTiles; tile++ ){
+            $scope.randomTimingOffset[tile] = {};
+            $scope.randomTimingOffset[tile]["-webkit-animation-delay"] = Math.random() + 's';
+            $scope.randomTimingOffset[tile]["animation-delay"] = $scope.randomTimingOffset[tile]["-webkit-animation-delay"];
+        }
+    }
 })
 
 /**
@@ -151,24 +157,21 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     hides arrow objects
 */
 .controller('scrollController', function($scope, $ionicScrollDelegate, logger) {
-    var maxScroll;
-    var currentScroll;
+    $scope.isBottom = false;
+    smoothnessOffset = 10;  //enrures 
     
-    maxScroll = $ionicScrollDelegate.$getByHandle('scrollable').getScrollMax;
-    
+    //scrolls the content window to the bottom
     $scope.scrlBot = function(){
         $ionicScrollDelegate.$getByHandle('scrollable').scrollBottom(true);
     }
     
-    $scope.fullScroll = function(){
-        currentScroll = $ionicScrollDelegate.$getByHandle('scrollable').getScrollPosition().top;
-        
-        logger.log(currentScroll);
-        
-        if(currentScroll === maxScroll){
-            return true;
-        }
-        
+    //hide arrow when user scrolls nearly to bottom
+    //hides using angular logic
+    //updates bool evaluated by ng-hide
+    $scope.cndHideArrow = function(){
+        $scope.isBottom = ($ionicScrollDelegate.getScrollPosition().top >= 
+                            $ionicScrollDelegate.getScrollView().__maxScrollTop - smoothnessOffset)
+        $scope.$apply();
     }
 })
 
