@@ -1,7 +1,7 @@
-angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload'])
+angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngFileUpload'])
 
 //the controller for the people view  
-.controller('peopleCtrl', function($scope, uuid2, Upload, logger, convertImage) {
+.controller('peopleCtrl', function($scope, uuid2, Upload, logger, $ionicPlatform, Camera) {
 
 	// variables stored in people
 	$scope.people = {};
@@ -26,12 +26,26 @@ angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload
 			logger.log (JSON.stringify(peopleJSON))
 	}
 
-	//wrapper for the image convert factory so we can call it from a button
+	//wrapper for the image convert factory so we can call it from the photo button
 	$scope.converts = function (file){
-		$scope.imageData = convertImage.convert (file);
+		$scope.imageData = Camera.convertToBase64 (file);
 	}
 
 
+	$scope.choosePicture = function (){
+		Camera.checkPermissions();
+		Camera.openGallery ();
+	}
+
+	//wrapper for the take image factory so we can call it from the takePhoto button
+	$scope.takePicture = function (){
+		document.addEventListener("deviceready", onDeviceReady, false);
+		function onDeviceReady() {
+    		Camera.checkPermissions();
+    		Camera.openCamera ();
+		}
+
+	}
 	// resets the forms. Currently only empties the people varaible. Needs to be edited to set all forms pristine
 	$scope.resetForm = function (){
 		$scope.people = {};
@@ -124,40 +138,48 @@ angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload
 
 })
    
+<<<<<<< HEAD
 .controller('mainMenuCtrl', function($scope) {
 	//wrapper for the sync factory so we can call it from a button
 	$scope.uploadJSONS = function (JSON){
 		uploadJSONS.sync (JSON);
 	}
+=======
+.controller('mainMenuCtrl', function($scope, $window) {
+    $scope.randomTimingOffset = [];
+    
+    $scope.setRndTimingOffsets = function(){
+        numTiles = $window.document.getElementsByClassName("tile-btn").length;
+        for( tile = 0; tile < numTiles; tile++ ){
+            $scope.randomTimingOffset[tile] = {};
+            $scope.randomTimingOffset[tile]["-webkit-animation-delay"] = Math.random() + 's';
+            $scope.randomTimingOffset[tile]["animation-delay"] = $scope.randomTimingOffset[tile]["-webkit-animation-delay"];
+        }
+    }
+>>>>>>> 43af88cbaac053a9db1dcaffc7fef34507aa0fe1
 })
 
-<<<<<<< HEAD
-=======
 /**
     Controller handles scroll functionality,
     binds to arrow objects,
     hides arrow objects
 */
 .controller('scrollController', function($scope, $ionicScrollDelegate, logger) {
-    var maxScroll;
-    var currentScroll;
+    $scope.isBottom = false;
+    smoothnessOffset = 10;  //enrures 
     
-    maxScroll = $ionicScrollDelegate.$getByHandle('scrollable').getScrollMax;
-    
+    //scrolls the content window to the bottom
     $scope.scrlBot = function(){
         $ionicScrollDelegate.$getByHandle('scrollable').scrollBottom(true);
     }
     
-    $scope.fullScroll = function(){
-        currentScroll = $ionicScrollDelegate.$getByHandle('scrollable').getScrollPosition().top;
-        
-        logger.log(currentScroll);
-        
-        if(currentScroll === maxScroll){
-            return true;
-        }
-        
+    //hide arrow when user scrolls nearly to bottom
+    //hides using angular logic
+    //updates bool evaluated by ng-hide
+    $scope.cndHideArrow = function(){
+        $scope.isBottom = ($ionicScrollDelegate.getScrollPosition().top >= 
+                            $ionicScrollDelegate.getScrollView().__maxScrollTop - smoothnessOffset)
+        $scope.$apply();
     }
 })
->>>>>>> a95fef1ed23fefa38e9d5740cd80d71f5987d218
 
