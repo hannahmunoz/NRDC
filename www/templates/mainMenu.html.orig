@@ -13,12 +13,20 @@
       >
 
         <div class="row quarter-fill no-padding">
+<<<<<<< HEAD
                  <div ui-sref="peopleList"  class ="col tile-btn primary animated flipInY"
                  ng-style="randomTimingOffset[0]" >
-                <h3 class="text pull-bottom">People</h3>
+                <h3 class="text"></h3>
                 </div>
 
             <button class="col tile-btn secondary animated flipInY"
+=======
+            <div class="col tile-btn primary animated flipInY"
+                 ng-style="randomTimingOffset[0]" ui-sref="viewServiceEntry">
+                 <h3 class="text pull-bottom">People</h3>
+             </div>
+            <div class="col tile-btn secondary animated flipInY"
+>>>>>>> dc75d388b9886ea7acd83c74c113ff549cf39c2a
                  ng-style="randomTimingOffset[1]">
                 <h3 class="text pull-bottom">Projects</h3>
              </div>
@@ -28,7 +36,7 @@
             <div class="col tile-btn secondary animated flipInY">
                 <h3 class="text pull-bottom">Sites</h3>
              </div>
-            <div class="col tile-btn primary animated flipInY"
+            <div  ui-sref = "systemList"  class="col tile-btn primary animated flipInY"
                  ng-style="randomTimingOffset[3]">
                 <h3 class="text pull-bottom">Systems</h3>
              </div>

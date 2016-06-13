@@ -143,6 +143,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     
     $scope.setRndTimingOffsets = function(){
         numTiles = $window.document.getElementsByClassName("tile-btn").length;
+        
         for( tile = 0; tile < numTiles; tile++ ){
             $scope.randomTimingOffset[tile] = {};
             $scope.randomTimingOffset[tile]["-webkit-animation-delay"] = Math.random() + 's';
