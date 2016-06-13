@@ -1,0 +1,62 @@
+angular.module('app.services', ['base64'])
+
+// factory: logger
+// fucntion(s): log
+// 		purpose: checks if log console is defined. If undefined, defines. prints to console.
+// 		var: string 
+//		return: log
+.factory ('logger', function (){
+	 function log (text){
+		if (typeof console == "undefined") {
+    		window.console = {
+       		log: function () {}
+   			};
+		}
+	console.log(text);
+	}
+
+	return {log: log};
+})
+
+// factory: convertImage
+// fucntion(s): convert
+// 		purpose: converts an image to base 64
+// 		var: file (image)
+//		return: base 64 string
+.factory ('convertImage', function($base64){
+	var imageData;
+	function convert (file){
+		imageData = $base64.encode (file);	
+       	return imageData;
+	}	
+	
+	return{convert: convert};
+<<<<<<< HEAD
+})
+
+
+// factory: sync
+// fucntion(s): 
+//		create
+// 		purpose: post request to http link 
+// 		var: string (url), JSON
+//		return: empty JSON upon success
+
+//		read
+// 		purpose: retreive info from http link 
+// 		var: string (url), empty JSON
+//		return: filled JSON upon success
+.factory ('sync', function(JSON){
+
+	function create (JSON){
+	}	
+
+	function read (JSON){
+	}	
+	
+	return{create: create};
+});
+=======
+});
+
+>>>>>>> a95fef1ed23fefa38e9d5740cd80d71f5987d218
