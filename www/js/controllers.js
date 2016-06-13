@@ -124,8 +124,17 @@ angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload
 
 })
    
-.controller('mainMenuCtrl', function($scope) {
+.controller('mainMenuCtrl', function($scope, $window) {
+    $scope.randomTimingOffset = [];
     
+    $scope.setRndTimingOffsets = function(){
+        numTiles = $window.document.getElementsByClassName("tile-btn").length;
+        for( tile = 0; tile < numTiles; tile++ ){
+            $scope.randomTimingOffset[tile] = {};
+            $scope.randomTimingOffset[tile]["-webkit-animation-delay"] = Math.random() + 's';
+            $scope.randomTimingOffset[tile]["animation-delay"] = $scope.randomTimingOffset[tile]["-webkit-animation-delay"];
+        }
+    }
 })
 
 /**
