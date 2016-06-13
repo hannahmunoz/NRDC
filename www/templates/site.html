@@ -1,5 +1,9 @@
-<ion-view title="Site" id="page4" style="background-color:#0471A6;" class=" ">
-    <ion-content padding="true" class="has-header">
+<ion-view ng-controller="scrollController" title="Site" id="page4" style="background-color:#0471A6;" class=" ">
+    <ion-content 
+      delegate-handle="scrollable" 
+      padding="true" 
+      class="has-header"
+      on-scroll="cndHideArrow()">
         <form id="site-form20" class="list ">
             <label class="item item-input " id="site-input24" name="siteName">
                 <span class="input-label">Name</span>
@@ -62,4 +66,15 @@
             <a ui-sref="createNew.mainMenu" id="site-button23" class=" button button-positive button-large button-block ">Save</a>
         </form>
     </ion-content>
+    
+    <!-- Small arrow on the bottom indicating scrollability-->
+    <!-- Functionality: Enables user to scroll rapidly to bottom of page
+         Hides upon full scroll down-->
+    <div class="overlay footer">
+            <div
+              delegate-handle="arrow-btn"
+              ng-click="scrlBot()"
+              ng-hide="isBottom"
+              class="arrow-down pull-right translucent"></div>  
+    </div>
 </ion-view>
