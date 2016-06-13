@@ -18,40 +18,151 @@ angular.module('app.services', ['base64'])
 	return {log: log};
 })
 
-// factory: convertImage
-// fucntion(s): convert
-// 		purpose: converts an image to base 64
-// 		var: file (image)
-//		return: base 64 string
-.factory ('convertImage', function($base64){
-	var imageData;
-	function convert (file){
-		imageData = $base64.encode (file);	
-       	return imageData;
-	}	
-	
-	return{convert: convert};
-})
-
 
 // factory: sync
 // fucntion(s): 
 //		create
-// 		purpose: post request to http link 
-// 		var: string (url), JSON
-//		return: empty JSON upon success
-
 //		read
-// 		purpose: retreive info from http link 
-// 		var: string (url), empty JSON
-//		return: filled JSON upon success
+
 .factory ('sync', function(JSON){
 
+// function:		create
+// purpose: post request to http link 
+// var: string (url), JSON
+// return: empty JSON upon success
 	function create (JSON){
 	}	
 
+// function: read
+// purpose:  retreive info from http link 
+// var: string (url), empty JSON
+// return: filled JSON upon success
 	function read (JSON){
 	}	
 	
 	return{create: create};
+})
+
+
+// factory: Camera
+// function(s): 
+//		checkPermissions
+// 		setOptions
+//		openCamera
+//		convertToBase64
+.factory('Camera', function($base64) {
+
+// function: checkPermissions
+// purpose:  checks and asks for camera permissions
+// var: n/a
+// return: n/a
+	function checkPermissions (){
+		// add event listener
+      document.addEventListener("deviceready", onDeviceReady, false);
+
+      // wait for device to be ready
+      function onDeviceReady() {
+        console.log(navigator.camera);
+      	// check if camera permissions have been requested
+    	cordova.plugins.diagnostic.isCameraAuthorized(function(authorized){
+    	console.log("App is " + (authorized ? "authorized" : "denied") + " access to camera");
+    		// if not, request access
+    	if (!authorized){
+			cordova.plugins.diagnostic.requestCameraAuthorization(function(status){
+            console.log("Successfully requested camera authorization: authorization was " + status);
+        }, function(error){
+            console.error(error);
+        	});
+		}
+		}, function(error){
+    		console.error("The following error occurred: "+ error);
+		});
+	}
+	}
+
+// function: setOptions
+// purpose:  set the parameters for the camera options 
+// var: source type (camera or image gallery)
+// return: camera options
+	function setOptions (source){
+		var cameraOption = {
+			quality: 100,
+			allowEdit: false,
+			sourceType: source,
+			destinationType: Camera.DestinationType.FILE_URI,
+			encodingType: Camera.EncodingType.JPEG,
+			mediaType: Camera.MediaType.PICTURE,
+			correctOrientation: true
+		};
+		return cameraOption;
+	}
+
+// function: openCamera
+// purpose:  opens the camera and take the picture
+// var: n/a
+// return: n/a (eventually will return the encoded image)
+	function openCamera() {
+    	var options = setOptions(Camera.PictureSourceType.CAMERA);
+
+    	navigator.camera.getPicture(function cameraSuccess(imageUri) {
+
+        console.log(imageUri);
+
+    	}, function cameraError(error) {
+        	console.debug("Camera Error: " + error, "app");
+    	}, options);
+}
+
+	function openGallery() {
+    	var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
+
+    	navigator.camera.getPicture(function cameraSuccess(imageUri) {
+
+        console.log(imageUri);
+
+    	}, function cameraError(error) {
+        	console.debug("Camera Error: " + error, "app");
+    	}, options);
+}
+
+// function: openGallery
+// purpose:  opens the gallery to select a picture
+// var: n/a
+// return: n/a (eventually will return the encoded image)
+	// function openGallery(){
+ //    	var options = setOptions(Camera.PictureSourceType.CAMERA);
+
+ //    	navigator.camera.getPicture(function cameraSuccess(imageUri) {
+
+ //    	console.log (imageUri);
+
+ //    	}, function cameraError(error) {
+ //        console.debug("Unable to obtain picture: " + error, "app");
+
+ //    	}, options);
+
+	// }
+
+
+// factory: convertImage
+// function: convert
+// 	purpose: converts an image to base 64
+// 	var: file (image)
+//	return: base 64 string
+	var imageData;
+	function convertToBase64 (file){
+		imageData = $base64.encode (file);
+		console.log(imageData);
+       	return imageData;
+	}	
+
+// return values
+	return {checkPermissions: checkPermissions,
+			setOptions: setOptions,
+			openCamera: openCamera,
+			openGallery: openGallery,
+			convertToBase64: convertToBase64
+		};
+
+
 });

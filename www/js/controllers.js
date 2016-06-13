@@ -1,7 +1,7 @@
-angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload'])
+angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngFileUpload'])
 
 //the controller for the people view  
-.controller('peopleCtrl', function($scope, uuid2, Upload, logger, convertImage) {
+.controller('peopleCtrl', function($scope, uuid2, Upload, logger, $ionicPlatform, Camera) {
 
 	// variables stored in people
 	$scope.people = {};
@@ -26,12 +26,26 @@ angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload
 			logger.log (JSON.stringify(peopleJSON))
 	}
 
-	//wrapper for the image convert factory so we can call it from a button
+	//wrapper for the image convert factory so we can call it from the photo button
 	$scope.converts = function (file){
-		$scope.imageData = convertImage.convert (file);
+		$scope.imageData = Camera.convertToBase64 (file);
 	}
 
 
+	$scope.choosePicture = function (){
+		Camera.checkPermissions();
+		Camera.openGallery ();
+	}
+
+	//wrapper for the take image factory so we can call it from the takePhoto button
+	$scope.takePicture = function (){
+		document.addEventListener("deviceready", onDeviceReady, false);
+		function onDeviceReady() {
+    		Camera.checkPermissions();
+    		Camera.openCamera ();
+		}
+
+	}
 	// resets the forms. Currently only empties the people varaible. Needs to be edited to set all forms pristine
 	$scope.resetForm = function (){
 		$scope.people = {};
@@ -131,4 +145,30 @@ angular.module('app.controllers', ['app.services', 'angularUUID2', 'ngFileUpload
 	}
 })
 
+/**
+    Controller handles scroll functionality,
+    binds to arrow objects,
+    hides arrow objects
+*/
+.controller('scrollController', function($scope, $ionicScrollDelegate, logger) {
+    var maxScroll;
+    var currentScroll;
+    
+    maxScroll = $ionicScrollDelegate.$getByHandle('scrollable').getScrollMax;
+    
+    $scope.scrlBot = function(){
+        $ionicScrollDelegate.$getByHandle('scrollable').scrollBottom(true);
+    }
+    
+    $scope.fullScroll = function(){
+        currentScroll = $ionicScrollDelegate.$getByHandle('scrollable').getScrollPosition().top;
+        
+        logger.log(currentScroll);
+        
+        if(currentScroll === maxScroll){
+            return true;
+        }
+        
+    }
+})
 
