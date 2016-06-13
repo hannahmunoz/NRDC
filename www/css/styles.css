@@ -66,6 +66,10 @@
     opacity: 0.5;
 }
 
+.near-visible{
+    opacity: 0.8;
+}
+
 .visible{
     opacity: 1.0;
 }
@@ -95,6 +99,15 @@
     float: right;
 }
 
+.center-text{
+    text-align: center;
+}
+
+.pull-bottom{
+    position:absolute;
+    width: 100%;
+    bottom: 0;
+}
 /*makes a div fill it's parent block*/
 .fill-parent{
 	min-height: 100%;
@@ -116,7 +129,9 @@ div.arrow-down:active{
 
 /*tile button*/
 .tile-btn{
-    margin: 5px;
+    margin: 5px 2.5px 5px 2.5px;
+    padding: 0.0px;
+    opacity: .85;
 }
 
 
