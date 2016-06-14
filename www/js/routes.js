@@ -148,6 +148,12 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('peopleList', {
+    url: '/peopleList',
+    templateUrl: 'templates/peopleList.html',
+    controller: 'peopleListCtrl'
+  })
+
   .state('createNew', {
     url: '/CreateNew',
     templateUrl: 'templates/createNew.html',

@@ -176,3 +176,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     }
 })
 
+.controller('peopleListCtrl', function($scope) {
+
+})
+
