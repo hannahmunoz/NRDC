@@ -1,7 +1,7 @@
 angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngFileUpload'])
 
 //the controller for the people view  
-.controller('peopleCtrl', function($scope, uuid2, Upload, logger, $ionicPlatform, Camera) {
+.controller('peopleCtrl', function($scope, $rootScope, uuid2, Upload, logger, $ionicPlatform, Camera) {
 
 	// variables stored in people
 	$scope.people = {};
@@ -53,7 +53,11 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 })
    
-.controller('viewPeopleCtrl', function($scope) {
+.controller('viewPeopleCtrl', function($scope, select) {
+	//$scope.personJSON = {};
+
+	$scope.personJSON = select.get();
+	console.log ($scope.personJSON);
 
 })
    
@@ -63,6 +67,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 	// JSON function for project
 	$scope.saveProjectJSON = function (){
+console.log ($rootScope.syncedJSON);
 		projectJSON = {};
 
 		projectJSON ["Creation Date"] = new Date();
@@ -138,10 +143,20 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 })
    
-.controller('mainMenuCtrl', function($scope, $window) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger) {
+
+	// create global variables
+	$rootScope.peopleSyncedJSON = {};
+
+	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
+	$rootScope.urlPaths = ["people","projects", "sites", "systems", "deployments", "components", "documents","service_entries"];
+
+
     $scope.randomTimingOffset = [];
     
     $scope.setRndTimingOffsets = function(){
+    	
+
         numTiles = $window.document.getElementsByClassName("tile-btn").length;
         
         for( tile = 0; tile < numTiles; tile++ ){
@@ -150,6 +165,23 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
             $scope.randomTimingOffset[tile]["animation-delay"] = $scope.randomTimingOffset[tile]["-webkit-animation-delay"];
         }
     }
+
+    $scope.uploadJSONS = function(){
+    	
+    }
+
+// only runs the first time the program is called. 
+// Reads from the server and inputs into array
+// TODO: add to local phone storage and read from there if server is unavaible
+    var init = function (){
+    		var promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[0]+"/");
+    			promise.then (function(result){
+    				$rootScope.peopleSyncedJSON = result;	
+    	}),function (error){
+
+    			}
+}
+    init ();
 })
 
 /**
@@ -176,7 +208,10 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     }
 })
 
-.controller('peopleListCtrl', function($scope) {
-
+.controller('peopleListCtrl', function($scope, $rootScope, select) {
+	// wrapper for person select button
+	$scope.select = function(JSON){
+		select.set (JSON);
+	}
 })
 

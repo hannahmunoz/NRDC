@@ -24,7 +24,7 @@ angular.module('app.services', ['base64'])
 //		create
 //		read
 
-.factory ('sync', function(JSON){
+.factory ('sync', function($q, $http){
 
 // function:		create
 // purpose: post request to http link 
@@ -35,14 +35,53 @@ angular.module('app.services', ['base64'])
 
 // function: read
 // purpose:  retreive info from http link 
-// var: string (url), empty JSON
+// var: string (url)
 // return: filled JSON upon success
-	function read (JSON){
+	var read = function (url){
+		return $http.get (url)
+			.then (function Success (response){
+				console.log (response.status +": " + response.statusText);
+				return response.data;
+			}, function Error (response){
+				console.log (response.status +": "+ response.statusText);
+				return response.statusText;
+			});
+
+
 	}	
 	
-	return{create: create};
+	return{read: read};
 })
 
+
+// factory: select
+// fucntion(s): 
+//		set
+//		get
+
+.factory ('select', function (){
+	var JSON = {};
+
+// function: set
+// purpose:  sets the JSON  from the list pages 
+// var: JSON
+// return: n/a
+	function set (data){
+		JSON = data;
+
+	}
+
+// function: get
+// purpose:  gets the JSON for the view pages
+// var: 
+// return: number
+	function get (){
+		return JSON;
+	}
+
+	return {set: set,
+			get: get}
+})
 
 // factory: Camera
 // function(s): 
