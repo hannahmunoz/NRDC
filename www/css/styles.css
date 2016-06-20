@@ -8,8 +8,10 @@
   display: none;
 }
 
-/*make a css arrow
--- adapted from stack overflow-- */
+/*
+    make a css arrow
+    -- adapted from stack overflow-- 
+*/
 .arrow-down{
     border-right: 10px solid; 
     border-bottom: 10px solid;
@@ -27,7 +29,8 @@
 }
 
 
-/*Color Pallette*/
+/*Color Pallette and Theming*/
+
 /*Blue Grey*/
 .primary{
     background-color: #60809F;
@@ -46,7 +49,7 @@
 /*Black*/
 .text{
     text-decoration-color: #000;
-    color: #000;
+    color: #F2F2F2;
 }
 
 /*very light silver*/
@@ -54,8 +57,31 @@
     background-color: #F2F2F2;
 }
 
+/*overrides existing bar-dark theme*/
+.bar.bar-dark{
+    background-color: #042444 !important;
+    border-color: #042444 !important;
+}
 
+/* Overrides existing Bar Light Theme*/
+.bar.bar-light{
+    background: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
+}
 
+/*background image on main page*/
+.bg-img-main{
+    background: url(../img/subtle_bg/daimond_eyes/daimond_eyes.png);
+}
+
+.bg-img-tray{
+    background: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
+}
+
+/*overrides item content backgrounds*/
+.item .item-content{
+    background-color: #FFF !important;
+    
+}
 
 /*Preset Transparencies*/
 .transparent{
@@ -132,7 +158,9 @@ div.arrow-down:active{
     margin: 5px 2.5px 5px 2.5px;
     padding: 0.0px;
     opacity: .85;
+    border-radius: 2%;
 }
+
 
 
 
