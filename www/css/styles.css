@@ -73,6 +73,10 @@
     background: url(../img/subtle_bg/daimond_eyes/daimond_eyes.png);
 }
 
+.bg-img-secondary{
+     background: url(../img/subtle_bg/subtle_white_feathers/subtle_white_feathers.png);
+}
+
 .bg-img-tray{
     background: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
 }
