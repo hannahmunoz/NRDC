@@ -11,10 +11,11 @@
         min|max req: not implemented -->
 
         <form name ="firstNameForm" class="list" novalidate>
-            <label class="item item-input  id="viewPeople-input125">
-                <input type="text" placeholder ="{{personJSON['First Name']}}"  name = "firstName" ng-model = "people.firstName" required>
+            <label class="item item-input"  id="viewPeople-input125" >
+                <input type="text" ng-model = "personJSON['First Name']" name = "firstName" ng-model = "people.firstName"  required>
             </label>
         </form>
+
 
 
 <!--    controller scope var: viewPeople
@@ -25,7 +26,7 @@
 
         <form name ="lastNameForm" class="list" novalidate>
             <label class="item item-input " id="viewPeople-input6" >
-                <input type="text" placeholder="{{personJSON['Last Name']}}" name = "lastName" ng-model = "people.lastName" required>
+                <input type="text" ng-model = "personJSON['Last Name']" name = "lastName" ng-model = "people.lastName" required>
             </label>
         </form>
 
@@ -37,7 +38,7 @@
 
         <form name ="organizationForm" class="list" novalidate>
             <label class="item item-input " id="viewPeople-input9" >
-                <input type="text" placeholder="{{personJSON['Organization']}}" name = "organization" ng-model = "people.organization" required>
+                <input type="text"  ng-model = "personJSON.Organization" name = "organization" ng-model = "people.organization" required>
             </label>
         </form>
 
@@ -49,7 +50,7 @@
 
         <form name="emailForm" class="list" novalidate>
             <label class="item item-input " id="viewPeople-input8" >
-                <input type="email" placeholder="{{personJSON['Email']}}" name = "email" ng-model = "people.email" required>
+                <input type="email" ng-model = "personJSON.Email" placeholder="{{personJSON['Email']}}" name = "email" ng-model = "people.email" required>
             </label>
         </form>
 
@@ -61,7 +62,7 @@
 
         <form name="phoneForm" class="list" novalidate>
             <label class="item item-input " id="viewPeople-input10">
-                <input type="text" placeholder="{{personJSON['Phone']}}" ng-minlength = "10" ng-maxlength = "10" name = "phone" ng-model="people.phone" required>
+                <input type="text"  ng-model = "personJSON.Phone" ng-minlength = "10" ng-maxlength = "10" name = "phone" ng-model="people.phone" required>
             </label> 
         </form>
 

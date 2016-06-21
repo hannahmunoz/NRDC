@@ -1,0 +1,15 @@
+<ion-view title="Projects" id="page10" style="background-color:#0471A6;" class=" ">
+    <ion-content padding="true" class="has-header">
+    <ul>
+    	<li class ="" ng-repeat="project in projectSyncedJSON">
+    	<ul>
+    		<li class="" ng-repeat = "project in project">
+    			<button class = "" ui-sref="viewProject" ng-click = "select(project)" > {{project["Name"]}}
+    			</button>
+    			</li>
+    			</ul>
+    	</li>
+    </ul>
+
+        </ion-content>
+</ion-view>

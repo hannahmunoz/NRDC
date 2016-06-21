@@ -54,20 +54,18 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 })
    
 .controller('viewPeopleCtrl', function($scope, select) {
-	//$scope.personJSON = {};
-
 	$scope.personJSON = select.get();
 	console.log ($scope.personJSON);
-
 })
    
-.controller('projectCtrl', function($scope, uuid2, logger) {
+.controller('projectCtrl', function($scope, $rootScope, uuid2, logger) {
 	//variables stored in projects
 	$scope.project = {};
+	$scope.selected = $rootScope.peopleSyncedJSON;
+	// TODO: figure out selected spinnger
 
 	// JSON function for project
 	$scope.saveProjectJSON = function (){
-console.log ($rootScope.syncedJSON);
 		projectJSON = {};
 
 		projectJSON ["Creation Date"] = new Date();
@@ -78,7 +76,8 @@ console.log ($rootScope.syncedJSON);
 		projectJSON ["Name"] = $scope.project.name;
 		projectJSON ["Institution Name"] = $scope.project.institution;
 		projectJSON ["Original Funding Agency"] = $scope.project.funding;
-		projectJSON ["Grant Number"] = $scope.project.grantNumber;
+		// needs to be a string
+		projectJSON ["Grant Number"] = $scope.project.grantNumber.toString();
 
 		// print json to console for debugging
 		logger.log (JSON.stringify(projectJSON))
@@ -91,7 +90,9 @@ console.log ($rootScope.syncedJSON);
 
 })
    
-.controller('viewProjectCtrl', function($scope) {
+.controller('viewProjectCtrl', function($scope, select) {
+	$scope.projectJSON = select.get();
+	console.log ($scope.projectJSON);
 
 })
    
@@ -147,6 +148,13 @@ console.log ($rootScope.syncedJSON);
 
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
+	$rootScope.projectSyncedJSON = {};
+	$rootScope.siteSyncedJSON = {};
+	$rootScope.systemSyncedJSON = {};
+	$rootScope.deploymentSyncedJSON = {};
+	$rootScope.componentSyncedJSON = {};
+	$rootScope.documentSyncedJSON = {};
+	$rootScope.serviceSyncedJSON = {};
 
 	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
 	$rootScope.urlPaths = ["people","projects", "sites", "systems", "deployments", "components", "documents","service_entries"];
@@ -174,13 +182,71 @@ console.log ($rootScope.syncedJSON);
 // Reads from the server and inputs into array
 // TODO: add to local phone storage and read from there if server is unavaible
     var init = function (){
-    		var promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[0]+"/");
-    			promise.then (function(result){
-    				$rootScope.peopleSyncedJSON = result;	
-    	}),function (error){
+    	// people read
+    	var promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[0]+"/");
+    		promise.then (function(result){
+    			$rootScope.peopleSyncedJSON = result;	
+    		}),function (error){
 
-    			}
-}
+    		}
+
+    	//project read
+    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/");
+    		promise.then (function(result){
+    			$rootScope.projectSyncedJSON = result;	
+    		}),function (error){
+
+    		}
+
+    	//site read
+    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/");
+    		promise.then (function(result){
+    			$rootScope.siteSyncedJSON = result;	
+    		}),function (error){
+
+    		}
+
+    	//project read
+    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/");
+    		promise.then (function(result){
+    			$rootScope.systemSyncedJSON = result;	
+    		}),function (error){
+
+    		}
+
+    	//deployment read
+    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[4]+"/");
+    		promise.then (function(result){
+    			$rootScope.deploymentSyncedJSON = result;	
+    		}),function (error){
+
+    		}
+
+    	//component read
+    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[5]+"/");
+    		promise.then (function(result){
+    			$rootScope.componentSyncedJSON = result;	
+    		}),function (error){
+
+    		}
+
+    	//document read
+    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[6]+"/");
+    		promise.then (function(result){
+    			$rootScope.documentSyncedJSON = result;	
+    		}),function (error){
+
+    		}
+
+    	//service Entries read
+    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[7]+"/");
+    		promise.then (function(result){
+    			$rootScope.serviceSyncedJSON = result;	
+    		}),function (error){
+
+    		}
+	}
+
     init ();
 })
 
@@ -208,7 +274,7 @@ console.log ($rootScope.syncedJSON);
     }
 })
 
-.controller('peopleListCtrl', function($scope, $rootScope, select) {
+.controller('listCtrl', function($scope, $rootScope, select) {
 	// wrapper for person select button
 	$scope.select = function(JSON){
 		select.set (JSON);

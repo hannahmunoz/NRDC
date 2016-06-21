@@ -149,9 +149,50 @@ angular.module('app.routes', [])
   .state('peopleList', {
     url: '/peopleList',
     templateUrl: 'templates/peopleList.html',
-    controller: 'peopleListCtrl'
+    controller: 'listCtrl'
   })
 
+  .state('projectList', {
+    url: '/projectList',
+    templateUrl: 'templates/projectList.html',
+    controller: 'listCtrl'
+  })
+
+    .state('siteList', {
+    url: '/siteList',
+    templateUrl: 'templates/siteList.html',
+    controller: 'listCtrl'
+  })
+
+      .state('systemList', {
+    url: '/systemList',
+    templateUrl: 'templates/systemList.html',
+    controller: 'listCtrl'
+  })
+
+  .state('deploymentList', {
+    url: '/deploymentList',
+    templateUrl: 'templates/deploymentList.html',
+    controller: 'listCtrl'
+  })
+
+  .state('componentList', {
+    url: '/componentList',
+    templateUrl: 'templates/componentList.html',
+    controller: 'listCtrl'
+  })
+
+  .state('documentList', {
+    url: '/documentList',
+    templateUrl: 'templates/documentList.html',
+    controller: 'listCtrl'
+  })
+
+  .state('serviceList', {
+    url: '/serviceList',
+    templateUrl: 'templates/serviceList.html',
+    controller: 'listCtrl'
+  })
   .state('createNew', {
     url: '/CreateNew',
     templateUrl: 'templates/createNew.html',

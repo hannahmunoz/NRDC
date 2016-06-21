@@ -55,12 +55,13 @@
         error checking: no
         min|max req: not implemented -->
 
-        <form name ="investigatorForm" class="list " novalidate >
-            <label class="item item-select " id="project-select19" name="investigator">
-                <span class="input-label">Prinicipal Investigator</span>
-                <select></select>
-            </label>
-        </form>
+      <!--   <form name ="investigatorForm" class="list " novalidate >
+            <label class="item item-select " id="project-select19" name="investigator"> -->
+               <!--  <span class="input-label">Prinicipal Investigator</span> -->
+                <select ng-options="people for people in peopleSyncedJSON" ng-model = "project.investigator">
+                </select>
+<!--             </label>
+        </form> -->
 
     <!--var name: n/a
         type: button

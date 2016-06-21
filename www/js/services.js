@@ -40,10 +40,10 @@ angular.module('app.services', ['base64'])
 	var read = function (url){
 		return $http.get (url)
 			.then (function Success (response){
-				console.log (response.status +": " + response.statusText);
+				console.log (url + " " + response.status +": " + response.statusText);
 				return response.data;
 			}, function Error (response){
-				console.log (response.status +": "+ response.statusText);
+				console.log (url + " " + response.status +": "+ response.statusText);
 				return response.statusText;
 			});
 
