@@ -93,4 +93,15 @@
     <splash src="resources\wp8\splash\SplashScreenImage.png" width="768" height="1280"/>
   </platform>
   <icon src="resources\android\icon\drawable-xhdpi-icon.png"/>
+
+  <!-- for iOS -->
+<feature name="Toast">
+  <param name="ios-package" value="Toast" />
+</feature>
+<!-- for Android -->
+<feature name="Toast">
+  <param name="android-package" value="nl.xservices.plugins.Toast" />
+</feature>
+
+
 </widget>

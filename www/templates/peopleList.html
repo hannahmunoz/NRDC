@@ -1,4 +1,15 @@
 <ion-view title="People" id="page10" style="background-color:#0471A6;" class=" ">
     <ion-content padding="true" class="has-header">
+    <ul>
+    	<li class ="" ng-repeat="people in peopleSyncedJSON">
+    	<ul>
+    		<li class="" ng-repeat = "person in people">
+    			<button class = "" ui-sref="viewPeople" ng-click = "select(person)" > {{person["First Name"] + " " + person["Last Name"]}}
+    			</button>
+    			</li>
+    			</ul>
+    	</li>
+    </ul>
+
         </ion-content>
 </ion-view>
