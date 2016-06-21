@@ -66,6 +66,7 @@
 /* Overrides existing Bar Light Theme*/
 .bar.bar-light{
     background: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
+    border-bottom: 1px solid #C5C4C4 !important;
 }
 
 /*background image on main page*/
