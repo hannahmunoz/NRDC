@@ -162,6 +162,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
     $scope.randomTimingOffset = [];
     
+    //randomizes the appearance of tile buttons on main page
     $scope.setRndTimingOffsets = function(){
     	
 
@@ -169,7 +170,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
         
         for( tile = 0; tile < numTiles; tile++ ){
             $scope.randomTimingOffset[tile] = {};
-            $scope.randomTimingOffset[tile]["-webkit-animation-delay"] = Math.random() + 's';
+            $scope.randomTimingOffset[tile]["-webkit-animation-delay"] = (Math.random()/2) + 's';
             $scope.randomTimingOffset[tile]["animation-delay"] = $scope.randomTimingOffset[tile]["-webkit-animation-delay"];
         }
     }
@@ -257,7 +258,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 */
 .controller('scrollController', function($scope, $ionicScrollDelegate, logger) {
     $scope.isBottom = false;
-    smoothnessOffset = 10;  //enrures 
+    smoothnessOffset = 10;  //ensures smooth dissapearnce of arrow 
     
     //scrolls the content window to the bottom
     $scope.scrlBot = function(){
