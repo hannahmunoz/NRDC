@@ -1,5 +1,10 @@
 <ion-view title="Projects" id="page10" style="background-color:#0471A6;" class=" ">
     <ion-content padding="true" class="has-header">
+    <div class ="tile-btn accent animated flipInY"
+         ng-style="randomTimingOffset[1]" 
+         ng-click="modal.show()">
+        <h3 class="text">Create New Project</h3>
+    </div>
     <ul>
     	<li class ="" ng-repeat="project in projectSyncedJSON">
     	<ul>

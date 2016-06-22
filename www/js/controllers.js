@@ -144,7 +144,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 })
    
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal) {
 
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
@@ -249,6 +249,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 	}
 
     init ();
+    
 })
 
 /**
@@ -275,10 +276,16 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     }
 })
 
-.controller('listCtrl', function($scope, $rootScope, select) {
+.controller('listCtrl', function($scope, $rootScope, select, $ionicModal) {
 	// wrapper for person select button
 	$scope.select = function(JSON){
 		select.set (JSON);
 	}
+    
+    //Enables the execution of a modal window on click
+    $ionicModal.fromTemplateUrl('templates/project.html', {
+        }).then(function(modal) {
+        $scope.modal = modal;
+        });
 })
 
