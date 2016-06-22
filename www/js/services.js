@@ -141,19 +141,8 @@ angular.module('app.services', ['base64'])
 // var: n/a
 // return: n/a (eventually will return the encoded image)
 	function openCamera() {
+
     	var options = setOptions(Camera.PictureSourceType.CAMERA);
-
-    	navigator.camera.getPicture(function cameraSuccess(imageUri) {
-
-        console.log(imageUri);
-
-    	}, function cameraError(error) {
-        	console.debug("Camera Error: " + error, "app");
-    	}, options);
-}
-
-	function openGallery() {
-    	var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
 
     	navigator.camera.getPicture(function cameraSuccess(imageUri) {
 
@@ -168,22 +157,20 @@ angular.module('app.services', ['base64'])
 // purpose:  opens the gallery to select a picture
 // var: n/a
 // return: n/a (eventually will return the encoded image)
-	// function openGallery(){
- //    	var options = setOptions(Camera.PictureSourceType.CAMERA);
+	function openGallery() {
 
- //    	navigator.camera.getPicture(function cameraSuccess(imageUri) {
+    	var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
 
- //    	console.log (imageUri);
+    	navigator.camera.getPicture(function cameraSuccess(imageUri) {
 
- //    	}, function cameraError(error) {
- //        console.debug("Unable to obtain picture: " + error, "app");
+        console.log(imageUri);
 
- //    	}, options);
+    	}, function cameraError(error) {
+        	console.debug("Camera Error: " + error, "app");
+    	}, options);
+}
 
-	// }
 
-
-// factory: convertImage
 // function: convert
 // 	purpose: converts an image to base 64
 // 	var: file (image)
@@ -203,5 +190,45 @@ angular.module('app.services', ['base64'])
 			convertToBase64: convertToBase64
 		};
 
+})
 
-});
+.factory ('DynamicPage', function(){
+	var title = null;
+	var route = null;
+
+	return {getTitle: function(){return title;},
+			setTitle: function(newTitle){ title = newTitle;},
+			getRoute: function(){return route;} ,
+			setRoute: function(newRoute){ route = newRoute;}}
+})
+
+
+// factory: GPS
+// function(s): 
+//		checkPermissions
+// 		setOptions
+//		openCamera
+//		convertToBase64
+.factory('GPS', function() {
+
+// function: checkPermission
+// 	purpose: checks and asks for permission to access gps
+// 	var: n/a
+//	return: n/a
+	function checkPermissions(){
+		//check if location is enabled
+		cordova.plugins.diagnostic.isLocationAuthorized(function(enabled){
+    		console.log("Location authorization is " + (enabled ? "enabled" : "disabled"));
+    		   if (!enabled){
+			cordova.plugins.diagnostic.requestLocationAuthorization(function(status){
+            console.log("Successfully requested location authorization: authorization was " + status);
+		}, function(error){
+    		console.error("The following error occurred: "+ error);
+		});
+	}}, function(error){
+    	console.error("The following error occurred: "+error);
+	});
+	}
+
+	return{checkPermissions: checkPermissions};
+	});

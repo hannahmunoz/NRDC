@@ -4,101 +4,107 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 .controller('peopleCtrl', function($scope, $rootScope, uuid2, Upload, logger, $ionicPlatform, Camera) {
 
 	// variables stored in people
-	$scope.people = {};
 	$scope.imageData;
-
+	$scope.people = {};
 	//JSON fucntion for people
 	$scope.savePeopleJSON = function (){
-			peopleJSON = {};
-			peopleJSON ["Creation Date"] = new Date();
-			peopleJSON ["Modification Date"] = new Date();
-			peopleJSON ["Unique Identifier"] = uuid2.newuuid();
+			$scope.people ["Creation Date"] = new Date();
+			$scope.people ["Modification Date"] = new Date();
+			$scope.people ["Unique Identifier"] = uuid2.newuuid();
 
-			peopleJSON ["First Name"] = $scope.people.firstName;
-			peopleJSON ["Last Name"] = $scope.people.lastName;
-			peopleJSON ["Organization"] = $scope.people.organization;
-			peopleJSON ["Email"] = $scope.people.email;
-			peopleJSON ["Phone"] = $scope.people.phone;
-
-			peopleJSON ["Photo"] = $scope.imageData;
+			// peopleJSON ["Photo"] = $scope.imageData;
 
 			// print json to console for debugging
-			logger.log (JSON.stringify(peopleJSON))
-	}
+			logger.log (JSON.stringify($scope.people))
 
-	//wrapper for the image convert factory so we can call it from the photo button
-	$scope.converts = function (file){
-		$scope.imageData = Camera.convertToBase64 (file);
+			$scope.people = {};
 	}
 
 
-	$scope.choosePicture = function (){
+	//wrapper for the openGallery factory so we can call it from the choosePicture button.
+	// in root scope so it can be called from all buttons
+	$rootScope.choosePicture = function (){
 		Camera.checkPermissions();
 		Camera.openGallery ();
 	}
 
 	//wrapper for the take image factory so we can call it from the takePhoto button
-	$scope.takePicture = function (){
-		document.addEventListener("deviceready", onDeviceReady, false);
-		function onDeviceReady() {
+	// in root scope so it can be called from all buttons
+	$rootScope.takePicture = function (){
     		Camera.checkPermissions();
     		Camera.openCamera ();
-		}
-
-	}
-	// resets the forms. Currently only empties the people varaible. Needs to be edited to set all forms pristine
-	$scope.resetForm = function (){
-		$scope.people = {};
 	}
 
 })
    
+
 .controller('viewPeopleCtrl', function($scope, select) {
 	$scope.personJSON = select.get();
-	console.log ($scope.personJSON);
+	//console.log ($scope.personJSON);
 })
+
+
    
 .controller('projectCtrl', function($scope, $rootScope, uuid2, logger) {
 	//variables stored in projects
-	$scope.project = {};
-	$scope.selected = $rootScope.peopleSyncedJSON;
+	$scope.JSON = {};
+	$scope.JSON = $rootScope.peopleSyncedJSON;
 	// TODO: figure out selected spinnger
 
 	// JSON function for project
 	$scope.saveProjectJSON = function (){
-		projectJSON = {};
 
-		projectJSON ["Creation Date"] = new Date();
-		projectJSON ["Started Date"] = new Date();
-		projectJSON ["Modification Date"] = new Date();
-		projectJSON ["Unique Identifier"] = uuid2.newuuid();
-
-		projectJSON ["Name"] = $scope.project.name;
-		projectJSON ["Institution Name"] = $scope.project.institution;
-		projectJSON ["Original Funding Agency"] = $scope.project.funding;
-		// needs to be a string
-		projectJSON ["Grant Number"] = $scope.project.grantNumber.toString();
+		$scope.JSON ["Creation Date"] = new Date();
+		$scope.JSON ["Started Date"] = new Date();
+		$scope.JSON ["Modification Date"] = new Date();
+		$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
 
 		// print json to console for debugging
-		logger.log (JSON.stringify(projectJSON))
-	}
+		logger.log (JSON.stringify($scope.project));
 
-	// resets the forms. Currently only empties the people varaible. Needs to be edited to set all forms pristine
-	$scope.resetForm = function (){
 		$scope.project = {};
 	}
-
 })
    
-.controller('viewProjectCtrl', function($scope, select) {
-	$scope.projectJSON = select.get();
-	console.log ($scope.projectJSON);
+
+.controller('viewCtrl', function($scope, select) {
+	$scope.JSON = select.get();
+	console.log ($scope.JSON);
+
 
 })
+
+
    
-.controller('siteCtrl', function($scope) {
+.controller('siteCtrl', function($scope, $rootScope, uuid2, Upload, logger, $ionicPlatform, Camera, GPS) {
+
+	// variables stored in site
+	$scope.site = {};
+	$scope.imageData;
+
+	//JSON fucntion for people
+	$scope.saveSiteJSON = function (){
+			$scope.site ["Creation Date"] = new Date();
+			$scope.site ["Modification Date"] = new Date();
+			$scope.site ["Unique Identifier"] = uuid2.newuuid();
+
+			//$scope.site ["Photo"] = $scope.imageData;
+
+			// print json to console for debugging
+			logger.log (JSON.stringify($scope.site));
+
+			$scope.site = {};
+	}
+
+	//wrapper for the GPS factory so we can call it from the getGPS button
+	// in root scope so it can be called from all buttons
+	$rootScope.getGPS = function (){
+		GPS.checkPermissions();
+	}
 
 })
+
+
    
 .controller('viewSiteCtrl', function($scope) {
 
@@ -144,7 +150,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 })
    
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, DynamicPage) {
 
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
@@ -179,14 +185,25 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     	
     }
 
+    $scope.listSwitch = function (JSON, title, route){
+    	$rootScope.listJSON = JSON;
+    	DynamicPage.setTitle (title);
+    	DynamicPage.setRoute (route);
+    }
+
 // only runs the first time the program is called. 
 // Reads from the server and inputs into array
 // TODO: add to local phone storage and read from there if server is unavaible
     var init = function (){
+    	//get permissions
+    	//unblock before packaging
+    	//Camera.checkPermissions();
+
     	// people read
-    	var promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[0]+"/");
+    	var promise = sync.read($rootScope.baseURL + "edge" +"/");
     		promise.then (function(result){
-    			$rootScope.peopleSyncedJSON = result;	
+    			$rootScope.peopleSyncedJSON = result;
+    			console.log ($rootScope.peopleSyncedJSON);	
     		}),function (error){
 
     		}
@@ -256,7 +273,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     binds to arrow objects,
     hides arrow objects
 */
-.controller('scrollController', function($scope, $ionicScrollDelegate, logger) {
+.controller('scrollController', function($scope, $state, $ionicScrollDelegate, logger) {
     $scope.isBottom = false;
     smoothnessOffset = 10;  //ensures smooth dissapearnce of arrow 
     
@@ -275,10 +292,22 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     }
 })
 
-.controller('listCtrl', function($scope, $rootScope, select) {
+.controller('listCtrl', function($scope, $rootScope, select, DynamicPage, $state) {
+	$scope.title = DynamicPage.getTitle();
+	$scope.route = DynamicPage.getRoute();
+	console.log ( $scope.route);
+
+	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
+		$scope.title = DynamicPage.getTitle();
+		$scope.route = DynamicPage.getRoute();
+		console.log ($scope.route);})
+
+
 	// wrapper for person select button
 	$scope.select = function(JSON){
 		select.set (JSON);
+		$state.go ($scope.route);
 	}
+
 })
 

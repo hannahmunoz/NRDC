@@ -34,11 +34,12 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('viewProject', {
-    url: '/viewProject',
-    templateUrl: 'templates/viewProject.html',
-    controller: 'viewProjectCtrl'
+  .state('project', {
+    url: '/project',
+    templateUrl: 'templates/project.html',
+    controller: 'viewCtrl'
   })
+
 
   .state('createNew.site', {
     url: '/CreateNewSite',
@@ -50,10 +51,10 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('viewSite', {
-    url: '/siteView',
-    templateUrl: 'templates/viewSite.html',
-    controller: 'viewSiteCtrl'
+  .state('site', {
+    url: '/CreateNewSite',
+    templateUrl: 'templates/site.html',
+    controller: 'viewCtrl'
   })
 
   .state('createNew.system', {
@@ -66,10 +67,10 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('viewSystem', {
-    url: '/systemView',
-    templateUrl: 'templates/viewSystem.html',
-    controller: 'viewSystemCtrl'
+  .state('system', {
+    url: '/CreateNewSystem',
+    templateUrl: 'templates/system.html',
+    controller: 'viewCtrl'
   })
 
   .state('createNew.deployment', {
@@ -82,10 +83,10 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('viewDeployment', {
-    url: '/deploymentView',
-    templateUrl: 'templates/viewDeployment.html',
-    controller: 'viewDeploymentCtrl'
+  .state('deployment', {
+    url: '/CreateNewDeployment',
+    templateUrl: 'templates/deployment.html',
+    controller: 'viewCtrl'
   })
 
   .state('createNew.component', {
@@ -98,10 +99,10 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('viewComponent', {
-    url: '/componentView',
-    templateUrl: 'templates/viewComponent.html',
-    controller: 'viewComponentCtrl'
+  .state('component', {
+    url: '/CreateNewComponent',
+    templateUrl: 'templates/component.html',
+    controller: 'viewCtrl'
   })
 
   .state('createNew.document', {
@@ -114,10 +115,10 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('viewDocument', {
-    url: '/documetView',
-    templateUrl: 'templates/viewDocument.html',
-    controller: 'viewDocumentCtrl'
+  .state('document', {
+    url: '/CreateNewDocument',
+    templateUrl: 'templates/document.html',
+    controller: 'viewCtrl'
   })
 
   .state('createNew.serviceEntry', {
@@ -130,10 +131,10 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('viewServiceEntry', {
-    url: '/serviceEntryView',
-    templateUrl: 'templates/viewServiceEntry.html',
-    controller: 'viewServiceEntryCtrl'
+  .state('serviceEntry', {
+    url: '/CreateNewServiceEntry',
+    templateUrl: 'templates/serviceEntry.html',
+    controller: 'viewCtrl'
   })
 
   .state('createNew.mainMenu', {
@@ -152,47 +153,12 @@ angular.module('app.routes', [])
     controller: 'listCtrl'
   })
 
-  .state('projectList', {
-    url: '/projectList',
-    templateUrl: 'templates/projectList.html',
+  .state('list', {
+    url: '/list',
+    templateUrl: 'templates/list.html',
     controller: 'listCtrl'
   })
 
-  //   .state('siteList', {
-  //   url: '/siteList',
-  //   templateUrl: 'templates/siteList.html',
-  //   controller: 'listCtrl'
-  // })
-
-  //     .state('systemList', {
-  //   url: '/systemList',
-  //   templateUrl: 'templates/systemList.html',
-  //   controller: 'listCtrl'
-  // })
-
-  // .state('deploymentList', {
-  //   url: '/deploymentList',
-  //   templateUrl: 'templates/deploymentList.html',
-  //   controller: 'listCtrl'
-  // })
-
-  // .state('componentList', {
-  //   url: '/componentList',
-  //   templateUrl: 'templates/componentList.html',
-  //   controller: 'listCtrl'
-  // })
-
-  // .state('documentList', {
-  //   url: '/documentList',
-  //   templateUrl: 'templates/documentList.html',
-  //   controller: 'listCtrl'
-  // })
-
-  // .state('serviceList', {
-  //   url: '/serviceList',
-  //   templateUrl: 'templates/serviceList.html',
-  //   controller: 'listCtrl'
-  // })
   .state('createNew', {
     url: '/CreateNew',
     templateUrl: 'templates/createNew.html',
