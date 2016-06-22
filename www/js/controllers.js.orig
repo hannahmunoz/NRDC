@@ -150,7 +150,11 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 })
    
+<<<<<<< HEAD
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, DynamicPage) {
+=======
 .controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal) {
+>>>>>>> e45be8d93f0cd9f7a1bcb60af2071630a9a522d2
 
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
@@ -200,9 +204,10 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     	//Camera.checkPermissions();
 
     	// people read
-    	var promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[0]+"/");
+    	var promise = sync.read($rootScope.baseURL + "edge" +"/");
     		promise.then (function(result){
-    			$rootScope.peopleSyncedJSON = result;	
+    			$rootScope.peopleSyncedJSON = result;
+    			console.log ($rootScope.peopleSyncedJSON);	
     		}),function (error){
 
     		}
@@ -292,7 +297,8 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     }
 })
 
-.controller('listCtrl', function($scope, $rootScope, select, DynamicPage, $state, $ionicModal) {
+<<<<<<< HEAD
+.controller('listCtrl', function($scope, $rootScope, select, DynamicPage, $state) {
 	$scope.title = DynamicPage.getTitle();
 	$scope.route = DynamicPage.getRoute();
 	console.log ( $scope.route);
@@ -303,16 +309,23 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 		console.log ($scope.route);})
 
 
+=======
+.controller('listCtrl', function($scope, $rootScope, select, $ionicModal) {
+>>>>>>> e45be8d93f0cd9f7a1bcb60af2071630a9a522d2
 	// wrapper for person select button
 	$scope.select = function(JSON){
 		select.set (JSON);
 		$state.go ($scope.route);
 	}
+<<<<<<< HEAD
+
+=======
     
     //Enables the execution of a modal window on click
     $ionicModal.fromTemplateUrl('templates/project.html', {
         }).then(function(modal) {
         $scope.modal = modal;
         });
+>>>>>>> e45be8d93f0cd9f7a1bcb60af2071630a9a522d2
 })
 

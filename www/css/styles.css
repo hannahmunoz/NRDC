@@ -66,6 +66,7 @@
 /* Overrides existing Bar Light Theme*/
 .bar.bar-light{
     background: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
+    border-bottom: 1px solid #C5C4C4 !important;
 }
 
 /*background image on main page*/
@@ -104,6 +105,7 @@
     opacity: 1.0;
 }
 
+
 /*makes a div an fixed overlay on content*/
 .overlay{
     position: fixed;
@@ -125,27 +127,20 @@
     padding: 10px;
 }
 
-.pull-right{
-    float: right;
-}
-
 .center-text{
     text-align: center;
 }
 
 .pull-bottom{
-    position:absolute;
+    position: absolute;
     width: 100%;
     bottom: 0;
 }
+
 /*makes a div fill it's parent block*/
 .fill-parent{
 	min-height: 100%;
 	width: 100%;
-}
-
-.quarter-fill{
-    min-height: 25%;
 }
 
 .no-padding{
@@ -157,15 +152,29 @@ div.arrow-down:active{
     opacity: 1.0;
 }
 
-/*tile button*/
+/*tile style button
+used on main page*/
 .tile-btn{
-    margin: 5px 2.5px 5px 2.5px;
     padding: 0.0px;
+    margin: 2px;
     opacity: .85;
     border-radius: 2%;
 }
 
 
+/*makes rows wrap*/
+.row{
+  flex-wrap: wrap;
+}
 
+/*used for flex box purposes*/
+.home-container{
+    display: -webkit-flex;
+    -webkit-flex-directon: ;
+    height: 100%;
+}
 
-/*Animation tools*/
+.modal-back-btn{
+    margin-right: 8px;
+}
+
