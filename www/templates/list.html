@@ -1,0 +1,16 @@
+<ion-view id="page10" style="background-color:#0471A6;" class=" ">
+<ion-nav-title>{{title}}</ion-nav-title>
+    <ion-content padding="true" class="has-header">
+    <ul>
+    	<li class ="" ng-repeat="items in listJSON">
+    	<ul>
+    		<li class="" ng-repeat = "item in items">
+    			<button class = ""  ng-click = "select(item)" > {{item["Name"]}}
+    			</button>
+    			</li>
+    			</ul>
+    	</li>
+    </ul>
+
+        </ion-content>
+</ion-view>

@@ -15,7 +15,7 @@
 
         <form name ="nameForm" class="list " novalidate>
             <label class="item item-input " id="project-input63">
-                <input type="text" placeholder="Name"  name="projectName" ng-model = "project.name" required>
+                <input type="text" placeholder="Name"  name="projectName" ng-model = "JSON['Name']" required>
             </label>
         </form>
 
@@ -27,7 +27,7 @@
 
         <form name ="institutionForm" class="list " novalidate>
             <label class="item item-input " id="project-input64" >
-                <input type="text" placeholder="Institution Name" name="institution" ng-model = "project.institution" required>
+                <input type="text" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required>
             </label>
         </form>
 
@@ -39,7 +39,7 @@
 
         <form name ="fundingForm" class="list " novalidate>
             <label class="item item-input " id="project-input65" >
-                <input type="text" placeholder="Original Funding Agency" name="funding" ng-model = "project.funding" required>
+                <input type="text" placeholder="Original Funding Agency" name="funding" ng-model = "JSON['Original Funding Agency'] " required>
             </label>
         </form>
 
@@ -51,7 +51,7 @@
 
         <form name ="grantForm" class="list " novalidate>
             <label class="item item-input " id="project-input66">
-                <input type="number" placeholder="Grant Number" name="grantNumber" ng-model = project.grantNumber required>
+                <input type="text" placeholder="Grant Number" name="grantNumber" ng-model = "JSON['Grant Number String']" required>
             </label>
         </form>
 
