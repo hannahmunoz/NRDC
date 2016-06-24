@@ -86,11 +86,11 @@
     <!-- Small arrow on the bottom indicating scrollability-->
     <!-- Functionality: Enables user to scroll rapidly to bottom of page
          Hides upon full scroll down-->
-    <div class="overlay footer">
+    <div class="overlay footer"
+         ng-hide="isBottom">
             <div
               delegate-handle="arrow-btn"
               ng-click="scrlBot()"
-              ng-hide="isBottom"
               class="arrow-down pull-right translucent"></div>  
     </div>
 </ion-view>

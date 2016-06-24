@@ -275,7 +275,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 */
 .controller('scrollController', function($scope, $state, $ionicScrollDelegate, logger) {
     $scope.isBottom = false;
-    smoothnessOffset = 10;  //ensures smooth dissapearnce of arrow 
+    smoothnessOffset = 15;  //ensures smooth dissapearnce of arrow 
     
     //scrolls the content window to the bottom
     $scope.scrlBot = function(){
@@ -292,7 +292,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     }
 })
 
-.controller('listCtrl', function($scope, $rootScope, select, DynamicPage, $state, $ionicModal) {
+.controller('listCtrl', function($scope, $rootScope, select, DynamicPage, $state) {
 	$scope.title = DynamicPage.getTitle();
 	$scope.route = DynamicPage.getRoute();
 	console.log ( $scope.route);
@@ -309,10 +309,18 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 		$state.go ($scope.route);
 	}
     
-    //Enables the execution of a modal window on click
-    $ionicModal.fromTemplateUrl('templates/project.html', {
+})
+
+.controller('modalController', function($scope, $state, $ionicModal, logger) {
+    $scope.myHtml = "<div class='center-text fill-parent'>Some Injected HTML<div>";
+    
+    $ionicModal.fromTemplateUrl('templates/new-entry-modal.html', {
         }).then(function(modal) {
         $scope.modal = modal;
         });
 })
 
+.controller('modalContentController', function($scope, $state, $ionicModal, logger) {
+    $scope.myHtml = "<div class='center-text fill-parent'>Some Injected HTML<div>";
+
+})
