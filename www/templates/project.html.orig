@@ -50,6 +50,10 @@
         min|max req: not implemented -->
 
         <form name ="grantForm" class="list " novalidate>
+<<<<<<< HEAD:www/templates/viewProject.html
+            <label class="item item-input " id="project-input66" >
+                <input type="text" name="grantNumber" ng-model = "projectJSON['Grant Number String']" required>
+=======
 <<<<<<< HEAD
             <label class="item item-input " id="project-input66" ">
                 <input type="text" placeholder="Grant Number" name="grantNumber" ng-model = "JSON['Grant Number String']" required>
@@ -57,6 +61,7 @@
             <label class="item item-input " id="project-input66">
                 <input type="number" placeholder="Grant Number" name="grantNumber" ng-model = project.grantNumber required>
 >>>>>>> e45be8d93f0cd9f7a1bcb60af2071630a9a522d2
+>>>>>>> fe6b166be519261984d7297e5d9b3338a8e39ea4:www/templates/project.html.orig
             </label>
         </form>
 
