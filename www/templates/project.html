@@ -1,6 +1,6 @@
 <ion-modal-view title="Project" id="page10" style="" class=" ">
     <ion-nav-bar class="bar-light">
-        <ion-nav-back-button></ion-nav-back-button>
+        <ion-nav-back-button style="display:block;">Back</ion-nav-back-button>
         <ion-nav-buttons side="right">
             <div class="near-visible modal-back-btn" ng-click="modal.hide()"><h5>BACK</h5></div>
         </ion-nav-buttons>
@@ -75,7 +75,7 @@
         onclick function: remove modal and free memory
         error checking: checks if all input are of valid types and lengths -->
 
-        <a ui-sref="" id="project-button12" class=" button button-positive button-large button-block" ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid " ng-click = "saveProjectJSON(); resetForm(); modal.remove();">Save</a>
+        <a id="project-button12" class=" button button-positive button-large button-block" ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid " ng-click = "saveProjectJSON();  modal.remove();">Save</a>
 
     <!-- error handling for the above forms -->
     

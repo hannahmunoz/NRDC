@@ -4,58 +4,65 @@
       padding="true" 
       class="has-header bg-img-main"
       on-scroll="cndHideArrow()">
-        <form id="deployment-form31" class="list ">
-            <label class="item item-input " id="deployment-input37" name="deploymentName">
-                <span class="input-label">Name</span>
-                <input type="text" placeholder="">
+
+        <form name = "nameForm" id="deployment-form31" class="list " novalidate>
+            <label class="item item-input " id="deployment-input37">
+                <input type="text" placeholder="Name" name = "deploymentName" ng-model = "JSON['Name']" required>
             </label>
         </form>
-        <form id="deployment-form32" class="list ">
-            <label class="item item-input " id="deployment-input38" name="purpose">
-                <span class="input-label">Purpose</span>
-                <input type="text" placeholder="">
+
+        <form name = "purposeForm" id="deployment-form32" class="list ">
+            <label class="item item-input " id="deployment-input38" >
+                <input type="text" placeholder="Purpose" name="purpose" ng-model = "JSON['Purpose']" required>
             </label>
         </form>
-        <form id="deployment-form33" class="list ">
-            <label class="item item-input " id="deployment-input40" name="deploymentLatitude">
-                <span class="input-label">Latitude</span>
-                <input type="number" placeholder="">
+
+        <form  name = "GPSForm" id="deployment-form33" class="list ">
+            <label class="item item-input " id="deployment-input40" >
+                <input type="text" placeholder="Latitude" name="deploymentLatitude" ng-mdoel = "JSON['Latitude']">
             </label>
-            <label class="item item-input " id="deployment-input39" name="deploymentLongitude">
-                <span class="input-label">Longitude</span>
-                <input type="number" placeholder="">
+
+            <label class="item item-input " id="deployment-input39" >
+                <input type="text" placeholder="Longitude" name="deploymentLongitude" ng-model= "JSON['Longitude']" required>
             </label>
-            <label class="item item-input " id="deployment-input41" name="deploymentElevation">
-                <span class="input-label">Elevation</span>
-                <input type="number" placeholder="">
+
+            <label class="item item-input " id="deployment-input41" >
+                <input type="text" placeholder="Altitude" name="deploymentAltitude" ng-model = "JSON['Altitude']" required>
             </label>
             <button id="deployment-button8" class=" button button-positive button-large button-block ">Get GPS Location</button>
         </form>
-        <form id="deployment-form36" class="list ">
-            <label class="item item-input " id="deployment-input42" name="offset">
-                <span class="input-label">Center Offset</span>
-                <input type="text" placeholder="">
+
+
+        <form name = "offsetForm" id="deployment-form36" class="list ">
+            <label class="item item-input " id="deployment-input42" >
+                <input type="text" placeholder="Center Offset" name="offset" ng-model = "JSON['CenterOffset']" required>
             </label>
         </form>
-        <form id="deployment-form37" class="list ">
-            <label class="item item-input " id="deployment-input43" name="neight">
-                <span class="input-label">Height From Ground</span>
-                <input type="text" placeholder="">
+
+
+        <form name = "heightForm" id="deployment-form37" class="list ">
+            <label class="item item-input " id="deployment-input43">
+                <input type="text" placeholder="Height From Ground" name="height" ng-model = "JSON['Height From Ground']" required>
             </label>
         </form>
-        <form id="deployment-form38" class="list ">
-            <label class="item item-input " id="deployment-input44" name="logger">
-                <span class="input-label">Parent Logger</span>
-                <input type="text" placeholder="">
+
+
+        <form name = "loggerForm" id="deployment-form38" class="list ">
+            <label class="item item-input " id="deployment-input44" >
+                <input type="text" placeholder="Parent Logger" name="logger" ng-model = "JSON['Parent Logger']" required>
             </label>
         </form>
-        <form id="deployment-form39" class="list ">
+
+
+        <form name = "systemForm" id="deployment-form39" class="list ">
             <label class="item item-select " id="deployment-select7" name="deploymentSystem">
                 <span class="input-label">System</span>
                 <select></select>
             </label>
         </form>
-        <form id="deployment-form40" class="list ">
+
+
+        <form name = "dateForm" id="deployment-form40" class="list ">
             <label class="item item-input " id="deployment-input45" name="deploymentEstablish">
                 <span class="input-label">Established Date</span>
                 <input type="date" placeholder="">
@@ -67,12 +74,12 @@
     <!-- Small arrow on the bottom indicating scrollability-->
     <!-- Functionality: Enables user to scroll rapidly to bottom of page
          Hides upon full scroll down-->
-    <div class="overlay footer">
+<!--     <div class="overlay footer">
             <div
               delegate-handle="arrow-btn"
               ng-click="scrlBot()"
               ng-hide="isBottom"
               class="arrow-down pull-right translucent"></div>  
     </div>
-   
+    -->
 </ion-view>

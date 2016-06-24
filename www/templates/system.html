@@ -1,50 +1,88 @@
 <ion-view title="System" id="page5" style="background-color:#0471A6;" class=" ">
     <ion-content padding="true" class="has-header bg-img-main">
-        <form id="system-form23" class="list ">
-            <label class="item item-input " id="system-input31" name="systemName">
-                <span class="input-label">Name</span>
-                <input type="text" placeholder="">
+
+<!--    controller scope var: system
+        var name: systemName
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "nameForm" id="system-form23" class="list " novalidate>
+            <label class="item item-input " id="system-input31">
+                <input type="text" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" required>
             </label>
         </form>
-        <form id="system-form24" class="list ">
-            <label class="item item-input " id="system-input32" name="Details">
-                <span class="input-label">Details</span>
-                <input type="text" placeholder="">
+
+<!--    controller scope var: system
+        var name: details
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "detailsForm" id="system-form24" class="list " novalidate>
+            <label class="item item-input " id="system-input32" >
+                <input type="text" placeholder="Details" name="details" ng-model = "JSON['Details']" required="">
             </label>
         </form>
-        <form id="system-form25" class="list ">
-            <label class="item item-input " id="system-input33" name="power">
-                <span class="input-label">Power</span>
-                <input type="text" placeholder="">
+
+<!--    controller scope var: system
+        var name: power
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "powerForm" id="system-form25" class="list " novalidate>
+            <label class="item item-input " id="system-input33" >
+                <input type="text" placeholder="Power" name="power" ng-model = "JSON['Power']" required>
             </label>
         </form>
-        <form id="system-form26" class="list ">
-            <label class="item item-input " id="system-input34" name="installLocation">
-                <span class="input-label">Installation Location</span>
-                <input type="text" placeholder="">
+
+<!--    controller scope var: system
+        var name: installLocation
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "installForm" id="system-form26" class="list " novalidate>
+            <label class="item item-input " id="system-input34" >
+                <input type="text" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" required> 
             </label>
         </form>
-        <form id="system-form28" class="list ">
+
+
+        <form name = "managerForm" id="system-form28" class="list ">
             <label class="item item-select " id="system-select4" name="manager">
                 <span class="input-label">Manager</span>
                 <select></select>
             </label>
         </form>
-        <form id="system-form30" class="list ">
+
+
+        <form name = "siteForm" id="system-form30" class="list ">
             <label class="item item-select " id="system-select5" name="systemSite">
                 <span class="input-label">Site</span>
                 <select></select>
             </label>
         </form>
         
-        <form>
-            <label class= "myLabel button button-positive button-large button-block" id = "system-photo1" name="systemPhotoButton">
-                <span>Photo</span>
-                <input type="file"  accept="image/*">
+<!--    controller scope var: n/a
+        var name: photo
+        type: file upload
+        error checking: onchange -->
 
-            </label>
-        </form>
+         <button class = "button button-positive button-large button-block" ng-click = "choosePicture()">Choose Photo</button>
 
-        <a ui-sref="createNew.mainMenu" id="system-button6" class=" button button-positive button-large button-block ">Save</a>
+
+<!--    controller scope var: n/a
+        var name: takePhoto
+        type: file upload
+        error checking: onchange -->
+
+        <button class = "button button-positive button-large button-block" ng-click = "takePicture()">Take Photo</button>
+
+
+        <a ui-sref="createNew.mainMenu" id="system-button6" class=" button button-positive button-large button-block " ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid" ng-click = saveSystemJSON();>Save</a>
+
+            <!-- error handling for the above forms -->
+    <div class="padding"> 
+     <p ng-show="nameForm.siteName.$error.required || detailsForm.details.$error.required  || powerForm.power.$error.required  || installForm.installLocation.$error.required" >* All inputs must be completed</p>
+     </div>
+
     </ion-content>
 </ion-view>
