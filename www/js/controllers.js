@@ -45,11 +45,18 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 
    
-.controller('projectCtrl', function($scope, $rootScope, uuid2, logger) {
+.controller('projectCtrl', function($scope, $rootScope, uuid2, logger, ObjectCounter) {
 	//variables stored in projects
 	$scope.JSON = {};
-	$scope.JSON = $rootScope.peopleSyncedJSON;
-	// TODO: figure out selected spinnger
+	$scope.peopleJSON = {};
+	$scope.investigator;
+	for (var i = 0; i < ObjectCounter.count($rootScope.peopleSyncedJSON); i++){
+		var obj = {};
+		$scope.peopleJSON [$rootScope.peopleSyncedJSON.People[i]['Person']] =  $rootScope.peopleSyncedJSON.People[i]['First Name'] + " " + $rootScope.peopleSyncedJSON.People[i]['Last Name']; 
+		//$scope.peopleJSON.push (obj);
+		console.log (JSON.stringify($scope.peopleJSON));
+	}
+
 
 	// JSON function for project
 	$scope.saveProjectJSON = function (){
@@ -59,10 +66,12 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 		$scope.JSON ["Modification Date"] = new Date();
 		$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
 
-		// print json to console for debugging
-		logger.log (JSON.stringify($scope.project));
 
-		$scope.project = {};
+
+		// print json to console for debugging
+		logger.log (JSON.stringify($scope.JSON));
+
+		$scope.JSON = {};
 	}
 })
    
@@ -128,7 +137,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 })
    
    
-.controller('deploymentCtrl', function($scope, $rootScope, uuid2, Upload, logger) {
+.controller('deploymentCtrl', function($scope, $rootScope, uuid2, Upload, logger, GPS) {
 
 	// variables stored in system
 	$scope.JSON = {};
@@ -152,13 +161,28 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
    
 
    
-.controller('componentCtrl', function($scope) {
+.controller('componentCtrl', function($scope, $rootScope, uuid2, Upload, logger, Camera) {
+	$scope.JSON = {};
+	$scope.imageData;
 
+	//JSON fucntion for people
+	$scope.saveComponentJSON = function (){
+			$scope.JSON ["Creation Date"] = new Date();
+			$scope.JSON ["Modification Date"] = new Date();
+			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
+
+			//$scope.site ["Photo"] = $scope.imageData;
+
+			// print json to console for debugging
+			logger.log (JSON.stringify($scope.JSON));
+
+			$scope.JSON = {};
+	}
 })
    
    
 .controller('documentCtrl', function($scope, $rootScope, uuid2, Upload, logger) {
-		// variables stored in system
+	// variables stored in document
 	$scope.JSON = {};
 	$scope.imageData;
 
@@ -176,11 +200,28 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 			$scope.JSON = {};
 	}
 
-
 })
    
    
-.controller('serviceEntryCtrl', function($scope) {
+.controller('serviceEntryCtrl', function($scope, $rootScope, uuid2, Upload, logger) {
+		// variables stored in document
+	$scope.JSON = {};
+	$scope.imageData;
+
+	//JSON fucntion for people
+	$scope.saveServiceJSON = function (){
+			$scope.JSON ["Creation Date"] = new Date();
+			$scope.JSON ["Modification Date"] = new Date();
+			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
+
+			//$scope.site ["Photo"] = $scope.imageData;
+
+			// print json to console for debugging
+			logger.log (JSON.stringify($scope.JSON));
+
+			$scope.JSON = {};
+	}
+
 
 })
    
@@ -310,7 +351,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 */
 .controller('scrollController', function($scope, $state, $ionicScrollDelegate, logger) {
     $scope.isBottom = false;
-    smoothnessOffset = 10;  //ensures smooth dissapearnce of arrow 
+    smoothnessOffset = 15;  //ensures smooth dissapearnce of arrow 
     
     //scrolls the content window to the bottom
     $scope.scrlBot = function(){
@@ -327,7 +368,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     }
 })
 
-.controller('listCtrl', function($scope, $rootScope, select, DynamicPage, $state, $ionicModal) {
+.controller('listCtrl', function($scope, $rootScope, select, DynamicPage, $state) {
 	$scope.title = DynamicPage.getTitle();
 	$scope.route = DynamicPage.getRoute();
 	console.log ( $scope.route);
@@ -344,10 +385,18 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 		$state.go ($scope.route);
 	}
     
-    //Enables the execution of a modal window on click
-    $ionicModal.fromTemplateUrl('templates/project.html', {
+})
+
+.controller('modalController', function($scope, $state, $ionicModal, logger) {
+    $scope.myHtml = "<div class='center-text fill-parent'>Some Injected HTML<div>";
+    
+    $ionicModal.fromTemplateUrl('templates/new-entry-modal.html', {
         }).then(function(modal) {
         $scope.modal = modal;
         });
 })
 
+.controller('modalContentController', function($scope, $state, $ionicModal, logger) {
+    $scope.myHtml = "<div class='center-text fill-parent'>Some Injected HTML<div>";
+
+})

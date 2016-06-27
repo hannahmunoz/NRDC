@@ -202,6 +202,19 @@ angular.module('app.services', ['base64'])
 			setRoute: function(newRoute){ route = newRoute;}}
 })
 
+.factory ('ObjectCounter', function(){
+	function count (object){
+		var i = 0;
+		for (var x in object){
+			if (object.hasOwnProperty (x)){
+				i++;
+			}
+		}
+		return i;
+	}
+
+	return{count: count};
+})
 
 // factory: GPS
 // function(s): 
