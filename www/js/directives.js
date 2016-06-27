@@ -15,7 +15,29 @@ angular.module('app.directives', [])
       });
     }
   }
+})
+
+
+//Directive: conditionalView
+//Defines a tag as either ion-modal-view
+//or ion-view depending on what called it
+.directive('conditionalView', function($interpolate){
+    return{
+        restrict: 'E',
+        scope:{
+            tagName: '='
+        },
+        link: function($scope, $element, $attr, ModalService){
+            var content = $element.html();
+            $element.contents().remove();
+            var tag = $interpolate('<ion-modal-view title="Project" id="page10">{{content}}</ion-modal-view>')
+                       ({tagName: $scope.tagName, content: content});
+            var e = angular.element(tag);
+            $element.replaceWith(e);
+        }
+    }
 });
+
 
 
 // .directive('blankDirective', [function(){

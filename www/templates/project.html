@@ -1,7 +1,8 @@
-<ion-view title="Project" id="page10" style="" class=" ">
-    <ion-nav-bar class="bar-light">
-        <ion-nav-back-button style="display:block;">Back</ion-nav-back-button>
-    </ion-nav-bar>
+<ion-modal-view title="Project" id="page10" ng-controller="projectCtrl">
+    <ion-header-bar class="bar-light">
+        <button style="display:block;" ng-click="back(); closeModal();">Back</button>
+        <!--<ion-header-button>back</ion-header-button>-->
+    </ion-header-bar>
     <ion-content padding="true" class="has-header bg-img-main">
 
     <!--controller scope var: project
@@ -73,7 +74,7 @@
         onclick function: remove modal and free memory
         error checking: checks if all input are of valid types and lengths -->
 
-        <a ui-sref = "createNew.mainMenu" d="project-button12" class=" button button-positive button-large button-block" ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid " ng-click = "saveProjectJSON(); ">Save</a>
+        <a d="project-button12" class=" button button-positive button-large button-block" ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid " ng-click = "saveProjectJSON(); destroyModal(); ">Save</a>
 
     <!-- error handling for the above forms -->
     
@@ -82,4 +83,4 @@
    </div>
 
     </ion-content>
-</ion-view>
+</ion-modal-view>

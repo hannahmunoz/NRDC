@@ -73,12 +73,17 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 		$scope.JSON = {};
 	}
+    
 })
    
 
-.controller('viewCtrl', function($scope, select) {
+.controller('viewCtrl', function($scope, $ionicHistory, select) {
 	$scope.JSON = select.get();
 	console.log ($scope.JSON);
+    
+     $scope.back = function(){
+        $ionicHistory.goBack();
+    }
 
 })
 
@@ -384,17 +389,37 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 		select.set (JSON);
 		$state.go ($scope.route);
 	}
-    
+   
 })
 
-.controller('modalController', function($scope, $rootScope, $state, $ionicModal, logger) {
-    $scope.myHtml = "<div class='center-text fill-parent'>Some Injected HTML<div>";
+.controller('modalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
+    $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
     
-    $ionicModal.fromTemplateUrl('templates/new-entry-modal.html', {
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
         }).then(function(modal) {
             $scope.modal = modal;
         });
+    });
+    
+    $scope.openModal = function() {
+        $scope.modal.show();
+    };
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+    };
+     $scope.destroyModal = function() {
+        $scope.modal.remove();
+    };
 })
 
-.controller('modalContentController', function($scope, $state, $ionicModal, logger) {
+.controller('modalContentController', function($scope, $state, logger) {
+    $scope.isModal = true;
 })
