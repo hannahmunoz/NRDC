@@ -45,11 +45,18 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 
    
-.controller('projectCtrl', function($scope, $rootScope, uuid2, logger) {
+.controller('projectCtrl', function($scope, $rootScope, uuid2, logger, ObjectCounter) {
 	//variables stored in projects
 	$scope.JSON = {};
-	$scope.JSON = $rootScope.peopleSyncedJSON;
-	// TODO: figure out selected spinnger
+	$scope.peopleJSON = {};
+	$scope.investigator;
+	for (var i = 0; i < ObjectCounter.count($rootScope.peopleSyncedJSON); i++){
+		var obj = {};
+		$scope.peopleJSON [$rootScope.peopleSyncedJSON.People[i]['Person']] =  $rootScope.peopleSyncedJSON.People[i]['First Name'] + " " + $rootScope.peopleSyncedJSON.People[i]['Last Name']; 
+		//$scope.peopleJSON.push (obj);
+		console.log (JSON.stringify($scope.peopleJSON));
+	}
+
 
 	// JSON function for project
 	$scope.saveProjectJSON = function (){
@@ -59,10 +66,12 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 		$scope.JSON ["Modification Date"] = new Date();
 		$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
 
-		// print json to console for debugging
-		logger.log (JSON.stringify($scope.project));
 
-		$scope.project = {};
+
+		// print json to console for debugging
+		logger.log (JSON.stringify($scope.JSON));
+
+		$scope.JSON = {};
 	}
 })
    
@@ -71,7 +80,6 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 	$scope.JSON = select.get();
 	console.log ($scope.JSON);
 
-
 })
 
 
@@ -79,21 +87,21 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 .controller('siteCtrl', function($scope, $rootScope, uuid2, Upload, logger, $ionicPlatform, Camera, GPS) {
 
 	// variables stored in site
-	$scope.site = {};
+	$scope.JSON = {};
 	$scope.imageData;
 
 	//JSON fucntion for people
 	$scope.saveSiteJSON = function (){
-			$scope.site ["Creation Date"] = new Date();
-			$scope.site ["Modification Date"] = new Date();
-			$scope.site ["Unique Identifier"] = uuid2.newuuid();
+			$scope.JSON  ["Creation Date"] = new Date();
+			$scope.JSON  ["Modification Date"] = new Date();
+			$scope.JSON  ["Unique Identifier"] = uuid2.newuuid();
 
 			//$scope.site ["Photo"] = $scope.imageData;
 
 			// print json to console for debugging
-			logger.log (JSON.stringify($scope.site));
+			logger.log (JSON.stringify($scope.JSON ));
 
-			$scope.site = {};
+			$scope.JSON  = {};
 	}
 
 	//wrapper for the GPS factory so we can call it from the getGPS button
@@ -106,49 +114,117 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 
    
-.controller('viewSiteCtrl', function($scope) {
+.controller('systemCtrl', function($scope, $rootScope, uuid2, Upload, logger) {
+	
+	// variables stored in system
+	$scope.JSON = {};
+	$scope.imageData;
+
+	//JSON fucntion for people
+	$scope.saveSystemJSON = function (){
+			$scope.JSON ["Creation Date"] = new Date();
+			$scope.JSON ["Modification Date"] = new Date();
+			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
+
+			//$scope.site ["Photo"] = $scope.imageData;
+
+			// print json to console for debugging
+			logger.log (JSON.stringify($scope.JSON));
+
+			$scope.JSON = {};
+	}
 
 })
    
-.controller('systemCtrl', function($scope) {
+   
+.controller('deploymentCtrl', function($scope, $rootScope, uuid2, Upload, logger, GPS) {
+
+	// variables stored in system
+	$scope.JSON = {};
+	$scope.imageData;
+
+	//JSON fucntion for people
+	$scope.saveDeploymentJSON = function (){
+			$scope.JSON ["Creation Date"] = new Date();
+			$scope.JSON ["Modification Date"] = new Date();
+			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
+
+			//$scope.site ["Photo"] = $scope.imageData;
+
+			// print json to console for debugging
+			logger.log (JSON.stringify($scope.JSON));
+
+			$scope.JSON = {};
+	}
 
 })
    
-.controller('viewSystemCtrl', function($scope) {
+
+   
+.controller('componentCtrl', function($scope, $rootScope, uuid2, Upload, logger, Camera) {
+	$scope.JSON = {};
+	$scope.imageData;
+
+	//JSON fucntion for people
+	$scope.saveComponentJSON = function (){
+			$scope.JSON ["Creation Date"] = new Date();
+			$scope.JSON ["Modification Date"] = new Date();
+			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
+
+			//$scope.site ["Photo"] = $scope.imageData;
+
+			// print json to console for debugging
+			logger.log (JSON.stringify($scope.JSON));
+
+			$scope.JSON = {};
+	}
+})
+   
+   
+.controller('documentCtrl', function($scope, $rootScope, uuid2, Upload, logger) {
+	// variables stored in document
+	$scope.JSON = {};
+	$scope.imageData;
+
+	//JSON fucntion for people
+	$scope.saveDocumentJSON = function (){
+			$scope.JSON ["Creation Date"] = new Date();
+			$scope.JSON ["Modification Date"] = new Date();
+			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
+
+			//$scope.site ["Photo"] = $scope.imageData;
+
+			// print json to console for debugging
+			logger.log (JSON.stringify($scope.JSON));
+
+			$scope.JSON = {};
+	}
 
 })
    
-.controller('deploymentCtrl', function($scope) {
+   
+.controller('serviceEntryCtrl', function($scope, $rootScope, uuid2, Upload, logger) {
+		// variables stored in document
+	$scope.JSON = {};
+	$scope.imageData;
+
+	//JSON fucntion for people
+	$scope.saveServiceJSON = function (){
+			$scope.JSON ["Creation Date"] = new Date();
+			$scope.JSON ["Modification Date"] = new Date();
+			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
+
+			//$scope.site ["Photo"] = $scope.imageData;
+
+			// print json to console for debugging
+			logger.log (JSON.stringify($scope.JSON));
+
+			$scope.JSON = {};
+	}
+
 
 })
    
-.controller('viewDeploymentCtrl', function($scope) {
-
-})
-   
-.controller('componentCtrl', function($scope) {
-
-})
-   
-.controller('viewComponentCtrl', function($scope) {
-
-})
-   
-.controller('documentCtrl', function($scope) {
-
-})
-   
-.controller('viewDocumentCtrl', function($scope) {
-
-})
-   
-.controller('serviceEntryCtrl', function($scope) {
-
-})
-   
-.controller('viewServiceEntryCtrl', function($scope) {
-
-})
    
 .controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage) {
 
