@@ -54,35 +54,6 @@ angular.module('app.services', ['base64'])
 })
 
 
-// factory: select
-// fucntion(s): 
-//		set
-//		get
-
-.factory ('select', function (){
-	var JSON = {};
-
-// function: set
-// purpose:  sets the JSON  from the list pages 
-// var: JSON
-// return: n/a
-	function set (data){
-		JSON = data;
-
-	}
-
-// function: get
-// purpose:  gets the JSON for the view pages
-// var: 
-// return: number
-	function get (){
-		return JSON;
-	}
-
-	return {set: set,
-			get: get}
-})
-
 // factory: Camera
 // function(s): 
 //		checkPermissions
@@ -195,11 +166,14 @@ angular.module('app.services', ['base64'])
 .factory ('DynamicPage', function(){
 	var title = null;
 	var route = null;
+	var JSON = null;
 
 	return {getTitle: function(){return title;},
 			setTitle: function(newTitle){ title = newTitle;},
 			getRoute: function(){return route;} ,
-			setRoute: function(newRoute){ route = newRoute;}}
+			setRoute: function(newRoute){ route = newRoute;},
+			setJSON: function(newJSON){JSON = newJSON;},
+			getJSON: function(){return JSON;}};
 })
 
 .factory ('ObjectCounter', function(){
