@@ -48,15 +48,6 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 .controller('projectCtrl', function($scope, $rootScope, uuid2, logger, ObjectCounter) {
 	//variables stored in projects
 	$scope.JSON = {};
-	$scope.peopleJSON = {};
-	$scope.investigator;
-	for (var i = 0; i < ObjectCounter.count($rootScope.peopleSyncedJSON); i++){
-		var obj = {};
-		$scope.peopleJSON [$rootScope.peopleSyncedJSON.People[i]['Person']] =  $rootScope.peopleSyncedJSON.People[i]['First Name'] + " " + $rootScope.peopleSyncedJSON.People[i]['Last Name']; 
-		//$scope.peopleJSON.push (obj);
-		console.log (JSON.stringify($scope.peopleJSON));
-	}
-
 
 	// JSON function for project
 	$scope.saveProjectJSON = function (){
@@ -65,7 +56,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 		$scope.JSON ["Started Date"] = new Date();
 		$scope.JSON ["Modification Date"] = new Date();
 		$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
-
+		$scope.JSON ["Principal Investigator"] = parseInt ($scope.JSON ["Principal Investigator"]);
 
 
 		// print json to console for debugging
@@ -76,19 +67,36 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     
 })
    
+.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope) {
 
-.controller('viewCtrl', function($scope, $ionicHistory, select) {
-	$scope.JSON = select.get();
-	console.log ($scope.JSON);
+	$scope.JSON = DynamicPage.getJSON();
+		switch (DynamicPage.getTitle()){
+			case 'Projects':
+					$scope.JSON['Principal Investigator'] = JSON.stringify($scope.JSON['Principal Investigator']);
+				break;
+				
+			case 'Sites':
+					$scope.JSON['Project'] = JSON.stringify($scope.JSON['Project']);
+					$scope.JSON ['Permit Holder'] = JSON.stringify($scope.JSON['Permit Holder']);
+					$scope.JSON ['Land Owner'] = JSON.stringify($scope.JSON['Land Owner']);
+				break;
+			case 'Systems':
+					$scope.JSON['Manager'] = JSON.stringify($scope.JSON['Manager']);
+					$scope.JSON['Site'] = JSON.stringify($scope.JSON['Site']);
+				break;
+			case 'Deployments':
+					$scope.JSON ['System'] = JSON.stringify($scope.JSON['System']);
+				break;
+			case 'Components':
+					$scope.JSON['Deployment'] = JSON.stringify($scope.JSON['Deployment']);
+		}
     
-     $scope.back = function(){
-        $ionicHistory.goBack();
-    }
-
+      $scope.back = function(){
+            $ionicHistory.goBack();
+      }
 })
 
 
-   
 .controller('siteCtrl', function($scope, $rootScope, uuid2, Upload, logger, $ionicPlatform, Camera, GPS) {
 
 	// variables stored in site
@@ -100,6 +108,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 			$scope.JSON  ["Creation Date"] = new Date();
 			$scope.JSON  ["Modification Date"] = new Date();
 			$scope.JSON  ["Unique Identifier"] = uuid2.newuuid();
+			$scope.JSON ["Project"] = parseInt ($scope.JSON ["Project"]);
+			$scope.JSON ["Permit Holder"] = parseInt ($scope.JSON ["Permit Holder"]);
+			$scope.JSON ["Land Owner"] = parseInt ($scope.JSON ["Land Owner"]);
 
 			//$scope.site ["Photo"] = $scope.imageData;
 
@@ -130,6 +141,8 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 			$scope.JSON ["Creation Date"] = new Date();
 			$scope.JSON ["Modification Date"] = new Date();
 			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
+			$scope.JSON ["Manager"] = parseInt ($scope.JSON ["Manager"]);
+			$scope.JSON ["Site"] = parseInt ($scope.JSON ["Site"]);
 
 			//$scope.site ["Photo"] = $scope.imageData;
 
@@ -153,6 +166,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 			$scope.JSON ["Creation Date"] = new Date();
 			$scope.JSON ["Modification Date"] = new Date();
 			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
+			$scope.JSON ["System"] = parseInt ($scope.JSON ["System"]);
 
 			//$scope.site ["Photo"] = $scope.imageData;
 
@@ -175,6 +189,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 			$scope.JSON ["Creation Date"] = new Date();
 			$scope.JSON ["Modification Date"] = new Date();
 			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
+			$scope.JSON ["Deployment"] = parseInt ($scope.JSON ["Deployment"]);
 
 			//$scope.site ["Photo"] = $scope.imageData;
 
@@ -231,17 +246,25 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 })
    
    
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter) {
 
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
+	$rootScope.peopleJSON = {};
 	$rootScope.projectSyncedJSON = {};
+	$rootScope.projectJSON = {};
 	$rootScope.siteSyncedJSON = {};
+	$rootScope.siteJSON = {};
 	$rootScope.systemSyncedJSON = {};
+	$rootScope.systemJSON = {};
 	$rootScope.deploymentSyncedJSON = {};
+	$rootScope.deploymentJSON = {};
 	$rootScope.componentSyncedJSON = {};
+	$rootScope.componentJSON = {};
 	$rootScope.documentSyncedJSON = {};
+	$rootScope.documentJSON = {};
 	$rootScope.serviceSyncedJSON = {};
+	$rootScope.serviceJSON = {};
 
 	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
 	$rootScope.urlPaths = ["people","projects", "sites", "systems", "deployments", "components", "documents","service_entries"];
@@ -284,6 +307,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     	var promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[0]+"/");
     		promise.then (function(result){
     			$rootScope.peopleSyncedJSON = result;	
+    			for (var i = 0; i < $rootScope.peopleSyncedJSON.People.length; i++){
+					$rootScope.peopleJSON [$rootScope.peopleSyncedJSON.People[i]['Person']] =  $rootScope.peopleSyncedJSON.People[i]['First Name'] + " " + $rootScope.peopleSyncedJSON.People[i]['Last Name']; 
+				}
     		}),function (error){
 
     		}
@@ -291,7 +317,10 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     	//project read
     	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/");
     		promise.then (function(result){
-    			$rootScope.projectSyncedJSON = result;	
+    			$rootScope.projectSyncedJSON = result;
+    			for (var i = 0; i < $rootScope.projectSyncedJSON.Projects.length; i++){
+					$rootScope.projectJSON [$rootScope.projectSyncedJSON.Projects[i]['Project']] =  $rootScope.projectSyncedJSON.Projects[i]['Name']; 
+				}
     		}),function (error){
 
     		}
@@ -299,7 +328,10 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     	//site read
     	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/");
     		promise.then (function(result){
-    			$rootScope.siteSyncedJSON = result;	
+    			$rootScope.siteSyncedJSON = result;
+    			for (var i = 0; i < $rootScope.siteSyncedJSON.Sites.length; i++){
+					$rootScope.siteJSON [$rootScope.siteSyncedJSON.Sites[i]['Site']] =  $rootScope.siteSyncedJSON.Sites[i]['Name']; 
+				}
     		}),function (error){
 
     		}
@@ -307,7 +339,10 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     	//project read
     	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/");
     		promise.then (function(result){
-    			$rootScope.systemSyncedJSON = result;	
+    			$rootScope.systemSyncedJSON = result;
+    			    for (var i = 0; i < $rootScope.systemSyncedJSON.Systems.length; i++){
+						$rootScope.systemJSON [$rootScope.systemSyncedJSON.Systems[i]['System']] =  $rootScope.systemSyncedJSON.Systems[i]['Name']; 
+					}	
     		}),function (error){
 
     		}
@@ -315,7 +350,11 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     	//deployment read
     	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[4]+"/");
     		promise.then (function(result){
-    			$rootScope.deploymentSyncedJSON = result;	
+    			$rootScope.deploymentSyncedJSON = result;
+    		    for (var i = 0; i < $rootScope.deploymentSyncedJSON.Deployments.length; i++){
+					$rootScope.deploymentJSON [$rootScope.deploymentSyncedJSON.Deployments[i]['Deployment']] =  $rootScope.deploymentSyncedJSON.Deployments[i]['Name']; 
+				}	
+			
     		}),function (error){
 
     		}
@@ -323,7 +362,10 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     	//component read
     	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[5]+"/");
     		promise.then (function(result){
-    			$rootScope.componentSyncedJSON = result;	
+    			$rootScope.componentSyncedJSON = result;
+    		    for (var i = 0; i < $rootScope.componentSyncedJSON.Components.length; i++){
+					$rootScope.componentJSON [$rootScope.componentSyncedJSON.Components[i]['Component']] =  $rootScope.componentSyncedJSON.Components[i]['Name']; 
+				}		
     		}),function (error){
 
     		}
@@ -332,6 +374,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[6]+"/");
     		promise.then (function(result){
     			$rootScope.documentSyncedJSON = result;	
+    		    for (var i = 0; i < $rootScope.documentSyncedJSON.Documents.length; i++){
+					$rootScope.documentJSON [$rootScope.documentSyncedJSON.Documents[i]['Document']] =  $rootScope.documentSyncedJSON.Documents[i]['Name']; 
+				}	
     		}),function (error){
 
     		}
@@ -340,6 +385,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[7]+"/");
     		promise.then (function(result){
     			$rootScope.serviceSyncedJSON = result;	
+    		    for (var i = 0; i < $rootScope.serviceSyncedJSON.ServiceEntries.length; i++){
+					$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
+				}			
     		}),function (error){
 
     		}
@@ -373,7 +421,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     }
 })
 
-.controller('listCtrl', function($scope, $rootScope, select, DynamicPage, $state) {
+.controller('listCtrl', function($scope, $rootScope, DynamicPage, $state) {
 	$scope.title = DynamicPage.getTitle();
 	$scope.route = DynamicPage.getRoute();
 	console.log ( $scope.route);
@@ -386,7 +434,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 	// wrapper for person select button
 	$scope.select = function(JSON){
-		select.set (JSON);
+		DynamicPage.setJSON (JSON);
 		$state.go ($scope.route);
 	}
    
