@@ -311,16 +311,14 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     
 })
 
-.controller('modalController', function($scope, $state, $ionicModal, logger) {
+.controller('modalController', function($scope, $rootScope, $state, $ionicModal, logger) {
     $scope.myHtml = "<div class='center-text fill-parent'>Some Injected HTML<div>";
     
     $ionicModal.fromTemplateUrl('templates/new-entry-modal.html', {
         }).then(function(modal) {
-        $scope.modal = modal;
+            $scope.modal = modal;
         });
 })
 
 .controller('modalContentController', function($scope, $state, $ionicModal, logger) {
-    $scope.myHtml = "<div class='center-text fill-parent'>Some Injected HTML<div>";
-
 })
