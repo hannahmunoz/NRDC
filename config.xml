@@ -75,6 +75,8 @@
       <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
       <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
       <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+      <preference name="AndroidPersistentFileLocation" value="Internal"/>
+      <preference name="iosPersistentFileLocation" value="Library"/>
     </config-file>
     <icon src="resources\android\icon\drawable-ldpi-icon.png" density="ldpi"/>
     <icon src="resources\android\icon\drawable-mdpi-icon.png" density="mdpi"/>

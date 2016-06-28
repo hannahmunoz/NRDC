@@ -1,4 +1,4 @@
-angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngFileUpload'])
+angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage'])
 
 //the controller for the people view  
 .controller('peopleCtrl', function($scope, $rootScope, uuid2, Upload, logger, $ionicPlatform, Camera) {
@@ -128,8 +128,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 	//wrapper for the GPS factory so we can call it from the getGPS button
 	// in root scope so it can be called from all buttons
-	$rootScope.getGPS = function (){
+	$rootScope.getGPS = function (JSON){
 		GPS.checkPermissions();
+		GPS.getLocation(JSON);
 	}
 
 })
@@ -252,7 +253,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 })
    
    
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile) {
 
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
@@ -275,6 +276,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
 	$rootScope.urlPaths = ["people","projects", "sites", "systems", "deployments", "components", "documents","service_entries"];
 
+	File.createDirectory();
 
     $scope.randomTimingOffset = [];
     

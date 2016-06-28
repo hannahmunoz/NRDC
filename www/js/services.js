@@ -98,7 +98,7 @@ angular.module('app.services', ['base64'])
 			quality: 100,
 			allowEdit: false,
 			sourceType: source,
-			destinationType: Camera.DestinationType.FILE_URI,
+			destinationType: Camera.DestinationType.DATA_URL,
 			encodingType: Camera.EncodingType.JPEG,
 			mediaType: Camera.MediaType.PICTURE,
 			correctOrientation: true
@@ -111,21 +111,17 @@ angular.module('app.services', ['base64'])
 // var: n/a
 // return: n/a (eventually will return the encoded image)
 	function openCamera() {
+		document.addEventListener ("deviceready", function(){
 
     	var options = setOptions(Camera.PictureSourceType.CAMERA);
 
-//     	navigator.camera.getPicture(function cameraSuccess(imageUri) {
-
-//        // console.log(imageUri);
-//        return imageUri;
-
-//     	}, function cameraError(error) {
-//         	console.debug("Camera Error: " + error, "app");
-//     	}, options);
 		navigator.camera.getPicture(function onSuccess (imageData){
 				 var image = "data:image/jpeg;base64," + imageData;
 				return image;
-			}, function onFail(){}, options);
+			}, function onFail(error){
+				console.debug("Camera Error: " + error, "app");
+			}, options);
+	})
 }
 
 // function: openGallery
@@ -133,36 +129,24 @@ angular.module('app.services', ['base64'])
 // var: n/a
 // return: n/a (eventually will return the encoded image)
 	function openGallery() {
+		document.addEventListener ("deviceready", function(){
+			var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
 
-    	var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
-
-    	navigator.camera.getPicture(function cameraSuccess(imageData) {
-			var image = "data:image/jpeg;base64," + imageData;
-			return image;
-
-    	}, function cameraError(error) {
-        	console.debug("Camera Error: " + error, "app");
+    		navigator.camera.getPicture(function cameraSuccess(imageData) {
+				 var image = "data:image/jpeg;base64," + imageData;
+				return image;
+    		}, function cameraError(error) {
+        	console.debug("Gallery Error: " + error, "app");
     	}, options);
+	})
+
 }
-
-
-// function: convert
-// 	purpose: converts an image to base 64
-// 	var: file (image)
-//	return: base 64 string
-	var imageData;
-	function convertToBase64 (file){
-		imageData = $base64.encode (file);
-		console.log(imageData);
-       	return imageData;
-	}	
 
 // return values
 	return {checkPermissions: checkPermissions,
 			setOptions: setOptions,
 			openCamera: openCamera,
 			openGallery: openGallery,
-			convertToBase64: convertToBase64
 		};
 
 })
@@ -179,14 +163,6 @@ angular.module('app.services', ['base64'])
 			setJSON: function(newJSON){JSON = newJSON;},
 			getJSON: function(){return JSON;}};
 })
-
-.factory('DynamicModal', function(){
-    var title;
-    return {getTitle: function(){return title;},
-			setTitle: function(newTitle){ title = newTitle;}}
-})
-
-
 
 .factory ('ObjectCounter', function(){
 	function count (object){
@@ -229,5 +205,33 @@ angular.module('app.services', ['base64'])
 	});
 	}
 
-	return{checkPermissions: checkPermissions};
+	function getLocation(JSON){
+
+		navigator.geolocation.getCurrentPosition(function onSuccess (position){
+  			JSON ['Longitude'] = position.coords.longitude;
+  			JSON ['Latitude'] = position.coords.latitude;
+  			JSON ['Altitude'] = position.coords.altitude;
+		}, function onError(){
+        console.debug ('GPS error code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+		}, { enableHighAccuracy: true });
+	}
+
+	return{checkPermissions: checkPermissions,
+		   getLocation: getLocation};
+	})
+
+
+.factory ('File',function($cordovaFile){
+	function createDirectory(){
+		document.addEventListener ("deviceready", function(){
+			$cordovaFile.checkDir (cordova.file.dataDirectory,'NRDC').then (function (success){
+			console.log (success.code);
+		},function (error){
+			console.log (error);
+			})
+		})
+	}
+	return {createDirectory: createDirectory}
+
 });
