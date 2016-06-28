@@ -1,4 +1,12 @@
-<ion-view ng-controller="scrollController" title="Service Entry" id="page8" style="background-color:#0471A6;" class=" ">
+<ion-modal-view ng-controller="scrollController" 
+                title="Service Entry" 
+                id="page8" 
+                style="background-color:#0471A6;" 
+                class=" ">
+    <ion-header-bar class="bar-light">
+        <button style="display:block;" ng-click="back(); closeModal();">Back</button>
+    </ion-header-bar>
+    
     <ion-content 
       delegate-handle="scrollable" 
       padding="true" 
@@ -101,4 +109,4 @@
               ng-click="scrlBot()"
               class="arrow-down pull-right translucent"></div>  
     </div>
-</ion-view>
+</ion-modal-view>

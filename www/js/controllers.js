@@ -69,11 +69,12 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 		logger.log (JSON.stringify($scope.JSON));
 
 		$scope.JSON = {};
+        
 	}
     
 })
    
-.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope) {
+.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory) {
 
 	$scope.JSON = DynamicPage.getJSON();
 		switch (DynamicPage.getTitle()){
@@ -96,10 +97,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 			case 'Components':
 					$scope.JSON['Deployment'] = JSON.stringify($scope.JSON['Deployment']);
 		}
-    
-      $scope.back = function(){
+     $scope.back = function(){
             $ionicHistory.goBack();
-      }
+        }
 })
 
 
@@ -445,7 +445,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 		DynamicPage.setJSON (JSON);
 		$state.go ($scope.route);
 	}
-   
+    
 })
 
 .controller('modalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
@@ -476,6 +476,3 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     };
 })
 
-.controller('modalContentController', function($scope, $state, logger) {
-    $scope.isModal = true;
-})
