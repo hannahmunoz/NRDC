@@ -70,9 +70,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 		$scope.JSON = {};
 	}
+    
 })
    
-
 .controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope) {
 
 	$scope.JSON = DynamicPage.getJSON();
@@ -96,8 +96,10 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 			case 'Components':
 					$scope.JSON['Deployment'] = JSON.stringify($scope.JSON['Deployment']);
 		}
-
-
+    
+      $scope.back = function(){
+            $ionicHistory.goBack();
+      }
 })
 
 
@@ -441,19 +443,37 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 		DynamicPage.setJSON (JSON);
 		$state.go ($scope.route);
 	}
-    
+   
 })
 
-.controller('modalController', function($scope, $state, $ionicModal, logger) {
-    $scope.myHtml = "<div class='center-text fill-parent'>Some Injected HTML<div>";
-    
-    $ionicModal.fromTemplateUrl('templates/new-entry-modal.html', {
-        }).then(function(modal) {
+.controller('modalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
+    $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
         $scope.modal = modal;
+    });
+    
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
         });
+    });
+    
+    $scope.openModal = function() {
+        $scope.modal.show();
+    };
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+    };
+     $scope.destroyModal = function() {
+        $scope.modal.remove();
+    };
 })
 
-.controller('modalContentController', function($scope, $state, $ionicModal, logger) {
-    $scope.myHtml = "<div class='center-text fill-parent'>Some Injected HTML<div>";
-
+.controller('modalContentController', function($scope, $state, logger) {
+    $scope.isModal = true;
 })

@@ -180,6 +180,14 @@ angular.module('app.services', ['base64'])
 			getJSON: function(){return JSON;}};
 })
 
+.factory('DynamicModal', function(){
+    var title;
+    return {getTitle: function(){return title;},
+			setTitle: function(newTitle){ title = newTitle;}}
+})
+
+
+
 .factory ('ObjectCounter', function(){
 	function count (object){
 		var i = 0;
@@ -222,4 +230,4 @@ angular.module('app.services', ['base64'])
 	}
 
 	return{checkPermissions: checkPermissions};
-	});
+});
