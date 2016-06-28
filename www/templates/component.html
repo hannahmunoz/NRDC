@@ -1,4 +1,8 @@
 <ion-view ng-controller="scrollController" title="Component" id="page7" style="background-color:#0471A6;" class=" ">
+    <ion-header-bar class="bar-light">
+        <button style="display:block;" ng-click="back(); closeModal();">Back</button>
+    </ion-header-bar>
+    
    <!--Scrollable Content; Calls function to check visibility of translucent down arrow.-->
     <ion-content 
       delegate-handle="scrollable" 
@@ -95,11 +99,11 @@
     <!-- Small arrow on the bottom indicating scrollability-->
     <!-- Functionality: Enables user to scroll rapidly to bottom of page
          Hides upon full scroll down-->
-    <div class="overlay footer"
+    <!--<div class="overlay footer"
          ng-hide="isBottom">
             <div
               delegate-handle="arrow-btn"
               ng-click="scrlBot()"
               class="arrow-down pull-right translucent"></div>  
-    </div>
+    </div>-->
 </ion-view>

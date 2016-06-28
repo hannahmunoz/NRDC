@@ -69,11 +69,12 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 		logger.log (JSON.stringify($scope.JSON));
 
 		$scope.JSON = {};
+        
 	}
     
 })
    
-.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope) {
+.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory) {
 
 	$scope.JSON = DynamicPage.getJSON();
 		switch (DynamicPage.getTitle()){
@@ -96,10 +97,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 			case 'Components':
 					$scope.JSON['Deployment'] = JSON.stringify($scope.JSON['Deployment']);
 		}
-    
-      $scope.back = function(){
+     $scope.back = function(){
             $ionicHistory.goBack();
-      }
+        }
 })
 
 
@@ -443,7 +443,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 		DynamicPage.setJSON (JSON);
 		$state.go ($scope.route);
 	}
-   
+    
 })
 
 .controller('modalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
@@ -474,6 +474,3 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
     };
 })
 
-.controller('modalContentController', function($scope, $state, logger) {
-    $scope.isModal = true;
-})

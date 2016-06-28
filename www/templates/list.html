@@ -1,4 +1,4 @@
-<ion-view id="page10" class="" ng-controller="modalController">
+<ion-view id="page10" class="">
     <ion-nav-bar align-title="center" class="bar-light">
           <ion-nav-back-button style="display:block;">
               Back
@@ -16,9 +16,9 @@
           </ul>
     	</li>
     </ul>
-    <div class="tile-btn center-text secondary" ng-click="openModal()">
-        New {{title}}
-    </div>
+    <button fab="true" ng-controller="modalController" ng-click="openModal()">
+        New {{route}}
+    </button>
 
  </ion-content>
 </ion-view>
