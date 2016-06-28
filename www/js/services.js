@@ -72,7 +72,6 @@ angular.module('app.services', ['base64'])
 
       // wait for device to be ready
       function onDeviceReady() {
-        console.log(navigator.camera);
       	// check if camera permissions have been requested
     	cordova.plugins.diagnostic.isCameraAuthorized(function(authorized){
     	console.log("App is " + (authorized ? "authorized" : "denied") + " access to camera");
@@ -115,13 +114,18 @@ angular.module('app.services', ['base64'])
 
     	var options = setOptions(Camera.PictureSourceType.CAMERA);
 
-    	navigator.camera.getPicture(function cameraSuccess(imageUri) {
+//     	navigator.camera.getPicture(function cameraSuccess(imageUri) {
 
-        console.log(imageUri);
+//        // console.log(imageUri);
+//        return imageUri;
 
-    	}, function cameraError(error) {
-        	console.debug("Camera Error: " + error, "app");
-    	}, options);
+//     	}, function cameraError(error) {
+//         	console.debug("Camera Error: " + error, "app");
+//     	}, options);
+		navigator.camera.getPicture(function onSuccess (imageData){
+				 var image = "data:image/jpeg;base64," + imageData;
+				return image;
+			}, function onFail(){}, options);
 }
 
 // function: openGallery
@@ -132,9 +136,9 @@ angular.module('app.services', ['base64'])
 
     	var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
 
-    	navigator.camera.getPicture(function cameraSuccess(imageUri) {
-
-        console.log(imageUri);
+    	navigator.camera.getPicture(function cameraSuccess(imageData) {
+			var image = "data:image/jpeg;base64," + imageData;
+			return image;
 
     	}, function cameraError(error) {
         	console.debug("Camera Error: " + error, "app");

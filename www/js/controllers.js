@@ -4,15 +4,16 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 .controller('peopleCtrl', function($scope, $rootScope, uuid2, Upload, logger, $ionicPlatform, Camera) {
 
 	// variables stored in people
-	$scope.imageData;
+	$scope.imageData = null;
 	$scope.people = {};
+	$scope.people  ["Photo"] = null;
 	//JSON fucntion for people
 	$scope.savePeopleJSON = function (){
 			$scope.people ["Creation Date"] = new Date();
 			$scope.people ["Modification Date"] = new Date();
 			$scope.people ["Unique Identifier"] = uuid2.newuuid();
 
-			// peopleJSON ["Photo"] = $scope.imageData;
+			$scope.people  ["Photo"] = $scope.imageData;
 
 			// print json to console for debugging
 			logger.log (JSON.stringify($scope.people))
@@ -23,16 +24,21 @@ angular.module('app.controllers', ['ionic', 'app.services', 'angularUUID2', 'ngF
 
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.
 	// in root scope so it can be called from all buttons
-	$rootScope.choosePicture = function (){
+	$rootScope.choosePicture = function (imageData){
 		Camera.checkPermissions();
-		Camera.openGallery ();
+		$scope.imageData = Camera.openGallery ();
+		
+		if (angular.isUndefined (imageData) || imageData == null)
+			console.log("null");
+		else
+			console.log("full");
 	}
 
 	//wrapper for the take image factory so we can call it from the takePhoto button
 	// in root scope so it can be called from all buttons
-	$rootScope.takePicture = function (){
+	$rootScope.takePicture = function (imageData){
     		Camera.checkPermissions();
-    		Camera.openCamera ();
+    		imageData = Camera.openCamera ();
 	}
 
 })
