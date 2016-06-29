@@ -225,10 +225,12 @@ angular.module('app.services', ['base64'])
 .factory ('File',function($cordovaFile){
 	function createDirectory(){
 		document.addEventListener ("deviceready", function(){
-			$cordovaFile.checkDir (cordova.file.dataDirectory,'NRDC').then (function (success){
-			console.log (success.code);
+			$cordovaFile.checkDir (cordova.file.dataDirectory,'/NRDC').then (function (success){
+				console.log (success);
 		},function (error){
-			console.log (error);
+			if (error.code == 1){
+				$cordovaFile.createDir (cordova.file.dataDirectory,'/NRDC', false);	
+			}
 			})
 		})
 	}
