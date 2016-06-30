@@ -10,15 +10,14 @@
     	<li class ="" ng-repeat="items in listJSON">
     	  <ul>
     		<li class="" ng-repeat = "item in items">
-    			<button class = ""  ng-click = "select(item)" > {{item["Name"]}}
+    			<button class = "button"  ng-click = "select(item)" > {{item["Name"]}}
     			</button>
             </li>
           </ul>
     	</li>
     </ul>
-    <button fab="true" ng-controller="modalController" ng-click="openModal()">
-        New {{route}}
+ </ion-content>
+        <button class="button button-fab button-fab-bottom-right icon accent waves-effect waves-button waves-light" ng-controller="modalController" ng-click="openModal()">
     </button>
 
- </ion-content>
 </ion-view>
