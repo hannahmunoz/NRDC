@@ -38,7 +38,8 @@ angular.module('app.services', ['base64'])
 // var: string (url)
 // return: filled JSON upon success
 	var read = function (url, syncedJSON, title, JSON){
-		return $http.get (url)
+		config = {timeout: 10000};
+		return $http.get (url, config)
 			.then (function Success (response){
 				console.log (url + " " + response.status +": " + response.statusText);
 					syncedJSON = response.data;
@@ -48,6 +49,7 @@ angular.module('app.services', ['base64'])
 				return response.data;
 			}, function Error (response){
 				console.debug (url + " " + response.status +": "+ response.statusText);
+
 				return response.statusText;
 			});
 
@@ -229,15 +231,27 @@ angular.module('app.services', ['base64'])
 .factory ('File',function($cordovaFile){
 	function createDirectory(){
 		document.addEventListener ("deviceready", function(){
-			$cordovaFile.checkDir (cordova.file.dataDirectory,'/NRDC').then (function (success){
-				console.log (success);
+			$cordovaFile.checkDir (cordova.file.dataDirectory,'NRDC').then (function (success){
 		},function (error){
 			if (error.code == 1){
-				$cordovaFile.createDir (cordova.file.dataDirectory,'/NRDC', false);	
+				$cordovaFile.createDir (cordova.file.dataDirectory,'NRDC', false);	
 			}
 			})
 		})
 	}
-	return {createDirectory: createDirectory}
+
+	function checkFile(title, JSON){
+		document.addEventListener ("deviceready",function(){
+			$cordovaFile.checkFile(cordova.file.dataDirectory+'NRDC/', title + '.txt').then(function(success){
+				$cordovaFile.writeFile (cordova.file.dataDirectory+'NRDC/', title + '.txt', JSON, true);
+			},function(error){
+				if (error.code == 1){
+					$cordovaFile.writeFile (cordova.file.dataDirectory+'NRDC/', title + '.txt', JSON, true);
+				}
+			})
+		})
+	}
+	return {createDirectory: createDirectory,
+			checkFile: checkFile};
 
 });

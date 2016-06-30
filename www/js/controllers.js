@@ -306,14 +306,22 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     	//get permissions
     	//unblock before packaging
     	//Camera.checkPermissions();
-    	//if ($cordovaNetwork.getNetwork() != "none"){
+    	if ($cordovaNetwork.getNetwork() != "none"){
+		document.addEventListener ("deviceready",function(){
+			console.log ($cordovaFile.readAsText (cordova.file.dataDirectory+'NRDC/', 'People.txt').value);
+		})
+    }
     	// people read
     $http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/").then (function(result){
-    	console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
+    	console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);
     	$rootScope.peopleSyncedJSON = result.data;	
     		for (var i = 0; i < $rootScope.peopleSyncedJSON.People.length; i++){
 				$rootScope.peopleJSON [$rootScope.peopleSyncedJSON.People[i]['Person']] =  $rootScope.peopleSyncedJSON.People[i]['First Name'] + " " + $rootScope.peopleSyncedJSON.People[i]['Last Name']; 
 			}
+		File.checkFile('People', $rootScope.peopleSyncedJSON);
+		document.addEventListener ("deviceready",function(){
+			console.log ($cordovaFile.readAsText (cordova.file.dataDirectory+'NRDC/', 'People.txt').value);
+		})
     	}),function (error){
 
     }
@@ -362,7 +370,8 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 }
 
     init ();
-    
+//}
+
 })
 
 /**
