@@ -390,7 +390,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     }
 })
 
-.controller('listCtrl', function($scope, $rootScope, DynamicPage, $state, ObjectCounter) {
+.controller('listCtrl', function($scope, $rootScope, DynamicPage, $state, ObjectCounter, $ionicHistory, ionicMaterialInk) {
 	$scope.title = DynamicPage.getTitle();
 	$scope.route = DynamicPage.getRoute();
 
@@ -418,6 +418,14 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 		
 		$state.go ($scope.route);
 	}
+    
+    //custom back button functinality
+    $scope.back = function(){
+        $ionicHistory.goBack();
+    }
+    
+    //required for ink ripple effect on material button press
+    ionicMaterialInk.displayEffect();
     
 })
 

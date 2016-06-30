@@ -1,23 +1,26 @@
 <ion-view id="page10" class="">
-    <ion-nav-bar align-title="center" class="bar-light">
-          <ion-nav-back-button style="display:block;">
-              Back
-          </ion-nav-back-button>
+    <ion-nav-bar align-title="center" class="bar-dark">
+        <ion-nav-buttons class="" side="left">          
+            <button class="button button-icon button-clear ion-chevron-left" ng-click="back();">
+            </button>
+        </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-title>{{title}}</ion-nav-title>
-    <ion-content padding="true" class="has-header content-bg">
+    <ion-content padding="false" class="has-header content-bg">
 <!--     <ul>
     	<li class ="" ng-repeat="items in listJSON"> -->
     	  <ul>
     		<li class="" ng-repeat = "(key, item) in listJSON">
-    			<button class = "button"  ng-click = "select(item)" > {{item}}
-    			</button>
+                <div class = "item"  ng-click = "select(item)" >
+                    <h2>{{item}}</h2>
+    			</div>
             </li>
           </ul>
 <!--     "item in items"	</li>
     </ul> -->
  </ion-content>
-        <button class="button button-fab button-fab-bottom-right icon accent waves-effect waves-button waves-light" ng-controller="modalController" ng-click="openModal()">
+    <button class="button button-fab button-fab-bottom-right pane" ng-controller="modalController" ng-click="openModal()">
+        <i class="icon ion-plus" style="color: #FFFFFF;"></i>
     </button>
 
 </ion-view>
