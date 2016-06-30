@@ -29,7 +29,8 @@
 }
 
 
-/*Color Pallette and Theming*/
+/*Color Pallette and Theming
+===================================*/
 
 /*Blue Grey*/
 .primary{
@@ -68,25 +69,14 @@
 /*    border-bottom: 1px solid #C5C4C4 !important; */
 }
 
-/*background image on main page*/
-.bg-img-main{
-    background: url(../img/subtle_bg/daimond_eyes/daimond_eyes.png);
-}
-
-.bg-img-secondary{
-     background: url(../img/subtle_bg/subtle_white_feathers/subtle_white_feathers.png);
-}
-
-.bg-img-tray{
-    background: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
-}
-
 /*overrides item content backgrounds*/
 .item .item-content{
     background-color: #FFFFFF !important;
     
 }
 
+/*Utilities
+=================================================*/
 /*Preset Transparencies*/
 .transparent{
     opacity: 0.0;
@@ -126,15 +116,6 @@
     padding: 10px;
 }
 
-.center-text{
-    text-align: center;
-}
-
-.pull-bottom{
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-}
 
 /*makes a div fill it's parent block*/
 .fill-parent{
@@ -160,7 +141,6 @@ used on main page*/
     border-radius: 2%;
 }
 
-
 /*makes rows wrap*/
 .row{
   flex-wrap: wrap;
@@ -181,3 +161,9 @@ used on main page*/
     margin: 0px; !important
 }
 
+
+/*Manual overrides of md-input css*/
+input{
+    background-color: inherit !important;
+    color: black !important;
+}

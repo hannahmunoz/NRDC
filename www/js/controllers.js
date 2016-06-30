@@ -90,9 +90,11 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 			case 'Components':
 					$scope.JSON['Deployment'] = JSON.stringify($scope.JSON['Deployment']);
 		}
+    
+     //custom back button functionality
      $scope.back = function(){
             $ionicHistory.goBack();
-        }
+     }
 })
 
 
@@ -418,7 +420,11 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     
     //custom back button functinality
     $scope.back = function(){
-        $ionicHistory.goBack();
+        //conditional to fix problem of double
+        //back when modal closed
+        if($rootScope.modalHidden != false){
+            $ionicHistory.goBack();
+        }
     }
     
     //required for ink ripple effect on material button press
@@ -442,15 +448,19 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
             $scope.modal = modal;
         });
     });
-    
+    //set flag in root scope to indicate weither modal
+    //hidden or shown
     $scope.openModal = function() {
         $scope.modal.show();
+        $rootScope.modalHidden = false;
     };
     $scope.closeModal = function() {
         $scope.modal.hide();
+        $rootScope.modalHidden = true;
     };
      $scope.destroyModal = function() {
         $scope.modal.remove();
+        $rootScope.modalHidden = true;
     };
 })
 
