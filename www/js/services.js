@@ -232,8 +232,6 @@ angular.module('app.services', ['base64'])
 	function createDirectory(){
 		document.addEventListener ("deviceready", function(){
 			$cordovaFile.checkDir (cordova.file.dataDirectory,'NRDC').then (function (success){
-				console.log(cordova.file.dataDirectory+'NRDC');
-
 		},function (error){
 			if (error.code == 1){
 				$cordovaFile.createDir (cordova.file.dataDirectory,'NRDC', false);	
@@ -244,14 +242,12 @@ angular.module('app.services', ['base64'])
 
 	function checkFile(title, JSON){
 		document.addEventListener ("deviceready",function(){
-			$cordovaFile.checkFile(cordova.file.dataDirectory+'NRDC/', title).then(function(success){
-				console.log(success);
+			$cordovaFile.checkFile(cordova.file.dataDirectory+'NRDC/', title + '.txt').then(function(success){
+				$cordovaFile.writeFile (cordova.file.dataDirectory+'NRDC/', title + '.txt', JSON, true);
 			},function(error){
 				if (error.code == 1){
-					$cordovaFile.writeFile (cordova.file.dataDirectory+'NRDC/', title, JSON, true);
+					$cordovaFile.writeFile (cordova.file.dataDirectory+'NRDC/', title + '.txt', JSON, true);
 				}
-				console.log(cordova.file.dataDirectory+'NRDC');
-				console.log(error);
 			})
 		})
 	}
