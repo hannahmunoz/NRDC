@@ -5,20 +5,20 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 	// variables stored in people
 	$scope.imageData = null;
-	$scope.people = {};
-	$scope.people  ["Photo"] = null;
+	$scope.JSON = {};
+	$scope.JSON ["Photo"] = null;
 	//JSON fucntion for people
 	$scope.savePeopleJSON = function (){
-			$scope.people ["Creation Date"] = new Date();
-			$scope.people ["Modification Date"] = new Date();
-			$scope.people ["Unique Identifier"] = uuid2.newuuid();
+			$scope.JSON ["Creation Date"] = new Date();
+			$scope.JSON ["Modification Date"] = new Date();
+			$scope.JSON["Unique Identifier"] = uuid2.newuuid();
 
-			$scope.people  ["Photo"] = $scope.imageData;
+			$scope.JSON  ["Photo"] = $scope.imageData;
 
 			// print json to console for debugging
-			logger.log (JSON.stringify($scope.people))
+			logger.log (JSON.stringify($scope.JSON))
 
-			$scope.people = {};
+			$scope.JSON = {};
 	}
 
 
@@ -42,13 +42,6 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 	}
 
 })
-   
-
-.controller('viewPeopleCtrl', function($scope, select) {
-	$scope.personJSON = select.get();
-	//console.log ($scope.personJSON);
-})
-
 
    
 .controller('projectCtrl', function($scope, $rootScope, uuid2, logger, ObjectCounter) {
@@ -297,8 +290,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     	
     }
 
-    $scope.listSwitch = function (JSON, title, route){
+    $scope.listSwitch = function (JSON, syncedJSON, title, route){
     	$rootScope.listJSON = JSON;
+    	$rootScope.chosenJSONlist = syncedJSON
     	DynamicPage.setTitle (title);
     	DynamicPage.setRoute (route);
     }
@@ -358,6 +352,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     	$rootScope.serviceSyncedJSON = result.data;	
     		for (var i = 0; i < $rootScope.serviceSyncedJSON.ServiceEntries.length; i++){
 				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
+
 			}			
     	}),function (error){
 
@@ -392,7 +387,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     }
 })
 
-.controller('listCtrl', function($scope, $rootScope, DynamicPage, $state) {
+.controller('listCtrl', function($scope, $rootScope, DynamicPage, $state, ObjectCounter) {
 	$scope.title = DynamicPage.getTitle();
 	$scope.route = DynamicPage.getRoute();
 
@@ -403,7 +398,21 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 	// wrapper for person select button
 	$scope.select = function(JSON){
-		DynamicPage.setJSON (JSON);
+		var x = 0;
+		for (var o in $rootScope.listJSON){
+			if (JSON == $rootScope.listJSON[o]){
+				if (DynamicPage.getTitle() == 'Service Entries'){
+					DynamicPage.setJSON ($rootScope.chosenJSONlist['ServiceEntries'][x]);				
+
+				}
+				else{
+					DynamicPage.setJSON ($rootScope.chosenJSONlist[DynamicPage.getTitle()][x]);
+				}
+				break;
+			 }
+			 x ++;
+		}
+		
 		$state.go ($scope.route);
 	}
     

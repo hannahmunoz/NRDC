@@ -6,16 +6,16 @@
     </ion-nav-bar>
     <ion-nav-title>{{title}}</ion-nav-title>
     <ion-content padding="true" class="has-header content-bg">
-    <ul>
-    	<li class ="" ng-repeat="items in listJSON">
+<!--     <ul>
+    	<li class ="" ng-repeat="items in listJSON"> -->
     	  <ul>
-    		<li class="" ng-repeat = "item in items">
-    			<button class = "button"  ng-click = "select(item)" > {{item["Name"]}}
+    		<li class="" ng-repeat = "(key, item) in listJSON">
+    			<button class = "button"  ng-click = "select(item)" > {{item}}
     			</button>
             </li>
           </ul>
-    	</li>
-    </ul>
+<!--     "item in items"	</li>
+    </ul> -->
  </ion-content>
         <button class="button button-fab button-fab-bottom-right icon accent waves-effect waves-button waves-light" ng-controller="modalController" ng-click="openModal()">
     </button>
