@@ -18,10 +18,10 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('viewPeople', {
-    url: '/ViewPeople',
-    templateUrl: 'templates/viewPeople.html',
-    controller: 'viewPeopleCtrl'
+  .state('people', {
+   url: '/people',
+    templateUrl: 'templates/people.html',
+    controller: 'viewCtrl'
   })
 
   .state('createNew.project', {

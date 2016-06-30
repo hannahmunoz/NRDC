@@ -13,7 +13,7 @@
 
         <form name ="firstNameForm" class="list" novalidate>
             <label class="item item-input " id="people-input125">
-                <input type="text" placeholder="First Name" name = "firstName" ng-model = "people['First Name']" required>
+                <input type="text" placeholder="First Name" name = "firstName" ng-model = "JSON['First Name']" required>
             </label>
         </form>
 
@@ -25,7 +25,7 @@
 
         <form name ="lastNameForm" class="list" novalidate>
             <label class="item item-input " id="people-input6" >
-                <input type="text" placeholder="Last name" name = "lastName" ng-model = "people['Last Name'] " required>
+                <input type="text" placeholder="Last name" name = "lastName" ng-model = "JSON['Last Name'] " required>
             </label>
         </form>
 
@@ -37,7 +37,7 @@
 
         <form name ="organizationForm" class="list" novalidate>
             <label class="item item-input " id="people-input9" >
-                <input type="text" placeholder="Organization" name = "organization" ng-model = "people['Organization']" required>
+                <input type="text" placeholder="Organization" name = "organization" ng-model = "JSON['Organization']" required>
             </label>
         </form>
 
@@ -49,7 +49,7 @@
 
         <form name="emailForm" class="list" novalidate>
             <label class="item item-input " id="people-input8" >
-                <input type="email" placeholder="Email" name = "email" ng-model = "people['Email']" required>
+                <input type="email" placeholder="Email" name = "email" ng-model = "JSON['Email']" required>
             </label>
         </form>
 
@@ -61,7 +61,7 @@
 
         <form name="phoneForm" class="list" novalidate>
             <label class="item item-input " id="people-input10">
-                <input type="text" placeholder="Phone" ng-minlength = "10" ng-maxlength = "10" name = "phone" ng-model="people['Phone']" required>
+                <input type="text" placeholder="Phone" ng-minlength = "10" ng-maxlength = "10" name = "phone" ng-model="JSON['Phone']" required>
             </label> 
         </form>
 
@@ -70,7 +70,7 @@
         type: file upload
         error checking: onchange -->
 
-         <button class = "button button-positive button-large button-block" ng-model = "people['Photo']" ng-click = "choosePicture()">Choose Photo</button>
+         <button class = "button button-positive button-large button-block" ng-model = "JSON['Photo']" ng-click = "choosePicture()">Choose Photo</button>
 
 
 <!--    controller scope var: n/a
@@ -78,7 +78,7 @@
         type: file upload
         error checking: onchange -->
 
-        <button class = "button button-positive button-large button-block" ng-model = "people['Photo']" ng-click = "takePicture(imageData)">Take Photo</button>
+        <button class = "button button-positive button-large button-block" ng-model = "JSON['Photo']" ng-click = "takePicture(imageData)">Take Photo</button>
 
 
 <!--    var name: n/a

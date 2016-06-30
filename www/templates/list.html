@@ -6,6 +6,7 @@
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-title>{{title}}</ion-nav-title>
+<!--<<<<<<< HEAD
     <ion-content padding="false" class="has-header content-bg">
     <ul class="" ng-repeat="items in listJSON">
     	<li ng-repeat = "item in items">
@@ -14,6 +15,19 @@
             </div>
     	</li>
     </ul>
+=======-->
+    <ion-content padding="true" class="has-header content-bg">
+<!--     <ul>
+    	<li class ="" ng-repeat="items in listJSON"> -->
+    	  <ul>
+    		<li class="" ng-repeat = "(key, item) in listJSON">
+                <div class = "item"  ng-click = "select(item)" >
+                    <h2>{{item}}</h2>
+    			</div>
+            </li>
+          </ul>
+<!--     "item in items"	</li>
+    </ul> -->
  </ion-content>
     <button class="button button-fab button-fab-bottom-right pane" ng-controller="modalController" ng-click="openModal()">
         <i class="icon ion-plus" style="color: #FFFFFF;"></i>

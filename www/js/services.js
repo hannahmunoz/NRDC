@@ -37,13 +37,17 @@ angular.module('app.services', ['base64'])
 // purpose:  retreive info from http link 
 // var: string (url)
 // return: filled JSON upon success
-	var read = function (url){
+	var read = function (url, syncedJSON, title, JSON){
 		return $http.get (url)
 			.then (function Success (response){
 				console.log (url + " " + response.status +": " + response.statusText);
+					syncedJSON = response.data;
+				for (var i = 0; i < syncedJSON[title+'s'].length; i++){
+					JSON [syncedJSON[title+'s'][i][title]] =  syncedJSON[title+'s'][i]['Name']; 
+				}
 				return response.data;
 			}, function Error (response){
-				console.log (url + " " + response.status +": "+ response.statusText);
+				console.debug (url + " " + response.status +": "+ response.statusText);
 				return response.statusText;
 			});
 
@@ -225,10 +229,12 @@ angular.module('app.services', ['base64'])
 .factory ('File',function($cordovaFile){
 	function createDirectory(){
 		document.addEventListener ("deviceready", function(){
-			$cordovaFile.checkDir (cordova.file.dataDirectory,'NRDC').then (function (success){
-			console.log (success.code);
+			$cordovaFile.checkDir (cordova.file.dataDirectory,'/NRDC').then (function (success){
+				console.log (success);
 		},function (error){
-			console.log (error);
+			if (error.code == 1){
+				$cordovaFile.createDir (cordova.file.dataDirectory,'/NRDC', false);	
+			}
 			})
 		})
 	}
