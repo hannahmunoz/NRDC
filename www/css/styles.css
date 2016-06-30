@@ -43,7 +43,7 @@
 
 /*UNR Dark Blue*/
 .accent{
-    background-color: #003366;
+    background-color: #003366 !important;
 }
 
 /*Black*/
@@ -52,21 +52,20 @@
     color: #F2F2F2;
 }
 
-/*very light silver*/
+/*white*/
 .content-bg{
-    background-color: #F2F2F2;
+    background-color: #FFFFFF;
 }
 
 /*overrides existing bar-dark theme*/
 .bar.bar-dark{
-    background-color: #042444 !important;
-    border-color: #042444 !important;
+    background-color: #003366 !important;
 }
 
 /* Overrides existing Bar Light Theme*/
 .bar.bar-light{
     background: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
-    border-bottom: 1px solid #C5C4C4 !important;
+/*    border-bottom: 1px solid #C5C4C4 !important; */
 }
 
 /*background image on main page*/
@@ -84,7 +83,7 @@
 
 /*overrides item content backgrounds*/
 .item .item-content{
-    background-color: #FFF !important;
+    background-color: #FFFFFF !important;
     
 }
 
@@ -176,5 +175,9 @@ used on main page*/
 
 .modal-back-btn{
     margin-right: 8px;
+}
+
+.item{
+    margin: 0px; !important
 }
 
