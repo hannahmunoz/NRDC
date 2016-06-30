@@ -253,7 +253,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 })
    
    
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork) {
 
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
@@ -310,96 +310,59 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     	//get permissions
     	//unblock before packaging
     	//Camera.checkPermissions();
-
+    	//if ($cordovaNetwork.getNetwork() != "none"){
     	// people read
-    	var promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[0]+"/");
-    		promise.then (function(result){
-    			$rootScope.peopleSyncedJSON = result;	
-    			for (var i = 0; i < $rootScope.peopleSyncedJSON.People.length; i++){
-					$rootScope.peopleJSON [$rootScope.peopleSyncedJSON.People[i]['Person']] =  $rootScope.peopleSyncedJSON.People[i]['First Name'] + " " + $rootScope.peopleSyncedJSON.People[i]['Last Name']; 
-				}
-    		}),function (error){
+    $http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/").then (function(result){
+    	console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
+    	$rootScope.peopleSyncedJSON = result.data;	
+    		for (var i = 0; i < $rootScope.peopleSyncedJSON.People.length; i++){
+				$rootScope.peopleJSON [$rootScope.peopleSyncedJSON.People[i]['Person']] =  $rootScope.peopleSyncedJSON.People[i]['First Name'] + " " + $rootScope.peopleSyncedJSON.People[i]['Last Name']; 
+			}
+    	}),function (error){
 
-    		}
+    }
 
-    	//project read
-    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/");
-    		promise.then (function(result){
-    			$rootScope.projectSyncedJSON = result;
-    			for (var i = 0; i < $rootScope.projectSyncedJSON.Projects.length; i++){
-					$rootScope.projectJSON [$rootScope.projectSyncedJSON.Projects[i]['Project']] =  $rootScope.projectSyncedJSON.Projects[i]['Name']; 
-				}
-    		}),function (error){
+    //project read
+    sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/", $rootScope.projectSyncedJSON, 'Project', $rootScope.projectJSON).then (function (result){
+    	$rootScope.projectSyncedJSON = result;
+    })
 
-    		}
+    // 	site read
+    sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/", $rootScope.siteSyncedJSON,'Site', $rootScope.siteJSON).then(function(result){
+    	$rootScope.siteSyncedJSON = result;
+    });
 
-    	//site read
-    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/");
-    		promise.then (function(result){
-    			$rootScope.siteSyncedJSON = result;
-    			for (var i = 0; i < $rootScope.siteSyncedJSON.Sites.length; i++){
-					$rootScope.siteJSON [$rootScope.siteSyncedJSON.Sites[i]['Site']] =  $rootScope.siteSyncedJSON.Sites[i]['Name']; 
-				}
-    		}),function (error){
+    // 	system read
+    sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/", $rootScope.systemSyncedJSON, 'System', $rootScope.systemJSON).then (function(result){
+    	$rootScope.systemSyncedJSON = result;
+    })
 
-    		}
+    // deployment read
+    sync.read($rootScope.baseURL + $rootScope.urlPaths[4]+"/", $rootScope.deploymentSyncedJSON, 'Deployment', $rootScope.deploymentJSON).then (function(result){
+    	$rootScope.deploymentSyncedJSON = result;
+    });
 
-    	//project read
-    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/");
-    		promise.then (function(result){
-    			$rootScope.systemSyncedJSON = result;
-    			    for (var i = 0; i < $rootScope.systemSyncedJSON.Systems.length; i++){
-						$rootScope.systemJSON [$rootScope.systemSyncedJSON.Systems[i]['System']] =  $rootScope.systemSyncedJSON.Systems[i]['Name']; 
-					}	
-    		}),function (error){
+    // component read
+    sync.read($rootScope.baseURL + $rootScope.urlPaths[5]+"/", $rootScope.componentSyncedJSON, 'Component', $rootScope.componentJSON).then (function(result){
+    	$rootScope.componentSyncedJSON = result;
+    });
 
-    		}
+    // 	document read
+	sync.read($rootScope.baseURL + $rootScope.urlPaths[6]+"/", $rootScope.documentSyncedJSON, 'Document', $rootScope.documentJSON).then (function(result){
+		$rootScope.documentSyncedJSON = result;
+	});
 
-    	//deployment read
-    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[4]+"/");
-    		promise.then (function(result){
-    			$rootScope.deploymentSyncedJSON = result;
-    		    for (var i = 0; i < $rootScope.deploymentSyncedJSON.Deployments.length; i++){
-					$rootScope.deploymentJSON [$rootScope.deploymentSyncedJSON.Deployments[i]['Deployment']] =  $rootScope.deploymentSyncedJSON.Deployments[i]['Name']; 
-				}	
-			
-    		}),function (error){
+    // 	service Entries read
+    $http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
+    	console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
+    	$rootScope.serviceSyncedJSON = result.data;	
+    		for (var i = 0; i < $rootScope.serviceSyncedJSON.ServiceEntries.length; i++){
+				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
+			}			
+    	}),function (error){
 
-    		}
-
-    	//component read
-    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[5]+"/");
-    		promise.then (function(result){
-    			$rootScope.componentSyncedJSON = result;
-    		    for (var i = 0; i < $rootScope.componentSyncedJSON.Components.length; i++){
-					$rootScope.componentJSON [$rootScope.componentSyncedJSON.Components[i]['Component']] =  $rootScope.componentSyncedJSON.Components[i]['Name']; 
-				}		
-    		}),function (error){
-
-    		}
-
-    	//document read
-    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[6]+"/");
-    		promise.then (function(result){
-    			$rootScope.documentSyncedJSON = result;	
-    		    for (var i = 0; i < $rootScope.documentSyncedJSON.Documents.length; i++){
-					$rootScope.documentJSON [$rootScope.documentSyncedJSON.Documents[i]['Document']] =  $rootScope.documentSyncedJSON.Documents[i]['Name']; 
-				}	
-    		}),function (error){
-
-    		}
-
-    	//service Entries read
-    	promise = sync.read($rootScope.baseURL + $rootScope.urlPaths[7]+"/");
-    		promise.then (function(result){
-    			$rootScope.serviceSyncedJSON = result;	
-    		    for (var i = 0; i < $rootScope.serviceSyncedJSON.ServiceEntries.length; i++){
-					$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
-				}			
-    		}),function (error){
-
-    		}
-	}
+    	}
+}
 
     init ();
     
@@ -432,13 +395,11 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 .controller('listCtrl', function($scope, $rootScope, DynamicPage, $state) {
 	$scope.title = DynamicPage.getTitle();
 	$scope.route = DynamicPage.getRoute();
-	console.log ( $scope.route);
 
 	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
 		$scope.title = DynamicPage.getTitle();
 		$scope.route = DynamicPage.getRoute();
-		console.log ($scope.route);})
-
+	})
 
 	// wrapper for person select button
 	$scope.select = function(JSON){
