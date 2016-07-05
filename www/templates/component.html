@@ -1,4 +1,4 @@
-<ion-view ng-controller="scrollController" title="Component" id="page7" style="background-color:#0471A6;" class=" ">
+<ion-view ng-controller="scrollController" title="Component" id="page7" style="" class=" ">
     <ion-header-bar class="bar-light">
         <button style="display:block;" ng-click="back(); closeModal();">Back</button>
     </ion-header-bar>
@@ -7,55 +7,55 @@
     <ion-content 
       delegate-handle="scrollable" 
       padding="true" 
-      class="has-header bg-img-main"
+      class="has-header content-bg"
       on-scroll="cndHideArrow()">
 
         <form name = "nameForm" id="component-form41" class="list ">
             <label class="item item-input " id="component-input46" >
-                <input type="text" placeholder="Name" name="componentName" ng-model = "JSON['Name']" required>
+                <ion-md-input type="text" placeholder="Name" name="componentName" ng-model = "JSON['Name']" required></ion-md-input>
             </label>
         </form>
 
         <form name = "manufaturerForm" id="component-form42" class="list ">
             <label class="item item-input " id="component-input47" >
-                <input type="text" placeholder="Manufacturer" name="manufacturer" ng-model = "JSON['Manufacturer']" required>
+                <ion-md-input type="text" placeholder="Manufacturer" name="manufacturer" ng-model = "JSON['Manufacturer']" required></ion-md-input>
             </label>
         </form>
 
         <form name = "modelForm" id="component-form43" class="list ">
             <label class="item item-input " id="component-input48" >
-                <input type="text" placeholder="Model" name="model" ng-model = "JSON['Model']" required>
+                <ion-md-input type="text" placeholder="Model" name="model" ng-model = "JSON['Model']" required></ion-md-input>
             </label>
         </form>
 
 
         <form name = "serialForm" id="component-form44" class="list ">
             <label class="item item-input " id="component-input49" >
-                <input type="text" placeholder="Serial Number" ng-model = "JSON['Serial Number']" name="serialNumber" required>
+                <ion-md-input type="text" placeholder="Serial Number" ng-model = "JSON['Serial Number']" name="serialNumber" required></ion-md-input>
             </label>
         </form>
 
         <form name = "vendorForm" id="component-form45" class="list ">
             <label class="item item-input " id="component-input50" >
-                <input type="text" placeholder="Vendor" name="vendor" ng-model = "JSON['Vendor']" required>
+                <ion-md-input type="text" placeholder="Vendor" name="vendor" ng-model = "JSON['Vendor']" required></ion-md-input>
             </label>
         </form>
 
         <form name = "supplierForm" id="component-form46" class="list ">
             <label class="item item-input " id="component-input51" >
-                <input type="text" placeholder="Supplier" name="supplier" ng-model = "JSON['Supplier']" required>
+                <ion-md-input type="text" placeholder="Supplier" name="supplier" ng-model = "JSON['Supplier']" required></ion-md-input>
             </label>
         </form>
 
         <form name = "installationForm" id="component-form47" class="list ">
             <label class="item item-input " id="component-input52" >
-                <input type="text" placeholder="Installation Details" name="installationDetails" ng-model = "JSON['Installation Details']" required>
+                <ion-md-input type="text" placeholder="Installation Details" name="installationDetails" ng-model = "JSON['Installation Details']" required></ion-md-input>
             </label>
         </form>
 
         <form name = "wiringForm" id="component-form48" class="list ">
             <label class="item item-input " id="component-input53" >
-                <input type="text" placeholder="Wiring Notes" ng-model= "JSON['Wiring Notes']" name="wiringNotes" required>
+                <ion-md-input type="text" placeholder="Wiring Notes" ng-model= "JSON['Wiring Notes']" name="wiringNotes" required></ion-md-input>
             </label>
         </form>
 
@@ -68,7 +68,7 @@
 <!--         <form id="component-form50" class="list ">
             <label class="item item-input " id="component-input54" name="deploymentCalivrated">
                 <span class="input-label">Last Calibrated Date</span>
-                <input type="date" placeholder="">
+                <ion-md-input type="date" placeholder="">
             </label>
         </form> -->
 

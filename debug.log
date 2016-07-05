@@ -536,3 +536,20 @@
 [0622/145311:WARNING:process_snapshot_win.cc(102)] ReadMemory ExceptionInformation failed
 [0622/145311:WARNING:crash_report_exception_handler.cc(60)] ProcessSnapshotWin::InitializeException failed
 [0622/145311:ERROR:scoped_process_suspend.cc(38)] NtResumeProcess, ntstatus=-1073741558
+[0705/122702:ERROR:process_reader_win.cc(141)] SuspendThread: Access is denied. (0x5)
+[0705/122702:ERROR:process_reader_win.cc(141)] SuspendThread: Access is denied. (0x5)
+[0705/122702:ERROR:process_reader_win.cc(141)] SuspendThread: Access is denied. (0x5)
+[0705/122702:ERROR:process_reader_win.cc(141)] SuspendThread: Access is denied. (0x5)
+[0705/122702:ERROR:process_reader_win.cc(141)] SuspendThread: Access is denied. (0x5)
+[0705/122702:ERROR:process_reader_win.cc(141)] SuspendThread: Access is denied. (0x5)
+[0705/122702:ERROR:process_reader_win.cc(141)] SuspendThread: Access is denied. (0x5)
+[0705/122702:ERROR:process_reader_win.cc(141)] SuspendThread: Access is denied. (0x5)
+[0705/122702:ERROR:process_reader_win.cc(141)] SuspendThread: Access is denied. (0x5)
+[0705/122702:ERROR:process_reader_win.cc(141)] SuspendThread: Access is denied. (0x5)
+[0705/122702:ERROR:process_reader_win.cc(141)] SuspendThread: Access is denied. (0x5)
+[0705/122702:ERROR:exception_snapshot_win.cc(57)] thread ID 1516 not found in process
+[0705/122702:WARNING:crash_report_exception_handler.cc(60)] ProcessSnapshotWin::InitializeException failed
+[0705/122702:ERROR:exception_snapshot_win.cc(57)] thread ID 6872 not found in process
+[0705/122702:WARNING:crash_report_exception_handler.cc(60)] ProcessSnapshotWin::InitializeException failed
+[0705/122702:ERROR:exception_snapshot_win.cc(57)] thread ID 5676 not found in process
+[0705/122702:WARNING:crash_report_exception_handler.cc(60)] ProcessSnapshotWin::InitializeException failed

@@ -1,11 +1,11 @@
-<ion-modal-view ng-controller="scrollController" title="Document" id="page9" style="background-color:#0471A6;" class=" ">
+<ion-modal-view ng-controller="scrollController" title="Document" id="page9" style="" class=" ">
     <ion-header-bar class="bar-light">
         <button style="display:block;" ng-click="back(); closeModal();">Back</button>
     </ion-header-bar>
     <ion-content 
       delegate-handle="scrollable" 
       padding="true" 
-      class="has-header bg-img-main"
+      class="has-header content-bg"
       on-scroll="cndHideArrow()"> 
 
 <!--    controller scope var: document
@@ -15,7 +15,7 @@
         min|max req: not implemented --> 
         <form name = "nameForm" id="document-form53" class="list " novalidate>
             <label class="item item-input " id="document-input55" >
-                <input type="text" placeholder="Name" name="documentName" ng-model = "JSON['Name']" required>
+                <ion-md-input type="text" placeholder="Name" name="documentName" ng-model = "JSON['Name']" required></ion-md-input>
             </label>
         </form>
 
@@ -26,7 +26,7 @@
         min|max req: not implemented --> 
         <form name = "notesForm" id="document-form54" class="list " novalidate>
             <label class="item item-input " id="document-input56" >
-                <input type="text" name="notes" placeholder="Notes" ng-model = "JSON['Notes']" required>
+                <ion-md-input type="text" name="notes" placeholder="Notes" ng-model = "JSON['Notes']" required></ion-md-input>
             </label>
         </form>
 
@@ -37,7 +37,7 @@
         min|max req: not implemented --> 
         <form name = "pathForm" id="document-form55" class="list " novalidate>
             <label class="item item-input " id="document-input57" >
-                <input type="text" placeholder="Path" name="path" ng-model = "JSON['Path']" required>
+                <ion-md-input type="text" placeholder="Path" name="path" ng-model = "JSON['Path']" required></ion-md-input>
             </label>
         </form>
 

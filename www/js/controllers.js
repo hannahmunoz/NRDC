@@ -306,11 +306,11 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     	//get permissions
     	//unblock before packaging
     	//Camera.checkPermissions();
-    	if ($cordovaNetwork.getNetwork() != "none"){
+/*    	if ($cordovaNetwork.getNetwork() != "none"){
 		document.addEventListener ("deviceready",function(){
 			console.log ($cordovaFile.readAsText (cordova.file.dataDirectory+'NRDC/', 'People.txt').value);
 		})
-    }
+    }*/
     	// people read
     $http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/").then (function(result){
     	console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);
@@ -473,3 +473,15 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     };
 })
 
+.controller('LoadController', function($scope, $rootScope, $state){
+    $scope.isLoaded = false;
+    
+    $scope.$on('$viewContentLoaded', function(){
+        $scope.isLoaded = true;        
+        console.log($scope.isLoaded);
+    })
+})
+
+.controller('InputViewController', function(){
+    //functionality which epands input box on overflow detect
+})

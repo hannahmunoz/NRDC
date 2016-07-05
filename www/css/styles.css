@@ -1,6 +1,11 @@
-/* 
-	Custom Stylesheet for NRDC QA app 
-*/
+/***************************************
+****Custom Stylesheet for NRDC QA app*** 
+****************************************/
+
+
+
+/*Utilities
+===============================*/
 
 /*Disables Ugly Scroll Bar Globallly*/
 ::-webkit-scrollbar,
@@ -8,11 +13,113 @@
   display: none;
 }
 
-/*
-    make a css arrow
+/*Preset Transparencies*/
+.transparent {
+    opacity: 0.0;
+}
+
+.translucent {
+    opacity: 0.5;
+}
+
+.near-visible {
+    opacity: 0.8;
+}
+
+.visible {
+    opacity: 1.0;
+}
+
+/*makes a div an fixed overlay on content*/
+.overlay {
+    position: fixed;
+    z-index: 10;
+}
+
+/*makes a div fill it's parent block*/
+.fill-parent {
+	min-height: 100%;
+	width: 100%;
+}
+
+.no-padding {
+    padding: 0.0px;
+}
+
+/*make arrow clickable*/
+div.arrow-down:active {
+    opacity: 1.0;
+}
+
+/*makes rows wrap*/
+.row {
+  flex-wrap: wrap;
+}
+
+
+
+
+
+/*Color Pallette and Theming
+===================================*/
+
+/*Blue Grey*/
+.primary {
+    background-color: #60809F;
+}
+
+/*light blue-grey*/
+.secondary {
+    background-color: #DFE5EC;
+}
+
+/*UNR Dark Blue*/
+.accent {
+    background-color: #003366 !important;
+}
+
+.compliment{
+    background-color: #F99300;
+}
+
+/*Black*/
+.text {
+    text-decoration-color: #000;
+    color: #F2F2F2;
+}
+
+/*white*/
+.content-bg {
+    background-color: #FFFFFF;
+}
+
+/*overrides existing bar-dark theme*/
+.bar.bar-dark {
+    background-color: #003366 !important;
+}
+
+/* Overrides existing Bar Light Theme*/
+.bar.bar-light {
+    background: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
+/*    border-bottom: 1px solid #C5C4C4 !important; */
+}
+
+/*overrides item content backgrounds*/
+.item .item-content {
+    background-color: #FFFFFF !important;
+    
+}
+
+
+
+
+
+/* CSS objects
+============================/
+/*    make a css arrow
     -- adapted from stack overflow-- 
 */
-.arrow-down{
+.arrow-down {
     border-right: 10px solid; 
     border-bottom: 10px solid;
     width: 30px; 
@@ -20,7 +127,7 @@
     transform: rotate(45deg);
 }
 
-.arrow-up{
+.arrow-up {
     border-right: 10px solid; 
     border-bottom: 10px solid;
     width: 30px; 
@@ -28,142 +135,57 @@
     transform: rotate(-135deg);    
 }
 
-
-/*Color Pallette and Theming
-===================================*/
-
-/*Blue Grey*/
-.primary{
-    background-color: #60809F;
-}
-
-/*light blue-grey*/
-.secondary{
-    background-color: #DFE5EC;
-}
-
-/*UNR Dark Blue*/
-.accent{
-    background-color: #003366 !important;
-}
-
-/*Black*/
-.text{
-    text-decoration-color: #000;
-    color: #F2F2F2;
-}
-
-/*white*/
-.content-bg{
-    background-color: #FFFFFF;
-}
-
-/*overrides existing bar-dark theme*/
-.bar.bar-dark{
-    background-color: #003366 !important;
-}
-
-/* Overrides existing Bar Light Theme*/
-.bar.bar-light{
-    background: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
-/*    border-bottom: 1px solid #C5C4C4 !important; */
-}
-
-/*overrides item content backgrounds*/
-.item .item-content{
-    background-color: #FFFFFF !important;
-    
-}
-
-/*Utilities
-=================================================*/
-/*Preset Transparencies*/
-.transparent{
-    opacity: 0.0;
-}
-
-.translucent{
-    opacity: 0.5;
-}
-
-.near-visible{
-    opacity: 0.8;
-}
-
-.visible{
-    opacity: 1.0;
-}
-
-
-/*makes a div an fixed overlay on content*/
-.overlay{
-    position: fixed;
-    z-index: 10;
-}
-
 /*aligns a div or some content to act as a footer*/
-.footer{
+.footer {
     bottom: 0;
     height: 8%;
     width: 100%;
     padding: 10px;
 }
 
-.header{
+.header {
     top: 0;
     height: 8%;
     width: 100%;
     padding: 10px;
 }
 
-
-/*makes a div fill it's parent block*/
-.fill-parent{
-	min-height: 100%;
-	width: 100%;
-}
-
-.no-padding{
-    padding: 0.0px;
-}
-
-/*make arrow clickable*/
-div.arrow-down:active{
-    opacity: 1.0;
-}
-
 /*tile style button
 used on main page*/
-.tile-btn{
+.tile-btn {
     padding: 0.0px;
     margin: 2px;
-    opacity: .85;
-    border-radius: 2%;
+    opacity: 1;
+    border-radius: 2px;
 }
 
-/*makes rows wrap*/
-.row{
-  flex-wrap: wrap;
-}
+
+
+
+/* Overrides
+==========================*/
 
 /*used for flex box purposes*/
-.home-container{
+.home-container {
     display: -webkit-flex;
     -webkit-flex-directon: ;
     height: 100%;
 }
 
-.modal-back-btn{
+.modal-back-btn {
     margin-right: 8px;
 }
 
-.item{
+.item {
     margin: 0px; !important
 }
 
-
 /*Manual overrides of md-input css*/
-input{
+input {
     background-color: inherit !important;
     color: black !important;
+}
+
+input:focus {
+     background-color: #EEEEEE !important;
 }

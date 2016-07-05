@@ -19,7 +19,7 @@
         min|max req: not implemented -->
         <form name = "nameForm" class="list " novalidate>
             <label class="item item-input " id="site-input24">
-                <input type="text" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required>
+                <ion-md-input type="text" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required></ion-md-input>
             </label>
         </form>
 
@@ -30,15 +30,15 @@
         min|max req: not implemented -->
         <form name="GPSForm" class="list " novalidate="">
             <label class="item item-input " id="site-input19" >
-                <input type="text" placeholder="Latitude" name = "siteLatitude" required ng-model = "JSON['Latitude']">
+                <ion-md-input type="text" placeholder="Latitude" name = "siteLatitude" required ng-model = "JSON['Latitude']"></ion-md-input>
             </label>
 
             <label class="item item-input "  name="siteLongitude" >
-                <input type="text" placeholder="Longitude" name = "siteLongitude" ng-model = "JSON['Longitude']" required>
+                <ion-md-input type="text" placeholder="Longitude" name = "siteLongitude" ng-model = "JSON['Longitude']" required></ion-md-input>
             </label>
 
             <label class="item item-input " id="site-input23" name="siteElevation">
-                <input type="text" placeholder="Elevation" name = "siteElevation" ng-model = "JSON['Altitude']" required>
+                <ion-md-input type="text" placeholder="Elevation" name = "siteElevation" ng-model = "JSON['Altitude']" required></ion-md-input>
             </label>
 
             <button id="site-button4" class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)" >Get GPS Location</button>
@@ -52,7 +52,7 @@
         min|max req: not implemented --> 
         <form name = "aliasForm" class = "list" novalidate>
             <label class="item item-input " id="site-input28" name="alias">
-                <input type="text" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required>
+                <ion-md-input type="text" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required></ion-md-input>
             </label>
         </form>
 
@@ -61,9 +61,10 @@
         type: text
         error checking: no
         min|max req: not implemented --> 
+<!--    Visual: Expand on click -->
         <form name = "notesForm" class = "list" novalidate="">
             <label class="item item-input " id="site-input27">
-                <input type="text" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required>
+                <ion-md-input type="text" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required></ion-md-input>
             </label>
         </form>
 
@@ -117,11 +118,11 @@
     <!-- Small arrow on the bottom indicating scrollability-->
     <!-- Functionality: Enables user to scroll rapidly to bottom of page
          Hides upon full scroll down-->
-    <div class="overlay footer"
+<!--    <div class="overlay footer"
          ng-hide="isBottom">
             <div
               delegate-handle="arrow-btn"
               ng-click="scrlBot()"
               class="arrow-down pull-right translucent"></div>  
-    </div>
+    </div>-->
 </ion-modal-view>
