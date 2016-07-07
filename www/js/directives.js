@@ -36,8 +36,17 @@ angular.module('app.directives', [])
             $element.replaceWith(e);
         }
     }
-});
+})
 
+//throws a flag when the last element is loaded from an ng-repeat
+.directive('repeatDirective', function(){
+    return function(element, scope, attrs){
+        scope = angular.element(element)[0];
+        if (scope.$last){
+            scope.$emit('LastElemLoaded');
+        }
+    };
+});
 
 
 // .directive('blankDirective', [function(){

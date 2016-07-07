@@ -159,6 +159,43 @@ used on main page*/
     border-radius: 2px;
 }
 
+/*Loading Spinner*/
+.loading-spinner-inner{
+  height: 24px;
+  width: 24px;
+  border-radius: 50px;
+  border: 2px dotted #003366;
+  background-color: rgba(0,0,0,0);
+}
+
+.loading-spinner{
+  height: 56px;
+  width: 56px;
+  background-color: rgba(0,0,0,0);
+  border: dotted 5px #F99300;
+  border-radius: 50px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+/*Animations
+===========================*/
+.spinner{
+  animation: spin 1s ease-in-out infinite;
+}
+
+.spinner-rev{
+ animation: spin .2s linear infinite reverse;
+}
+
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
 
 
 

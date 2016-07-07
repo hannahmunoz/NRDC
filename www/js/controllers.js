@@ -272,13 +272,13 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 	$rootScope.urlPaths = ["people","projects", "sites", "systems", "deployments", "components", "documents","service_entries"];
 
 	File.createDirectory();
-
+    
+    //front end timing offset
     $scope.randomTimingOffset = [];
+    
     
     //randomizes the appearance of tile buttons on main page
     $scope.setRndTimingOffsets = function(){
-    	
-
         numTiles = $window.document.getElementsByClassName("tile-btn").length;
         
         for( tile = 0; tile < numTiles; tile++ ){
@@ -329,7 +329,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     //project read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/", $rootScope.projectSyncedJSON, 'Project', $rootScope.projectJSON).then (function (result){
     	$rootScope.projectSyncedJSON = result;
-    })
+    });
 
     // 	site read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/", $rootScope.siteSyncedJSON,'Site', $rootScope.siteJSON).then(function(result){
@@ -473,15 +473,13 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     };
 })
 
-.controller('LoadController', function($scope, $rootScope, $state){
+
+.controller('LoadController', function($scope, $rootScope, $state ){
     $scope.isLoaded = false;
-    
-    $scope.$on('$viewContentLoaded', function(){
-        $scope.isLoaded = true;        
-        console.log($scope.isLoaded);
-    })
 })
 
+/*
 .controller('InputViewController', function(){
     //functionality which epands input box on overflow detect
 })
+*/
