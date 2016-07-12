@@ -6,7 +6,7 @@ angular.module('ionMdInput', [])
     replace: true,
     require: '?ngModel',
     template: '<label class="item item-input item-md-label">' +
-      '<input type="text" class="md-input">' +
+      '<input type="text" class="md-input"/>' +
       '<span class="input-label"></span>' +
       '<div class="highlight"></div>' +
       '</label>',

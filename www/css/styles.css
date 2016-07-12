@@ -56,28 +56,26 @@ div.arrow-down:active {
   flex-wrap: wrap;
 }
 
-
-
+/*Make a button or element full width*/
+.wide{
+    min-width: 100%;
+}
 
 
 /*Color Pallette and Theming
 ===================================*/
-
-/*Blue Grey*/
-.primary {
-    background-color: #60809F;
-}
-
-/*light blue-grey*/
-.secondary {
-    background-color: #DFE5EC;
-}
 
 /*UNR Dark Blue*/
 .accent {
     background-color: #003366 !important;
 }
 
+/*Lighter Hue of Above Blue*/
+.primary{
+    background-color: #0052A1 !important;
+}
+
+/*Orange*/
 .compliment{
     background-color: #F99300;
 }
@@ -98,6 +96,10 @@ div.arrow-down:active {
     background-color: #003366 !important;
 }
 
+.bar-dark h4{
+    color:#FFFFFF;
+}
+
 /* Overrides existing Bar Light Theme*/
 .bar.bar-light {
     background: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
@@ -110,7 +112,9 @@ div.arrow-down:active {
     
 }
 
-
+.button-positive {
+    background-color: #0052A1 !important;
+}
 
 
 
@@ -205,7 +209,6 @@ used on main page*/
 /*used for flex box purposes*/
 .home-container {
     display: -webkit-flex;
-    -webkit-flex-directon: ;
     height: 100%;
 }
 
@@ -221,8 +224,15 @@ used on main page*/
 input {
     background-color: inherit !important;
     color: black !important;
+    display: -webkit-flex;
+    overflow-x: visible;
 }
 
 input:focus {
      background-color: #EEEEEE !important;
+}
+
+/*Input Underline*/
+.item-md-label .highlight-calm {
+    background: #F99300 !important;
 }
