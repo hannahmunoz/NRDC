@@ -1,3 +1,7 @@
+/*  Modified: 07/13/2016
+    Changes: All instances of 'input' have been changed to text area for the
+             purposes of making expandable text inputs */
+
 angular.module('ionMdInput', [])
 
 .directive('ionMdInput', function() {

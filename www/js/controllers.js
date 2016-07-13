@@ -478,8 +478,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     $scope.isLoaded = false;
 })
 
-/*
+
 .controller('InputViewController', function(){
-    //functionality which epands input box on overflow detect
+    //functionality which expands input box on overflow detect
+    
 })
-*/
+

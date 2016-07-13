@@ -221,14 +221,19 @@ used on main page*/
 }
 
 /*Manual overrides of md-input css*/
-input {
+/*EM scales element according to text size*/
+.item-md-label textarea {
     background-color: inherit !important;
     color: black !important;
-    display: -webkit-flex;
-    overflow-x: visible;
+    resize: none;
+    font-size: large;
+    font: arial;
+    min-height: 2em;
+    padding: .5em;
+    line-height: 1em;
 }
 
-input:focus {
+textarea:focus {
      background-color: #EEEEEE !important;
 }
 
@@ -236,3 +241,4 @@ input:focus {
 .item-md-label .highlight-calm {
     background: #F99300 !important;
 }
+
