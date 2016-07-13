@@ -1,4 +1,4 @@
-angular.module('app.services', ['base64'])
+angular.module('app.services', ['ionic','base64'])
 
 // factory: logger
 // fucntion(s): log
@@ -24,39 +24,47 @@ angular.module('app.services', ['base64'])
 //		create
 //		read
 
-.factory ('sync', function($q, $http){
+.factory ('sync', function($q, $http, File, $ionicPlatform){
 
 // function:		create
 // purpose: post request to http link 
 // var: string (url), JSON
 // return: empty JSON upon success
-	function create (JSON){
-	}	
 
 // function: read
 // purpose:  retreive info from http link 
 // var: string (url)
 // return: filled JSON upon success
-	var read = function (url, syncedJSON, title, JSON){
+	function read (url, syncedJSON, title, JSON){
+		var ret;
 		config = {timeout: 10000};
-		return $http.get (url, config)
+		var promise = $q (function (resolve, reject){  $http.get (url, config)
 			.then (function Success (response){
 				console.log (url + " " + response.status +": " + response.statusText);
 					syncedJSON = response.data;
-				for (var i = 0; i < syncedJSON[title+'s'].length; i++){
-					JSON [syncedJSON[title+'s'][i][title]] =  syncedJSON[title+'s'][i]['Name']; 
-				}
-				return response.data;
+
+				ret = response.data;
+				resolve (response.data);
 			}, function Error (response){
-				console.debug (url + " " + response.status +": "+ response.statusText);
-
-				return response.statusText;
-			});
-
+				File.readFile (title).then (function(success){
+					syncedJSON = success
+				ret = success;
+				resolve (success);
+				})
+			})})
+			return (promise.then (function (success){
+				for (var i = 0; i < syncedJSON[title+'s'].length; i++){
+				JSON [syncedJSON[title+'s'][i][title]] =  syncedJSON[title+'s'][i]['Name']; 
+				}
+				return ret;
+			}));
 
 	}	
+
+
 	
-	return{read: read};
+	return{read: read,
+			};
 })
 
 
@@ -228,30 +236,70 @@ angular.module('app.services', ['base64'])
 	})
 
 
-.factory ('File',function($cordovaFile){
+.factory ('File', function($cordovaFile, $q){
+
 	function createDirectory(){
 		document.addEventListener ("deviceready", function(){
-			$cordovaFile.checkDir (cordova.file.dataDirectory,'NRDC').then (function (success){
+			$cordovaFile.checkDir (cordova.file.cacheDirectory,'NRDC').then (function (success){
 		},function (error){
 			if (error.code == 1){
-				$cordovaFile.createDir (cordova.file.dataDirectory,'NRDC', false);	
+				$cordovaFile.createDir (cordova.file.cacheDirectory,'NRDC', false);	
 			}
 			})
 		})
 	}
 
-	function checkFile(title, JSON){
+	function checkFile(title){
 		document.addEventListener ("deviceready",function(){
-			$cordovaFile.checkFile(cordova.file.dataDirectory+'NRDC/', title + '.txt').then(function(success){
-				$cordovaFile.writeFile (cordova.file.dataDirectory+'NRDC/', title + '.txt', JSON, true);
+			$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then(function(success){
+				$cordovaFile.createFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', true);
 			},function(error){
-				if (error.code == 1){
-					$cordovaFile.writeFile (cordova.file.dataDirectory+'NRDC/', title + '.txt', JSON, true);
+			if (error.code == 1){
+					$cordovaFile.createFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt',  true).then (function (){
+			});
+					return error;
 				}
 			})
 		})
 	}
+
+	function checkandWriteFile (title, JSON){
+		document.addEventListener ("deviceready",function(){
+		$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then(function(success){
+			$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt',JSON, true);
+		},function(error){
+		if (error.code == 1){
+				$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', JSON,  true).then (function (){			});
+					return error;
+				}
+		else{
+			console.debug ("File Write Error: " + title + " " + error.code);
+			}
+		}
+		)
+	})}
+
+	function readFile (title){
+		return $q(function (resolve, reject){
+			document.addEventListener ("deviceready", function(){
+				$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
+					 $cordovaFile.readAsText (cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
+						resolve (JSON.parse(result));
+						}, function (error){
+							console.debug("File Read Error:" + title + " " + error.code);
+							reject (error);
+						})
+					}, function (error){
+						console.debug ("File Error: " + title + " " + error.code);
+						reject (error);
+				})
+		})
+	})
+	}
+	
 	return {createDirectory: createDirectory,
-			checkFile: checkFile};
+			checkFile: checkFile,
+			checkandWriteFile: checkandWriteFile,
+			readFile: readFile};
 
 });

@@ -116,6 +116,9 @@ div.arrow-down:active {
     background-color: #0052A1 !important;
 }
 
+.near-visible{
+    opacity: 0.8;
+}
 
 
 /* CSS objects
@@ -172,16 +175,9 @@ used on main page*/
   background-color: rgba(0,0,0,0);
 }
 
-.loading-spinner{
-  height: 56px;
-  width: 56px;
-  background-color: rgba(0,0,0,0);
-  border: dotted 5px #F99300;
-  border-radius: 50px;
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/*make arrow clickable*/
+div.arrow-down:active{
+    opacity: 1.0;
 }
 
 
@@ -219,6 +215,7 @@ used on main page*/
 .item {
     margin: 0px; !important
 }
+
 
 /*Manual overrides of md-input css*/
 /*EM scales element according to text size*/

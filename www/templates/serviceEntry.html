@@ -1,7 +1,7 @@
 <ion-modal-view ng-controller="scrollController" 
                 title="Service Entry" 
                 id="page8" 
-                style="" 
+                style="background-color:#0471A6;" 
                 class=" ">
     <ion-header-bar class="bar-dark">
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
@@ -10,7 +10,7 @@
     <ion-content 
       delegate-handle="scrollable" 
       padding="true" 
-      class="has-header content-bg"
+      class="has-header bg-img-main"
       on-scroll="cndHideArrow()">
 
 <!--    controller scope var: service
@@ -20,7 +20,7 @@
         min|max req: not implemented --> 
         <form name = "nameForm" id="serviceEntry-form62" class="list ">
             <label class="item item-input " id="serviceEntry-input59" >
-                <ion-md-input type="text" placeholder="Name" name="serviceName" ng-model = "JSON['Name']" required></ion-md-input>
+                <input type="text" placeholder="Name" name="serviceName" ng-model = "JSON['Name']" required>
             </label>
         </form>
 
@@ -31,7 +31,7 @@
         min|max req: not implemented --> 
         <form name = "notesForm" id="serviceEntry-form63" class="list ">
             <label class="item item-input " id="serviceEntry-input60">
-                <ion-md-input type="text" placeholder="Notes" name = "notes" ng-model = "JSON['Notes']" required></ion-md-input>
+                <input type="text" placeholder="Notes" name = "notes" ng-model = "JSON['Notes']" required>
             </label>
         </form>
 
@@ -42,7 +42,7 @@
         min|max req: not implemented --> 
         <form name = "operationForm" id="serviceEntry-form64" class="list ">
             <label class="item item-input " id="serviceEntry-input61" >
-                <ion-md-input type="text" placeholder="Operation" name="operation" ng-model = "JSON['Operation']" required></ion-md-input>
+                <input type="text" placeholder="Operation" name="operation" ng-model = "JSON['Operation']" required> 
             </label>
         </form>
 

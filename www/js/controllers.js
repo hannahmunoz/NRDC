@@ -272,13 +272,13 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 	$rootScope.urlPaths = ["people","projects", "sites", "systems", "deployments", "components", "documents","service_entries"];
 
 	File.createDirectory();
-    
-    //front end timing offset
+
     $scope.randomTimingOffset = [];
-    
     
     //randomizes the appearance of tile buttons on main page
     $scope.setRndTimingOffsets = function(){
+    	
+
         numTiles = $window.document.getElementsByClassName("tile-btn").length;
         
         for( tile = 0; tile < numTiles; tile++ ){
@@ -306,69 +306,97 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     	//get permissions
     	//unblock before packaging
     	//Camera.checkPermissions();
-/*    	if ($cordovaNetwork.getNetwork() != "none"){
-		document.addEventListener ("deviceready",function(){
-			console.log ($cordovaFile.readAsText (cordova.file.dataDirectory+'NRDC/', 'People.txt').value);
-		})
-    }*/
+    	File.createDirectory();
+ 
+
     	// people read
-    $http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/").then (function(result){
-    	console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);
-    	$rootScope.peopleSyncedJSON = result.data;	
+    	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/").then (function(result){
+    		console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);
+    		$rootScope.peopleSyncedJSON = result.data;
+    		File.checkandWriteFile ( $rootScope.urlPaths[0], $rootScope.peopleSyncedJSON);
+    		resolve ($rootScope.peopleSyncedJSON);
+
+    	}, function (result){
+    		File.readFile($rootScope.urlPaths[0]).then (function(success){
+    			$rootScope.peopleSyncedJSON = success;
+    			resolve ($rootScope.peopleSyncedJSON);
+    		});
+
+     	})})
+   promise.then (function(result){
     		for (var i = 0; i < $rootScope.peopleSyncedJSON.People.length; i++){
 				$rootScope.peopleJSON [$rootScope.peopleSyncedJSON.People[i]['Person']] =  $rootScope.peopleSyncedJSON.People[i]['First Name'] + " " + $rootScope.peopleSyncedJSON.People[i]['Last Name']; 
 			}
-		File.checkFile('People', $rootScope.peopleSyncedJSON);
-		document.addEventListener ("deviceready",function(){
-			console.log ($cordovaFile.readAsText (cordova.file.dataDirectory+'NRDC/', 'People.txt').value);
-		})
-    	}),function (error){
+    	})
 
-    }
 
     //project read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/", $rootScope.projectSyncedJSON, 'Project', $rootScope.projectJSON).then (function (result){
     	$rootScope.projectSyncedJSON = result;
-    });
+    	File.checkandWriteFile('Project', $rootScope.projectSyncedJSON);
+    })
 
-    // 	site read
+    	//site read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/", $rootScope.siteSyncedJSON,'Site', $rootScope.siteJSON).then(function(result){
     	$rootScope.siteSyncedJSON = result;
+    	File.checkandWriteFile('Site', $rootScope.siteSyncedJSON);
     });
 
     // 	system read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/", $rootScope.systemSyncedJSON, 'System', $rootScope.systemJSON).then (function(result){
     	$rootScope.systemSyncedJSON = result;
+    	File.checkandWriteFile('System', $rootScope.systemSyncedJSON);
     })
 
     // deployment read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[4]+"/", $rootScope.deploymentSyncedJSON, 'Deployment', $rootScope.deploymentJSON).then (function(result){
     	$rootScope.deploymentSyncedJSON = result;
+    	File.checkandWriteFile('Deployment', $rootScope.deploymentSyncedJSON);
     });
 
     // component read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[5]+"/", $rootScope.componentSyncedJSON, 'Component', $rootScope.componentJSON).then (function(result){
     	$rootScope.componentSyncedJSON = result;
+    	File.checkandWriteFile('Component', $rootScope.componentSyncedJSON);
     });
 
     // 	document read
 	sync.read($rootScope.baseURL + $rootScope.urlPaths[6]+"/", $rootScope.documentSyncedJSON, 'Document', $rootScope.documentJSON).then (function(result){
 		$rootScope.documentSyncedJSON = result;
+		File.checkandWriteFile('Document', $rootScope.documentSyncedJSON);
 	});
 
-    // 	service Entries read
-    $http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
-    	console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
-    	$rootScope.serviceSyncedJSON = result.data;	
+   // 	service Entries read
+     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
+    		console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
+    		$rootScope.serviceSyncedJSON = result.data;
+    		File.checkandWriteFile ( $rootScope.urlPaths[7], $rootScope.serviceSyncedJSON);
+    		resolve ($rootScope.serviceSyncedJSON);
+
+    	}, function (result){
+    		File.readFile($rootScope.urlPaths[7]).then (function(success){
+    			$rootScope.serviceSyncedJSON = success;
+    			resolve ($rootScope.serviceSyncedJSON);
+    		});
+
+     	})})
+   promise.then (function(result){
     		for (var i = 0; i < $rootScope.serviceSyncedJSON.ServiceEntries.length; i++){
 				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
+			}
+    	})
 
-			}			
-    	}),function (error){
+ //    $http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
+ //    	console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
+ //    	$rootScope.serviceSyncedJSON = result.data;	
+ //    		for (var i = 0; i < $rootScope.serviceSyncedJSON.ServiceEntries.length; i++){
+	// 			$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
+	// 		}	
+	// 		File.checkFile('ServiceEntries', $rootScope.serviceSyncedJSON);		
+ //    	}),function (error){
 
-    	}
+ //    	}
 }
-
     init ();
 //}
 
@@ -473,7 +501,6 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     };
 })
 
-
 .controller('LoadController', function($scope, $rootScope, $state ){
     $scope.isLoaded = false;
 })
@@ -483,4 +510,8 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     //functionality which expands input box on overflow detect
     
 })
+<<<<<<< HEAD
+=======
+*/
+>>>>>>> 2f66a328be4333d44753ae4868e22b0260207d65
 
