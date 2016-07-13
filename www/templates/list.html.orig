@@ -6,10 +6,19 @@
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-title>{{title}}</ion-nav-title>
+<<<<<<< HEAD
+    <ion-content padding="false" class="has-header content-bg">
+<!--     <ul>
+    	<li class ="" ng-repeat="items in listJSON"> -->
+    	  <ul>
+    		<li class="" ng-repeat = "(key, item) in listJSON">
+                <div class = "item waves-button"  ng-click = "select(item)" >
+=======
     <ion-content padding="false" class="has-header content-bg" ng-controller="LoadController">
         <ul>
     		<li repeat-directive ng-repeat = "(key, item) in listJSON" >
                 <div class = "item waves-button ink text-center"  ng-click = "select(item)">
+>>>>>>> e5fc141d9b4a945e960dbe524d7bd34d87b5cccc
                     <h2>{{item}}</h2>
     			</div>
             </li>
@@ -17,7 +26,7 @@
 <!--     "item in items"	</li>
     </ul> -->
  </ion-content>
-    <button class="button button-fab button-fab-bottom-right pane compliment" ng-controller="modalController" ng-click="openModal()">
+    <button class="button button-fab button-fab-bottom-right pane" ng-controller="modalController" ng-click="openModal()">
         <i class="icon ion-plus" style="color: #FFFFFF;"></i>
     </button>
 
