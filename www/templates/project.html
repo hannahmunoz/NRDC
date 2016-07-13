@@ -1,6 +1,6 @@
 <ion-modal-view title="Project" id="page10">
     <ion-header-bar class="bar-light">
-        <button class="button-flat ink" style="" ng-click="back(); closeModal();"><h4>Back</h4></button>
+        <button style="display:block;" ng-click="back(); closeModal();">Back</button>
     </ion-header-bar>
     <ion-content padding="true" class="has-header content-bg">
 
@@ -24,7 +24,7 @@
 
         <form name ="institutionForm" class="list " novalidate>
             <label class="item item-input " id="project-input64" >
-                <ion-md-input type="text" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required></ion-md-input>
+                <input type="text" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required>
             </label>
         </form>
 
@@ -36,7 +36,7 @@
 
         <form name ="fundingForm" class="list " novalidate>
             <label class="item item-input " id="project-input65" >
-                <ion-md-input type="text" placeholder="Original Funding Agency" name="funding" ng-model = "JSON['Original Funding Agency'] " required></ion-md-input>
+                <input type="text" placeholder="Original Funding Agency" name="funding" ng-model = "JSON['Original Funding Agency'] " required>
             </label>
         </form>
 
@@ -48,7 +48,7 @@
 
         <form name ="grantForm" class="list " novalidate>
             <label class="item item-input " id="project-input66">
-                <ion-md-input type="text" placeholder="Grant Number" name="grantNumber" ng-model = "JSON['Grant Number String']" required></ion-md-input>
+                <input type="text" placeholder="Grant Number" name="grantNumber" ng-model = "JSON['Grant Number String']" required>
             </label>
         </form>
 

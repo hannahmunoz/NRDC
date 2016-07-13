@@ -1,8 +1,8 @@
-<ion-modal-view title="System" id="page5" style="" class=" ">
-    <ion-header-bar class="bar-dark">
+<ion-modal-view title="System" id="page5" style="background-color:#0471A6;" class=" ">
+    <ion-header-bar class="bar-light">
         <button style="display:block;" ng-click="back(); closeModal();">Back</button>
     </ion-header-bar>
-    <ion-content padding="true" class="has-header content-bg">
+    <ion-content padding="true" class="has-header bg-img-main">
 
 <!--    controller scope var: system
         var name: systemName
@@ -11,7 +11,7 @@
         min|max req: not implemented --> 
         <form name = "nameForm" id="system-form23" class="list " novalidate>
             <label class="item item-input " id="system-input31">
-                <ion-md-input type="text" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" required></ion-md-input>
+                <input type="text" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" required>
             </label>
         </form>
 
@@ -22,7 +22,7 @@
         min|max req: not implemented --> 
         <form name = "detailsForm" id="system-form24" class="list " novalidate>
             <label class="item item-input " id="system-input32" >
-                <ion-md-input type="text" placeholder="Details" name="details" ng-model = "JSON['Details']" required=""></ion-md-input>
+                <input type="text" placeholder="Details" name="details" ng-model = "JSON['Details']" required="">
             </label>
         </form>
 
@@ -33,7 +33,7 @@
         min|max req: not implemented --> 
         <form name = "powerForm" id="system-form25" class="list " novalidate>
             <label class="item item-input " id="system-input33" >
-                <ion-md-input type="text" placeholder="Power" name="power" ng-model = "JSON['Power']" required></ion-md-input>
+                <input type="text" placeholder="Power" name="power" ng-model = "JSON['Power']" required>
             </label>
         </form>
 
@@ -44,7 +44,7 @@
         min|max req: not implemented --> 
         <form name = "installForm" id="system-form26" class="list " novalidate>
             <label class="item item-input " id="system-input34" >
-                <ion-md-input type="text" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" required> </ion-md-input>
+                <input type="text" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" required> 
             </label>
         </form>
 
