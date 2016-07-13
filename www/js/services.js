@@ -1,4 +1,4 @@
-angular.module('app.services', ['base64'])
+angular.module('app.services', ['ionic','base64'])
 
 // factory: logger
 // fucntion(s): log
@@ -24,7 +24,7 @@ angular.module('app.services', ['base64'])
 //		create
 //		read
 
-.factory ('sync', function($q, $http, File){
+.factory ('sync', function($q, $http, File, $ionicPlatform){
 
 // function:		create
 // purpose: post request to http link 
@@ -44,12 +44,10 @@ angular.module('app.services', ['base64'])
 					syncedJSON = response.data;
 
 				ret = response.data;
-				console.log  (response.data);
 				resolve (response.data);
 			}, function Error (response){
 				File.readFile (title).then (function(success){
-					syncedJSON = success;
-
+					syncedJSON = success
 				ret = success;
 				resolve (success);
 				})
@@ -58,7 +56,6 @@ angular.module('app.services', ['base64'])
 				for (var i = 0; i < syncedJSON[title+'s'].length; i++){
 				JSON [syncedJSON[title+'s'][i][title]] =  syncedJSON[title+'s'][i]['Name']; 
 				}
-				console.log ("hello")
 				return ret;
 			}));
 
@@ -275,23 +272,26 @@ angular.module('app.services', ['base64'])
 				$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', JSON,  true).then (function (){			});
 					return error;
 				}
-			})
-		})
-	}
+		else{
+			console.debug ("File Write Error: " + title + " " + error.code);
+			}
+		}
+		)
+	})}
 
 	function readFile (title){
 		return $q(function (resolve, reject){
 			document.addEventListener ("deviceready", function(){
 				$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
 					 $cordovaFile.readAsText (cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
-						resolve (result);
+						resolve (JSON.parse(result));
 						}, function (error){
-							console.debug("File Read Error:" + error.code);
+							console.debug("File Read Error:" + title + " " + error.code);
 							reject (error);
 						})
 					}, function (error){
-						console.debug ("File Error: " + error.code);
-						resolve (error);
+						console.debug ("File Error: " + title + " " + error.code);
+						reject (error);
 				})
 		})
 	})

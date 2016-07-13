@@ -310,7 +310,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
  
 
     	// people read
-    		var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/").then (function(result){
+    	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/").then (function(result){
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.peopleSyncedJSON = result.data;
     		File.checkandWriteFile ( $rootScope.urlPaths[0], $rootScope.peopleSyncedJSON);
@@ -318,8 +318,8 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
     	}, function (result){
     		File.readFile($rootScope.urlPaths[0]).then (function(success){
-    			$rootScope.peopleSyncedJSON = JSON.parse(success);
-    			resolve ($rootScope.peopleSyncedJSON);;
+    			$rootScope.peopleSyncedJSON = success;
+    			resolve ($rootScope.peopleSyncedJSON);
     		});
 
      	})})
@@ -334,11 +334,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/", $rootScope.projectSyncedJSON, 'Project', $rootScope.projectJSON).then (function (result){
     	$rootScope.projectSyncedJSON = result;
     	File.checkandWriteFile('Project', $rootScope.projectSyncedJSON);
-    }), function (result){
+    })
 
-    }
-
-    // 	site read
+    	//site read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/", $rootScope.siteSyncedJSON,'Site', $rootScope.siteJSON).then(function(result){
     	$rootScope.siteSyncedJSON = result;
     	File.checkandWriteFile('Site', $rootScope.siteSyncedJSON);
@@ -347,7 +345,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     // 	system read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/", $rootScope.systemSyncedJSON, 'System', $rootScope.systemJSON).then (function(result){
     	$rootScope.systemSyncedJSON = result;
-    	File.checkandWriteFile('Sytem', $rootScope.systemSyncedJSON);
+    	File.checkandWriteFile('System', $rootScope.systemSyncedJSON);
     })
 
     // deployment read
@@ -368,17 +366,36 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 		File.checkandWriteFile('Document', $rootScope.documentSyncedJSON);
 	});
 
-    // 	service Entries read
-    $http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
-    	console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
-    	$rootScope.serviceSyncedJSON = result.data;	
+   // 	service Entries read
+     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
+    		console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
+    		$rootScope.serviceSyncedJSON = result.data;
+    		File.checkandWriteFile ( $rootScope.urlPaths[7], $rootScope.serviceSyncedJSON);
+    		resolve ($rootScope.serviceSyncedJSON);
+
+    	}, function (result){
+    		File.readFile($rootScope.urlPaths[7]).then (function(success){
+    			$rootScope.serviceSyncedJSON = success;
+    			resolve ($rootScope.serviceSyncedJSON);
+    		});
+
+     	})})
+   promise.then (function(result){
     		for (var i = 0; i < $rootScope.serviceSyncedJSON.ServiceEntries.length; i++){
 				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
-			}	
-			File.checkFile('ServiceEntries', $rootScope.serviceSyncedJSON);		
-    	}),function (error){
+			}
+    	})
 
-    	}
+ //    $http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
+ //    	console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
+ //    	$rootScope.serviceSyncedJSON = result.data;	
+ //    		for (var i = 0; i < $rootScope.serviceSyncedJSON.ServiceEntries.length; i++){
+	// 			$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
+	// 		}	
+	// 		File.checkFile('ServiceEntries', $rootScope.serviceSyncedJSON);		
+ //    	}),function (error){
+
+ //    	}
 }
     init ();
 //}
@@ -420,8 +437,6 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 	// wrapper for person select button
 	$scope.select = function(JSON){
-		console.log ($rootScope.projectSyncedJSON);
-		console.log ($rootScope.projectJSON);
 		var x = 0;
 		for (var o in $rootScope.listJSON){
 			if (JSON == $rootScope.listJSON[o]){
@@ -485,4 +500,14 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
         $rootScope.modalHidden = true;
     };
 })
+
+.controller('LoadController', function($scope, $rootScope, $state ){
+    $scope.isLoaded = false;
+})
+
+/*
+.controller('InputViewController', function(){
+    //functionality which epands input box on overflow detect
+})
+*/
 
