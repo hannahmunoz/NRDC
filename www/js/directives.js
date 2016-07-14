@@ -26,10 +26,12 @@ angular.module('app.directives', [])
             scope.$emit('LastElemLoaded');
         }
     };
+})
+
+//directive for expandable input
+.directive('inputExpandable', function(){
+    
 });
-
-//directive for expandable input tag?
-
 
 
 // .directive('blankDirective', [function(){

@@ -1,3 +1,8 @@
+/* Modified: 07/13/2016
+   Changes: All occurences of input have been replaced with textarea for the
+            purpose of making expandable text inputs.
+-Connor */
+
 .item-md-label {
   display: block;
   background-color: transparent;
@@ -15,7 +20,7 @@
     color: #444;
     opacity: 0.5;
     transform-origin: 0; }
-  .item-md-label input {
+  .item-md-label textarea {
     z-index: 1;
     position: relative;
     bottom: 0; }
@@ -47,10 +52,10 @@
     background: #886aea; }
   .item-md-label .highlight-dark {
     background: #444; }
-  .item-md-label input:focus ~ .input-label, .item-md-label input.used ~ .input-label {
+  .item-md-label textarea:focus ~ .input-label, .item-md-label textarea.used ~ .input-label {
     -webkit-transform: translate3d(0, -60px, 0) scale(0.9);
     transform: translate3d(0, -60px, 0) scale(0.9);
     opacity: 1; }
-  .item-md-label input:focus ~ .highlight {
+  .item-md-label textarea:focus ~ .highlight {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
