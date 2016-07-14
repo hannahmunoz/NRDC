@@ -29,10 +29,30 @@ angular.module('app.directives', [])
 })
 
 //directive for expandable input
-.directive('inputExpandable', function(){
-    
-});
 
+/*Function: Adds a hidden div which checks the expected size of
+            our active text-area & resizes text area (sibling-node) appropriately
+*/
+
+.directive('textAreaSize', function(){
+    var link = function(scope, element, attrs){
+        var textSize = element[0];
+        var localTxt = element.parent()[0].childNodes[0];
+        
+        localTxt.oninput = function(){
+            //update data in localdiv to be localTxt.da
+            textSize.innerHTML = localTxt.value;
+            localTxt.style.height = textSize.offsetHeight + 'px';
+        }
+    };
+    
+    return {
+        restrict: 'E',
+        replace: true,
+        template: '<div class="text-format-mirror"></div>',
+        link:link
+    }
+});
 
 // .directive('blankDirective', [function(){
 

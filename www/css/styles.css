@@ -180,6 +180,19 @@ div.arrow-down:active{
     opacity: 1.0;
 }
 
+/* */
+.text-format-mirror{
+    position: absolute;
+    color: black;
+    padding: .5em;
+    line-height: 1em;
+    height: auto;
+    font: arial;
+    font-size: 18px;
+    word-wrap: break-word;
+    white-space: normal;
+    visibility: hidden;
+}
 
 
 
@@ -225,7 +238,7 @@ div.arrow-down:active{
     resize: none;
     font-size: large;
     font: arial;
-    min-height: 2em;
+    height: 2em;
     padding: .5em;
     line-height: 1em;
 }

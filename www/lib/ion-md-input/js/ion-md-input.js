@@ -10,9 +10,10 @@ angular.module('ionMdInput', [])
     replace: true,
     require: '?ngModel',
     template: '<label class="item item-input item-md-label">' +
-      '<input type="text" class="md-input"/>' +
+      '<textarea class="md-input"/>' +      
       '<span class="input-label"></span>' +
       '<div class="highlight"></div>' +
+      '<text-area-size><text-area-size>' +
       '</label>',
     compile: function(element, attr) {
 
@@ -29,7 +30,7 @@ angular.module('ionMdInput', [])
       label.innerHTML = attr.placeholder;
 
       /*Start From here*/
-      var input = element.find('input');
+      var input = element.find('textarea');
       angular.forEach({
         'name': attr.name,
         'type': attr.type,
