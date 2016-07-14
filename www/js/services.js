@@ -24,7 +24,7 @@ angular.module('app.services', ['ionic','base64'])
 //		create
 //		read
 
-.factory ('sync', function($q, $http, File, $ionicPlatform){
+.factory ('sync', function($q, $http, $cordovaFile, File){
 
 // function:		create
 // purpose: post request to http link 
@@ -42,7 +42,6 @@ angular.module('app.services', ['ionic','base64'])
 			.then (function Success (response){
 				console.log (url + " " + response.status +": " + response.statusText);
 					syncedJSON = response.data;
-
 				ret = response.data;
 				resolve (response.data);
 			}, function Error (response){
@@ -58,13 +57,57 @@ angular.module('app.services', ['ionic','base64'])
 				}
 				return ret;
 			}));
-
 	}	
+
+	function post (url, JSON){
+		//grab from possible past files
+		if (File.checkFile ('Unsynced').status == 1){
+			File.readFile ('Unsynced').then (function Success (response){
+				if (response != null){
+					console.log (response);
+					angular.forEach (JSON, function (value, key){
+						//for (int i = 0; i < key.length; i ++)
+						angular.merge (value, response[key]);
+					})
+
+				// angular.forEach (JSON, function (value, key){
+				// 	for (int i = 0, i < key.length; i ++){
+				// 		console.log ("Merged: " + value[i]);
+				// }
+		//	}
+				
+					console.log ('hello');
+				}
+			})
+
+		}
+		angular.forEach (JSON, function (value, key){
+			console.log ("Unsynced:" + key + value);
+		})
+
+		angular.forEach (JSON, function (value, key){
+			for (var i = 0; i < key.length; i ++){
+			console.log ("Unsynced:" + key[i] + value[i]);
+			}
+		})
+
+		config = {timeout: 10000};
+
+		$http.post (url,JSON, config).then (function Success (response){
+			if (File.checkFile ('Unsynced').status == 1){
+				$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
+			}
+			//toast for successful post
+		}),function Error (response){
+			//File.checkandWriteFile ('Unsynced', JSON);
+			//toast to tell user what happened
+		};
+	}
 
 
 	
 	return{read: read,
-			};
+		   post: post};
 })
 
 
@@ -250,16 +293,22 @@ angular.module('app.services', ['ionic','base64'])
 	}
 
 	function checkFile(title){
+	return $q (function (resolve, reject){document.addEventListener ("deviceready",function(){
+			 $cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then (function (success){
+			 	resolve (success.code);
+			 }, (function (error){
+			 	reject (error.code);
+			 }))
+		})
+	})
+	}
+
+	function createFile (title){
 		document.addEventListener ("deviceready",function(){
 			$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then(function(success){
-				$cordovaFile.createFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', true);
 			},function(error){
-			if (error.code == 1){
-					$cordovaFile.createFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt',  true).then (function (){
-			});
-					return error;
-				}
-			})
+					$cordovaFile.createFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt',  true);
+				})
 		})
 	}
 
@@ -279,11 +328,21 @@ angular.module('app.services', ['ionic','base64'])
 		)
 	})}
 
+	// function checkandWriteExistingFile (title,JSON){
+	// 	document.addEventListener ("deviceready",function(){
+	// 		$cordovaFile.checkFile (cordova.file.cacheDirectory,'NRDC/'+title+'.txt').then (function (success){
+	// 			$cordovaFile.writeExistingFile (cordova.file.cacheDirectory,'NRDC/'+title+'.txt', JSON);
+	// 		})
+	// 	})
+	// }
+
 	function readFile (title){
 		return $q(function (resolve, reject){
 			document.addEventListener ("deviceready", function(){
 				$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
 					 $cordovaFile.readAsText (cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
+					  if (title == 'Unsynced')
+					 		console.log (result);
 						resolve (JSON.parse(result));
 						}, function (error){
 							console.debug("File Read Error:" + title + " " + error.code);
@@ -299,6 +358,7 @@ angular.module('app.services', ['ionic','base64'])
 	
 	return {createDirectory: createDirectory,
 			checkFile: checkFile,
+			createFile: createFile,
 			checkandWriteFile: checkandWriteFile,
 			readFile: readFile};
 
