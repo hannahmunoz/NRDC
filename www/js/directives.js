@@ -32,17 +32,24 @@ angular.module('app.directives', [])
 
 /*Function: Adds a hidden div which checks the expected size of
             our active text-area & resizes text area (sibling-node) appropriately
+            and offsets input label
 */
 
 .directive('textAreaSize', function(){
     var link = function(scope, element, attrs){
         var textSize = element[0];
         var localTxt = element.parent()[0].childNodes[0];
+        var label = element.parent()[0].childNodes[1];
+        
         
         localTxt.oninput = function(){
-            //update data in localdiv to be localTxt.da
-            textSize.innerHTML = localTxt.value;
+            
+            //update data in localdiv to be localTxt height
+            textSize.innerHTML = localTxt.value + "<br/>";
             localTxt.style.height = textSize.offsetHeight + 'px';
+            
+            //maintain the offset of the input label so it remains above the text box
+            label.style = ' transform: translate3d(0,-' + (textSize.offsetHeight + 25) + 'px, 0) scale(.9); transition: all 0s linear;';
         }
     };
     

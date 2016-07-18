@@ -187,11 +187,12 @@ div.arrow-down:active{
     padding: .5em;
     line-height: 1em;
     height: auto;
-    font: arial;
+    font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
     font-size: 18px;
     word-wrap: break-word;
-    white-space: normal;
+    white-space: pre-line;
     visibility: hidden;
+
 }
 
 
