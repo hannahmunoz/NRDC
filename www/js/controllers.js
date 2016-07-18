@@ -11,12 +11,15 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 	$scope.savePeopleJSON = function (){
 			$scope.JSON ["Creation Date"] = new Date();
 			$scope.JSON ["Modification Date"] = new Date();
-			$scope.JSON["Unique Identifier"] = uuid2.newuuid();
+			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
 
 			$scope.JSON  ["Photo"] = $scope.imageData;
 
 			// print json to console for debugging
-			logger.log (JSON.stringify($scope.JSON))
+			logger.log (JSON.stringify($scope.JSON));
+
+			$rootScope.unsyncedJSON.People.push ($scope.JSON);
+			console.log ($rootScope.unsyncedJSON);
 
 			$scope.JSON = {};
 	}
@@ -60,6 +63,8 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 		// print json to console for debugging
 		logger.log (JSON.stringify($scope.JSON));
+		$rootScope.unsyncedJSON.Projects.push ($scope.JSON);
+
 
 		$scope.JSON = {};
         
@@ -117,6 +122,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 			// print json to console for debugging
 			logger.log (JSON.stringify($scope.JSON ));
+			$rootScope.unsyncedJSON.Sites.push ($scope.JSON);
 
 			$scope.JSON  = {};
 	}
@@ -150,6 +156,8 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 			// print json to console for debugging
 			logger.log (JSON.stringify($scope.JSON));
+			rootScope.unsyncedJSON.Systems.push ($scope.JSON);
+
 
 			$scope.JSON = {};
 	}
@@ -174,6 +182,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 			// print json to console for debugging
 			logger.log (JSON.stringify($scope.JSON));
+			$rootScope.unsyncedJSON.Deployments.push ($scope.JSON);
 
 			$scope.JSON = {};
 	}
@@ -197,6 +206,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 			// print json to console for debugging
 			logger.log (JSON.stringify($scope.JSON));
+			$rootScope.unsyncedJSON.Components.push ($scope.JSON);
 
 			$scope.JSON = {};
 	}
@@ -218,6 +228,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 			// print json to console for debugging
 			logger.log (JSON.stringify($scope.JSON));
+			$rootScope.unsyncedJSON.Documents.push ($scope.JSON);
 
 			$scope.JSON = {};
 	}
@@ -240,6 +251,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 			// print json to console for debugging
 			logger.log (JSON.stringify($scope.JSON));
+			$rootScope.unsyncedJSON.ServiceEntries.push ($scope.JSON);
 
 			$scope.JSON = {};
 	}
@@ -268,6 +280,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 	$rootScope.serviceSyncedJSON = {};
 	$rootScope.serviceJSON = {};
 
+	$rootScope.unsyncedJSON = {People:[], Projects:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
+
+
 	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
 	$rootScope.urlPaths = ["people","projects", "sites", "systems", "deployments", "components", "documents","service_entries"];
 
@@ -289,7 +304,8 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     }
 
     $scope.uploadJSONS = function(){
-    	
+    	console.log ($rootScope.unsyncedJSON);
+    	sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON);
     }
 
     $scope.listSwitch = function (JSON, syncedJSON, title, route){
@@ -385,17 +401,6 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
 			}
     	})
-
- //    $http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
- //    	console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
- //    	$rootScope.serviceSyncedJSON = result.data;	
- //    		for (var i = 0; i < $rootScope.serviceSyncedJSON.ServiceEntries.length; i++){
-	// 			$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
-	// 		}	
-	// 		File.checkFile('ServiceEntries', $rootScope.serviceSyncedJSON);		
- //    	}),function (error){
-
- //    	}
 }
     init ();
 //}
