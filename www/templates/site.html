@@ -19,7 +19,7 @@
         min|max req: not implemented -->
         <form name = "nameForm" class="list " novalidate>
             <label class="item item-input " id="site-input24">
-                <input type="text" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required>
+                <ion-md-input type="text" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required></ion-md-input>
             </label>
         </form>
 
@@ -30,15 +30,15 @@
         min|max req: not implemented -->
         <form name="GPSForm" class="list " novalidate="">
             <label class="item item-input " id="site-input19" >
-                <input type="text" placeholder="Latitude" name = "siteLatitude" required ng-model = "JSON['Latitude']">
+                <ion-md-input type="text" placeholder="Latitude" name = "siteLatitude" required ng-model = "JSON['Latitude']"></ion-md-input>
             </label>
 
             <label class="item item-input "  name="siteLongitude" >
-                <input type="text" placeholder="Longitude" name = "siteLongitude" ng-model = "JSON['Longitude']" required>
+                <ion-md-input type="text" placeholder="Longitude" name = "siteLongitude" ng-model = "JSON['Longitude']" required></ion-md-input>
             </label>
 
             <label class="item item-input " id="site-input23" name="siteElevation">
-                <input type="text" placeholder="Elevation" name = "siteElevation" ng-model = "JSON['Altitude']" required>
+                <ion-md-input type="text" placeholder="Elevation" name = "siteElevation" ng-model = "JSON['Altitude']" required></ion-md-input>
             </label>
 
             <button id="site-button4" class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)" >Get GPS Location</button>
@@ -52,7 +52,7 @@
         min|max req: not implemented --> 
         <form name = "aliasForm" class = "list" novalidate>
             <label class="item item-input " id="site-input28" name="alias">
-                <input type="text" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required>
+                <ion-md-input type="text" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required></ion-md-input>
             </label>
         </form>
 
@@ -63,29 +63,43 @@
         min|max req: not implemented --> 
         <form name = "notesForm" class = "list" novalidate="">
             <label class="item item-input " id="site-input27">
-                <input type="text" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required>
+                <ion-md-input type="text" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required></ion-md-input>
             </label>
         </form>
 
 
         <form name="projectForm" class="list" novalidate="" >
-                <select ng-model = "JSON['Project']" ng-options = "key as project for (key, project) in projectJSON" required>
+            <div class="select-container">
+                <select ng-model = "JSON['Project']" 
+                        ng-options = "key as project for (key, project) in projectJSON" 
+                        class="wide"
+                        required>
                 <option value="">Project</option>
                 </select>
-
+            </div>
         </form>
 
 
-        <form name="permitForm" class="list ">
-                        <select ng-model = "JSON['Permit Holder']" ng-options = "key as people for (key, people) in peopleJSON" required>
-                <option value="">Permit Holder</option>
+        <form name="permitForm" class="list">
+            <div class="select-container">
+                <select ng-model = "JSON['Permit Holder']" 
+                        ng-options = "key as people for (key, people) in peopleJSON" 
+                        class="wide"
+                        required>
+                    <option value="">Permit Holder</option>
                 </select>
+            </div>
         </form>
 
         <form name="landownerForm" class="list">
-                        <select ng-model = "JSON['Land Owner']" ng-options = "key as people for (key, people) in peopleJSON" required>
+            <div class="select-container">
+                        <select ng-model = "JSON['Land Owner']" 
+                                ng-options = "key as people for (key, people) in peopleJSON" 
+                                class="wide"
+                                required>
                 <option value="">Land Owner</option>
                 </select>
+            </div>
         </form>
 
 <!--    controller scope var: n/a
@@ -104,7 +118,7 @@
         <button class = "button button-positive button-large button-block" ng-click = "takePicture()">Take Photo</button>
 
 
-        <a ui-sref="createNew.mainMenu" id="site-button23" class=" button button-positive button-large button-block " ng-disabled="nameForm.$invalid || GPSForm.$invalid || landmarkForm.$invalid || aliasForm.$invalid || notesForm.$invalid || projectForm.$invalid  || permitForm.$invalid  || landownerForm.$invalid " ng-click = saveSiteJSON();  >Save</a>
+        <button ui-sref="createNew.mainMenu" id="site-button23" class=" button button-positive button-large button-block " ng-disabled="nameForm.$invalid || GPSForm.$invalid || landmarkForm.$invalid || aliasForm.$invalid || notesForm.$invalid || projectForm.$invalid  || permitForm.$invalid  || landownerForm.$invalid " ng-click = saveSiteJSON();  >Save</button>
 
     <!-- error handling for the above forms -->
 <!--     <div class="padding"> 

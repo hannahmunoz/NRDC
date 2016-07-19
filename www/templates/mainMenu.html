@@ -1,8 +1,8 @@
 <ion-view title="Main Menu" hide-back-button="true" id="page3" class="">
     <!-- Upload button only on main menu -->
     <ion-nav-buttons side="right">
-                    <button id="upload-btn" class="" ng-click = "uploadJSONS()">Upload</button>
-                    <button id="upload-btn" class="" ng-click = "">Login</button>
+                    <button id="upload-btn" class="button button-icon button-clear ion-upload" ng-click = "uploadJSONS()"></button>
+                    <button id="upload-btn" class="button-clear center-text" ng-click ="" style = "padding-right: 1em; padding-left: .5em;">Login</button>
     </ion-nav-buttons>
     
     <ion-content  
@@ -15,50 +15,55 @@
         <div class="fill-parent home-container">
           <div class="row">
             <div class="col">
-              <div ui-sref="list" ng-click = "listSwitch(peopleJSON, peopleSyncedJSON, 'People', 'people')"   class ="tile-btn accent animated flipInX"
-                 ng-style="randomTimingOffset[0]" >
+               
+              <h1 style="margin-top:1em; margin-bottom:2em;">NRDC QA APP</h1>
+                
+              <button ui-sref="list" 
+                      ng-click = "listSwitch(peopleJSON, peopleSyncedJSON, 'People', 'people')"   
+                      class ="button button-large button-block main-menu-button accent animated flipInX"
+                      ng-style="randomTimingOffset[0]" >
                 <h3 class="text">People</h3>
-              </div>
-              <div ui-sref="list" 
-                   class= "tile-btn accent animated flipInX"
-                   ng-click = "listSwitch(projectJSON, projectSyncedJSON, 'Projects', 'project')"
-                   ng-style="randomTimingOffset[1]">
+              </button>
+              <button ui-sref="list" 
+                      class= "button button-large button-block main-menu-button accent animated flipInX"
+                      ng-click = "listSwitch(projectJSON, projectSyncedJSON, 'Projects', 'project')"
+                      ng-style="randomTimingOffset[1]">
                   <h3 class="text">Projects</h3>
-               </div>
+               </button>
                 
 <!-- Here for temporary development -->                
                 <div ui-sref="list" 
                      ng-click = "listSwitch(siteJSON, siteSyncedJSON, 'Sites', 'site')" 
-                     class="col tile-btn accent animated flipInX"
+                     class="tile-btn accent animated flipInX"
                      ng-style="randomTimingOffset[2]">
                 <h3 class="text">Sites</h3>
                 </div>
                 <div ui-sref="list" 
                      ng-click = "listSwitch(systemJSON, systemSyncedJSON, 'Systems', 'system')" 
-                     class="col tile-btn accent animated flipInX"
+                     class=" tile-btn accent animated flipInX"
                      ng-style="randomTimingOffset[3]">
                   <h3 class="text">Systems</h3>
                 </div>
                 <div ui-sref="list" 
-                     ng-click = "listSwitch(deploymentJSON, deploymentSyncedJSON, 'Deployments', 'deployment')" class="col tile-btn accent animated flipInX"
+                     ng-click = "listSwitch(deploymentJSON, deploymentSyncedJSON, 'Deployments', 'deployment')" class=" tile-btn accent animated flipInX"
                      ng-style="randomTimingOffset[4]">
                     <h3 class="text">Deployments</h3>
                 </div>
                 
                 <div ui-sref="list" 
                      ng-click = "listSwitch(componentJSON, componentSyncedJSON, 'Components', 'component')" 
-                     class="col tile-btn accent animated flipInX"
+                     class=" tile-btn accent animated flipInX"
                      ng-style="randomTimingOffset[5]">
                     <h3 class="text">Components</h3>
                 </div>
                  <div ui-sref="list" 
                       ng-click = "listSwitch(documentJSON, documentSyncedJSON, 'Documents', 'document')" 
-                      class="col tile-btn accent animated flipInX"
+                      class="tile-btn accent animated flipInX"
                       ng-style="randomTimingOffset[6]">
                     <h3 class="text ">Documents</h3>
                 </div>
                 <div ui-sref="list" 
-                     ng-click = "listSwitch(serviceJSON, serviceSyncedJSON, 'Service Entries', 'serviceEntry')" class="col tile-btn accent animated flipInX"
+                     ng-click = "listSwitch(serviceJSON, serviceSyncedJSON, 'Service Entries', 'serviceEntry')" class="tile-btn accent animated flipInX"
                      ng-style="randomTimingOffset[7]">
                     <h3 class="text">Service Entries</h3>
                 </div>

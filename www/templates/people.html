@@ -3,7 +3,7 @@
         <button class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
     </ion-header-bar>
     
-    <ion-content padding="true" class="has-header bg-img-main">
+    <ion-content padding="true" class="has-header content-bg">
 
 <!--    controller scope var: people
         var name: firstName
@@ -13,7 +13,7 @@
 
         <form name ="firstNameForm" class="list" novalidate>
             <label class="item item-input " id="people-input125">
-                <input type="text" placeholder="First Name" name = "firstName" ng-model = "JSON['First Name']" required>
+                <ion-md-input type="text" placeholder="First Name" name = "firstName" ng-model = "JSON['First Name']" required></ion-md-input>
             </label>
         </form>
 
@@ -25,7 +25,7 @@
 
         <form name ="lastNameForm" class="list" novalidate>
             <label class="item item-input " id="people-input6" >
-                <input type="text" placeholder="Last name" name = "lastName" ng-model = "JSON['Last Name'] " required>
+                <ion-md-input type="text" placeholder="Last name" name = "lastName" ng-model = "JSON['Last Name'] " required></ion-md-input>
             </label>
         </form>
 
@@ -37,7 +37,7 @@
 
         <form name ="organizationForm" class="list" novalidate>
             <label class="item item-input " id="people-input9" >
-                <input type="text" placeholder="Organization" name = "organization" ng-model = "JSON['Organization']" required>
+                <ion-md-input type="text" placeholder="Organization" name = "organization" ng-model = "JSON['Organization']" required></ion-md-input>
             </label>
         </form>
 
@@ -49,7 +49,7 @@
 
         <form name="emailForm" class="list" novalidate>
             <label class="item item-input " id="people-input8" >
-                <input type="email" placeholder="Email" name = "email" ng-model = "JSON['Email']" required>
+                <ion-md-input type="email" placeholder="Email" name = "email" ng-model = "JSON['Email']" required></ion-md-input>
             </label>
         </form>
 
@@ -61,7 +61,7 @@
 
         <form name="phoneForm" class="list" novalidate>
             <label class="item item-input " id="people-input10">
-                <input type="text" placeholder="Phone" ng-minlength = "10" ng-maxlength = "10" name = "phone" ng-model="JSON['Phone']" required>
+                <ion-md-input type="text" placeholder="Phone" ng-minlength = "10" ng-maxlength = "10" name = "phone" ng-model="JSON['Phone']" required></ion-md-input>
             </label> 
         </form>
 
@@ -85,7 +85,11 @@
         type: button
         onclick fucntion: savePeopleJSON()
         error checking: checks if all input are of valid types and lengths -->
-        <a ui-sref="createNew.mainMenu" id="people-button1" class=" button button-positive button-large button-block" ng-disabled="phoneForm.$invalid || emailForm.$invalid || organizationForm.$invalid || lastNameForm.$invalid || firstNameForm.$invalid || photoForm.$invalid || takePhotoForm.$invalid" ng-click = "savePeopleJSON()">Save</a>
+        <a ui-sref="createNew.mainMenu" 
+           id="people-button1" 
+           class="button button-positive button-large button-block wide" 
+           ng-disabled="phoneForm.$invalid || emailForm.$invalid || organizationForm.$invalid || lastNameForm.$invalid || firstNameForm.$invalid || photoForm.$invalid || takePhotoForm.$invalid" 
+           ng-click = "savePeopleJSON()">Save</a>
 
 
 <!-- error handling for the above forms -->

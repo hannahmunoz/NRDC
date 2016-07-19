@@ -57,12 +57,14 @@
         type: spinner
         error checking: no
         min|max req: not implemented -->
-  <form name ="investigatorForm" class="list" novalidate>
+  <form name ="investigatorForm" class="list" novalidate> 
+    <div class="select-container">
      <select class="wide"
              ng-model = "JSON ['Principal Investigator']" 
              ng-options="key as people for (key, people) in peopleJSON" required>
                 <option value=""> Prinicipal Investigator</option>
     </select>
+    </div>
 </form> 
 
 
@@ -73,7 +75,6 @@
         error checking: checks if all input are of valid types and lengths 
         toFix: back() function call causes modal to not respawn upon attempt to add second
                 item -->
-
         <a id="project-button12" 
            class=" button button-large button-block button-positive wide" 
            ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid" ng-click="saveProjectJSON(); back(); destroyModal();">Save</a>

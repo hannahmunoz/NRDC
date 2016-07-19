@@ -506,4 +506,10 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     };
 })
 
+/* Will be used to refactor current expandable text :/
+
+.controller('TextAreaController', function($scope, $rootScope){
+    
+})
+*/
 

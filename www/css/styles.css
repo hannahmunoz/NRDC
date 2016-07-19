@@ -61,6 +61,11 @@ div.arrow-down:active {
     min-width: 100%;
 }
 
+.main-menu-button{
+    margin-top: 0em !important;
+    margin-bottom: 3em !important;
+}
+
 
 /*Color Pallette and Theming
 ===================================*/
@@ -242,6 +247,8 @@ div.arrow-down:active{
     height: 2em;
     padding: .5em;
     line-height: 1em;
+    
+    border-bottom: 2px solid rgba( 0, 0, 0, .05);
 }
 
 textarea:focus {
@@ -253,3 +260,26 @@ textarea:focus {
     background: #F99300 !important;
 }
 
+/*Basic redisign of select bars*/
+select{
+    border: 0px;
+    border-left: 2px solid rgba( 0, 0, 0, .1) !important;
+    border-right: 2px solid rgba( 0, 0, 0, .1) !important;
+
+    
+    padding-top: 1em;
+    padding-bottom: 1em;
+    
+    font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    font-size: 18px; 
+}
+
+.select-container{
+    padding: 0px;
+    margin-left: 2em;
+    margin-right: 1em;
+}
+
+li > .item{
+    padding: 2em !important;
+}

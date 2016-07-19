@@ -28,6 +28,7 @@ angular.module('app.directives', [])
     };
 })
 
+
 //directive for expandable input
 
 /*Function: Adds a hidden div which checks the expected size of
@@ -36,10 +37,23 @@ angular.module('app.directives', [])
 */
 
 .directive('textAreaSize', function(){
+    
     var link = function(scope, element, attrs){
-        var textSize = element[0];
-        var localTxt = element.parent()[0].childNodes[0];
-        var label = element.parent()[0].childNodes[1];
+        var textSize = element[0];                          //hidden div holding text 
+                                                            // for height measurement
+        var localTxt = element.parent()[0].childNodes[0];   //text area to be modified
+        var label = element.parent()[0].childNodes[1];      //input label eg 'name'
+        
+        
+        //on intial load reasize any already populated text fields
+        localTxt.onclick = function(){
+            //update data in localdiv to be localTxt height
+            textSize.innerHTML = localTxt.value + "<br/>";
+            localTxt.style.height = textSize.offsetHeight + 'px';
+            
+            //maintain the offset of the input label so it remains above the text box
+            label.style = ' transform: translate3d(0,-' + (textSize.offsetHeight + 25) + 'px, 0) scale(.9); transition: all 0s linear;';
+        }
         
         
         localTxt.oninput = function(){
