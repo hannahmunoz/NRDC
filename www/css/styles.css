@@ -66,6 +66,9 @@ div.arrow-down:active {
     margin-bottom: 3em !important;
 }
 
+button.main-menu-botton:active{
+    background-color: #F99300 !important;
+}
 
 /*Color Pallette and Theming
 ===================================*/
@@ -163,7 +166,8 @@ div.arrow-down:active {
 }
 
 /*tile style button
-used on main page*/
+used on main page
+eventual deletion*/
 .tile-btn {
     padding: 0.0px;
     margin: 2px;
@@ -171,14 +175,30 @@ used on main page*/
     border-radius: 2px;
 }
 
-/*Loading Spinner*/
+/*Loading Spinner
+----------------------------*/
+.loading-spinner{
+  height: 80px;
+  width: 80px;
+  background-color: rgba(0,0,0,0);
+  border: dotted 5px #003366;
+  border-radius: 100px;
+
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .loading-spinner-inner{
-  height: 24px;
-  width: 24px;
-  border-radius: 50px;
-  border: 2px dotted #003366;
+  height: 42px;
+  width: 42px;
+  border-radius: 100px;
+  border: 3px dotted #F99300;
   background-color: rgba(0,0,0,0);
 }
+
+
 
 /*make arrow clickable*/
 div.arrow-down:active{
@@ -205,11 +225,11 @@ div.arrow-down:active{
 /*Animations
 ===========================*/
 .spinner{
-  animation: spin 1s ease-in-out infinite;
+  animation: spin 1.5s ease-in-out infinite;
 }
 
 .spinner-rev{
- animation: spin .2s linear infinite reverse;
+ animation: spin .1s infinite reverse;
 }
 
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
@@ -282,4 +302,10 @@ select{
 
 li > .item{
     padding: 2em !important;
+}
+
+
+/*Loading Override*/
+.loading-container .loading{
+    background-color: rgba(255, 255, 255, .4) !important;
 }

@@ -260,7 +260,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 })
    
    
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading) {
 
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
@@ -319,6 +319,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 // Reads from the server and inputs into array
 // TODO: add to local phone storage and read from there if server is unavaible
     var init = function (){
+        
     	//get permissions
     	//unblock before packaging
     	//Camera.checkPermissions();
@@ -402,7 +403,19 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 			}
     	})
 }
+    
+    
+    //Indicating Initilaize is loading
+    $ionicLoading.show({
+            templateUrl: 'templates/loadingSpinner.html',
+            noBackdrop: false
+    });
+    
+    //initalize
     init ();
+    
+    //hide loading screen
+    $ionicLoading.hide();
 //}
 
 })
@@ -431,7 +444,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     }
 })
 
-.controller('listCtrl', function($scope, $rootScope, DynamicPage, $state, ObjectCounter, $ionicHistory, ionicMaterialInk) {
+.controller('listCtrl', function($scope, $rootScope, DynamicPage, $state, ObjectCounter, $ionicHistory, ionicMaterialInk, $ionicLoading) {
 	$scope.title = DynamicPage.getTitle();
 	$scope.route = DynamicPage.getRoute();
 
@@ -442,6 +455,14 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 	// wrapper for person select button
 	$scope.select = function(JSON){
+        
+        
+        /*Ionic Loading*/
+        $ionicLoading.show({
+            templateUrl: 'templates/loadingSpinner.html',
+            noBackdrop: true
+        });
+        
 		var x = 0;
 		for (var o in $rootScope.listJSON){
 			if (JSON == $rootScope.listJSON[o]){
@@ -457,6 +478,8 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 			 x ++;
 		}
 		
+        $ionicLoading.hide();
+        
 		$state.go ($scope.route);
 	}
     
@@ -505,6 +528,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
         $rootScope.modalHidden = true;
     };
 })
+
 
 /* Will be used to refactor current expandable text :/
 
