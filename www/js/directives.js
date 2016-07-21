@@ -73,7 +73,57 @@ angular.module('app.directives', [])
         template: '<div class="text-format-mirror"></div>',
         link:link
     }
+})
+
+
+.directive('fabCluster', function(){
+    
+    function HideController($scope){
+        $scope.active = false;
+        
+        $scope.toggleActive = function(){
+                $scope.active = true;
+        };
+        
+        $scope.toggleInactive = function(){
+                $scope.active = false;
+                console.log("called");
+        };
+        
+    }
+    
+    return{
+        restrict: 'E',
+        templateUrl: 'templates/directive_templates/fabCluster.html',
+        controller: HideController
+    }
+    
+})
+
+.directive('clickOff', function($parse, $document) {
+    var dir = {
+        compile: function($element, attr) {
+          // Parse the expression to be executed
+          // whenever someone clicks _off_ this element.
+          var fn = $parse(attr["clickOff"]);
+          return function(scope, element, attr) {
+            // add a click handler to the element that
+            // stops the event propagation.
+            element.bind("click", function(event) {
+              event.stopPropagation();
+            });
+            angular.element($document[0].body).bind("click", function(event) {
+                scope.$apply(function() {
+                    fn(scope, {$event:event});
+                });
+            });
+          };
+        }
+      };
+    return dir;
 });
+
+
 
 // .directive('blankDirective', [function(){
 
