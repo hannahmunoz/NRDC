@@ -62,8 +62,8 @@ angular.module('app.services', ['ionic','base64'])
 	function post (url, JSON){
 		//grab from possible past files
 		var list = ["People","Projects", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
-
-		if (File.checkFile ('Unsynced').status == 1){
+		console.log (File.checkFile ('Unsynced') )
+		if (File.checkFile ('Unsynced')){
 			File.readFile ('Unsynced').then (function Success (response){
 				if (response != null){
 					console.log (response);
@@ -71,6 +71,7 @@ angular.module('app.services', ['ionic','base64'])
 							angular.merge (JSON[list[i]], response[list[i]]);
 						}
 					console.log (JSON);	
+					console.log (response);
 				}
 			})
 
@@ -78,15 +79,24 @@ angular.module('app.services', ['ionic','base64'])
 
 		config = {timeout: 10000};
 
-		$http.post (url,JSON, config).then (function Success (response){
+		var promise = $q (function (resolve, reject){ $http.post (url, JSON, config).then (function Success (response){
+			console.log (response);
 			if (File.checkFile ('Unsynced').status == 1){
 				$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
 			}
+			resolve (response);
 			//toast for successful post
-		}),function Error (response){
+		}), function Error (response){
 			File.checkandWriteFile ('Unsynced', JSON);
+			reject (response);
 			//toast to tell user what happened
-		};
+		}})
+		console.log (promise);
+
+		if (promise.$$state.status != 1){
+			File.checkandWriteFile ('Unsynced', JSON);
+
+		}
 	}
 
 
@@ -280,7 +290,7 @@ angular.module('app.services', ['ionic','base64'])
 	function checkFile(title){
 	return $q (function (resolve, reject){document.addEventListener ("deviceready",function(){
 			 $cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then (function (success){
-			 	resolve (success.code);
+			 	resolve (success.isFile);
 			 }, (function (error){
 			 	reject (error.code);
 			 }))

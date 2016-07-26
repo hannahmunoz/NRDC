@@ -147,6 +147,12 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('mainMenu', {
+    url: '/mainMenu',
+     templateUrl: 'templates/mainMenu.html',
+     controller: 'mainMenuCtrl'
+  })
+
   .state('peopleList', {
     url: '/peopleList',
     templateUrl: 'templates/peopleList.html',
@@ -165,7 +171,7 @@ angular.module('app.routes', [])
     abstract:true
   })
 
-$urlRouterProvider.otherwise('/CreateNew/mainMenu')
+$urlRouterProvider.otherwise('/mainMenu')
 
 
 });

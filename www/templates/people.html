@@ -4,7 +4,7 @@
     </ion-header-bar>
     
     <ion-content padding="true" class="has-header content-bg">
-
+    <div ng-controller="peopleCtrl">
 <!--    controller scope var: people
         var name: firstName
         type: text
@@ -85,7 +85,7 @@
         type: button
         onclick fucntion: savePeopleJSON()
         error checking: checks if all input are of valid types and lengths -->
-        <a ui-sref="createNew.mainMenu" 
+        <a ui-sref="mainMenu" 
            id="people-button1" 
            class="button button-positive button-large button-block wide" 
            ng-disabled="phoneForm.$invalid || emailForm.$invalid || organizationForm.$invalid || lastNameForm.$invalid || firstNameForm.$invalid || photoForm.$invalid || takePhotoForm.$invalid" 

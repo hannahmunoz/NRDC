@@ -6,7 +6,7 @@
     <ion-header-bar class="bar-dark">
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
     </ion-header-bar>
-    
+    <div ng-controller="serviceEntryCtrl">
     <ion-content 
       delegate-handle="scrollable" 
       padding="true" 
@@ -90,7 +90,7 @@
         <button class = "button button-positive button-large button-block" ng-click = "takePicture()">Take Photo</button>
 
 
-        <button ui-sref="createNew.mainMenu" id="serviceEntry-button11" ng-disabled = "nameForm.$invalid || notesForm.$invalid || operationForm.$invalid " class=" button button-positive button-large button-block " ng-click = "saveServiceJSON()">Save</button>
+        <button ui-sref="mainMenu" id="serviceEntry-button11" ng-disabled = "nameForm.$invalid || notesForm.$invalid || operationForm.$invalid " class=" button button-positive button-large button-block " ng-click = "saveServiceJSON()">Save</button>
 
         <!-- error handling for the above forms -->
     <div class="padding"> 

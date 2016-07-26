@@ -5,6 +5,7 @@
     <ion-header-bar class="bar-dark">
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
     </ion-header-bar>
+    <div ng-controller="siteCtrl">
     <ion-content 
       delegate-handle="scrollable" 
       padding="true" 
@@ -118,7 +119,7 @@
         <button class = "button button-positive button-large button-block" ng-click = "takePicture()">Take Photo</button>
 
 
-        <button ui-sref="createNew.mainMenu" id="site-button23" class=" button button-positive button-large button-block " ng-disabled="nameForm.$invalid || GPSForm.$invalid || landmarkForm.$invalid || aliasForm.$invalid || notesForm.$invalid || projectForm.$invalid  || permitForm.$invalid  || landownerForm.$invalid " ng-click = saveSiteJSON();  >Save</button>
+        <button ui-sref="mainMenu" id="site-button23" class=" button button-positive button-large button-block " ng-disabled="nameForm.$invalid || GPSForm.$invalid || landmarkForm.$invalid || aliasForm.$invalid || notesForm.$invalid || projectForm.$invalid  || permitForm.$invalid  || landownerForm.$invalid " ng-click = saveSiteJSON();  >Save</button>
 
     <!-- error handling for the above forms -->
 <!--     <div class="padding"> 

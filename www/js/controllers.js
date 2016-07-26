@@ -306,6 +306,8 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     $scope.uploadJSONS = function(){
     	console.log ($rootScope.unsyncedJSON);
     	sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON);
+    	$rootScope.unsyncedJSON = {People:[], Projects:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
+
     }
 
     $scope.listSwitch = function (JSON, syncedJSON, title, route){

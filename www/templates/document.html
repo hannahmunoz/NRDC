@@ -8,7 +8,7 @@
       padding="true" 
       class="has-header content-bg"
       on-scroll="cndHideArrow()"> 
-
+    <div ng-controller="documentCtrl">
 <!--    controller scope var: document
         var name: documentName
         type: text
@@ -83,7 +83,7 @@
 
     
 
-  <a ui-sref="createNew.mainMenu" id="site-button23" class=" button button-positive button-large button-block " ng-disabled = "nameForm.$invalid || notesForm.$invalid || pathForm.$invalid" ng-click = saveDocumentJSON(); >Save</a>
+  <a ui-sref="mainMenu" id="site-button23" class=" button button-positive button-large button-block " ng-disabled = "nameForm.$invalid || notesForm.$invalid || pathForm.$invalid" ng-click = saveDocumentJSON(); >Save</a>
 
             <!-- error handling for the above forms -->
 <!--     <div class="padding"> 
