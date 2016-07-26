@@ -24,7 +24,7 @@ angular.module('app.services', ['ionic','base64'])
 //		create
 //		read
 
-.factory ('sync', function($q, $http, $cordovaFile, File){
+.factory ('sync', function($q, $http, $cordovaFile, File, ObjectCounter){
 
 // function:		create
 // purpose: post request to http link 
@@ -61,35 +61,20 @@ angular.module('app.services', ['ionic','base64'])
 
 	function post (url, JSON){
 		//grab from possible past files
+		var list = ["People","Projects", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
+
 		if (File.checkFile ('Unsynced').status == 1){
 			File.readFile ('Unsynced').then (function Success (response){
 				if (response != null){
 					console.log (response);
-					angular.forEach (JSON, function (value, key){
-						//for (int i = 0; i < key.length; i ++)
-						angular.merge (value, response[key]);
-					})
-
-				// angular.forEach (JSON, function (value, key){
-				// 	for (int i = 0, i < key.length; i ++){
-				// 		console.log ("Merged: " + value[i]);
-				// }
-		//	}
-				
-					console.log ('hello');
+						for (var i = 0; i < list.length; i++){
+							angular.merge (JSON[list[i]], response[list[i]]);
+						}
+					console.log (JSON);	
 				}
 			})
 
 		}
-		angular.forEach (JSON, function (value, key){
-			console.log ("Unsynced:" + key + value);
-		})
-
-		angular.forEach (JSON, function (value, key){
-			for (var i = 0; i < key.length; i ++){
-			console.log ("Unsynced:" + key[i] + value[i]);
-			}
-		})
 
 		config = {timeout: 10000};
 
@@ -99,7 +84,7 @@ angular.module('app.services', ['ionic','base64'])
 			}
 			//toast for successful post
 		}),function Error (response){
-			//File.checkandWriteFile ('Unsynced', JSON);
+			File.checkandWriteFile ('Unsynced', JSON);
 			//toast to tell user what happened
 		};
 	}
