@@ -1,4 +1,4 @@
-angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage'])
+angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage'])
 
 //the controller for the people view  
 .controller('peopleCtrl', function($scope, $rootScope, uuid2, Upload, logger, $ionicPlatform, Camera) {
@@ -47,12 +47,12 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 })
 
    
-.controller('projectCtrl', function($scope, $rootScope, uuid2, logger, ObjectCounter) {
+.controller('networkCtrl', function($scope, $rootScope, uuid2, logger, ObjectCounter) {
 	//variables stored in projects
 	$scope.JSON = {};
 
 	// JSON function for project
-	$scope.saveProjectJSON = function (){
+	$scope.saveNetworkJSON = function (){
 
 		$scope.JSON ["Creation Date"] = new Date();
 		$scope.JSON ["Started Date"] = new Date();
@@ -63,7 +63,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 		// print json to console for debugging
 		logger.log (JSON.stringify($scope.JSON));
-		$rootScope.unsyncedJSON.Projects.push ($scope.JSON);
+		$rootScope.unsyncedJSON.Network.push ($scope.JSON);
 
 
 		$scope.JSON = {};
@@ -76,7 +76,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 	$scope.JSON = DynamicPage.getJSON();
 		switch (DynamicPage.getTitle()){
-			case 'Projects':
+			case 'Networks':
 					$scope.JSON['Principal Investigator'] = JSON.stringify($scope.JSON['Principal Investigator']);
 				break;
 				
@@ -265,8 +265,8 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
 	$rootScope.peopleJSON = {};
-	$rootScope.projectSyncedJSON = {};
-	$rootScope.projectJSON = {};
+	$rootScope.networkSyncedJSON = {};
+	$rootScope.networkJSON = {};
 	$rootScope.siteSyncedJSON = {};
 	$rootScope.siteJSON = {};
 	$rootScope.systemSyncedJSON = {};
@@ -280,11 +280,11 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 	$rootScope.serviceSyncedJSON = {};
 	$rootScope.serviceJSON = {};
 
-	$rootScope.unsyncedJSON = {People:[], Projects:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
+	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 
 
 	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
-	$rootScope.urlPaths = ["people","projects", "sites", "systems", "deployments", "components", "documents","service_entries"];
+	$rootScope.urlPaths = ["people","networks", "sites", "systems", "deployments", "components", "documents","service_entries"];
 
 	File.createDirectory();
 
@@ -306,7 +306,7 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
     $scope.uploadJSONS = function(){
     	console.log ($rootScope.unsyncedJSON);
     	sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON);
-    	$rootScope.unsyncedJSON = {People:[], Projects:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
+    	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 
     }
 
@@ -350,9 +350,9 @@ angular.module('app.controllers', ['ionic', 'app.services', 'ngCordova', 'angula
 
 
     //project read
-    sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/", $rootScope.projectSyncedJSON, 'Project', $rootScope.projectJSON).then (function (result){
-    	$rootScope.projectSyncedJSON = result;
-    	File.checkandWriteFile('Project', $rootScope.projectSyncedJSON);
+    sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/", $rootScope.networkSyncedJSON, 'Network', $rootScope.networkJSON).then (function (result){
+    	$rootScope.networkSyncedJSON = result;
+    	File.checkandWriteFile('Network', $rootScope.networkSyncedJSON);
     })
 
     	//site read

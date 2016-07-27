@@ -61,7 +61,7 @@ angular.module('app.services', ['ionic','base64'])
 
 	function post (url, JSON){
 		//grab from possible past files
-		var list = ["People","Projects", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
+		var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
 
 		$q (function (resolve, reject){ if (File.checkFile ('Unsynced')){
 			  File.readFile ('Unsynced').then (function Success (response){
@@ -198,7 +198,7 @@ angular.module('app.services', ['ionic','base64'])
 
 	return {getTitle: function(){return title;},
 			setTitle: function(newTitle){ title = newTitle;},
-			getRoute: function(){return route;} ,
+			getRoute: function(){return route;},
 			setRoute: function(newRoute){ route = newRoute;},
 			setJSON: function(newJSON){JSON = newJSON;},
 			getJSON: function(){return JSON;}};

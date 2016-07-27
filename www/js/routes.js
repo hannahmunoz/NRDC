@@ -8,15 +8,6 @@ angular.module('app.routes', [])
   // Each state's controller can be found in controllers.js
   $stateProvider
     
-    .state('createNew.people', {
-    url: '/CreateNewPeople',
-    views: {
-      'side-menu21': {
-        templateUrl: 'templates/people.html',
-        controller: 'peopleCtrl'
-      }
-    }
-  })
 
   .state('people', {
    url: '/people',
@@ -25,9 +16,9 @@ angular.module('app.routes', [])
   })
 
 
-  .state('project', {
-    url: '/project',
-    templateUrl: 'templates/project.html',
+  .state('network', {
+    url: '/network',
+    templateUrl: 'templates/network.html',
     controller: 'viewCtrl'
   })
 
