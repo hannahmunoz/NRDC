@@ -24,15 +24,6 @@ angular.module('app.routes', [])
     controller: 'viewCtrl'
   })
 
-  .state('createNew.project', {
-    url: '/CreateNewProject',
-    views: {
-      'side-menu21': {
-        templateUrl: 'templates/project.html',
-        controller: 'projectCtrl'
-      }
-    }
-  })
 
   .state('project', {
     url: '/project',
@@ -41,31 +32,12 @@ angular.module('app.routes', [])
   })
 
 
-  .state('createNew.site', {
-    url: '/CreateNewSite',
-    views: {
-      'side-menu21': {
-        templateUrl: 'templates/site.html',
-        controller: 'siteCtrl'
-      }
-    }
-  })
-
   .state('site', {
     url: '/CreateNewSite',
     templateUrl: 'templates/site.html',
     controller: 'viewCtrl'
   })
 
-  .state('createNew.system', {
-    url: '/CreateNewSystem',
-    views: {
-      'side-menu21': {
-        templateUrl: 'templates/system.html',
-        controller: 'systemCtrl'
-      }
-    }
-  })
 
   .state('system', {
     url: '/CreateNewSystem',
@@ -73,30 +45,11 @@ angular.module('app.routes', [])
     controller: 'viewCtrl'
   })
 
-  .state('createNew.deployment', {
-    url: '/CreateNewDeployment',
-    views: {
-      'side-menu21': {
-        templateUrl: 'templates/deployment.html',
-        controller: 'deploymentCtrl'
-      }
-    }
-  })
 
   .state('deployment', {
     url: '/CreateNewDeployment',
     templateUrl: 'templates/deployment.html',
     controller: 'viewCtrl'
-  })
-
-  .state('createNew.component', {
-    url: '/CreateNewComponent',
-    views: {
-      'side-menu21': {
-        templateUrl: 'templates/component.html',
-        controller: 'componentCtrl'
-      }
-    }
   })
 
   .state('component', {
@@ -105,15 +58,6 @@ angular.module('app.routes', [])
     controller: 'viewCtrl'
   })
 
-  .state('createNew.document', {
-    url: '/CreateNewDocument',
-    views: {
-      'side-menu21': {
-        templateUrl: 'templates/document.html',
-        controller: 'documentCtrl'
-      }
-    }
-  })
 
   .state('document', {
     url: '/CreateNewDocument',
@@ -121,15 +65,6 @@ angular.module('app.routes', [])
     controller: 'viewCtrl'
   })
 
-  .state('createNew.serviceEntry', {
-    url: '/CreateNewServiceEntry',
-    views: {
-      'side-menu21': {
-        templateUrl: 'templates/serviceEntry.html',
-        controller: 'serviceEntryCtrl'
-      }
-    }
-  })
 
   .state('serviceEntry', {
     url: '/CreateNewServiceEntry',
@@ -137,15 +72,15 @@ angular.module('app.routes', [])
     controller: 'viewCtrl'
   })
 
-  .state('createNew.mainMenu', {
-    url: '/mainMenu',
-    views: {
-      'side-menu21': {
-        templateUrl: 'templates/mainMenu.html',
-        controller: 'mainMenuCtrl'
-      }
-    }
-  })
+  // .state('createNew.mainMenu', {
+  //   url: '/mainMenu',
+  //   views: {
+  //     'side-menu21': {
+  //       templateUrl: 'templates/mainMenu.html',
+  //       controller: 'mainMenuCtrl'
+  //     }
+  //   }
+  // })
 
   .state('mainMenu', {
     url: '/mainMenu',
