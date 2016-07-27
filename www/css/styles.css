@@ -88,6 +88,10 @@ button.main-menu-botton:active{
     background-color: #F99300;
 }
 
+.tertiary{
+    background-color: #F9BD00;
+}
+
 /*Black*/
 .text {
     text-decoration-color: #000;
@@ -105,7 +109,8 @@ button.main-menu-botton:active{
 }
 
 .bar-dark h4{
-    color:#FFFFFF;
+    color: #FFFFFF;
+    opacity: .8;
 }
 
 /* Overrides existing Bar Light Theme*/
@@ -150,20 +155,6 @@ button.main-menu-botton:active{
     transform: rotate(-135deg);    
 }
 
-/*aligns a div or some content to act as a footer*/
-.footer {
-    bottom: 0;
-    height: 8%;
-    width: 100%;
-    padding: 10px;
-}
-
-.header {
-    top: 0;
-    height: 8%;
-    width: 100%;
-    padding: 10px;
-}
 
 .nrdc-fab-container-lower-right{
     z-index: 9999;
