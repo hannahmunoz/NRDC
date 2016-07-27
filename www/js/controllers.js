@@ -499,7 +499,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
 })
 
-.controller('modalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
+.controller('ModalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
     $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
         scope: $scope,
         animation: 'slide-in-up'
@@ -509,6 +509,72 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
         $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+    });
+    //set flag in root scope to indicate weither modal
+    //hidden or shown
+    $scope.openModal = function() {
+        $scope.modal.show();
+        $rootScope.modalHidden = false;
+    };
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+        $rootScope.modalHidden = true;
+    };
+     $scope.destroyModal = function() {
+        $scope.modal.remove();
+        $rootScope.modalHidden = true;
+    };
+})
+
+
+.controller('DocumentModalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
+    $ionicModal.fromTemplateUrl('templates/document.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+    
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        $ionicModal.fromTemplateUrl('templates/document.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+    });
+    //set flag in root scope to indicate weither modal
+    //hidden or shown
+    $scope.openModal = function() {
+        $scope.modal.show();
+        $rootScope.modalHidden = false;
+    };
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+        $rootScope.modalHidden = true;
+    };
+     $scope.destroyModal = function() {
+        $scope.modal.remove();
+        $rootScope.modalHidden = true;
+    };
+})
+
+
+.controller('ServiceModalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
+    $ionicModal.fromTemplateUrl('templates/serviceEntry.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+    
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        $ionicModal.fromTemplateUrl('templates/serviceEntry.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(modal) {
