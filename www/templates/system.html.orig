@@ -3,7 +3,12 @@
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
     </ion-header-bar>
     
+<<<<<<< HEAD
+    <ion-content padding="true" class="has-header content-bg">
+=======
+    <div ng-controller="systemCtrl">
     <ion-content class="has-header content-bg padding">
+>>>>>>> 6ded29c5709bb45a2ae04e2044d8eb1fe3393a91
 <!--    controller scope var: system
         var name: systemName
         type: text

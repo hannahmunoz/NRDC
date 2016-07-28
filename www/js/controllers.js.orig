@@ -252,7 +252,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		}
 		
         $ionicLoading.hide();
-        
+        console.log ($scope.route)
 		$state.go ($scope.route);
 	}
     
@@ -270,13 +270,16 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
 })
 
+<<<<<<< HEAD
 .controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, Camera, GPS ) {
 	$scope.JSON = {};
 	$scope.imageData = null;
 
+=======
+.controller('ModalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
+>>>>>>> 6ded29c5709bb45a2ae04e2044d8eb1fe3393a91
     $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
         scope: $scope,
-        animation: 'slide-in-up'
     }).then(function(modal) {
         $scope.modal = modal;
 
@@ -285,7 +288,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
         $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
             scope: $scope,
-            animation: 'slide-in-up'
+            animation: 'slide-in-up',
         }).then(function(modal) {
             $scope.modal = modal;
         });
@@ -331,6 +334,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     		imageData = Camera.openCamera ();
 	}
 
+<<<<<<< HEAD
 
 	//wrapper for the GPS factory so we can call it from the getGPS button
 	// in root scope so it can be called from all buttons
@@ -340,6 +344,74 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	}
 
 })
+=======
+.controller('DocumentModalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
+    $ionicModal.fromTemplateUrl('templates/document.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+    
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        $ionicModal.fromTemplateUrl('templates/document.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+    });
+    //set flag in root scope to indicate weither modal
+    //hidden or shown
+    $scope.openModal = function() {
+        $scope.modal.show();
+        $rootScope.modalHidden = false;
+    };
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+        $rootScope.modalHidden = true;
+    };
+     $scope.destroyModal = function() {
+        $scope.modal.remove();
+        $rootScope.modalHidden = true;
+    };
+})
+
+
+.controller('ServiceModalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
+    $ionicModal.fromTemplateUrl('templates/serviceEntry.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+    
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        $ionicModal.fromTemplateUrl('templates/serviceEntry.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+    });
+    //set flag in root scope to indicate weither modal
+    //hidden or shown
+    $scope.openModal = function() {
+        $scope.modal.show();
+        $rootScope.modalHidden = false;
+    };
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+        $rootScope.modalHidden = true;
+    };
+     $scope.destroyModal = function() {
+        $scope.modal.remove();
+        $rootScope.modalHidden = true;
+    };
+})
+
+
+>>>>>>> 6ded29c5709bb45a2ae04e2044d8eb1fe3393a91
 /* Will be used to refactor current expandable text :/
 
 .controller('TextAreaController', function($scope, $rootScope){

@@ -88,6 +88,10 @@ button.main-menu-botton:active{
     background-color: #F99300;
 }
 
+.tertiary{
+    background-color: #F9BD00;
+}
+
 /*Black*/
 .text {
     text-decoration-color: #000;
@@ -105,7 +109,8 @@ button.main-menu-botton:active{
 }
 
 .bar-dark h4{
-    color:#FFFFFF;
+    color: #FFFFFF;
+    opacity: .8;
 }
 
 /* Overrides existing Bar Light Theme*/
@@ -150,20 +155,17 @@ button.main-menu-botton:active{
     transform: rotate(-135deg);    
 }
 
-/*aligns a div or some content to act as a footer*/
-.footer {
-    bottom: 0;
-    height: 8%;
-    width: 100%;
-    padding: 10px;
+
+.nrdc-fab-container-lower-right{
+    z-index: 9999;
+    position: absolute;
+    
+    top: auto;
+    right: 16px;
+    bottom: 16px;
+    left: auto;
 }
 
-.header {
-    top: 0;
-    height: 8%;
-    width: 100%;
-    padding: 10px;
-}
 
 /*tile style button
 used on main page
@@ -205,19 +207,23 @@ div.arrow-down:active{
     opacity: 1.0;
 }
 
-/* */
+/*Holds a copy of all text
+placed in a corresponding textarea
+used to measure the expected height
+of the text area*/
 .text-format-mirror{
     position: absolute;
+    visibility: hidden;
+    
     color: black;
     padding: .5em;
     line-height: 1em;
     height: auto;
     font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
     font-size: 18px;
+    
     word-wrap: break-word;
     white-space: pre-line;
-    visibility: hidden;
-
 }
 
 
@@ -300,6 +306,7 @@ select{
     margin-right: 1em;
 }
 
+/*Additional padding to items in a list*/
 li > .item{
     padding: 2em !important;
 }
