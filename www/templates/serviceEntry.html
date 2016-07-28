@@ -6,7 +6,6 @@
     <ion-header-bar class="bar-dark">
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
     </ion-header-bar>
-    <div ng-controller="serviceEntryCtrl">
     <ion-content 
       delegate-handle="scrollable" 
       padding="true" 
@@ -102,11 +101,11 @@
     <!-- Small arrow on the bottom indicating scrollability-->
     <!-- Functionality: Enables user to scroll rapidly to bottom of page
          Hides upon full scroll down-->
-    <div class="overlay footer"
+<!--     <div class="overlay footer"
          ng-hide="isBottom">
             <div
               delegate-handle="arrow-btn"
               ng-click="scrlBot()"
               class="arrow-down pull-right translucent"></div>  
-    </div>
+    </div> -->
 </ion-modal-view>

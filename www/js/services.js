@@ -325,7 +325,6 @@ angular.module('app.services', ['ionic','base64'])
 				$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
 					 $cordovaFile.readAsText (cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
 					  if (title == 'Unsynced')
-					 		console.log (result);
 						resolve (JSON.parse(result));
 						}, function (error){
 							console.debug("File Read Error:" + title + " " + error.code);
@@ -345,4 +344,64 @@ angular.module('app.services', ['ionic','base64'])
 			checkandWriteFile: checkandWriteFile,
 			readFile: readFile};
 
-});
+})
+
+.factory ('SaveNew', function(uuid2){
+
+	function save (type, isitNew, JSON, finalJSON, imageData){
+
+
+		JSON ["Modification Date"] = new Date();
+
+		if (isitNew){
+			JSON ["Creation Date"] = new Date();
+			JSON ["Started Date"] = new Date();
+			JSON ["Unique Identifier"] = uuid2.newuuid();
+		}
+
+		switch (type){
+			case 'Networks':
+				JSON ["Principal Investigator"] = parseInt (JSON ["Principal Investigator"]);
+				break;
+
+			case 'People':
+				JSON  ["Photo"] = imageData;
+				break;
+
+			case 'Sites':
+				JSON ["Project"] = parseInt (JSON ["Project"]);
+				JSON ["Permit Holder"] = parseInt (JSON ["Permit Holder"]);
+				JSON ["Land Owner"] = parseInt (JSON ["Land Owner"]);
+				break;
+
+			case 'Systems':
+				JSON ["Manager"] = parseInt (JSON ["Manager"]);
+				JSON ["Site"] = parseInt (JSON ["Site"]);
+				break;
+
+			case 'Deployments':
+				JSON ["System"] = parseInt (JSON ["System"]);
+				break;
+
+			case 'Components':
+				JSON ["Deployment"] = parseInt (JSON ["Deployment"]);
+				break;
+
+			case 'Documents':
+				break;
+
+			case 'Service Enteries':
+				JSON  ["Photo"] = imageData;
+				break;
+        }
+
+        // print json to console for debugging
+		console.log (JSON);
+		if (isitNew)
+			finalJSON.push (JSON);
+		JSON = {};
+	}
+
+	return {save: save}
+    
+	});

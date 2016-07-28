@@ -1,11 +1,12 @@
 angular.module('app.routes', [])
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function( $stateProvider, $urlRouterProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
+
   $stateProvider
     
 
@@ -63,6 +64,12 @@ angular.module('app.routes', [])
     controller: 'viewCtrl'
   })
 
+  .state('newNetworks', {
+    url: '/network',
+    templateUrl: 'templates/network.html',
+    controller: 'networkCtrl'
+  })  
+
   // .state('createNew.mainMenu', {
   //   url: '/mainMenu',
   //   views: {
@@ -98,6 +105,5 @@ angular.module('app.routes', [])
   })
 
 $urlRouterProvider.otherwise('/mainMenu')
-
 
 });

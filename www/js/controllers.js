@@ -1,76 +1,5 @@
-angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage'])
+angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage', 'ui.bootstrap'])
 
-//the controller for the people view  
-.controller('peopleCtrl', function($scope, $rootScope, uuid2, Upload, logger, $ionicPlatform, Camera) {
-
-	// variables stored in people
-	$scope.imageData = null;
-	$scope.JSON = {};
-	$scope.JSON ["Photo"] = null;
-	//JSON fucntion for people
-	$scope.savePeopleJSON = function (){
-			$scope.JSON ["Creation Date"] = new Date();
-			$scope.JSON ["Modification Date"] = new Date();
-			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
-
-			$scope.JSON  ["Photo"] = $scope.imageData;
-
-			// print json to console for debugging
-			logger.log (JSON.stringify($scope.JSON));
-
-			$rootScope.unsyncedJSON.People.push ($scope.JSON);
-			console.log ($rootScope.unsyncedJSON);
-
-			$scope.JSON = {};
-	}
-
-
-	//wrapper for the openGallery factory so we can call it from the choosePicture button.
-	// in root scope so it can be called from all buttons
-	$rootScope.choosePicture = function (imageData){
-		Camera.checkPermissions();
-		$scope.imageData = Camera.openGallery ();
-		
-		if (angular.isUndefined (imageData) || imageData == null)
-			console.log("null");
-		else
-			console.log("full");
-	}
-
-	//wrapper for the take image factory so we can call it from the takePhoto button
-	// in root scope so it can be called from all buttons
-	$rootScope.takePicture = function (imageData){
-    		Camera.checkPermissions();
-    		imageData = Camera.openCamera ();
-	}
-
-})
-
-   
-.controller('networkCtrl', function($scope, $rootScope, uuid2, logger, ObjectCounter) {
-	//variables stored in projects
-	$scope.JSON = {};
-
-	// JSON function for project
-	$scope.saveNetworkJSON = function (){
-
-		$scope.JSON ["Creation Date"] = new Date();
-		$scope.JSON ["Started Date"] = new Date();
-		$scope.JSON ["Modification Date"] = new Date();
-		$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
-		$scope.JSON ["Principal Investigator"] = parseInt ($scope.JSON ["Principal Investigator"]);
-
-
-		// print json to console for debugging
-		logger.log (JSON.stringify($scope.JSON));
-		$rootScope.unsyncedJSON.Network.push ($scope.JSON);
-
-
-		$scope.JSON = {};
-        
-	}
-    
-})
    
 .controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory) {
 
@@ -101,166 +30,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             $ionicHistory.goBack();
      }
 })
-
-
-.controller('siteCtrl', function($scope, $rootScope, uuid2, Upload, logger, $ionicPlatform, Camera, GPS) {
-
-	// variables stored in site
-	$scope.JSON = {};
-	$scope.imageData;
-
-	//JSON fucntion for people
-	$scope.saveSiteJSON = function (){
-			$scope.JSON  ["Creation Date"] = new Date();
-			$scope.JSON  ["Modification Date"] = new Date();
-			$scope.JSON  ["Unique Identifier"] = uuid2.newuuid();
-			$scope.JSON ["Project"] = parseInt ($scope.JSON ["Project"]);
-			$scope.JSON ["Permit Holder"] = parseInt ($scope.JSON ["Permit Holder"]);
-			$scope.JSON ["Land Owner"] = parseInt ($scope.JSON ["Land Owner"]);
-
-			//$scope.site ["Photo"] = $scope.imageData;
-
-			// print json to console for debugging
-			logger.log (JSON.stringify($scope.JSON ));
-			$rootScope.unsyncedJSON.Sites.push ($scope.JSON);
-
-			$scope.JSON  = {};
-	}
-
-	//wrapper for the GPS factory so we can call it from the getGPS button
-	// in root scope so it can be called from all buttons
-	$rootScope.getGPS = function (JSON){
-		GPS.checkPermissions();
-		GPS.getLocation(JSON);
-	}
-
-})
-
-
    
-.controller('systemCtrl', function($scope, $rootScope, uuid2, Upload, logger) {
-	
-	// variables stored in system
-	$scope.JSON = {};
-	$scope.imageData;
-
-	//JSON fucntion for people
-	$scope.saveSystemJSON = function (){
-			$scope.JSON ["Creation Date"] = new Date();
-			$scope.JSON ["Modification Date"] = new Date();
-			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
-			$scope.JSON ["Manager"] = parseInt ($scope.JSON ["Manager"]);
-			$scope.JSON ["Site"] = parseInt ($scope.JSON ["Site"]);
-
-			//$scope.site ["Photo"] = $scope.imageData;
-
-			// print json to console for debugging
-			logger.log (JSON.stringify($scope.JSON));
-			rootScope.unsyncedJSON.Systems.push ($scope.JSON);
-
-
-			$scope.JSON = {};
-	}
-
-})
-   
-   
-.controller('deploymentCtrl', function($scope, $rootScope, uuid2, Upload, logger, GPS) {
-
-	// variables stored in system
-	$scope.JSON = {};
-	$scope.imageData;
-
-	//JSON fucntion for people
-	$scope.saveDeploymentJSON = function (){
-			$scope.JSON ["Creation Date"] = new Date();
-			$scope.JSON ["Modification Date"] = new Date();
-			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
-			$scope.JSON ["System"] = parseInt ($scope.JSON ["System"]);
-
-			//$scope.site ["Photo"] = $scope.imageData;
-
-			// print json to console for debugging
-			logger.log (JSON.stringify($scope.JSON));
-			$rootScope.unsyncedJSON.Deployments.push ($scope.JSON);
-
-			$scope.JSON = {};
-	}
-
-})
-   
-
-   
-.controller('componentCtrl', function($scope, $rootScope, uuid2, Upload, logger, Camera) {
-	$scope.JSON = {};
-	$scope.imageData;
-
-	//JSON fucntion for people
-	$scope.saveComponentJSON = function (){
-			$scope.JSON ["Creation Date"] = new Date();
-			$scope.JSON ["Modification Date"] = new Date();
-			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
-			$scope.JSON ["Deployment"] = parseInt ($scope.JSON ["Deployment"]);
-
-			//$scope.site ["Photo"] = $scope.imageData;
-
-			// print json to console for debugging
-			logger.log (JSON.stringify($scope.JSON));
-			$rootScope.unsyncedJSON.Components.push ($scope.JSON);
-
-			$scope.JSON = {};
-	}
-})
-   
-   
-.controller('documentCtrl', function($scope, $rootScope, uuid2, Upload, logger) {
-	// variables stored in document
-	$scope.JSON = {};
-	$scope.imageData;
-
-	//JSON fucntion for people
-	$scope.saveDocumentJSON = function (){
-			$scope.JSON ["Creation Date"] = new Date();
-			$scope.JSON ["Modification Date"] = new Date();
-			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
-
-			//$scope.site ["Photo"] = $scope.imageData;
-
-			// print json to console for debugging
-			logger.log (JSON.stringify($scope.JSON));
-			$rootScope.unsyncedJSON.Documents.push ($scope.JSON);
-
-			$scope.JSON = {};
-	}
-
-})
-   
-   
-.controller('serviceEntryCtrl', function($scope, $rootScope, uuid2, Upload, logger) {
-		// variables stored in document
-	$scope.JSON = {};
-	$scope.imageData;
-
-	//JSON fucntion for people
-	$scope.saveServiceJSON = function (){
-			$scope.JSON ["Creation Date"] = new Date();
-			$scope.JSON ["Modification Date"] = new Date();
-			$scope.JSON ["Unique Identifier"] = uuid2.newuuid();
-
-			//$scope.site ["Photo"] = $scope.imageData;
-
-			// print json to console for debugging
-			logger.log (JSON.stringify($scope.JSON));
-			$rootScope.unsyncedJSON.ServiceEntries.push ($scope.JSON);
-
-			$scope.JSON = {};
-	}
-
-
-})
-   
-   
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
 
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
@@ -481,7 +252,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		}
 		
         $ionicLoading.hide();
-        
+        console.log ($scope.route)
 		$state.go ($scope.route);
 	}
     
@@ -499,18 +270,21 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
 })
 
-.controller('modalController', function($scope, $rootScope, $state, $ionicModal, logger, DynamicPage) {
+.controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, Camera, GPS ) {
+	$scope.JSON = {};
+	$scope.imageData = null;
+
     $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
         scope: $scope,
-        animation: 'slide-in-up'
     }).then(function(modal) {
         $scope.modal = modal;
+
     });
-    
+
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
         $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
             scope: $scope,
-            animation: 'slide-in-up'
+            animation: 'slide-in-up',
         }).then(function(modal) {
             $scope.modal = modal;
         });
@@ -520,18 +294,51 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.openModal = function() {
         $scope.modal.show();
         $rootScope.modalHidden = false;
+
     };
     $scope.closeModal = function() {
         $scope.modal.hide();
         $rootScope.modalHidden = true;
+
     };
      $scope.destroyModal = function() {
         $scope.modal.remove();
         $rootScope.modalHidden = true;
+
     };
+
+	$scope.saveJSON = function (){
+		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData);	
+	};
+
+	//wrapper for the openGallery factory so we can call it from the choosePicture button.
+	// in root scope so it can be called from all buttons
+	$rootScope.choosePicture = function (imageData){
+		Camera.checkPermissions();
+		$scope.imageData = Camera.openGallery ();
+		
+		if (angular.isUndefined (imageData) || imageData == null)
+			console.log("null");
+		else
+			console.log("full");
+	}
+
+	//wrapper for the take image factory so we can call it from the takePhoto button
+	// in root scope so it can be called from all buttons
+	$rootScope.takePicture = function (imageData){
+    		Camera.checkPermissions();
+    		imageData = Camera.openCamera ();
+	}
+
+
+	//wrapper for the GPS factory so we can call it from the getGPS button
+	// in root scope so it can be called from all buttons
+	$rootScope.getGPS = function (JSON){
+		GPS.checkPermissions();
+		GPS.getLocation(JSON);
+	}
+
 })
-
-
 /* Will be used to refactor current expandable text :/
 
 .controller('TextAreaController', function($scope, $rootScope){

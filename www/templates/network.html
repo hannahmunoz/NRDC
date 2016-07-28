@@ -75,10 +75,11 @@
         error checking: checks if all input are of valid types and lengths 
         toFix: back() function call causes modal to not respawn upon attempt to add second
                 item -->
+
         <a id="project-button12" 
-           ui-sref="mainMenu" 
            class=" button button-large button-block button-positive wide" 
-           ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid" ng-click="saveProjectJSON(); back(); destroyModal();">Save</a>
+           ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid" ng-click="saveJSON(); back(); destroyModal();">Save</a>
+        </div>
 
     <!-- error handling for the above forms -->
 <!--     
