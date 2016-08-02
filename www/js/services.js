@@ -211,6 +211,7 @@ angular.module('app.services', ['ionic','base64'])
 	var route = null;
 	var JSON = null;
 
+
 	return {getTitle: function(){return title;},
 			setTitle: function(newTitle){ title = newTitle;},
 			getRoute: function(){return route;},
