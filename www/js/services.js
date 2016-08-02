@@ -63,7 +63,7 @@ angular.module('app.services', ['ionic','base64'])
 		//grab from possible past files
 		var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
 
-		$q (function (resolve, reject){ if (File.checkFile ('Unsynced')){
+		$q (function (resolve, reject){ if (File.checkFile ('Unsynced').$$state.status){
 			  File.readFile ('Unsynced').then (function Success (response){
 				if (response != null){
 						for (var i = 0; i < list.length; i++){
@@ -72,18 +72,26 @@ angular.module('app.services', ['ionic','base64'])
 					resolve (JSON);
 				}
 			})
-		}}).then (function (){
+
+		}
+		else{
+			resolve (JSON);
+		}
+		}).then (function (){
 
 		config = {timeout: 10000};
 			$http.post (url, JSON, config).then (function Success (response){
-			if (File.checkFile ('Unsynced').status == 1){
-				$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
-			}
+				console.log (response);
+				if (File.checkFile ('Unsynced').$$state.status == 1){
+					$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
+				}
+
 			//toast for successful post
-		}, function Error (response){
-			File.checkandWriteFile ('Unsynced', JSON);
+				}, function Error (response){
+					console.log (response);
+				File.checkandWriteFile ('Unsynced', JSON);
 			//toast to tell user what happened
-		})})
+			})})
 
 	}
 
@@ -100,7 +108,7 @@ angular.module('app.services', ['ionic','base64'])
 // 		setOptions
 //		openCamera
 //		convertToBase64
-.factory('Camera', function($base64) {
+.factory('Camera', function($base64, $q, $cordovaCamera) {
 
 // function: checkPermissions
 // purpose:  checks and asks for camera permissions
@@ -151,16 +159,20 @@ angular.module('app.services', ['ionic','base64'])
 // var: n/a
 // return: n/a (eventually will return the encoded image)
 	function openCamera() {
+		return $q (function (resolve, reject){ 
 		document.addEventListener ("deviceready", function(){
 
     	var options = setOptions(Camera.PictureSourceType.CAMERA);
 
-		navigator.camera.getPicture(function onSuccess (imageData){
-				 var image = "data:image/jpeg;base64," + imageData;
-				return image;
+			navigator.camera.getPicture(function onSuccess (imageData){
+				 var image =  imageData;
+				resolve (image);
 			}, function onFail(error){
 				console.debug("Camera Error: " + error, "app");
+				reject (null);
 			}, options);
+	})
+
 	})
 }
 
@@ -169,15 +181,18 @@ angular.module('app.services', ['ionic','base64'])
 // var: n/a
 // return: n/a (eventually will return the encoded image)
 	function openGallery() {
+			return $q (function (resolve, reject){
 		document.addEventListener ("deviceready", function(){
 			var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
 
     		navigator.camera.getPicture(function cameraSuccess(imageData) {
-				 var image = "data:image/jpeg;base64," + imageData;
-				return image;
+				 var image = imageData;
+				resolve (image);
     		}, function cameraError(error) {
         	console.debug("Gallery Error: " + error, "app");
+        	reject (null);
     	}, options);
+	})
 	})
 
 }
@@ -248,9 +263,9 @@ angular.module('app.services', ['ionic','base64'])
 	function getLocation(JSON){
 
 		navigator.geolocation.getCurrentPosition(function onSuccess (position){
-  			JSON ['Longitude'] = position.coords.longitude;
-  			JSON ['Latitude'] = position.coords.latitude;
-  			JSON ['Altitude'] = position.coords.altitude;
+  			JSON ['Longitude'] = position.coords.longitude.toString();
+  			JSON ['Latitude'] = position.coords.latitude.toString();
+  			JSON ['Altitude'] = position.coords.altitude.toString();
 		}, function onError(){
         console.debug ('GPS error code: '    + error.code    + '\n' +
               'message: ' + error.message + '\n');
@@ -280,7 +295,7 @@ angular.module('app.services', ['ionic','base64'])
 			 $cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then (function (success){
 			 	resolve (success.isFile);
 			 }, (function (error){
-			 	reject (error.code);
+			 	reject (false);
 			 }))
 		})
 	})
@@ -311,13 +326,6 @@ angular.module('app.services', ['ionic','base64'])
 		)
 	})}
 
-	// function checkandWriteExistingFile (title,JSON){
-	// 	document.addEventListener ("deviceready",function(){
-	// 		$cordovaFile.checkFile (cordova.file.cacheDirectory,'NRDC/'+title+'.txt').then (function (success){
-	// 			$cordovaFile.writeExistingFile (cordova.file.cacheDirectory,'NRDC/'+title+'.txt', JSON);
-	// 		})
-	// 	})
-	// }
 
 	function readFile (title){
 		return $q(function (resolve, reject){
@@ -365,25 +373,33 @@ angular.module('app.services', ['ionic','base64'])
 				break;
 
 			case 'People':
-				JSON  ["Photo"] = imageData;
+				JSON ["Photo"] = imageData;
 				break;
 
 			case 'Sites':
-				JSON ["Project"] = parseInt (JSON ["Project"]);
+				JSON ["Network"] = parseInt (JSON ["Network"]);
 				JSON ["Permit Holder"] = parseInt (JSON ["Permit Holder"]);
 				JSON ["Land Owner"] = parseInt (JSON ["Land Owner"]);
+				JSON ["Landmark Photo"] = imageData;
 				break;
 
 			case 'Systems':
 				JSON ["Manager"] = parseInt (JSON ["Manager"]);
 				JSON ["Site"] = parseInt (JSON ["Site"]);
+				JSON ["Photo"] = imageData;
 				break;
 
 			case 'Deployments':
+				//abandoned date
+				JSON ["Abandoned Date"] = null;
 				JSON ["System"] = parseInt (JSON ["System"]);
+
 				break;
 
 			case 'Components':
+				JSON ["Installation Date"] = new Date();
+				JSON ["Last Calibrated Date"] = new Date();
+				JSON ["Photo"] = imageData;
 				JSON ["Deployment"] = parseInt (JSON ["Deployment"]);
 				break;
 
@@ -396,7 +412,7 @@ angular.module('app.services', ['ionic','base64'])
         }
 
         // print json to console for debugging
-		console.log (JSON);
+		//console.log (JSON);
 		if (isitNew)
 			finalJSON.push (JSON);
 		JSON = {};

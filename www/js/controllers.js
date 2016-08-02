@@ -1,7 +1,8 @@
-angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage', 'ui.bootstrap'])
+angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage', 'ngSanitize'])
 
    
-.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory) {
+.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce) {
+	$scope.htmlString = '<button class="button-flat" ui-sref="serviceEntry" ><h4>Add Service Entry </h4></button>';
 
 	$scope.JSON = DynamicPage.getJSON();
 		switch (DynamicPage.getTitle()){
@@ -27,8 +28,40 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
      //custom back button functionality
      $scope.back = function(){
-            $ionicHistory.goBack();
+         $ionicHistory.goBack();
      }
+
+
+	$scope.saveJSON = function (){
+		SaveNew.save (DynamicPage.getTitle(), false, $scope.JSON, $rootScope.editJSON[DynamicPage.getTitle()], $scope.imageData);	
+	};
+
+	//wrapper for the openGallery factory so we can call it from the choosePicture button.
+	// in root scope so it can be called from all buttons
+	$rootScope.choosePicture = function (imageData){
+		Camera.checkPermissions();
+		$scope.imageData = Camera.openGallery ();
+		
+		if (angular.isUndefined (imageData) || imageData == null)
+			console.log("null");
+		else
+			console.log("full");
+	}
+
+	//wrapper for the take image factory so we can call it from the takePhoto button
+	// in root scope so it can be called from all buttons
+	$rootScope.takePicture = function (imageData){
+    		Camera.checkPermissions();
+    		imageData = Camera.openCamera ();
+	}
+
+
+	//wrapper for the GPS factory so we can call it from the getGPS button
+	// in root scope so it can be called from all buttons
+	$rootScope.getGPS = function (JSON){
+		GPS.checkPermissions();
+		GPS.getLocation(JSON);
+	}
 })
    
 .controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
@@ -51,6 +84,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$rootScope.serviceSyncedJSON = {};
 	$rootScope.serviceJSON = {};
 
+	$rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 
 
@@ -77,7 +111,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.uploadJSONS = function(){
     	console.log ($rootScope.unsyncedJSON);
     	sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON);
-    	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
+    	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
 
     }
 
@@ -129,18 +163,21 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	//site read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/", $rootScope.siteSyncedJSON,'Site', $rootScope.siteJSON).then(function(result){
     	$rootScope.siteSyncedJSON = result;
+    	//console.log (result);
     	File.checkandWriteFile('Site', $rootScope.siteSyncedJSON);
     });
 
     // 	system read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/", $rootScope.systemSyncedJSON, 'System', $rootScope.systemJSON).then (function(result){
     	$rootScope.systemSyncedJSON = result;
+    	//console.log (result);
     	File.checkandWriteFile('System', $rootScope.systemSyncedJSON);
     })
 
     // deployment read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[4]+"/", $rootScope.deploymentSyncedJSON, 'Deployment', $rootScope.deploymentJSON).then (function(result){
     	$rootScope.deploymentSyncedJSON = result;
+    	//console.log (result);
     	File.checkandWriteFile('Deployment', $rootScope.deploymentSyncedJSON);
     });
 
@@ -152,6 +189,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     // 	document read
 	sync.read($rootScope.baseURL + $rootScope.urlPaths[6]+"/", $rootScope.documentSyncedJSON, 'Document', $rootScope.documentJSON).then (function(result){
+		console.log (result);
 		$rootScope.documentSyncedJSON = result;
 		File.checkandWriteFile('Document', $rootScope.documentSyncedJSON);
 	});
@@ -160,6 +198,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
      	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.serviceSyncedJSON = result.data;
+    		console.log (result.data);
     		File.checkandWriteFile ( $rootScope.urlPaths[7], $rootScope.serviceSyncedJSON);
     		resolve ($rootScope.serviceSyncedJSON);
 
@@ -176,7 +215,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			}
     	})
 }
-    
     
     //Indicating Initilaize is loading
     $ionicLoading.show({
@@ -270,7 +308,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
 })
 
-.controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, Camera, GPS ) {
+.controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce ) {
 	$scope.JSON = {};
 	$scope.imageData = null;
 
@@ -312,23 +350,27 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData);	
 	};
 
+
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.
 	// in root scope so it can be called from all buttons
 	$rootScope.choosePicture = function (imageData){
 		Camera.checkPermissions();
-		$scope.imageData = Camera.openGallery ();
-		
-		if (angular.isUndefined (imageData) || imageData == null)
+		$scope.imageData = Camera.openGallery ().then (function (image){
+    		$scope.imageData = image;
+			if (angular.isUndefined ($scope.imageData) || $scope.imageData == null)
 			console.log("null");
 		else
 			console.log("full");
+		});
 	}
 
 	//wrapper for the take image factory so we can call it from the takePhoto button
 	// in root scope so it can be called from all buttons
 	$rootScope.takePicture = function (imageData){
     		Camera.checkPermissions();
-    		imageData = Camera.openCamera ();
+    		Camera.openCamera ().then (function (image){
+    			$scope.imageData = image;
+    		});
 	}
 
 

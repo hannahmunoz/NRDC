@@ -1,0 +1,318 @@
+/***************************************
+****Custom Stylesheet for NRDC QA app*** 
+****************************************/
+
+
+
+/*Utilities
+===============================*/
+
+/*Disables Ugly Scroll Bar Globallly*/
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/*Preset Transparencies*/
+.transparent {
+    opacity: 0.0;
+}
+
+.translucent {
+    opacity: 0.5;
+}
+
+.near-visible {
+    opacity: 0.8;
+}
+
+.visible {
+    opacity: 1.0;
+}
+
+/*makes a div an fixed overlay on content*/
+.overlay {
+    position: fixed;
+    z-index: 10;
+}
+
+/*makes a div fill it's parent block*/
+.fill-parent {
+    min-height: 100%;
+    width: 100%;
+}
+
+.no-padding {
+    padding: 0.0px;
+}
+
+/*make arrow clickable*/
+div.arrow-down:active {
+    opacity: 1.0;
+}
+
+/*makes rows wrap*/
+.row {
+  flex-wrap: wrap;
+}
+
+/*Make a button or element full width*/
+.wide{
+    min-width: 100%;
+}
+
+.main-menu-button{
+    margin-top: 0em !important;
+    margin-bottom: 3em !important;
+}
+
+button.main-menu-botton:active{
+    background-color: #F99300 !important;
+}
+
+/*Color Pallette and Theming
+===================================*/
+
+/*UNR Dark Blue*/
+.accent {
+    background-color: #003366 !important;
+}
+
+/*Lighter Hue of Above Blue*/
+.primary{
+    background-color: #0052A1 !important;
+}
+
+/*Orange*/
+.compliment{
+    background-color: #F99300;
+}
+
+.tertiary{
+    background-color: #F9BD00;
+}
+
+/*Black*/
+.text {
+    text-decoration-color: #000;
+    color: #F2F2F2;
+}
+
+/*white*/
+.content-bg {
+    background-color: #FFFFFF;
+}
+
+/*overrides existing bar-dark theme*/
+.bar.bar-dark {
+    background-color: #003366 !important;
+}
+
+.bar-dark h4{
+    color: #FFFFFF;
+    opacity: .8;
+}
+
+/* Overrides existing Bar Light Theme*/
+.bar.bar-light {
+    background: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
+/*    border-bottom: 1px solid #C5C4C4 !important; */
+}
+
+/*overrides item content backgrounds*/
+.item .item-content {
+    background-color: #FFFFFF !important;
+    
+}
+
+.button-positive {
+    background-color: #0052A1 !important;
+}
+
+.near-visible{
+    opacity: 0.8;
+}
+
+
+/* CSS objects
+============================/
+/*    make a css arrow
+    -- adapted from stack overflow-- 
+*/
+.arrow-down {
+    border-right: 10px solid; 
+    border-bottom: 10px solid;
+    width: 30px; 
+    height: 30px;    
+    transform: rotate(45deg);
+}
+
+.arrow-up {
+    border-right: 10px solid; 
+    border-bottom: 10px solid;
+    width: 30px; 
+    height: 30px;    
+    transform: rotate(-135deg);    
+}
+
+
+.nrdc-fab-container-lower-right{
+    z-index: 9999;
+    position: absolute;
+    
+    top: auto;
+    right: 16px;
+    bottom: 16px;
+    left: auto;
+}
+
+
+/*tile style button
+used on main page
+eventual deletion*/
+.tile-btn {
+    padding: 0.0px;
+    margin: 2px;
+    opacity: 1;
+    border-radius: 2px;
+}
+
+/*Loading Spinner
+----------------------------*/
+.loading-spinner{
+  height: 80px;
+  width: 80px;
+  background-color: rgba(0,0,0,0);
+  border: dotted 5px #003366;
+  border-radius: 100px;
+
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner-inner{
+  height: 42px;
+  width: 42px;
+  border-radius: 100px;
+  border: 3px dotted #F99300;
+  background-color: rgba(0,0,0,0);
+}
+
+
+
+/*make arrow clickable*/
+div.arrow-down:active{
+    opacity: 1.0;
+}
+
+/*Holds a copy of all text
+placed in a corresponding textarea
+used to measure the expected height
+of the text area*/
+.text-format-mirror{
+    position: absolute;
+    visibility: hidden;
+    
+    color: black;
+    padding: .5em;
+    line-height: 1em;
+    height: auto;
+    font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    font-size: 18px;
+    
+    word-wrap: break-word;
+    white-space: pre-line;
+}
+
+
+
+/*Animations
+===========================*/
+.spinner{
+  animation: spin 1.5s ease-in-out infinite;
+}
+
+.spinner-rev{
+ animation: spin .1s infinite reverse;
+}
+
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+
+
+
+/* Overrides
+==========================*/
+
+/*used for flex box purposes*/
+.home-container {
+    display: -webkit-flex;
+    height: 100%;
+}
+
+.modal-back-btn {
+    margin-right: 8px;
+}
+
+.item {
+    margin: 0px; !important
+}
+
+
+/*Manual overrides of md-input css*/
+/*EM scales element according to text size*/
+.item-md-label textarea {
+    background-color: inherit !important;
+    color: black !important;
+    resize: none;
+    font-size: large;
+    font: arial;
+    height: 2em;
+    padding: .5em;
+    line-height: 1em;
+    
+    border-bottom: 2px solid rgba( 0, 0, 0, .05);
+}
+
+textarea:focus {
+     background-color: #EEEEEE !important;
+}
+
+/*Input Underline*/
+.item-md-label .highlight-calm {
+    background: #F99300 !important;
+}
+
+/*Basic redisign of select bars*/
+select{
+    border: 0px;
+    border-left: 2px solid rgba( 0, 0, 0, .1) !important;
+    border-right: 2px solid rgba( 0, 0, 0, .1) !important;
+
+    
+    padding-top: 1em;
+    padding-bottom: 1em;
+    
+    font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    font-size: 18px; 
+}
+
+.select-container{
+    padding: 0px;
+    margin-left: 2em;
+    margin-right: 1em;
+}
+
+/*Additional padding to items in a list*/
+li > .item{
+    padding: 2em !important;
+}
+
+
+/*Loading Override*/
+.loading-container .loading{
+    background-color: rgba(255, 255, 255, .4) !important;
+}

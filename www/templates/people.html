@@ -1,9 +1,12 @@
-<ion-modal-view title="People" id="page1" style="" class=" ">
+<ion-modal-view ng-controller="scrollController"  title="People" id="page1" style="" class=" ">
     <ion-header-bar class="bar-dark">
         <button class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
     </ion-header-bar>
-    
-     <ion-content class="has-header content-bg padding">
+
+    <ion-content 
+      delegate-handle="scrollable" 
+      class="has-header content-bg padding"
+      on-scroll="cndHideArrow()"> 
 <!--    controller scope var: people
         var name: firstName
         type: text
