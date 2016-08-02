@@ -2,11 +2,9 @@
     <ion-header-bar class="bar-dark">
         <button class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
     </ion-header-bar>
-
+    
     <ion-content 
-      delegate-handle="scrollable" 
-      class="has-header content-bg padding"
-      on-scroll="cndHideArrow()"> 
+      class="has-header content-bg padding"> 
 <!--    controller scope var: people
         var name: firstName
         type: text
@@ -101,7 +99,7 @@
         <p ng-show="firstNameForm.firstName.$error.required || lastNameForm.lastName.$error.required || organizationForm.organization.$error.required || emailForm.email.$error.required || phoneForm.phone.$error.required" >* All inputs must be completed</p>
         <p ng-show = "photoForm.$invalid || takePhotoForm.$invalid"> * Photo of user required</p>
 
-   </div>
-
+    </div>
     </ion-content>
+    
 </ion-modal-view>

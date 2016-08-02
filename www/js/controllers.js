@@ -328,20 +328,111 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     
 })
 
-.controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, ObjectCounter ) {
+.controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
+
 	$scope.JSON = {};
 	$scope.imageData = null;
+    $scope.template = 'templates/' + DynamicPage.getRoute() + '.html';
 
-    $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
+    $rootScope.modalHidden = true;
+
+    //Build the modal
+    $ionicModal.fromTemplateUrl($scope.template, {
         scope: $scope,
         animation: 'slide-in-up'
     }).then(function(modal) {
         $scope.modal = modal;
-
     });
 
+    $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        $ionicModal.fromTemplateUrl($scope.template, {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+    });
+    
+    
+    
+    //set flag in root scope to indicate weither modal
+    //hidden or shown
+    $scope.openModal = function() {
+        $scope.modal.show();
+        $rootScope.modalHidden = false;
+    };
+    
+    //close Modal
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+        $rootScope.modalHidden = true;
+    };
+    
+    //destroy modal to prevent memory leaks
+    $scope.destroyModal = function() {
+        $scope.modal.remove();
+        $rootScope.modalHidden = true;
+    };
+
+	$scope.saveJSON = function (){
+		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData);	
+	};
+
+
+	//wrapper for the openGallery factory so we can call it from the choosePicture button.
+	// in root scope so it can be called from all buttons
+	$rootScope.choosePicture = function (imageData){
+		Camera.checkPermissions();
+		$scope.imageData = Camera.openGallery ().then (function (image){
+    		$scope.imageData = image;
+			if (angular.isUndefined ($scope.imageData) || $scope.imageData == null)
+			console.log("null");
+		else
+			console.log("full");
+		});
+	}
+
+	//wrapper for the take image factory so we can call it from the takePhoto button
+	// in root scope so it can be called from all buttons
+	$rootScope.takePicture = function (imageData){
+    		Camera.checkPermissions();
+    		Camera.openCamera ().then (function (image){
+    			$scope.imageData = image;
+    		});
+	}
+
+
+	//wrapper for the GPS factory so we can call it from the getGPS button
+	// in root scope so it can be called from all buttons
+	$rootScope.getGPS = function (JSON){
+		GPS.checkPermissions();
+		GPS.getLocation(JSON);
+	}
+    
+      $scope.back = function(){
+        //conditional to fix problem of double
+        //back when modal closed
+        if($rootScope.modalHidden != false){
+            $ionicHistory.goBack();
+        }
+    }
+
+})
+
+.controller('DocumentModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory ) {
+    $scope.JSON = {};
+	$scope.imageData = null;
+    
+    
+    $ionicModal.fromTemplateUrl('templates/document.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+    
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-        $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
+        $ionicModal.fromTemplateUrl('templates/document.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(modal) {
@@ -362,9 +453,9 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
      $scope.destroyModal = function() {
         $scope.modal.remove();
         $rootScope.modalHidden = true;
-
     };
-
+    
+    
 	$scope.saveJSON = function (){
 		if (DynamicPage.getTitle() != "Service Entries")
 			SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData);
@@ -408,8 +499,101 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 		GPS.checkPermissions();
 		GPS.getLocation(JSON);
 	}
-
+    
+    $scope.back = function(){
+        //conditional to fix problem of double
+        //back when modal closed
+        if($rootScope.modalHidden != false){
+            $ionicHistory.goBack();
+        }
+     };
 })
+
+//Controls the behavior of the service modals for particular networks, sites, sysyems etc
+.controller('ServiceModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory) {
+    
+    $scope.JSON = {};
+	$scope.imageData = null;
+    
+    $rootScope.modalHidden = true;
+    
+    $ionicModal.fromTemplateUrl('templates/serviceEntry.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+    
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        $ionicModal.fromTemplateUrl('templates/serviceEntry.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+    });
+    
+    //set flag in root scope to indicate weither modal
+    //hidden or shown
+    $scope.openModal = function() {
+        $scope.modal.show();
+        $rootScope.modalHidden = false;
+    };
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+        $rootScope.modalHidden = true;
+    };
+     $scope.destroyModal = function() {
+        $scope.modal.remove();
+        $rootScope.modalHidden = true;
+    };
+    
+    
+	$scope.saveJSON = function (){
+		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData);	
+	};
+
+
+	//wrapper for the openGallery factory so we can call it from the choosePicture button.
+	// in root scope so it can be called from all buttons
+	$rootScope.choosePicture = function (imageData){
+		Camera.checkPermissions();
+		$scope.imageData = Camera.openGallery ().then (function (image){
+    		$scope.imageData = image;
+			if (angular.isUndefined ($scope.imageData) || $scope.imageData == null)
+			console.log("null");
+		else
+			console.log("full");
+		});
+	}
+
+	//wrapper for the take image factory so we can call it from the takePhoto button
+	// in root scope so it can be called from all buttons
+	$rootScope.takePicture = function (imageData){
+    		Camera.checkPermissions();
+    		Camera.openCamera ().then (function (image){
+    			$scope.imageData = image;
+    		});
+	}
+
+
+	//wrapper for the GPS factory so we can call it from the getGPS button
+	// in root scope so it can be called from all buttons
+	$rootScope.getGPS = function (JSON){
+		GPS.checkPermissions();
+		GPS.getLocation(JSON);
+	}
+    
+    $scope.back = function(){
+        //conditional to fix problem of double
+        //back when modal closed
+        if($rootScope.modalHidden != false){
+            $ionicHistory.goBack();
+        }
+     };
+})
+
+
 /* Will be used to refactor current expandable text :/
 
 .controller('TextAreaController', function($scope, $rootScope){
