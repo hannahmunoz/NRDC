@@ -311,39 +311,59 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 .controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce ) {
 	$scope.JSON = {};
 	$scope.imageData = null;
+    $rootScope.modalHidden = true;
 
-    $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
+    //function to determine the route of fab clicked
+    var determineModalRoute = function(){
+        var template = 'templates/' + DynamicPage.getRoute() + '.html';
+        
+        //check if document button was clicked
+        if(){
+            
+        }
+        
+        //check if service entry was clicked
+        else if(){
+            
+        }
+        
+        return template;
+    }
+    
+    //Build the modal
+    $ionicModal.fromTemplateUrl(determineModalRoute(), {
         scope: $scope,
         animation: 'slide-in-up'
     }).then(function(modal) {
         $scope.modal = modal;
-
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-        $ionicModal.fromTemplateUrl('templates/' + DynamicPage.getRoute() + '.html', {
+        $ionicModal.fromTemplateUrl(determineModalRoute(), {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(modal) {
             $scope.modal = modal;
         });
     });
+    
     //set flag in root scope to indicate weither modal
     //hidden or shown
     $scope.openModal = function() {
         $scope.modal.show();
         $rootScope.modalHidden = false;
-
     };
+    
+    //close Modal
     $scope.closeModal = function() {
         $scope.modal.hide();
         $rootScope.modalHidden = true;
-
     };
-     $scope.destroyModal = function() {
+    
+    //destroy modal to prevent memory leaks
+    $scope.destroyModal = function() {
         $scope.modal.remove();
         $rootScope.modalHidden = true;
-
     };
 
 	$scope.saveJSON = function (){
@@ -382,6 +402,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	}
 
 })
+
+
 /* Will be used to refactor current expandable text :/
 
 .controller('TextAreaController', function($scope, $rootScope){

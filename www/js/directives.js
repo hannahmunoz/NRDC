@@ -76,6 +76,8 @@ angular.module('app.directives', [])
 })
 
 
+//directive declaring and controlling
+// a floating action button cluster
 .directive('fabCluster', function(){
     
     function HideController($scope){
@@ -92,6 +94,9 @@ angular.module('app.directives', [])
         
     }
     
+    //make link to enable overscroll past save button
+    //where there is fabCluster
+    
     return{
         restrict: 'E',
         templateUrl: 'templates/directive_templates/fabCluster.html',
@@ -100,6 +105,7 @@ angular.module('app.directives', [])
     
 })
 
+//Extracted from GitHub
 .directive('clickOff', function($parse, $document) {
     var dir = {
         compile: function($element, attr) {
