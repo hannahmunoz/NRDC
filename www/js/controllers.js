@@ -1,9 +1,7 @@
 angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage', 'ngSanitize'])
 
    
-.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce) {
-	$scope.htmlString = '<button class="button-flat" ui-sref="serviceEntry" ><h4>Add Service Entry </h4></button>';
-
+.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew) {
 	$scope.JSON = DynamicPage.getJSON();
 		switch (DynamicPage.getTitle()){
 			case 'Networks':
@@ -33,7 +31,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 
 	$scope.saveJSON = function (){
-		SaveNew.save (DynamicPage.getTitle(), false, $scope.JSON, $rootScope.editJSON[DynamicPage.getTitle()], $scope.imageData);	
+		for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
+		if ($scope.JSON ['Unique Identifier'] == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
+			SaveNew.save (DynamicPage.getTitle(), false, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData);	
+		}
+	}
 	};
 
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.
