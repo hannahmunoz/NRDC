@@ -134,7 +134,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON[title]);
 		}
 
-    	$rootScope.listJSON = angular.extend (JSON,$scope.unsyncedListJSON)
+    	$rootScope.listJSON = angular.extend ({},JSON,$scope.unsyncedListJSON)
     	DynamicPage.setTitle (title);
     	DynamicPage.setRoute (route);
     }
@@ -214,7 +214,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
      	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.serviceSyncedJSON = result.data;
-    		console.log (result.data);
     		File.checkandWriteFile ( 'ServiceEntries', $rootScope.serviceSyncedJSON);
     		resolve ($rootScope.serviceSyncedJSON);
 
@@ -302,14 +301,11 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
             noBackdrop: true
         });
         
-		var x = 0;
-		for (var o in $rootScope.listJSON){
-			if (JSON == $rootScope.listJSON[o]){
-						DynamicPage.setJSON ($rootScope.chosenJSONlist[x]);
-				break;
-			 }
-			 x ++;
-		}
+        for (var i = 0; i < $rootScope.chosenJSONlist.length; i++){
+        	if (JSON == $rootScope.chosenJSONlist[i]['Name']){
+        		DynamicPage.setJSON ($rootScope.chosenJSONlist[i]);
+        	}
+        }
 		
         $ionicLoading.hide();
         
@@ -330,7 +326,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     
 })
 
-.controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce ) {
+.controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, ObjectCounter ) {
 	$scope.JSON = {};
 	$scope.imageData = null;
 
@@ -355,13 +351,12 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     $scope.openModal = function() {
         $scope.modal.show();
         $rootScope.modalHidden = false;
-
     };
     $scope.closeModal = function() {
         $scope.modal.hide();
         $rootScope.modalHidden = true;
-
     };
+
      $scope.destroyModal = function() {
         $scope.modal.remove();
         $rootScope.modalHidden = true;
@@ -373,6 +368,16 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 			SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData);
 		else
 			SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
+
+
+    	if (DynamicPage.getTitle() == "People")	{
+    			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['First Name'] + " "+ $scope.JSON['Last Name'];
+    		}
+    		else{
+    			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
+    		}
+			$rootScope.chosenJSONlist.push ($scope.JSON);	
+			console.log ($rootScope.chosenJSONlist);
 	};
 
 
