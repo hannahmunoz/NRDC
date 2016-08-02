@@ -80,7 +80,8 @@ angular.module('app.directives', [])
 // a floating action button cluster
 .directive('fabCluster', function(){
     
-    function HideController($scope){
+    function HideController($scope, $rootScope, $ionicModal){
+        
         $scope.active = false;
         
         $scope.toggleActive = function(){
