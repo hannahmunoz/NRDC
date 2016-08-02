@@ -105,9 +105,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     $scope.uploadJSONS = function(){
     	console.log ($rootScope.unsyncedJSON);
-    	sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON);
-    	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
-
+    	var promise = sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON);
+    	if (promise == 200){
+    		$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
+    	}
     }
 
     $scope.listSwitch = function (JSON, syncedJSON, title, route){
@@ -148,16 +149,15 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	//Camera.checkPermissions();
     	File.createDirectory();
  
-
     	// people read
     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/").then (function(result){
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.peopleSyncedJSON = result.data;
-    		File.checkandWriteFile ( $rootScope.urlPaths[0], $rootScope.peopleSyncedJSON);
+    		File.checkandWriteFile ( 'People', $rootScope.peopleSyncedJSON);
     		resolve ($rootScope.peopleSyncedJSON);
 
     	}, function (result){
-    		File.readFile($rootScope.urlPaths[0]).then (function(success){
+    		File.readFile('People').then (function(success){
     			$rootScope.peopleSyncedJSON = success;
     			resolve ($rootScope.peopleSyncedJSON);
     		});
@@ -215,11 +215,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.serviceSyncedJSON = result.data;
     		console.log (result.data);
-    		File.checkandWriteFile ( $rootScope.urlPaths[7], $rootScope.serviceSyncedJSON);
+    		File.checkandWriteFile ( 'ServiceEntries', $rootScope.serviceSyncedJSON);
     		resolve ($rootScope.serviceSyncedJSON);
 
     	}, function (result){
-    		File.readFile($rootScope.urlPaths[7]).then (function(success){
+    		File.readFile('ServiceEntries').then (function(success){
     			$rootScope.serviceSyncedJSON = success;
     			resolve ($rootScope.serviceSyncedJSON);
     		});
@@ -230,6 +230,19 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
 			}
     	})
+
+var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
+    if (File.checkFile ('Unsynced')){
+			  File.readFile ('Unsynced').then (function Success (response){
+				if (response != null){
+						for (var i = 0; i < list.length; i++){
+							$rootScope.unsyncedJSON[list[i]] = $rootScope.unsyncedJSON[list[i]].concat (response[list[i]]);
+						}
+				console.log ($rootScope.unsyncedJSON);
+				}
+			})
+
+	}
 }
     
     //Indicating Initilaize is loading
@@ -292,14 +305,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		var x = 0;
 		for (var o in $rootScope.listJSON){
 			if (JSON == $rootScope.listJSON[o]){
-				// if (DynamicPage.getTitle() == 'Service Entries'){
-				// 	DynamicPage.setJSON ($rootScope.chosenJSONlist['ServiceEntries'][x]);				
-				// }
-				// else{
-
 						DynamicPage.setJSON ($rootScope.chosenJSONlist[x]);
-
-			//	}
 				break;
 			 }
 			 x ++;

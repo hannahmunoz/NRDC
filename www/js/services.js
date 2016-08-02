@@ -60,42 +60,23 @@ angular.module('app.services', ['ionic','base64'])
 	}	
 
 	function post (url, JSON){
-		//grab from possible past files
-		var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
 
-		$q (function (resolve, reject){ if (File.checkFile ('Unsynced').$$state.status){
-			  File.readFile ('Unsynced').then (function Success (response){
-				if (response != null){
-						for (var i = 0; i < list.length; i++){
-							JSON[list[i]] = JSON[list[i]].concat (response[list[i]]);
-						}
-					resolve (JSON);
-				}
-			})
-
-		}
-		else{
-			resolve (JSON);
-		}
-		}).then (function (){
-
-		config = {timeout: 10000};
+		return $q (function (resolve, reject){ 
+			config = {timeout: 10000};
 			$http.post (url, JSON, config).then (function Success (response){
-				console.log (response);
 				if (File.checkFile ('Unsynced').$$state.status == 1){
 					$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
 				}
-
+				resolve (response.status);
 			//toast for successful post
 				}, function Error (response){
-					console.log (response);
 				File.checkandWriteFile ('Unsynced', JSON);
+				reject (response.status);
 			//toast to tell user what happened
-			})})
-
+			})
+		})
+		// })
 	}
-
-
 	
 	return{read: read,
 		   post: post};
@@ -313,6 +294,7 @@ angular.module('app.services', ['ionic','base64'])
 
 	function checkandWriteFile (title, JSON){
 		document.addEventListener ("deviceready",function(){
+			
 		$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then(function(success){
 			$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt',JSON, true);
 		},function(error){
@@ -333,7 +315,6 @@ angular.module('app.services', ['ionic','base64'])
 			document.addEventListener ("deviceready", function(){
 				$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
 					 $cordovaFile.readAsText (cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
-					  if (title == 'Unsynced')
 						resolve (JSON.parse(result));
 						}, function (error){
 							console.debug("File Read Error:" + title + " " + error.code);
