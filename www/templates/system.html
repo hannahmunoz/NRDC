@@ -78,7 +78,7 @@
         <button class = "button button-positive button-large button-block" ng-click = "takePicture()">Take Photo</button>
 
 
-        <a ui-sref="mainMenu" id="system-button6" class=" button button-positive button-large button-block " ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid" ng-click = "saveJSON(); back(); destroyModal();">Save</a>
+        <a id="system-button6" class=" button button-positive button-large button-block " ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid" ng-click = "saveJSON(); back(); destroyModal();">Save</a>
 
             <!-- error handling for the above forms -->
 <!--     <div class="padding"> 
