@@ -338,7 +338,7 @@ angular.module('app.services', ['ionic','base64'])
 
 .factory ('SaveNew', function(uuid2){
 
-	function save (type, isitNew, JSON, finalJSON, imageData){
+	function save (type, isitNew, JSON, finalJSON, imageData, editFlag){
 
 
 		JSON ["Modification Date"] = new Date();
@@ -395,8 +395,10 @@ angular.module('app.services', ['ionic','base64'])
 
         // print json to console for debugging
 		//console.log (JSON);
-		if (isitNew)
+		if (isitNew){
 			finalJSON.push (JSON);
+		}
+
 		JSON = {};
 	}
 
