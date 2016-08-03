@@ -11,58 +11,67 @@
 
         <form name = "nameForm" id="component-form41" class="list ">
             <label class="item item-input " id="component-input46" >
-                <ion-md-input type="text" placeholder="Name" name="componentName" ng-model = "JSON['Name']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Name" name="componentName" ng-model = "JSON['Name']" required></ion-md-input>
             </label>
         </form>
 
         <form name = "manufaturerForm" id="component-form42" class="list ">
             <label class="item item-input " id="component-input47" >
-                <ion-md-input type="text" placeholder="Manufacturer" name="manufacturer" ng-model = "JSON['Manufacturer']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Manufacturer" name="manufacturer"  ng-model = "JSON['Manufacturer']" ng-init = "JSON['Manufacturer'] = null" ></ion-md-input>
             </label>
         </form>
 
         <form name = "modelForm" id="component-form43" class="list ">
             <label class="item item-input " id="component-input48" >
-                <ion-md-input type="text" placeholder="Model" name="model" ng-model = "JSON['Model']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50"  placeholder="Model" name="model" ng-model = "JSON['Model']" ng-init = "JSON['Model'] = null"></ion-md-input>
             </label>
         </form>
 
 
         <form name = "serialForm" id="component-form44" class="list ">
             <label class="item item-input " id="component-input49" >
-                <ion-md-input type="text" placeholder="Serial Number" ng-model = "JSON['Serial Number']" name="serialNumber" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Serial Number" ng-model = "JSON['Serial Number']" name="serialNumber" ng-init = "JSON['Serial Number'] = null" ></ion-md-input>
             </label>
         </form>
 
         <form name = "vendorForm" id="component-form45" class="list ">
             <label class="item item-input " id="component-input50" >
-                <ion-md-input type="text" placeholder="Vendor" name="vendor" ng-model = "JSON['Vendor']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Vendor" name="vendor" ng-model = "JSON['Vendor']" ng-init = "JSON['Vendor'] = null" ></ion-md-input>
             </label>
         </form>
 
         <form name = "supplierForm" id="component-form46" class="list ">
             <label class="item item-input " id="component-input51" >
-                <ion-md-input type="text" placeholder="Supplier" name="supplier" ng-model = "JSON['Supplier']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Supplier" name="supplier" ng-model = "JSON['Supplier']" ng-init = "JSON['Supplier'] = null"  ></ion-md-input>
             </label>
         </form>
 
+        <form name="dateForm">
+        <label>Installation Date</label>
+        <input type="date" name="data"  ng-model = "JSON['Installation Date']" ng-init = "JSON['Installation Date'] = null" placeholder="yyyy-MM-dd"/>
+       </form>
+
         <form name = "installationForm" id="component-form47" class="list ">
             <label class="item item-input " id="component-input52" >
-                <ion-md-input type="text" placeholder="Installation Details" name="installationDetails" ng-model = "JSON['Installation Details']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="100" placeholder="Installation Details" name="installationDetails" ng-model = "JSON['Installation Details']" ng-init = "JSON['Installation Details'] = null" ></ion-md-input>
             </label>
         </form>
 
         <form name = "wiringForm" id="component-form48" class="list ">
             <label class="item item-input " id="component-input53" >
-                <ion-md-input type="text" placeholder="Wiring Notes" ng-model= "JSON['Wiring Notes']" name="wiringNotes" required></ion-md-input>
+                <ion-md-input type="text" maxlength="100" placeholder="Wiring Notes" ng-model= "JSON['Wiring Notes']" name="wiringNotes" ng-init = "JSON['Wiring Notes'] = null"></ion-md-input>
             </label>
         </form>
 
+        <form name="calibratedForm">
+        <label>Last Calibrated Date</label>
+        <input type="date" name="data" ng-model = "JSON['Last Calibrated Date']" ng-init = "JSON['Last Calibrated Date'] = null" placeholder="yyyy-MM-dd"/>
+       </form>
+
         <form name = "deploymentForm" id="component-form49" class="list ">
-                <select ng-model = "JSON['Deployment']" ng-options = "key as deployment for (key, deployment) in deploymentJSON">
+                <select ng-model = "JSON['Deployment']" ng-options = "key as deployment for (key, deployment) in deploymentJSON" required>
                     <option value>Deployment</option>
                 </select>
-
         </form>
 <!--         <form id="component-form50" class="list ">
             <label class="item item-input " id="component-input54" name="deploymentCalivrated">

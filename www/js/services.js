@@ -64,7 +64,8 @@ angular.module('app.services', ['ionic','base64'])
 		return $q (function (resolve, reject){ 
 			config = {timeout: 10000};
 			$http.post (url, JSON, config).then (function Success (response){
-				if (File.checkFile ('Unsynced').$$state.status == 1){
+				console.log (File.checkFile ('Unsynced') );
+				if (File.checkFile ('Unsynced')){
 					$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
 				}
 				resolve (response.status);
@@ -338,8 +339,7 @@ angular.module('app.services', ['ionic','base64'])
 
 .factory ('SaveNew', function(uuid2){
 
-	function save (type, isitNew, JSON, finalJSON, imageData, editFlag){
-
+	function save (type, isitNew, JSON, finalJSON, imageData){
 
 		JSON ["Modification Date"] = new Date();
 
@@ -359,10 +359,20 @@ angular.module('app.services', ['ionic','base64'])
 				break;
 
 			case 'Sites':
+			var TZAJSON = {10:'HST', 9: 'AKST', 8: 'PST', 7: 'MST', 6: 'CST', 5: 'EST', 4: 'AST'};
+			var TZJSON = {10:'Hawaii-Aleutian Standard Time', 9: 'Alaska Standard Time', 8: 'Pacific Standard Time', 7: 'Mountain Standard Time', 6: 'Central Standard Time', 5: ' Eastern Standard Time', 4: 'Atlantic Standard Time'};
 				JSON ["Network"] = parseInt (JSON ["Network"]);
-				JSON ["Permit Holder"] = parseInt (JSON ["Permit Holder"]);
-				JSON ["Land Owner"] = parseInt (JSON ["Land Owner"]);
+				if (JSON ["Permit Holder"] != null)
+					JSON ["Permit Holder"] = parseInt (JSON ["Permit Holder"]);
+				if (JSON ["Land Owner"] != null)
+					JSON ["Land Owner"] = parseInt (JSON ["Land Owner"]);
 				JSON ["Landmark Photo"] = imageData;
+				//JSON ["Time Zone Name"]
+				JSON ["Time Zone Offset"] = (new Date().getTimezoneOffset()/60);
+				console.log(new Date().getTimezoneOffset()/60);
+				console.log (TZJSON[new Date().getTimezoneOffset()/60]);
+				console.log (TZAJSON[new Date().getTimezoneOffset()/60]);
+				//JSON ["Time Zone Abbreviation"]
 				break;
 
 			case 'Systems':
@@ -372,15 +382,11 @@ angular.module('app.services', ['ionic','base64'])
 				break;
 
 			case 'Deployments':
-				//abandoned date
-				JSON ["Abandoned Date"] = null;
+				JSON['Height From Ground'] = parseFloat (JSON['Height From Ground']);
 				JSON ["System"] = parseInt (JSON ["System"]);
-
 				break;
 
 			case 'Components':
-				JSON ["Installation Date"] = new Date();
-				JSON ["Last Calibrated Date"] = new Date();
 				JSON ["Photo"] = imageData;
 				JSON ["Deployment"] = parseInt (JSON ["Deployment"]);
 				break;
@@ -394,11 +400,10 @@ angular.module('app.services', ['ionic','base64'])
         }
 
         // print json to console for debugging
-		//console.log (JSON);
+		console.log (JSON);
 		if (isitNew){
 			finalJSON.push (JSON);
 		}
-
 		JSON = {};
 	}
 

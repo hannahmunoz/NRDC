@@ -27,7 +27,7 @@
         min|max req: not implemented -->
         <form name = "nameForm" class="list " novalidate>
             <label class="item item-input " id="site-input24">
-                <ion-md-input type="text" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required></ion-md-input>
             </label>
         </form>
 
@@ -60,7 +60,7 @@
         min|max req: not implemented --> 
         <form name = "aliasForm" class = "list" novalidate>
             <label class="item item-input " id="site-input28" name="alias">
-                <ion-md-input type="text" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="20" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required></ion-md-input>
             </label>
         </form>
 
@@ -71,7 +71,13 @@
         min|max req: not implemented --> 
         <form name = "notesForm" class = "list" novalidate="">
             <label class="item item-input " id="site-input27">
-                <ion-md-input type="text" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="200" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required></ion-md-input>
+            </label>
+        </form>
+
+        <form name = "landmarForm" class = "list" novalidate="">
+            <label class="item item-input " id="site-input27">
+                <ion-md-input type="text" maxlength="50" placeholder="GPS Landmark"  name = "gpsLandmark" ng-model = "JSON['GPS Landmark']" required></ion-md-input>
             </label>
         </form>
 
@@ -91,9 +97,9 @@
         <form name="permitForm" class="list">
             <div class="select-container">
                 <select ng-model = "JSON['Permit Holder']" 
+                        ng-init = "JSON ['Permit Holder'] = null"
                         ng-options = "key as people for (key, people) in peopleJSON" 
-                        class="wide"
-                        required>
+                        class="wide">
                     <option value="">Permit Holder</option>
                 </select>
             </div>
@@ -102,9 +108,9 @@
         <form name="landownerForm" class="list">
             <div class="select-container">
                         <select ng-model = "JSON['Land Owner']" 
+                                ng-init = "JSON ['Land Owner'] = null"
                                 ng-options = "key as people for (key, people) in peopleJSON" 
-                                class="wide"
-                                required>
+                                class="wide">
                 <option value="">Land Owner</option>
                 </select>
             </div>

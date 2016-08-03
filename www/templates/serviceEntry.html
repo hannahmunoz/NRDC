@@ -44,33 +44,46 @@
             </label>
         </form>
 
-        <form name = "projectForm" id="serviceEntry-form66" class="list ">
-            <label class="item item-select " id="serviceEntry-select14" name="serviceProject">
-                <span class="input-label">Project</span>
-                <select></select>
-            </label>
+        <form name="networkForm" class="list" novalidate="" >
+            <div class="select-container">
+                <select ng-model = "JSON['Network']" 
+                        ng-options = "key as network for (key, network) in networkJSON" 
+                        class="wide"
+                        required>
+                <option value="">Network</option>
+                </select>
+            </div>
         </form>
 
-        <form  name = "creatorForm" id="serviceEntry-form67" class="list ">
-            <label class="item item-select " id="serviceEntry-select15" name="serviceCreator">
-                <span class="input-label">Creator</span>
-                <select></select>
-            </label>
-        </form>
+  <form name ="creatorForm" class="list" novalidate> 
+    <div class="select-container">
+     <select class="wide"
+             ng-model = "JSON ['Principal Investigator']" 
+             ng-options="key as people for (key, people) in peopleJSON" required>
+                <option value=""> Creator</option>
+    </select>
+    </div>
+</form> 
 
-        <form name = "systemForm" id="serviceEntry-form68" class="list ">
-            <label class="item item-select " id="serviceEntry-select16" name="serviceSystem">
-                <span class="input-label">System</span>
-                <select></select>
-            </label>
-        </form>
+  <form name ="systemForm" class="list" novalidate> 
+    <div class="select-container">
+     <select class="wide"
+             ng-model = "JSON ['System']" 
+             ng-options="key as system for (key, system) in systemJSON" required>
+                <option value="">System</option>
+    </select>
+    </div>
+</form> 
 
-        <form name = "componentForm" id="serviceEntry-form69" class="list ">
-            <label class="item item-select " id="serviceEntry-select17" name="serviceComponent">
-                <span class="input-label">Component</span>
-                <select></select>
-            </label>
-        </form>
+  <form name ="componentForm" class="list" novalidate> 
+    <div class="select-container">
+     <select class="wide"
+             ng-model = "JSON ['Component']" 
+             ng-options="key as component for (key, component) in componentJSON" required>
+                <option value="">Component</option>
+    </select>
+    </div>
+</form> 
 
 <!--    controller scope var: n/a
         var name: photo
