@@ -3,11 +3,21 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
    
 .controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew) {
 	$scope.JSON = DynamicPage.getJSON();
+	console.log ($scope.JSON);
 	$scope.checked = true;
-	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
-		if ($scope.JSON ['Unique Identifier'].toUpperCase() === $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier'].toUpperCase()){
-			$scope.checked = false;
+	if (DynamicPage.getTitle() != "Service Entries"){
+		for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
+			if ($scope.JSON ['Unique Identifier'].toUpperCase() === $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier'].toUpperCase()){
+				$scope.checked = false;
+			}
 		}
+	}
+	else{
+		for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i ++){
+			if ($scope.JSON ['Unique Identifier'].toUpperCase() === $rootScope.unsyncedJSON.ServiceEntries[i]['Unique Identifier'].toUpperCase()){
+				$scope.checked = false;
+			}
+		}	
 	}
 
 		switch (DynamicPage.getTitle()){
@@ -132,12 +142,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 		$rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat (syncedJSON[title]);	
 		}
+
 		else {
 			for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i++){
 				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON.ServiceEntries[i]['Name'];
 			}
 
-			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON[title]);
+			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
 		}
 
     	$rootScope.listJSON = angular.extend ({},JSON,$scope.unsyncedListJSON)
@@ -300,7 +311,6 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 
 	// wrapper for person select button
 	$scope.select = function(JSON){
-        
         /*Ionic Loading*/
         $ionicLoading.show({
             templateUrl: 'templates/loadingSpinner.html',
@@ -308,8 +318,16 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
         });
         
         for (var i = 0; i < $rootScope.chosenJSONlist.length; i++){
-        	if (JSON == $rootScope.chosenJSONlist[i]['Name']){
-        		DynamicPage.setJSON ($rootScope.chosenJSONlist[i]);
+        	console.log ($rootScope.chosenJSONlist);
+        	if (DynamicPage.getTitle() != "People"){
+        		if (JSON == $rootScope.chosenJSONlist[i]['Name']){
+        			DynamicPage.setJSON ($rootScope.chosenJSONlist[i]);
+        		}
+        	}
+        	else {
+        		if (JSON == $rootScope.chosenJSONlist[i]['First Name'] + " " + $rootScope.chosenJSONlist[i]['Last Name']){
+        			DynamicPage.setJSON ($rootScope.chosenJSONlist[i]);
+        		}
         	}
         }
 		
