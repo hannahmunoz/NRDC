@@ -381,8 +381,8 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     //set flag in root scope to indicate weither modal
     //hidden or shown
     $scope.openModal = function() {
-        $scope.modal.show();
         $rootScope.modalHidden = false;
+        $scope.modal.show();
     };
     
     //close Modal
