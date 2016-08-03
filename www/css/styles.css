@@ -66,9 +66,19 @@ div.arrow-down:active {
     margin-bottom: 3em !important;
 }
 
-button.main-menu-botton:active{
+button.main-menu-button:active{
     background-color: #F99300 !important;
 }
+
+/*Adds a 75 vertical pixels of whitespace to the bottom of pages with FABs so that the FAB does
+not rest on the save button with max scroll*/
+.overscroll{
+    opacity:0; 
+    background-color:yellow; 
+    height: 35px; 
+    width: auto;
+}
+
 
 /*Color Pallette and Theming
 ===================================*/
@@ -315,4 +325,9 @@ li > .item{
 /*Loading Override*/
 .loading-container .loading{
     background-color: rgba(255, 255, 255, .4) !important;
+}
+
+.big-icon-button{
+    height: 100px !important;
+    width: 49%;
 }

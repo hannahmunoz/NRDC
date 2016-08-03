@@ -109,22 +109,23 @@
                 </select>
             </div>
         </form>
+        
+        <span>
+    <!--    controller scope var: n/a
+            var name: photo
+            type: file upload
+            error checking: onchange -->
 
-<!--    controller scope var: n/a
-        var name: photo
-        type: file upload
-        error checking: onchange -->
-
-         <button class = "button button-positive button-large button-block" ng-click = "choosePicture()">Choose Photo</button>
+             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
 
 
-<!--    controller scope var: n/a
-        var name: takePhoto
-        type: file upload
-        error checking: onchange -->
+    <!--    controller scope var: n/a
+            var name: takePhoto
+            type: file upload
+            error checking: onchange -->
 
-        <button class = "button button-positive button-large button-block" ng-click = "takePicture()">Take Photo</button>
-
+            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>
+        </span>
 
         <button id="site-button23" class=" button button-positive button-large button-block " ng-disabled="nameForm.$invalid || GPSForm.$invalid || landmarkForm.$invalid || aliasForm.$invalid || notesForm.$invalid || projectForm.$invalid  || permitForm.$invalid  || landownerForm.$invalid " ng-click = "saveJSON(); back(); destroyModal();" >Save</button>
 
@@ -133,18 +134,11 @@
      <p ng-show="nameForm.siteName.$error.required || GPSForm.siteLatitude.$error.required  || GPSForm.siteLongitude.$error.required  || GPSForm.siteElevation.$error.required || landmarkForm.siteLandmark.$error.required || aliasForm.siteAlias.$error.required || notesForm.siteNotes.$error.required" >* All inputs must be completed</p>
     </div> -->
 
-    <div class = "padding">
+    <div class = "overscroll"></div>
 
     </ion-content>
-
-    <!-- Small arrow on the bottom indicating scrollability-->
-    <!-- Functionality: Enables user to scroll rapidly to bottom of page
-         Hides upon full scroll down-->
-<!--     <div class="overlay footer"
-         ng-hide="isBottom">
-            <div
-              delegate-handle="arrow-btn"
-              ng-click="scrlBot()"
-              class="arrow-down pull-right translucent"></div>  
-    </div> -->
+    <!--Expnadable Floating Action Bar Group With options for new Document and new service entry.-->
+    <fab-cluster></fab-cluster>
+    
+    
 </ion-modal-view>

@@ -64,22 +64,22 @@
                 <ion-md-input type="text" placeholder="Phone" ng-minlength = "10" ng-maxlength = "10" name = "phone" ng-model="JSON['Phone']" required></ion-md-input>
             </label> 
         </form>
+        
+        <span>
+    <!--    controller scope var: n/a
+            var name: photo
+            type: file upload
+            error checking: onchange -->
 
-<!--    controller scope var: n/a
-        var name: photo
-        type: file upload
-        error checking: onchange -->
+             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-model = "JSON['Photo']" ng-click = "choosePicture()"></button>
 
-         <button class = "button button-positive button-large button-block" ng-model = "JSON['Photo']" ng-click = "choosePicture()">Choose Photo</button>
+    <!--    controller scope var: n/a
+            var name: takePhoto
+            type: file upload
+            error checking: onchange -->
 
-
-<!--    controller scope var: n/a
-        var name: takePhoto
-        type: file upload
-        error checking: onchange -->
-
-        <button class = "button button-positive button-large button-block" ng-model = "JSON['Photo']" ng-click = "takePicture(imageData)">Take Photo</button>
-
+            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-model = "JSON['Photo']" ng-click = "takePicture(imageData)"></button>
+        </span>
 
 <!--    var name: n/a
         type: button

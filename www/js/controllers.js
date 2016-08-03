@@ -297,7 +297,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
         
         /*Ionic Loading*/
         $ionicLoading.show({
-            templateUrl: 'templates/loadingSpinner.html',
+            templateUrl: 'templates/directive_templates/loading-spinner.html',
             noBackdrop: true
         });
         

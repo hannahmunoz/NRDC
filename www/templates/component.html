@@ -58,11 +58,12 @@
             </label>
         </form>
 
-        <form name = "deploymentForm" id="component-form49" class="list ">
-                <select ng-model = "JSON['Deployment']" ng-options = "key as deployment for (key, deployment) in deploymentJSON">
+        <form name = "deploymentForm" id="component-form49" class="list">
+            <div class="select-container">
+                <select class="wide" ng-model = "JSON['Deployment']" ng-options = "key as deployment for (key, deployment) in deploymentJSON">
                     <option value>Deployment</option>
                 </select>
-
+            </div>
         </form>
 <!--         <form id="component-form50" class="list ">
             <label class="item item-input " id="component-input54" name="deploymentCalivrated">
@@ -70,39 +71,37 @@
                 <ion-md-input type="date" placeholder="">
             </label>
         </form> -->
+        <span>
+    <!--    controller scope var: n/a
+            var name: photo
+            type: file upload
+            error checking: onchange -->
 
-<!--    controller scope var: n/a
-        var name: photo
-        type: file upload
-        error checking: onchange -->
-
-         <button class = "button button-positive button-large button-block" ng-click = "choosePicture()">Choose Photo</button>
+             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
 
 
-<!--    controller scope var: n/a
-        var name: takePhoto
-        type: file upload
-        error checking: onchange -->
+    <!--    controller scope var: n/a
+            var name: takePhoto
+            type: file upload
+            error checking: onchange -->
 
-        <button class = "button button-positive button-large button-block" ng-click = "takePicture()">Take Photo</button>
+            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>
+        </span>
 
-    <a ui-sref="mainMenu" id="component-button9" class=" button button-positive button-large button-block " ng-disabled = "nameForm.$invalid || vendorForm.$invalid || supplierForm.$invalid || installationForm.$invalid || wiringForm.$invalid || serialForm.$invalid || modelForm.$invalid || manufacturerForm.$invalid || deploymentForm.$invalid" ng-click = "saveJSON(); back(); destroyModal();">Save</a>
+    <a ui-sref="mainMenu" id="component-button9" class=" button button-positive button-large button-block wide" ng-disabled = "nameForm.$invalid || vendorForm.$invalid || supplierForm.$invalid || installationForm.$invalid || wiringForm.$invalid || serialForm.$invalid || modelForm.$invalid || manufacturerForm.$invalid || deploymentForm.$invalid" ng-click = "saveJSON(); back(); destroyModal();">Save</a>
 
         <!-- error handling for the above forms -->
 <!--     <div class="padding"> 
      <p ng-show="nameForm.componentName.$error.required || vendorForm.vendor.$error.required  || supplierForm.supplier.$error.required  || installationForm.installationDetails.$error.required || wiringForm.wiringNotes.$error.required || serialForm.serialNumber.$error.required || modelForm.model.$error.required || manufacturerForm.model.$error.required" >* All inputs must be completed</p>
     </div> -->
-
+    
+    <div class = "overscroll"></div>
+        
     </ion-content>
     
-    <!-- Small arrow on the bottom indicating scrollability-->
-    <!-- Functionality: Enables user to scroll rapidly to bottom of page
-         Hides upon full scroll down-->
-    <!--<div class="overlay footer"
-         ng-hide="isBottom">
-            <div
-              delegate-handle="arrow-btn"
-              ng-click="scrlBot()"
-              class="arrow-down pull-right translucent"></div>  
-    </div>-->
+    <!--FAB Link for the addition of documents-->
+    <button class="button button-fab button-fab-bottom-right compliment"  ng-controller='DocumentModalController' ng-click="openModal();" ng-show="modalHidden">
+        <i class="icon ion-android-document" style="color:white;"></i>
+    </button>
+
 </ion-modal-view>

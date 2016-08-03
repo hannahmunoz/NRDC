@@ -50,40 +50,49 @@
 
 
         <form name = "managerForm" id="system-form28" class="list ">
-                <select ng-model = "JSON ['Manager']" ng-options = "key as people for (key, people) in peopleJSON" required>
+            <div class="select-container">
+                <select class="wide" ng-model = "JSON ['Manager']" ng-options = "key as people for (key, people) in peopleJSON" required>
                     <option value="">Manager</option>
                 </select>
+            </div>
         </form>
 
 
         <form name = "siteForm" id="system-form30" class="list ">
-                <select ng-model = "JSON['Site']" ng-options = "key as site for (key, site) in siteJSON" required>
+            <div class="select-container">
+                <select class="wide" ng-model = "JSON['Site']" ng-options = "key as site for (key, site) in siteJSON" required>
                     <option value="">Site</option>
                     </select>
+            </div>
         </form>
         
-<!--    controller scope var: n/a
-        var name: photo
-        type: file upload
-        error checking: onchange -->
+        <span>
+    <!--    controller scope var: n/a
+            var name: photo
+            type: file upload
+            error checking: onchange -->
 
-         <button class = "button button-positive button-large button-block" ng-click = "choosePicture()">Choose Photo</button>
-
-
-<!--    controller scope var: n/a
-        var name: takePhoto
-        type: file upload
-        error checking: onchange -->
-
-        <button class = "button button-positive button-large button-block" ng-click = "takePicture()">Take Photo</button>
+             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
 
 
-        <a ui-sref="mainMenu" id="system-button6" class=" button button-positive button-large button-block " ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid" ng-click = "saveJSON(); back(); destroyModal();">Save</a>
+    <!--    controller scope var: n/a
+            var name: takePhoto
+            type: file upload
+            error checking: onchange -->
+
+            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>
+        </span>
+
+
+        <a ui-sref="mainMenu" id="system-button6" class=" button button-positive wide button-block " ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid" ng-click = "saveJSON(); back(); destroyModal();">Save</a>
 
             <!-- error handling for the above forms -->
 <!--     <div class="padding"> 
      <p ng-show="nameForm.siteName.$error.required || detailsForm.details.$error.required  || powerForm.power.$error.required  || installForm.installLocation.$error.required" >* All inputs must be completed</p>
      </div>
  -->
+        
+    <div class="overscroll"></div>
     </ion-content>
+    <fab-cluster></fab-cluster>
 </ion-modal-view>
