@@ -1,0 +1,110 @@
+<ion-modal-view ng-controller="scrollController" 
+                title="Service Entry" 
+                id="page8" 
+                style="background-color:#0471A6;" 
+                class=" ">
+    <ion-header-bar class="bar-dark">
+        <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
+    </ion-header-bar>
+    <ion-content 
+      delegate-handle="scrollable" 
+      class="has-header content-bg padding"
+      on-scroll="cndHideArrow()">
+
+<!--    controller scope var: service
+        var name: name
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "nameForm" id="serviceEntry-form62" class="list ">
+            <label class="item item-input " id="serviceEntry-input59" >
+                <ion-md-input type="text" placeholder="Name" name="serviceName" ng-model = "JSON['Name']" required></ion-md-input>
+            </label>
+        </form>
+
+<!--    controller scope var: service
+        var name: notes
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "notesForm" id="serviceEntry-form63" class="list ">
+            <label class="item item-input " id="serviceEntry-input60">
+                <ion-md-input type="text" placeholder="Notes" name = "notes" ng-model = "JSON['Notes']" required></ion-md-input>
+            </label>
+        </form>
+
+<!--    controller scope var: service
+        var name: operation
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "operationForm" id="serviceEntry-form64" class="list ">
+            <label class="item item-input " id="serviceEntry-input61" >
+                <ion-md-input type="text" placeholder="Operation" name="operation" ng-model = "JSON['Operation']" required> </ion-md-input>
+            </label>
+        </form>
+
+        <form name = "projectForm" id="serviceEntry-form66" class="list ">
+            <label class="item item-select " id="serviceEntry-select14" name="serviceProject">
+                <span class="input-label">Project</span>
+                <select></select>
+            </label>
+        </form>
+
+        <form  name = "creatorForm" id="serviceEntry-form67" class="list ">
+            <label class="item item-select " id="serviceEntry-select15" name="serviceCreator">
+                <span class="input-label">Creator</span>
+                <select></select>
+            </label>
+        </form>
+
+        <form name = "systemForm" id="serviceEntry-form68" class="list ">
+            <label class="item item-select " id="serviceEntry-select16" name="serviceSystem">
+                <span class="input-label">System</span>
+                <select></select>
+            </label>
+        </form>
+
+        <form name = "componentForm" id="serviceEntry-form69" class="list ">
+            <label class="item item-select " id="serviceEntry-select17" name="serviceComponent">
+                <span class="input-label">Component</span>
+                <select></select>
+            </label>
+        </form>
+
+<!--    controller scope var: n/a
+        var name: photo
+        type: file upload
+        error checking: onchange -->
+
+         <button class = "button button-positive button-large button-block" ng-click = "choosePicture()">Choose Photo</button>
+
+
+<!--    controller scope var: n/a
+        var name: takePhoto
+        type: file upload
+        error checking: onchange -->
+
+        <button class = "button button-positive button-large button-block" ng-click = "takePicture()">Take Photo</button>
+
+
+        <button id="serviceEntry-button11" ng-disabled = "nameForm.$invalid || notesForm.$invalid || operationForm.$invalid " class=" button button-positive button-large button-block " ng-click = "saveJSON(); back(); destroyModal();">Save</button>
+
+        <!-- error handling for the above forms -->
+    <div class="padding"> 
+     <p ng-show="nameForm.name.$error.required || notesForm.notes.$error.required  || operationForm.operation.$error.required" >* All inputs must be completed</p>
+    </div>
+
+    </ion-content>
+    
+    <!-- Small arrow on the bottom indicating scrollability-->
+    <!-- Functionality: Enables user to scroll rapidly to bottom of page
+         Hides upon full scroll down-->
+<!--    <div class="overlay footer"
+         ng-hide="isBottom">
+            <div
+              delegate-handle="arrow-btn"
+              ng-click="scrlBot()"
+              class="arrow-down pull-right translucent"></div>  
+    </div>-->
+</ion-modal-view>
