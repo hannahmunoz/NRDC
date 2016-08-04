@@ -46,10 +46,11 @@
             </label>
         </form>
 
-        <form name="dateForm">
-        <label>Installation Date</label>
-        <input type="date" name="data"  ng-model = "JSON['Installation Date']" ng-init = "JSON['Installation Date'] = null" placeholder="yyyy-MM-dd"/>
-       </form>
+        <form name = "wiringForm" id="component-form48" class="list ">
+            <label class="item item-input " id="component-input53" >
+                <ion-md-input type="text" maxlength="100" placeholder="Wiring Notes" ng-model= "JSON['Wiring Notes']" name="wiringNotes" ></ion-md-input>
+            </label>
+        </form>
 
         <form name = "installationForm" id="component-form47" class="list ">
             <label class="item item-input " id="component-input52" >
@@ -57,15 +58,17 @@
             </label>
         </form>
 
-        <form name = "wiringForm" id="component-form48" class="list ">
-            <label class="item item-input " id="component-input53" >
-                <ion-md-input type="text" maxlength="100" placeholder="Wiring Notes" ng-model= "JSON['Wiring Notes']" name="wiringNotes" ></ion-md-input>
-            </label>
-        </form>
+        <form name="dateForm">
+        <label>Installation Date</label>
+        <input type="date" name="date"  ng-model = "JSON['Installation Date']"/>
+       </form>
+
+
+
 
         <form name="calibratedForm">
         <label>Last Calibrated Date</label>
-        <input type="date" name="data" ng-model = "JSON['Last Calibrated Date']" placeholder="yyyy-MM-dd"/>
+        <input type="date" name="caliDate" ng-model = "JSON['Last Calibrated Date']"/>
        </form>
 
         <form name = "deploymentForm" id="component-form49" class="list ">

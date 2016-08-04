@@ -12,6 +12,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			}
 		}
 	}
+
 	else{
 		for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i ++){
 			if ($scope.JSON ['Unique Identifier'].toUpperCase() === $rootScope.unsyncedJSON.ServiceEntries[i]['Unique Identifier'].toUpperCase()){
@@ -35,10 +36,19 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 					$scope.JSON['Site'] = JSON.stringify($scope.JSON['Site']);
 				break;
 			case 'Deployments':
+					$scope.JSON ['Established Date'] = new Date($scope.JSON ['Established Date'] );
+					$scope.JSON ['Abandoned Date'] = new Date($scope.JSON ['Abandoned Date'] );
 					$scope.JSON ['System'] = JSON.stringify($scope.JSON['System']);
 				break;
 			case 'Components':
+					$scope.JSON ['Installation Date'] = new Date($scope.JSON ['Installation Date'] );
+					$scope.JSON ['Last Calibrated Date'] = new Date($scope.JSON ['Last Calibrated Date'] );
 					$scope.JSON['Deployment'] = JSON.stringify($scope.JSON['Deployment']);
+					break;
+			case 'Service Entries':
+				$scope.JSON ['Date'] = new Date($scope.JSON ['Date'] );
+				break;
+
 		}
     
      //custom back button functionality
@@ -100,6 +110,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$rootScope.servicelistJSON = {};
 	$rootScope.serviceJSONlist = [];
 
+	$rootScope.documentlistJSON = {};
+	$rootScope.documentJSONlist = [];
+
 	$rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 
@@ -129,6 +142,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	var promise = sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON);
     	console.log (promise);
     	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
+    	promise.then (function (){
+    		init ();
+    	});
     }
 
     $scope.listSwitch = function (JSON, syncedJSON, title, route){
@@ -200,21 +216,18 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	//site read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/", $rootScope.siteSyncedJSON,'Site', $rootScope.siteJSON).then(function(result){
     	$rootScope.siteSyncedJSON = result;
-    	console.log (result);
     	File.checkandWriteFile('Site', $rootScope.siteSyncedJSON);
     });
 
     // 	system read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/", $rootScope.systemSyncedJSON, 'System', $rootScope.systemJSON).then (function(result){
     	$rootScope.systemSyncedJSON = result;
-    	console.log (result);
     	File.checkandWriteFile('System', $rootScope.systemSyncedJSON);
     })
 
     // deployment read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[4]+"/", $rootScope.deploymentSyncedJSON, 'Deployment', $rootScope.deploymentJSON).then (function(result){
     	$rootScope.deploymentSyncedJSON = result;
-    	console.log (result);
     	File.checkandWriteFile('Deployment', $rootScope.deploymentSyncedJSON);
     });
 
@@ -226,7 +239,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     // 	document read
 	sync.read($rootScope.baseURL + $rootScope.urlPaths[6]+"/", $rootScope.documentSyncedJSON, 'Document', $rootScope.documentJSON).then (function(result){
-		console.log (result);
 		$rootScope.documentSyncedJSON = result;
 		File.checkandWriteFile('Document', $rootScope.documentSyncedJSON);
 	});
@@ -408,8 +420,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
     		}
 			$rootScope.chosenJSONlist.push ($scope.JSON);
-			console.log ($scope.JSON);	
-			console.log ($rootScope.chosenJSONlist);
+			$scope.JSON = {};
 	};
 
 
@@ -493,13 +504,13 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 		$scope.JSON ['Component'] = null;
 		$scope.JSON ['Service Entry'] = null;
 
-		var JSON = DynamicPage.getJSON();
-		$scope.JSON [DynamicPage.getTitle().slice (0,-1)] = JSON [DynamicPage.getTitle().slice (0,-1)];
+		var JSONbefore = DynamicPage.getJSON();
+		$scope.JSON [DynamicPage.getTitle().slice (0,-1)] = JSONbefore [DynamicPage.getTitle().slice (0,-1)];
 
 		SaveNew.save ("Documents", true, $scope.JSON, $rootScope.unsyncedJSON['Documents'], $scope.imageData);
-    	$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
-		$rootScope.chosenJSONlist.push ($scope.JSON);	
-		console.log ($scope.JSON);
+    	$rootScope.documentlistJSON [ObjectCounter.count ($rootScope.documentlistJSON)] = $scope.JSON['Name'];
+		$rootScope.documentJSONlist.push ($scope.JSON);	
+		$scope.JSON = {};
 	};
 
     $scope.back = function(){
@@ -561,6 +572,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
 		$rootScope.servicelistJSON [ObjectCounter.count ($rootScope.servicelistJSON)] = $scope.JSON['Name'];
 		$rootScope.serviceJSONlist.push ($scope.JSON);	
+		$scope.JSON = {};
 	};
 
 

@@ -377,12 +377,14 @@ angular.module('app.services', ['ionic','base64'])
 					JSON ['Land Owner'] = null;
 				else
 					JSON ['Land Owner'] = parseInt (JSON ['Land Owner']);
-				JSON ['Longitude'] = parseFloat (JSON ['Longitude']);
-  				JSON ['Latitude'] = parseFloat (JSON ['Latitude']);
-  				JSON ['Elevation'] = parseFloat (JSON ['Elevation']);
+				JSON ['Longitude'] = parseFloat (parseFloat(JSON ['Longitude']).toFixed (7));
+
+  				JSON ['Latitude'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));
+  				console.log (JSON ['Latitude']);
+  				JSON ['Elevation'] = parseFloat (parseFloat (JSON ['Elevation']).toFixed (7));
 				JSON ['Landmark Photo'] = imageData;
-				JSON ['Time Zone Name'] = TZJSON[new Date().getTimezoneOffset()];
-				JSON ['Time Zone Offset'] = (new Date().getTimezoneOffset()/60);
+				JSON ['Time Zone Name'] = TZJSON[new Date().getTimezoneOffset()/60 + 1];
+				JSON ['Time Zone Offset'] = (new Date().getTimezoneOffset());
 				JSON ['Time Zone Abbreviation'] = TZAJSON[new Date().getTimezoneOffset()/60 + 1];
 				break;
 
@@ -393,6 +395,7 @@ angular.module('app.services', ['ionic','base64'])
 				 JSON ['Power'] = null;
 				if (angular.isUndefined (JSON ['Installation Location']))
 				 JSON ['Installation Location'] = null;				 				 			
+
 				JSON ["Manager"] = parseInt (JSON ["Manager"]);
 				JSON ["Site"] = parseInt (JSON ["Site"]);
 				JSON ["Photo"] = imageData;
@@ -406,21 +409,21 @@ angular.module('app.services', ['ionic','base64'])
 				if (angular.isUndefined (JSON ['Longitude']))
 				 JSON ['Longitude'] = null;
 				else
-					JSON ['Longitude'] = parseFloat (JSON ['Longitude']);
+					JSON ['Longitude'] = parseFloat (parseFloat (JSON ['Longitude']).toFixed (7));
 				if (angular.isUndefined (JSON ['Latitude']))
 				 JSON ['Latitude'] = null;
 				else
-					JSON ['Latitude'] = parseFloat (JSON ['Latitude']);
+					JSON ['Latitude'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));
 				if (angular.isUndefined (JSON ['Elevation']))
 				 JSON ['Elevation'] = null;
 				else
-					JSON ['Elevation'] = parseFloat (JSON ['Elevation']);
+					JSON ['Elevation'] = parseFloat (parseFloat (JSON ['Elevation']).toFixed (7));;
 				if (angular.isUndefined (JSON ['Height From Ground']))
 				 JSON ['Height From Ground'] = null;
 				 if (angular.isUndefined (JSON ['Parent Logger']))
 				 JSON ['Parent Logger'] = null;
 				else
-				  JSON ['Height From Ground'] = parseFloat (JSON['Height From Ground']);
+				  JSON ['Height From Ground'] = parseFloat (parseFloat (JSON ['Height From Ground']).toFixed (7));
 				 if (angular.isUndefined (JSON ['Notes']))
 				 JSON ['Notes'] = null; 	
 				if (angular.isUndefined (JSON ['Established Date']))
@@ -459,6 +462,8 @@ angular.module('app.services', ['ionic','base64'])
 				break;
 
 			case 'Service Entries':
+			if (angular.isUndefined (JSON ['Date']))
+				 JSON ['Date'] = null;
 				JSON ["Photo"] = imageData;
 				JSON ["Creator"] = parseInt (JSON ["Creator"]);
 				break;
