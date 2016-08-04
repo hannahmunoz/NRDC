@@ -1,0 +1,144 @@
+<ion-modal-view ng-controller="scrollController" 
+          title="Site" 
+          id="page4"  
+          class=" ">
+<!--     <ion-nav-bar class="bar-dark">
+            <ion-nav-back-button class="button-flat" ng-click="back(); closeModal();"></ion-nav-back-button>
+        <ion-nav-buttons class="" side = "right"> 
+            <div ng-html-bind= htmlString></div>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+ -->
+
+    <ion-header-bar class="bar-dark">
+        <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
+    </ion-header-bar>
+ 
+    <ion-content 
+      delegate-handle="scrollable" 
+      class="has-header content-bg padding"
+      on-scroll="cndHideArrow()">
+
+
+<!--    controller scope var: site
+        var name: name
+        type: text
+        error checking: no
+        min|max req: not implemented -->
+        <form name = "nameForm" class="list " novalidate>
+            <label class="item item-input " id="site-input24">
+                <ion-md-input type="text" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required></ion-md-input>
+            </label>
+        </form>
+
+<!--    controller scope var: site
+        var name: latitude, lognitude, elevation
+        type: number
+        error checking: no
+        min|max req: not implemented -->
+        <form name="GPSForm" class="list " novalidate="">
+            <label class="item item-input " id="site-input19" >
+                <ion-md-input type="text" placeholder="Latitude" name = "siteLatitude" required ng-model = "JSON['Latitude']"></ion-md-input>
+            </label>
+
+            <label class="item item-input "  name="siteLongitude" >
+                <ion-md-input type="text" placeholder="Longitude" name = "siteLongitude" ng-model = "JSON['Longitude']" required></ion-md-input>
+            </label>
+
+            <label class="item item-input " id="site-input23" name="siteElevation">
+                <ion-md-input type="text" placeholder="Altitude" name = "siteElevation" ng-model = "JSON['Altitude']" required></ion-md-input>
+            </label>
+
+            <button id="site-button4" class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)" >Get GPS Location</button>
+        </form>
+
+
+<!--    controller scope var: site
+        var name: alias
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "aliasForm" class = "list" novalidate>
+            <label class="item item-input " id="site-input28" name="alias">
+                <ion-md-input type="text" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required></ion-md-input>
+            </label>
+        </form>
+
+<!--    controller scope var: site
+        var name: note
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "notesForm" class = "list" novalidate="">
+            <label class="item item-input " id="site-input27">
+                <ion-md-input type="text" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required></ion-md-input>
+            </label>
+        </form>
+
+
+        <form name="projectForm" class="list" novalidate="" >
+            <div class="select-container">
+                <select ng-model = "JSON['Network']" 
+                        ng-options = "key as network for (key, network) in networkJSON" 
+                        class="wide"
+                        required>
+                <option value="">Network</option>
+                </select>
+            </div>
+        </form>
+
+
+        <form name="permitForm" class="list">
+            <div class="select-container">
+                <select ng-model = "JSON['Permit Holder']" 
+                        ng-options = "key as people for (key, people) in peopleJSON" 
+                        class="wide"
+                        required>
+                    <option value="">Permit Holder</option>
+                </select>
+            </div>
+        </form>
+
+        <form name="landownerForm" class="list">
+            <div class="select-container">
+                        <select ng-model = "JSON['Land Owner']" 
+                                ng-options = "key as people for (key, people) in peopleJSON" 
+                                class="wide"
+                                required>
+                <option value="">Land Owner</option>
+                </select>
+            </div>
+        </form>
+        
+        <span>
+    <!--    controller scope var: n/a
+            var name: photo
+            type: file upload
+            error checking: onchange -->
+
+             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
+
+
+    <!--    controller scope var: n/a
+            var name: takePhoto
+            type: file upload
+            error checking: onchange -->
+
+            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>
+        </span>
+
+        <button id="site-button23" class=" button button-positive button-large button-block " ng-disabled="nameForm.$invalid || GPSForm.$invalid || landmarkForm.$invalid || aliasForm.$invalid || notesForm.$invalid || projectForm.$invalid  || permitForm.$invalid  || landownerForm.$invalid " ng-click = "saveJSON(); back(); destroyModal();" >Save</button>
+
+    <!-- error handling for the above forms -->
+<!--     <div class="padding"> 
+     <p ng-show="nameForm.siteName.$error.required || GPSForm.siteLatitude.$error.required  || GPSForm.siteLongitude.$error.required  || GPSForm.siteElevation.$error.required || landmarkForm.siteLandmark.$error.required || aliasForm.siteAlias.$error.required || notesForm.siteNotes.$error.required" >* All inputs must be completed</p>
+    </div> -->
+
+    <div class = "overscroll"></div>
+
+    </ion-content>
+    <!--Expnadable Floating Action Bar Group With options for new Document and new service entry.-->
+    <fab-cluster></fab-cluster>
+    
+    
+</ion-modal-view>
