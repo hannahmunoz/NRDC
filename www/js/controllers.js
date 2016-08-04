@@ -1,4 +1,4 @@
-angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage', 'ngSanitize'])
+angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage', 'ngSanitize', 'initialValue'])
 
    
 .controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew) {
@@ -49,7 +49,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$scope.saveJSON = function (){
 		for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
 			if ($scope.JSON ['Unique Identifier'] == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
-				SaveNew.save (DynamicPage.getTitle(), false, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData, true);	
+				SaveNew.save (DynamicPage.getTitle(), false, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], null);	
 			}
 		}
 	};
@@ -97,12 +97,15 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$rootScope.serviceSyncedJSON = {};
 	$rootScope.serviceJSON = {};
 
+	$rootScope.servicelistJSON = {};
+	$rootScope.serviceJSONlist = [];
+
 	$rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 
 
 	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
-	$rootScope.urlPaths = ["people","networks", "sites", "systems", "deployments", "components", "documents","service_entries"];
+	$rootScope.urlPaths = ["people", "networks", "sites", "systems", "deployments", "components", "documents","service_entries"];
 
 	File.createDirectory();
 
@@ -124,6 +127,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.uploadJSONS = function(){
     	console.log ($rootScope.unsyncedJSON);
     	var promise = sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON);
+    	console.log (promise);
     	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
     }
 
@@ -196,21 +200,21 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	//site read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/", $rootScope.siteSyncedJSON,'Site', $rootScope.siteJSON).then(function(result){
     	$rootScope.siteSyncedJSON = result;
-    	//console.log (result);
+    	console.log (result);
     	File.checkandWriteFile('Site', $rootScope.siteSyncedJSON);
     });
 
     // 	system read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/", $rootScope.systemSyncedJSON, 'System', $rootScope.systemJSON).then (function(result){
     	$rootScope.systemSyncedJSON = result;
-    	//console.log (result);
+    	console.log (result);
     	File.checkandWriteFile('System', $rootScope.systemSyncedJSON);
     })
 
     // deployment read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[4]+"/", $rootScope.deploymentSyncedJSON, 'Deployment', $rootScope.deploymentJSON).then (function(result){
     	$rootScope.deploymentSyncedJSON = result;
-    	//console.log (result);
+    	console.log (result);
     	File.checkandWriteFile('Deployment', $rootScope.deploymentSyncedJSON);
     });
 
@@ -231,6 +235,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
      	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.serviceSyncedJSON = result.data;
+    		console.log (result.data);
     		File.checkandWriteFile ( 'ServiceEntries', $rootScope.serviceSyncedJSON);
     		resolve ($rootScope.serviceSyncedJSON);
 
@@ -318,7 +323,6 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
         });
         
         for (var i = 0; i < $rootScope.chosenJSONlist.length; i++){
-        	console.log ($rootScope.chosenJSONlist);
         	if (DynamicPage.getTitle() != "People"){
         		if (JSON == $rootScope.chosenJSONlist[i]['Name']){
         			DynamicPage.setJSON ($rootScope.chosenJSONlist[i]);
@@ -347,7 +351,6 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     
     //required for ink ripple effect on material button press
     ionicMaterialInk.displayEffect();
-    
 })
 
 .controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
@@ -361,10 +364,10 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     $scope.modal = null;
     
     
-    
     //open a modal for viewing
     //creates a new modal if one has not been instantiated
     //elsewise opens the old modal
+
     $scope.openModal = function() {
         $rootScope.modalHidden = false;
         
@@ -402,11 +405,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     
     
 	$scope.saveJSON = function (){
-		if (DynamicPage.getTitle() != "Service Entries")
-			SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData, false);
-		else
-			SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, false);
-
+		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle() ], $scope.imageData);
 
     	if (DynamicPage.getTitle() == "People")	{
     			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['First Name'] + " "+ $scope.JSON['Last Name'];
@@ -414,8 +413,9 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     		else{
     			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
     		}
-			$rootScope.chosenJSONlist.push ($scope.JSON);	
-			console.log ($rootScope.chosenJSONlist)	
+			$rootScope.chosenJSONlist.push ($scope.JSON);
+			console.log ($scope.JSON);	
+			console.log ($rootScope.chosenJSONlist);
 	};
 
 
@@ -455,9 +455,8 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 
 })
 
-.controller('DocumentModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory ) {
+.controller('DocumentModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter ) {
     $scope.JSON = {};
-	$scope.imageData = null;
 	$scope.checked = false;
     $scope.template = 'templates/modal_templates/document_modal.html';
     
@@ -501,49 +500,22 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     
     
 	$scope.saveJSON = function (){
-		if (DynamicPage.getTitle() != "Service Entries")
-			SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData, false);
-		else
-			SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, false);
+		$scope.JSON ['Network'] = null;
+		$scope.JSON ['Site'] = null;
+		$scope.JSON ['System'] = null;
+		$scope.JSON ['Deployment'] = null;
+		$scope.JSON ['Component'] = null;
+		$scope.JSON ['Service Entry'] = null;
 
+		var JSON = DynamicPage.getJSON();
+		$scope.JSON [DynamicPage.getTitle().slice (0,-1)] = JSON [DynamicPage.getTitle().slice (0,-1)];
 
-    	if (DynamicPage.getTitle() == "People")	{
-    			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['First Name'] + " "+ $scope.JSON['Last Name'];
-    		}
-    		else{
-    			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
-    		}
-			$rootScope.chosenJSONlist.push ($scope.JSON);	
-			console.log ($rootScope.chosenJSONlist);
+		SaveNew.save ("Documents", true, $scope.JSON, $rootScope.unsyncedJSON['Documents'], $scope.imageData);
+    	$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
+		$rootScope.chosenJSONlist.push ($scope.JSON);	
+		console.log ($scope.JSON);
 	};
 
-
-	//wrapper for the openGallery factory so we can call it from the choosePicture button.
-	// in root scope so it can be called from all buttons
-	$rootScope.choosePicture = function (imageData){
-		Camera.checkPermissions();
-		$scope.imageData = Camera.openGallery ().then (function (image){
-    		$scope.imageData = image;
-		});
-	}
-
-	//wrapper for the take image factory so we can call it from the takePhoto button
-	// in root scope so it can be called from all buttons
-	$rootScope.takePicture = function (imageData){
-    		Camera.checkPermissions();
-    		Camera.openCamera ().then (function (image){
-    			$scope.imageData = image;
-    		});
-	}
-
-
-	//wrapper for the GPS factory so we can call it from the getGPS button
-	// in root scope so it can be called from all buttons
-	$rootScope.getGPS = function (JSON){
-		GPS.checkPermissions();
-		GPS.getLocation(JSON);
-	}
-    
     $scope.back = function(){
         //conditional to fix problem of double
         //back when modal closed
@@ -554,8 +526,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 })
 
 //Controls the behavior of the service modals for particular networks, sites, sysyems etc
-.controller('ServiceModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory) {
-    
+.controller('ServiceModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
     $scope.JSON = {};
 	$scope.imageData = null;
 	$scope.checked = false;
@@ -599,20 +570,15 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     
     
 	$scope.saveJSON = function (){
-		if (DynamicPage.getTitle() != "Service Entries")
-			SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData, false);
-		else
-			SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, false);
+		$scope.JSON ['Site'] = null;
+		$scope.JSON ['System'] = null;
+		$scope.JSON ['Deployment'] = null;
 
-
-    	if (DynamicPage.getTitle() == "People")	{
-    			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['First Name'] + " "+ $scope.JSON['Last Name'];
-    		}
-    		else{
-    			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
-    		}
-			$rootScope.chosenJSONlist.push ($scope.JSON);	
-			console.log ($rootScope.chosenJSONlist)	
+		var JSON = DynamicPage.getJSON();
+		$scope.JSON [DynamicPage.getTitle().slice (0,-1)] = JSON [DynamicPage.getTitle().slice (0,-1)];
+		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
+		$rootScope.servicelistJSON [ObjectCounter.count ($rootScope.servicelistJSON)] = $scope.JSON['Name'];
+		$rootScope.serviceJSONlist.push ($scope.JSON);	
 	};
 
 
@@ -634,14 +600,6 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     		});
 	}
 
-
-	//wrapper for the GPS factory so we can call it from the getGPS button
-	// in root scope so it can be called from all buttons
-	$rootScope.getGPS = function (JSON){
-		GPS.checkPermissions();
-		GPS.getLocation(JSON);
-	}
-    
     $scope.back = function(){
         //conditional to fix problem of double
         //back when modal closed

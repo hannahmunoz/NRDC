@@ -13,7 +13,7 @@
 
         <form name ="firstNameForm" class="list" novalidate>
             <label class="item item-input " id="people-input125">
-                <ion-md-input type="text" placeholder="First Name" name = "firstName" ng-model = "JSON['First Name']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="20" placeholder="First Name" name = "firstName" ng-model = "JSON['First Name']" required></ion-md-input>
             </label>
         </form>
 
@@ -25,7 +25,7 @@
 
         <form name ="lastNameForm" class="list" novalidate>
             <label class="item item-input " id="people-input6" >
-                <ion-md-input type="text" placeholder="Last name" name = "lastName" ng-model = "JSON['Last Name'] " required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Last name" name = "lastName" ng-model = "JSON['Last Name'] " required></ion-md-input>
             </label>
         </form>
 
@@ -37,7 +37,7 @@
 
         <form name ="organizationForm" class="list" novalidate>
             <label class="item item-input " id="people-input9" >
-                <ion-md-input type="text" placeholder="Organization" name = "organization" ng-model = "JSON['Organization']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="100" placeholder="Organization" name = "organization" ng-model = "JSON['Organization']"></ion-md-input>
             </label>
         </form>
 
@@ -49,7 +49,7 @@
 
         <form name="emailForm" class="list" novalidate>
             <label class="item item-input " id="people-input8" >
-                <ion-md-input type="email" placeholder="Email" name = "email" ng-model = "JSON['Email']" required></ion-md-input>
+                <ion-md-input type="email" maxlength="100" placeholder="Email" name = "email" ng-model = "JSON['Email']" ></ion-md-input>
             </label>
         </form>
 
@@ -61,7 +61,7 @@
 
         <form name="phoneForm" class="list" novalidate>
             <label class="item item-input " id="people-input10">
-                <ion-md-input type="text" placeholder="Phone" ng-minlength = "10" ng-maxlength = "10" name = "phone" ng-model="JSON['Phone']" required></ion-md-input>
+                <ion-md-input type="text" placeholder="Phone" ng-maxlength = "13" name = "phone" ng-model="JSON['Phone']" ></ion-md-input>
             </label> 
         </form>
         
