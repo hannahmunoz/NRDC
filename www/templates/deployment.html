@@ -25,7 +25,7 @@
         min|max req: not implemented -->
         <form name = "purposeForm" id="deployment-form32" class="list">
             <label class="item item-input " id="deployment-input38" >
-                <ion-md-input type="text" maxlength="100" placeholder="Purpose" name="purpose" ng-model = "JSON['Purpose']" ng-init = "JSON['Purpose'] = null"></ion-md-input>
+                <ion-md-input type="text" maxlength="100" placeholder="Purpose" name="purpose" ng-model = "JSON['Purpose']"></ion-md-input>
             </label>
         </form>
 
@@ -38,15 +38,15 @@
 
         <form  name = "GPSForm" id="deployment-form33" class="list ">
             <label class="item item-input " id="deployment-input40" >
-                <ion-md-input type="text" placeholder="Latitude" name="deploymentLatitude" ng-model = "JSON['Latitude']" ng-init = "JSON['Latitude'] = null"></ion-md-input>
+                <ion-md-input type="text" placeholder="Latitude" name="deploymentLatitude" ng-model = "JSON['Latitude']"></ion-md-input>
             </label>
 
             <label class="item item-input " id="deployment-input39" >
-                <ion-md-input type="text" placeholder="Longitude" name="deploymentLongitude" ng-model= "JSON['Longitude']" ng-init = "JSON['Longitude'] = null"></ion-md-input>
+                <ion-md-input type="text" placeholder="Longitude" name="deploymentLongitude" ng-model= "JSON['Longitude']" ></ion-md-input>
             </label>
 
             <label class="item item-input " id="deployment-input41" >
-                <ion-md-input type="text" placeholder="Altitude" name="deploymentAltitude" ng-model = "JSON['Altitude']" ng-init = "JSON['Altitude'] = null" ></ion-md-input>
+                <ion-md-input type="text" placeholder="Altitude" name="deploymentAltitude" ng-model = "JSON['Elevation']" ></ion-md-input>
             </label>
             <button id="deployment-button8" class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)" >Get GPS Location</button>
         </form>
@@ -58,7 +58,7 @@
         min|max req: not implemented -->
         <form name = "offsetForm" id="deployment-form36" class="list ">
             <label class="item item-input " id="deployment-input42" >
-                <ion-md-input type="text" maxlength="50" placeholder="Center Offset" name="offset" ng-model = "JSON['Center0Offset']" ng-init = "JSON['CenterOffset'] = null"></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Center Offset" name="offset" ng-model = "JSON['Center Offset']"></ion-md-input>
             </label>
         </form>
 
@@ -69,7 +69,7 @@
         min|max req: not implemented -->
         <form name = "heightForm" id="deployment-form37" class="list ">
             <label class="item item-input " id="deployment-input43">
-                <ion-md-input type="text" placeholder="Height From Ground" name="height" ng-model = "JSON['Height From Ground']" ng-init = "JSON['Height From Ground'] = null"></ion-md-input>
+                <ion-md-input type="text" placeholder="Height From Ground" name="height" ng-model = "JSON['Height From Ground']"></ion-md-input>
             </label>
         </form>
 
@@ -80,25 +80,25 @@
         min|max req: not implemented -->
         <form name = "loggerForm" id="deployment-form38" class="list ">
             <label class="item item-input " id="deployment-input44" >
-                <ion-md-input type="text" maxlength="100" placeholder="Parent Logger" name="logger" ng-model = "JSON['Parent Logger']" ng-init = "JSON['Parent Logger'] = null"></ion-md-input>
+                <ion-md-input type="text" maxlength="100" placeholder="Parent Logger" name="logger" ng-model = "JSON['Parent Logger']"></ion-md-input>
             </label>
         </form>
 
         <form name = "notesForm" id="deployment-form38" class="list ">
             <label class="item item-input " id="deployment-input44" >
-                <ion-md-input type="text" maxlength="200" placeholder="Notes" name="notes" ng-model = "JSON['Notes']" ng-init = "JSON['Notes'] = null"></ion-md-input>
+                <ion-md-input type="text" maxlength="200" placeholder="Notes" name="notes" ng-model = "JSON['Notes']"></ion-md-input>
             </label>
         </form>
 
         <form name="dateEstForm">
              <label>Established Date</label>
-             <input type="date" name="dateest" ng-model = "JSON['Established Date']" ng-init = "JSON['Established Date'] = null" placeholder="yyyy-MM-dd"/>
+             <input type="date" name="dateest" ng-model = "JSON['Established Date']" placeholder="yyyy-MM-dd"/>
         </form>
 
 
         <form name="dateForm">
              <label>Abandoned Date</label>
-             <input type="date" name="date" ng-model = "JSON['Abandoned Date']" ng-init = "JSON['Abandoned Date'] = null" placeholder="yyyy-MM-dd"/>
+             <input type="date" name="date" ng-model = "JSON['Abandoned Date']" placeholder="yyyy-MM-dd"/>
         </form>
 
         <form name = "systemForm" id="deployment-form39" class="list ">
@@ -116,18 +116,14 @@
                 <ion-md-input type="date" placeholder="">
             </label>
         </form> -->
-        <a id="deployment-button7" class=" button button-positive button-large button-block " ng-disabled = "nameForm.$invalid || purposeForm.$invalid || GPSForm.$invalid || offsetForm.$invalid || heightForm.$invalid || loggerForm.$invalid || systemForm.$invalid" ng-click = "saveJSON(); back(); destroyModal();">Save</a> 
+        
+        <a id="deployment-button7" class=" button button-positive button-large button-block wide" ng-disabled = "nameForm.$invalid || purposeForm.$invalid || GPSForm.$invalid || offsetForm.$invalid || heightForm.$invalid || loggerForm.$invalid || systemForm.$invalid" ng-click = "saveJSON(); back(); destroyModal();">Save</a> 
+        
+        <div class = "overscroll"></div>
+
+
     </ion-content>
     
-    <!-- Small arrow on the bottom indicating scrollability-->
-    <!-- Functionality: Enables user to scroll rapidly to bottom of page
-         Hides upon full scroll down-->
-<!--    <div class="overlay footer"
-         ng-hide="isBottom">
-            <div
-              delegate-handle="arrow-btn"
-              ng-click="scrlBot()"
-              class="arrow-down pull-right translucent"></div>  
-    </div>
-   -->
+    <!--Expandable floating action button menu with options for new document and service entry.-->
+    <fab-cluster></fab-cluster>
 </ion-modal-view>

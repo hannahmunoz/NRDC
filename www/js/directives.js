@@ -94,9 +94,7 @@ angular.module('app.directives', [])
         };
         
     }
-    
-    //make link to enable overscroll past save button
-    //where there is fabCluster
+
     
     return{
         restrict: 'E',

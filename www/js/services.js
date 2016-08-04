@@ -60,7 +60,7 @@ angular.module('app.services', ['ionic','base64'])
 	}	
 
 	function post (url, JSON){
-
+					$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
 		return $q (function (resolve, reject){ 
 			config = {timeout: 10000};
 			$http.post (url, JSON, config).then (function Success (response){
@@ -163,7 +163,7 @@ angular.module('app.services', ['ionic','base64'])
 // var: n/a
 // return: n/a (eventually will return the encoded image)
 	function openGallery() {
-			return $q (function (resolve, reject){
+		return $q (function (resolve, reject){
 		document.addEventListener ("deviceready", function(){
 			var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
 
@@ -246,9 +246,9 @@ angular.module('app.services', ['ionic','base64'])
 	function getLocation(JSON){
 
 		navigator.geolocation.getCurrentPosition(function onSuccess (position){
-  			JSON ['Longitude'] = position.coords.longitude.toString();
-  			JSON ['Latitude'] = position.coords.latitude.toString();
-  			JSON ['Altitude'] = position.coords.altitude.toString();
+  			JSON ['Longitude'] = position.coords.longitude;
+  			JSON ['Latitude'] = position.coords.latitude;
+  			JSON ['Elevation'] = position.coords.altitude;
 		}, function onError(){
         console.debug ('GPS error code: '    + error.code    + '\n' +
               'message: ' + error.message + '\n');
@@ -344,58 +344,123 @@ angular.module('app.services', ['ionic','base64'])
 		JSON ["Modification Date"] = new Date();
 
 		if (isitNew){
-			JSON ["Creation Date"] = new Date();
-			JSON ["Started Date"] = new Date();
+			JSON ["Creation Date"] = new Date();		
 			JSON ["Unique Identifier"] = uuid2.newuuid();
 		}
 
 		switch (type){
 			case 'Networks':
+				JSON ["Started Date"] = new Date();
 				JSON ["Principal Investigator"] = parseInt (JSON ["Principal Investigator"]);
 				break;
 
 			case 'People':
+				if (angular.isUndefined (JSON ['Phone']))
+					 JSON ['Phone'] = null;
+				if (angular.isUndefined (JSON ['Email']))
+					 JSON ['Email'] = null;
+				if (angular.isUndefined (JSON ['Organization']))
+					 JSON ['Organization'] = null;
+				JSON ["Started Date"] = new Date();
 				JSON ["Photo"] = imageData;
 				break;
 
 			case 'Sites':
-			var TZAJSON = {10:'HST', 9: 'AKST', 8: 'PST', 7: 'MST', 6: 'CST', 5: 'EST', 4: 'AST'};
-			var TZJSON = {10:'Hawaii-Aleutian Standard Time', 9: 'Alaska Standard Time', 8: 'Pacific Standard Time', 7: 'Mountain Standard Time', 6: 'Central Standard Time', 5: ' Eastern Standard Time', 4: 'Atlantic Standard Time'};
+				var TZAJSON = {10:'HST', 9: 'AKST', 8: 'PST', 7: 'MST', 6: 'CST', 5: 'EST', 4: 'AST'};
+				var TZJSON = {10:'Hawaii-Aleutian Standard Time', 9: 'Alaska Standard Time', 8: 'Pacific Standard Time', 7: 'Mountain Standard Time', 6: 'Central Standard Time', 5: ' Eastern Standard Time', 4: 'Atlantic Standard Time'};
 				JSON ["Network"] = parseInt (JSON ["Network"]);
-				if (JSON ["Permit Holder"] != null)
-					JSON ["Permit Holder"] = parseInt (JSON ["Permit Holder"]);
-				if (JSON ["Land Owner"] != null)
-					JSON ["Land Owner"] = parseInt (JSON ["Land Owner"]);
-				JSON ["Landmark Photo"] = imageData;
-				//JSON ["Time Zone Name"]
-				JSON ["Time Zone Offset"] = (new Date().getTimezoneOffset()/60);
-				console.log(new Date().getTimezoneOffset()/60);
-				console.log (TZJSON[new Date().getTimezoneOffset()/60]);
-				console.log (TZAJSON[new Date().getTimezoneOffset()/60]);
-				//JSON ["Time Zone Abbreviation"]
+				if (angular.isUndefined (JSON ['Permit Holder']))
+				 JSON ['Permit Holder'] = null;
+				else
+					JSON ['Permit Holder'] = parseInt (JSON ['Permit Holder']);
+				if (angular.isUndefined (JSON ['Land Owner']))
+					JSON ['Land Owner'] = null;
+				else
+					JSON ['Land Owner'] = parseInt (JSON ['Land Owner']);
+				JSON ['Longitude'] = parseFloat (JSON ['Longitude']);
+  				JSON ['Latitude'] = parseFloat (JSON ['Latitude']);
+  				JSON ['Elevation'] = parseFloat (JSON ['Elevation']);
+				JSON ['Landmark Photo'] = imageData;
+				JSON ['Time Zone Name'] = TZJSON[new Date().getTimezoneOffset()];
+				JSON ['Time Zone Offset'] = (new Date().getTimezoneOffset()/60);
+				JSON ['Time Zone Abbreviation'] = TZAJSON[new Date().getTimezoneOffset()/60 + 1];
 				break;
 
 			case 'Systems':
+				if (angular.isUndefined (JSON ['Details']))
+				 JSON ['Details'] = null;
+				if (angular.isUndefined (JSON ['Power']))
+				 JSON ['Power'] = null;
+				if (angular.isUndefined (JSON ['Installation Location']))
+				 JSON ['Installation Location'] = null;				 				 			
 				JSON ["Manager"] = parseInt (JSON ["Manager"]);
 				JSON ["Site"] = parseInt (JSON ["Site"]);
 				JSON ["Photo"] = imageData;
 				break;
 
 			case 'Deployments':
-				JSON['Height From Ground'] = parseFloat (JSON['Height From Ground']);
+				if (angular.isUndefined (JSON ['Purpose']))
+				 JSON ['Purpose'] = null;
+				if (angular.isUndefined (JSON ['Center Offset']))
+				 JSON ['Center Offset'] = null;
+				if (angular.isUndefined (JSON ['Longitude']))
+				 JSON ['Longitude'] = null;
+				else
+					JSON ['Longitude'] = parseFloat (JSON ['Longitude']);
+				if (angular.isUndefined (JSON ['Latitude']))
+				 JSON ['Latitude'] = null;
+				else
+					JSON ['Latitude'] = parseFloat (JSON ['Latitude']);
+				if (angular.isUndefined (JSON ['Elevation']))
+				 JSON ['Elevation'] = null;
+				else
+					JSON ['Elevation'] = parseFloat (JSON ['Elevation']);
+				if (angular.isUndefined (JSON ['Height From Ground']))
+				 JSON ['Height From Ground'] = null;
+				 if (angular.isUndefined (JSON ['Parent Logger']))
+				 JSON ['Parent Logger'] = null;
+				else
+				  JSON ['Height From Ground'] = parseFloat (JSON['Height From Ground']);
+				 if (angular.isUndefined (JSON ['Notes']))
+				 JSON ['Notes'] = null; 	
+				if (angular.isUndefined (JSON ['Established Date']))
+				 JSON ['Established Date'] = null;
+			 	if (angular.isUndefined (JSON ['Abandoned Date']))
+				 JSON ['Abandoned Date'] = null;			 				 				 			
 				JSON ["System"] = parseInt (JSON ["System"]);
 				break;
 
 			case 'Components':
+				if (angular.isUndefined (JSON ['Last Calibrated Date']))
+				 JSON ['Last Calibrated Date'] = null;
+				if (angular.isUndefined (JSON ['Manufacturer']))
+				 JSON ['Manufacturer'] = null;
+				if (angular.isUndefined (JSON ['Model']))
+				 JSON ['Model'] = null;
+				if (angular.isUndefined (JSON ['Serial Number']))
+				 JSON ['Serial Number'] = null;
+				if (angular.isUndefined (JSON ['Vendor']))
+				 JSON ['Vendor'] = null;
+				if (angular.isUndefined (JSON ['Supplier']))
+				 JSON ['Supplier'] = null;
+				if (angular.isUndefined (JSON ['Installation Date']))
+				 JSON ['Installation Date'] = null;
+				if (angular.isUndefined (JSON ['Installation Details']))
+				 JSON ['Installation Details'] = null;
+				if (angular.isUndefined (JSON ['Wiring Notes']))
+				 JSON ['Wiring Notes'] = null;
+				JSON ["Started Date"] = new Date();
 				JSON ["Photo"] = imageData;
 				JSON ["Deployment"] = parseInt (JSON ["Deployment"]);
 				break;
 
 			case 'Documents':
+				JSON ["Started Date"] = new Date();
 				break;
 
-			case 'Service Enteries':
-				JSON  ["Photo"] = imageData;
+			case 'Service Entries':
+				JSON ["Photo"] = imageData;
+				JSON ["Creator"] = parseInt (JSON ["Creator"]);
 				break;
         }
 

@@ -97,6 +97,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$rootScope.serviceSyncedJSON = {};
 	$rootScope.serviceJSON = {};
 
+	$rootScope.servicelistJSON = {};
+	$rootScope.serviceJSONlist = [];
+
 	$rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 
@@ -232,6 +235,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
      	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.serviceSyncedJSON = result.data;
+    		console.log (result.data);
     		File.checkandWriteFile ( 'ServiceEntries', $rootScope.serviceSyncedJSON);
     		resolve ($rootScope.serviceSyncedJSON);
 
@@ -314,7 +318,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 	$scope.select = function(JSON){
         /*Ionic Loading*/
         $ionicLoading.show({
-            templateUrl: 'templates/loadingSpinner.html',
+            templateUrl: 'templates/directive_templates/loading-spinner.html',
             noBackdrop: true
         });
         
@@ -347,7 +351,6 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     
     //required for ink ripple effect on material button press
     ionicMaterialInk.displayEffect();
-    
 })
 
 .controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
@@ -379,8 +382,8 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     //set flag in root scope to indicate weither modal
     //hidden or shown
     $scope.openModal = function() {
-        $scope.modal.show();
         $rootScope.modalHidden = false;
+        $scope.modal.show();
     };
     
     //close Modal
@@ -446,7 +449,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 
 })
 
-.controller('DocumentModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory ) {
+.controller('DocumentModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter ) {
     $scope.JSON = {};
 	$scope.checked = false;
     
@@ -483,10 +486,20 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     
     
 	$scope.saveJSON = function (){
-		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData);
+		$scope.JSON ['Network'] = null;
+		$scope.JSON ['Site'] = null;
+		$scope.JSON ['System'] = null;
+		$scope.JSON ['Deployment'] = null;
+		$scope.JSON ['Component'] = null;
+		$scope.JSON ['Service Entry'] = null;
+
+		var JSON = DynamicPage.getJSON();
+		$scope.JSON [DynamicPage.getTitle().slice (0,-1)] = JSON [DynamicPage.getTitle().slice (0,-1)];
+
+		SaveNew.save ("Documents", true, $scope.JSON, $rootScope.unsyncedJSON['Documents'], $scope.imageData);
     	$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
 		$rootScope.chosenJSONlist.push ($scope.JSON);	
-		console.log ($rootScope.chosenJSONlist);
+		console.log ($scope.JSON);
 	};
 
     $scope.back = function(){
@@ -499,7 +512,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 })
 
 //Controls the behavior of the service modals for particular networks, sites, sysyems etc
-.controller('ServiceModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory) {
+.controller('ServiceModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
     $scope.JSON = {};
 	$scope.imageData = null;
 	$scope.checked = false;
@@ -539,10 +552,15 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     
     
 	$scope.saveJSON = function (){
-		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
-		$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
-		$rootScope.chosenJSONlist.push ($scope.JSON);	
-		console.log ($rootScope.chosenJSONlist)	
+		$scope.JSON ['Site'] = null;
+		$scope.JSON ['System'] = null;
+		$scope.JSON ['Deployment'] = null;
+
+		var JSON = DynamicPage.getJSON();
+		$scope.JSON [DynamicPage.getTitle().slice (0,-1)] = JSON [DynamicPage.getTitle().slice (0,-1)];
+		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
+		$rootScope.servicelistJSON [ObjectCounter.count ($rootScope.servicelistJSON)] = $scope.JSON['Name'];
+		$rootScope.serviceJSONlist.push ($scope.JSON);	
 	};
 
 
