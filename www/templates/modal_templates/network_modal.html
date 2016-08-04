@@ -3,6 +3,7 @@
         <button class="button-flat" ng-click="back(); closeModal();"><h4 style="color:#FFF;">Back</h4></button>
     </ion-header-bar>
     
+  
     <ion-content class="has-header content-bg padding">
     <!--controller scope var: project
         var name: name
@@ -12,7 +13,7 @@
 
         <form name ="nameForm" class="list" novalidate>
             <label class="item item-input " id="project-input63">
-                <ion-md-input type="text" placeholder="Name"  name="projectName" ng-model = "JSON['Name']" required></ion-md-input>
+                <ion-md-input type="text"  placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" required></ion-md-input>
             </label>
         </form>
 
@@ -24,7 +25,7 @@
 
         <form name ="institutionForm" class="list " novalidate>
             <label class="item item-input " id="project-input64" >
-                <ion-md-input type="text" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required></ion-md-input>
             </label>
         </form>
 
@@ -36,7 +37,7 @@
 
         <form name ="fundingForm" class="list " novalidate>
             <label class="item item-input " id="project-input65" >
-                <ion-md-input type="text" placeholder="Original Funding Agency" name="funding" ng-model = "JSON['Original Funding Agency'] " required></ion-md-input>
+                <ion-md-input type="text" maxlength="100" placeholder="Original Funding Agency" name="funding" ng-model = "JSON['Original Funding Agency'] " required></ion-md-input>
             </label>
         </form>
 
@@ -48,7 +49,7 @@
 
         <form name ="grantForm" class="list " novalidate>
             <label class="item item-input " id="project-input66">
-                <ion-md-input type="text" placeholder="Grant Number" name="grantNumber" ng-model = "JSON['Grant Number String']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="20" placeholder="Grant Number" name="grantNumber" ng-model = "JSON['Grant Number String']" required></ion-md-input>
             </label>
         </form>
 

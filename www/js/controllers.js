@@ -247,7 +247,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
      	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.serviceSyncedJSON = result.data;
-    		console.log (result.data);
     		File.checkandWriteFile ( 'ServiceEntries', $rootScope.serviceSyncedJSON);
     		resolve ($rootScope.serviceSyncedJSON);
 
