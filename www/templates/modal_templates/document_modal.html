@@ -1,0 +1,101 @@
+<ion-modal-view ng-controller="scrollController" title="Document" id="page9" style="" class=" ">
+    <ion-header-bar class="bar-dark">
+        <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
+    </ion-header-bar>
+    
+    <ion-content 
+      delegate-handle="scrollable" 
+      class="has-header content-bg padding"
+      on-scroll="cndHideArrow()"> 
+<!--    controller scope var: document
+        var name: documentName
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "nameForm" id="document-form53" class="list " novalidate>
+            <label class="item item-input " id="document-input55" >
+                <ion-md-input type="text" placeholder="Name" name="documentName" ng-model = "JSON['Name']" required></ion-md-input>
+            </label>
+        </form>
+
+<!--    controller scope var: document
+        var name: notes
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "notesForm" id="document-form54" class="list " novalidate>
+            <label class="item item-input " id="document-input56" >
+                <ion-md-input type="text" name="notes" placeholder="Notes" ng-model = "JSON['Notes']" required></ion-md-input>
+            </label>
+        </form>
+
+<!--    controller scope var: documents
+        var name: path
+        type: text
+        error checking: no
+        min|max req: not implemented --> 
+        <form name = "pathForm" id="document-form55" class="list " novalidate>
+            <label class="item item-input " id="document-input57" >
+                <ion-md-input type="text" placeholder="Path" name="path" ng-model = "JSON['Path']" required></ion-md-input>
+            </label>
+        </form>
+
+
+        <form name = "projectForm" id="document-form56" class="list ">
+            <div class="select-container">
+                <select class="wide">
+                    <option value="">Project<option>
+                </select>
+            </div>
+        </form>
+
+
+        <form name= "siteForm" id="document-form57" class="list ">
+            <div class="select-container">
+                <select class="wide">
+                    <option value="">Site<option>
+                </select>
+            </div>
+        </form>
+        
+        <form  name = "deplomentForm" id="document-form58" class="list ">
+            <div class="select-container">
+                <select class="wide">
+                    <option value="">Deployment<option>
+                </select>
+            </div>
+        </form>
+
+
+        <form  name = "componentForm" id="document-form59" class="list ">
+            <div class="select-container">
+                <select class="wide">
+                    <option value="">Component<option>
+                </select>
+            </div>
+        </form>
+
+
+        <form name = "serviceForm" id="document-form60" class="list ">
+            <div class="select-container">
+                <select class="wide">
+                    <option value="">Service Entry<option>
+                </select>
+            </div>
+        </form>
+
+
+    
+
+
+  <a ui-sref="mainMenu" id="site-button23" class=" button button-positive button-large button-block wide" ng-disabled = "nameForm.$invalid || notesForm.$invalid || pathForm.$invalid" ng-click = saveDocumentJSON(); >Save</a>
+
+
+            <!-- error handling for the above forms -->
+<!--     <div class="padding"> 
+     <p ng-show="nameForm.documentsName.$error.required || notesForm.notes.$error.required  || pathForm.path.$error.required " >* All inputs must be completed</p>
+    </div> -->
+
+    
+    </ion-content>
+</ion-modal-view>
