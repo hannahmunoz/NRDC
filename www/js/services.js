@@ -60,7 +60,6 @@ angular.module('app.services', ['ionic','base64'])
 	}	
 
 	function post (url, JSON){
-					$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
 		return $q (function (resolve, reject){ 
 			config = {timeout: 10000};
 			$http.post (url, JSON, config).then (function Success (response){
@@ -145,10 +144,13 @@ angular.module('app.services', ['ionic','base64'])
 		document.addEventListener ("deviceready", function(){
 
     	var options = setOptions(Camera.PictureSourceType.CAMERA);
-
 			navigator.camera.getPicture(function onSuccess (imageData){
-				 var image =  imageData;
-				resolve (image);
+   			var image =  atob (imageData)
+				var result = "";
+    			for (var i = 0; i < image.length; i++) {
+        			result += image.charCodeAt(i).toString(16);
+    			}
+				resolve (result);
 			}, function onFail(error){
 				console.debug("Camera Error: " + error, "app");
 				reject (null);
@@ -166,16 +168,21 @@ angular.module('app.services', ['ionic','base64'])
 		return $q (function (resolve, reject){
 		document.addEventListener ("deviceready", function(){
 			var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
-
     		navigator.camera.getPicture(function cameraSuccess(imageData) {
-				 var image = imageData;
-				resolve (image);
+    			var image =  atob (imageData)
+				var result = "";
+    			for (var i = 0; i < image.length; i++) {
+        			result += image.charCodeAt(i).toString(16);
+    			}
+				resolve (result);
     		}, function cameraError(error) {
         	console.debug("Gallery Error: " + error, "app");
         	reject (null);
     	}, options);
 	})
 	})
+
+
 
 }
 
