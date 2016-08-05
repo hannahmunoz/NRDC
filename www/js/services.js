@@ -1,4 +1,4 @@
-angular.module('app.services', ['base64'])
+angular.module('app.services', [])
 
 // factory: sync
 // fucntion(s): 
@@ -74,7 +74,7 @@ angular.module('app.services', ['base64'])
 // 		setOptions
 //		openCamera
 //		convertToBase64
-.factory('Camera', function($base64, $q, $cordovaCamera, $cordovaToast) {
+.factory('Camera', function( $q, $cordovaCamera, $cordovaToast) {
 
 // function: checkPermissions
 // purpose:  checks and asks for camera permissions
