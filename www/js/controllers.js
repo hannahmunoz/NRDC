@@ -1,4 +1,4 @@
-angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage', 'ngSanitize', 'initialValue'])
+angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage'])
 
    
 .controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew, Camera) {
@@ -95,7 +95,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	}
 })
    
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
 
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
@@ -287,8 +287,8 @@ console.log (File.checkFile ('Unsynced'));
     
     //Indicating Initilaize is loading
     $ionicLoading.show({
-            templateUrl: 'templates/loadingSpinner.html',
-            noBackdrop: false
+        templateUrl: 'templates/loadingSpinner.html',
+        noBackdrop: false
     });
     
     //initalize
@@ -305,7 +305,7 @@ console.log (File.checkFile ('Unsynced'));
     binds to arrow objects,
     hides arrow objects
 */
-.controller('scrollController', function($scope, $state, $ionicScrollDelegate, logger) {
+.controller('scrollController', function($scope, $state, $ionicScrollDelegate) {
     $scope.isBottom = false;
     smoothnessOffset = 15;  //ensures smooth dissapearnce of arrow 
     
