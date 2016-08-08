@@ -63,6 +63,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 				SaveNew.save (DynamicPage.getTitle(), false, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], null);	
 			}
 		}
+
+        SaveNew.deleteJSON ($scope.JSON['Name'], $rootScope.unsyncedJSON, $rootScope.chosenJSONlist, $rootScope.listJSON);
 	};
 
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.

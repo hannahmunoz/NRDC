@@ -491,6 +491,7 @@ angular.module('app.services', [])
 	}
 
 	function deletePeople (name, unsyncedJSON, JSONlist, listJSON){
+
 		for (var i = 0; i < unsyncedJSON.length; i ++){
 			if (name == (unsyncedJSON[i]['First Name'] + unsyncedJSON[i]['Last Name'])){
 				unsyncedJSON.splice (i, 1);	
@@ -504,9 +505,12 @@ angular.module('app.services', [])
 				JSONlist.splice (i, 1);	
 			}
 		}
+
+
 	}
 
 	return {save: save,
-			deleteJSON: deleteJSON}
+			deleteJSON: deleteJSON,
+			deletePeople: deletePeople}
     
 	});
