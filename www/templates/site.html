@@ -2,17 +2,17 @@
           title="Site" 
           id="page4"  
           class=" ">
-<!--     <ion-nav-bar class="bar-dark">
-            <ion-nav-back-button class="button-flat" ng-click="back(); closeModal();"></ion-nav-back-button>
-        <ion-nav-buttons class="" side = "right"> 
-            <div ng-html-bind= htmlString></div>
-        </ion-nav-buttons>
-    </ion-nav-bar>
- -->
-
-    <ion-header-bar class="bar-dark">
-        <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
-    </ion-header-bar>
+    <ion-nav-buttons side="right">
+        <div deletable 
+             ng-init="isDeletable();" 
+             ng-show="deletable" 
+             ng-click="deleteView();">
+            <button class="button-clear center-text" 
+                    style="padding-right: 1em; padding-left: .5em;">
+                <h4>Delete</h4>
+            </button>
+        </div>
+    </ion-nav-buttons>
  
     <ion-content 
       delegate-handle="scrollable" 

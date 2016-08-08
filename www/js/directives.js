@@ -128,10 +128,10 @@ angular.module('app.directives', [])
     return dir;
 })
 
-/*
+
 .directive('deletable', function(){
     
-    function deletableController($scope, $rootScope, SaveNew){
+    function deletableController($scope, $rootScope, SaveNew, $ionicHistory, DynamicPage){
         $scope.deletable = false;
         
         //determine if my current view in deletable
@@ -150,9 +150,19 @@ angular.module('app.directives', [])
             }
             
         };
-    
+        
+        //delete the current view JSON from the list of unsynced items
         $scope.deleteView = function(){
-            SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON, $rootScope.chosenJSONlist, $rootScope.listJSON);     
+            SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON[DynamicPage.getTitle()],
+                               $rootScope.chosenJSONlist, $rootScope.listJSON);
+            $ionicHistory.goBack();
+        };
+        
+        $scope.deletePeople = function(){
+            SaveNew.deletePeople(($scope.JSON['First Name'] + $scope.JSON['Last Name']), 
+                                 $rootScope.unsyncedJSON[DynamicPage.getTitle()],
+                               $rootScope.chosenJSONlist, $rootScope.listJSON);
+            $ionicHistory.goBack();
         };
     }
     
@@ -161,7 +171,7 @@ angular.module('app.directives', [])
         restrict: 'A',
         controller: deletableController
     }
-});*/
+});
 
 
 

@@ -1,8 +1,10 @@
 <ion-view title="Site Networks" id="page10">
     <ion-nav-buttons side="right">
-        <div ng-init="isDeletable();" ng-show="deletable" ng-click="deleteView();">
+        <div deletable 
+             ng-init="isDeletable();" 
+             ng-show="deletable" 
+             ng-click="deleteView();">
             <button class="button-clear center-text" 
-                    ng-click="" 
                     style="padding-right: 1em; padding-left: .5em;">
                 <h4>Delete</h4>
             </button>
