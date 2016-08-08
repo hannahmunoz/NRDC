@@ -54,6 +54,7 @@ angular.module('app.services', [])
 				}, function Error (response){
 				console.warn ("Post Error :" + response.statusText)
 				File.checkandWriteFile ('Unsynced', JSON);
+				console.log (response);
 				$cordovaToast.showLongBottom ("Post Error: " + response.statusText);
 				reject (response.status);
 			//toast to tell user what happened

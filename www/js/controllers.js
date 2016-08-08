@@ -189,14 +189,12 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	File.createDirectory();
 
 var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
-console.log (File.checkFile ('Unsynced'));
     if (File.checkFile ('Unsynced')){
 			  File.readFile ('Unsynced').then (function Success (response){
 				if (response != null){
 						for (var i = 0; i < list.length; i++){
 							$rootScope.unsyncedJSON[list[i]] = $rootScope.unsyncedJSON[list[i]].concat (response[list[i]]);
 						}
-				console.log ($rootScope.unsyncedJSON);
 				}
 			})
 	}
@@ -405,15 +403,21 @@ console.log (File.checkFile ('Unsynced'));
     
     //close Modal
     $scope.closeModal = function() {
-        $scope.modal.hide();
+        if($scope.modal != null){
+            $scope.modal.hide();
+        }
         $rootScope.modalHidden = true;
     };
     
     //destroy modal to prevent memory leaks
     $scope.destroyModal = function() {
+                
         $rootScope.modalHidden = true;
-        $scope.modal.remove();
-        $scope.modal = null;
+        $scope.modal.remove().then (function (){
+                $scope.JSON = {};
+                $scope.modal = null;
+        });
+
     };
 
     
@@ -428,7 +432,6 @@ console.log (File.checkFile ('Unsynced'));
     			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
     		}
 			$rootScope.chosenJSONlist.push ($scope.JSON);
-			$scope.JSON = {};
 	};
 
 
@@ -501,13 +504,17 @@ console.log (File.checkFile ('Unsynced'));
     
     
     $scope.closeModal = function() {
-        $scope.modal.hide();
+        if($scope.modal != null){
+            $scope.modal.hide();
+        }
         $rootScope.modalHidden = true;
     };
 
     
      $scope.destroyModal = function() {
-        $scope.modal.remove();
+        $scope.modal.remove().then (function (){
+            $scope.JSON = {};  
+        });
         $rootScope.modalHidden = true;
     };
     
@@ -526,7 +533,7 @@ console.log (File.checkFile ('Unsynced'));
 		SaveNew.save ("Documents", true, $scope.JSON, $rootScope.unsyncedJSON['Documents'], $scope.imageData);
     	$rootScope.documentlistJSON [ObjectCounter.count ($rootScope.documentlistJSON)] = $scope.JSON['Name'];
 		$rootScope.documentJSONlist.push ($scope.JSON);	
-		$scope.JSON = {};
+
 	};
 
     $scope.back = function(){
@@ -573,12 +580,17 @@ console.log (File.checkFile ('Unsynced'));
     };
     
     $scope.closeModal = function() {
-        $scope.modal.hide();
+         if($scope.modal != null){
+            $scope.modal.hide();
+        }
         $rootScope.modalHidden = true;
     };
      $scope.destroyModal = function() {
-        $scope.modal.remove();
+        $scope.modal.remove().then ( function () {
+            $scope.JSON = {};
+        });
         $rootScope.modalHidden = true;
+
     };
     
     
@@ -592,7 +604,6 @@ console.log (File.checkFile ('Unsynced'));
 		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
 		$rootScope.servicelistJSON [ObjectCounter.count ($rootScope.servicelistJSON)] = $scope.JSON['Name'];
 		$rootScope.serviceJSONlist.push ($scope.JSON);	
-		$scope.JSON = {};
 	};
 
 

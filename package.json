@@ -30,5 +30,7 @@
     },
     "cordova-plugin-file"
   ],
-  "cordovaPlatforms": []
+  "cordovaPlatforms": [
+    "ios"
+  ]
 }
