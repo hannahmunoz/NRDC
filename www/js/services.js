@@ -18,8 +18,7 @@ angular.module('app.services', [])
 // return: filled JSON upon success
 	function read (url, syncedJSON, title, JSON){
 		var ret;
-		config = {timeout: 10000};
-		var promise = $q (function (resolve, reject){  $http.get (url, config)
+		var promise = $q (function (resolve, reject){  $http.get (url, {timeout: 10000})
 			.then (function Success (response){
 				console.log (url + " " + response.status +": " + response.statusText);
 					syncedJSON = response.data;
@@ -333,7 +332,7 @@ angular.module('app.services', [])
 
 })
 
-.factory ('SaveNew', function(uuid2){
+.factory ('SaveNew', function(uuid2, ObjectCounter){
 
 	function save (type, isitNew, JSON, finalJSON, imageData){
 
@@ -473,6 +472,40 @@ angular.module('app.services', [])
 		JSON = {};
 	}
 
-	return {save: save}
+	function deleteJSON (name, unsyncedJSON, JSONlist, listJSON){
+
+		for (var i = 0; i < unsyncedJSON.length; i ++){
+			if (name == unsyncedJSON[i]['Name']){
+				unsyncedJSON.splice (i, 1);	
+			}
+		}
+
+		delete listJSON[JSONlist.length - 1];
+
+		for (var i = 0; i < JSONlist.length; i ++){
+			if (name == JSONlist[i]['Name']){
+				JSONlist.splice (i, 1);	
+			}
+		}
+	}
+
+	function deletePeople (name, unsyncedJSON, JSONlist, listJSON){
+		for (var i = 0; i < unsyncedJSON.length; i ++){
+			if (name == (unsyncedJSON[i]['First Name'] + unsyncedJSON[i]['Last Name'])){
+				unsyncedJSON.splice (i, 1);	
+			}
+		}
+
+		delete listJSON[JSONlist.length - 1];
+
+		for (var i = 0; i < JSONlist.length; i ++){
+			if (name == (unsyncedJSON[i]['First Name'] + unsyncedJSON[i]['Last Name'])){
+				JSONlist.splice (i, 1);	
+			}
+		}
+	}
+
+	return {save: save,
+			deleteJSON: deleteJSON}
     
 	});

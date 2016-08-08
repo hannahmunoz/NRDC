@@ -3,7 +3,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
    
 .controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew, Camera) {
 	$scope.JSON = DynamicPage.getJSON();
-	console.log ($scope.JSON);
 	$scope.imageData = $scope.JSON ['Photo'];
 	$scope.checked = true;
 
@@ -24,9 +23,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	}
 
 		switch (DynamicPage.getTitle()){
-			case'People':
-					//$scope.JSON ['Photo'] = $scope.JSON ['Photo'];
- 				break;
 			case 'Networks':
 					$scope.JSON['Principal Investigator'] = JSON.stringify($scope.JSON['Principal Investigator']);
 				break;
@@ -73,7 +69,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	// in root scope so it can be called from all buttons
 	$rootScope.choosePicture = function (imageData){
 		Camera.checkPermissions();
-		$scope.imageData = Camera.openGallery ().then (function (image){
+		Camera.openGallery ().then (function (image){
     		$scope.imageData = image;
 		});
 	}
@@ -135,7 +131,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     //randomizes the appearance of tile buttons on main page
     $scope.setRndTimingOffsets = function(){
     	
-
         numTiles = $window.document.getElementsByClassName("tile-btn").length;
         
         for( tile = 0; tile < numTiles; tile++ ){
@@ -207,7 +202,7 @@ console.log (File.checkFile ('Unsynced'));
 	}
  
     	// people read
-    	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/").then (function(result){
+    	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/", {timeout: 10000}).then (function(result){
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.peopleSyncedJSON = result.data;
     		File.checkandWriteFile ( 'People', $rootScope.peopleSyncedJSON);
@@ -264,7 +259,7 @@ console.log (File.checkFile ('Unsynced'));
 	});
 
    // 	service Entries read
-     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
+     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/", {timeout: 10000}).then (function(result){
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.serviceSyncedJSON = result.data;
     		File.checkandWriteFile ( 'ServiceEntries', $rootScope.serviceSyncedJSON);
@@ -441,7 +436,7 @@ console.log (File.checkFile ('Unsynced'));
 	// in root scope so it can be called from all buttons
 	$rootScope.choosePicture = function (imageData){
 		Camera.checkPermissions();
-		$scope.imageData = Camera.openGallery ().then (function (image){
+		Camera.openGallery ().then (function (image){
     		$scope.imageData = image;
 		});
 	}
@@ -605,7 +600,7 @@ console.log (File.checkFile ('Unsynced'));
 	// in root scope so it can be called from all buttons
 	$rootScope.choosePicture = function (imageData){
 		Camera.checkPermissions();
-		$scope.imageData = Camera.openGallery ().then (function (image){
+		Camera.openGallery ().then (function (image){
     		$scope.imageData = image;
 		});
 	}
