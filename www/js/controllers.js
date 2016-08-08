@@ -62,7 +62,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			if ($scope.JSON ['Unique Identifier'] == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
 				SaveNew.save (DynamicPage.getTitle(), false, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], null);	
 			}
-		}
+		} 
 	};
 
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.
@@ -90,29 +90,29 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		GPS.getLocation(JSON);
 	}
     
-    $rootScope.deletable = false;
+  $rootScope.deletable = false;
         
-        //determine if my current view in deletable
-        //by checking for membership in unsyncedJSON
-        $scope.isDeletable = function(){
-            for(var category in $rootScope.unsyncedJSON){
-                for(var unsEntry = 0; 
-                    unsEntry < $rootScope.unsyncedJSON[category].length; 
-                    unsEntry++){
-                        if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
-                            $scope.deletable = true;
-                    }
-                
+    //determine if my current view in deletable
+    //by checking for membership in unsyncedJSON
+    $scope.isDeletable = function(){
+        for(var category in $rootScope.unsyncedJSON){
+            for(var unsEntry = 0; 
+                unsEntry < $rootScope.unsyncedJSON[category].length; 
+                unsEntry++){
+                    if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
+                        $scope.deletable = true;
                 }
-            
+
             }
-            
-        };
-    
-        $rootScope.deleteView = function(){
-            SaveNew.deleteJSON($scope.JSON['Name'], $rootScope.unsyncedJSON, $rootScope.chosenJSONlist, $rootScope.listJSON);     
-            $ionicHistory.goBack();
-        };
+
+        }
+
+    };
+
+    $rootScope.deleteView = function(){
+        SaveNew.deleteJSON($scope.JSON['Name'], $rootScope.unsyncedJSON, $rootScope.chosenJSONlist, $rootScope.listJSON);     
+        $ionicHistory.goBack();
+    };
 })
    
 .controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {

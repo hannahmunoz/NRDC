@@ -507,6 +507,7 @@ angular.module('app.services', [])
 	}
 
 	return {save: save,
-			deleteJSON: deleteJSON}
+			deleteJSON: deleteJSON,
+            deletePeople: deletePeople}
     
 	});
