@@ -126,6 +126,24 @@ angular.module('app.directives', [])
         }
       };
     return dir;
+})
+
+
+.directive('deletable', function(){
+    
+    function deletableController($scope, $rootScope){
+        //determine is my current view in deletable
+        $scope.isDeletable = function(){
+            for (var category in $rootScope.unsyncedJSON){
+                console.log(category);
+            }
+        }
+    }
+    
+    return{
+        restrict: 'A',
+        controller: deletableController
+    }
 });
 
 

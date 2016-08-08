@@ -405,7 +405,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     
     
 	$scope.saveJSON = function (){
-		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle() ], $scope.imageData);
+		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData);
 
     	if (DynamicPage.getTitle() == "People")	{
     			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['First Name'] + " "+ $scope.JSON['Last Name'];
@@ -414,7 +414,8 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
     		}
 			$rootScope.chosenJSONlist.push ($scope.JSON);
-			console.log ($scope.JSON);	
+        
+			console.log ($scope.unsyncedJSON);	
 			console.log ($rootScope.chosenJSONlist);
 	};
 
