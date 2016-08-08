@@ -89,6 +89,30 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		GPS.checkPermissions();
 		GPS.getLocation(JSON);
 	}
+    
+    $rootScope.deletable = false;
+        
+        //determine if my current view in deletable
+        //by checking for membership in unsyncedJSON
+        $scope.isDeletable = function(){
+            for(var category in $rootScope.unsyncedJSON){
+                for(var unsEntry = 0; 
+                    unsEntry < $rootScope.unsyncedJSON[category].length; 
+                    unsEntry++){
+                        if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
+                            $scope.deletable = true;
+                    }
+                
+                }
+            
+            }
+            
+        };
+    
+        $rootScope.deleteView = function(){
+            SaveNew.deleteJSON($scope.JSON['Name'], $rootScope.unsyncedJSON, $rootScope.chosenJSONlist, $rootScope.listJSON);     
+            $ionicHistory.goBack();
+        };
 })
    
 .controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
@@ -412,8 +436,7 @@ console.log (File.checkFile ('Unsynced'));
     //destroy modal to prevent memory leaks
     $scope.destroyModal = function() {
         $rootScope.modalHidden = true;
-        $scope.modal.remove();
-        $scope.modal = null;
+        $scope.modal.remove().then(function(){$scope.modal = null;});
     };
 
     
@@ -624,6 +647,33 @@ console.log (File.checkFile ('Unsynced'));
      };
 })
 
+/*
+.controller('DeletableController', function($scope, $rootScope, SaveNew){
+        $scope.deletable = false;
+        
+        //determine if my current view in deletable
+        //by checking for membership in unsyncedJSON
+        $scope.isDeletable = function(){
+            for(var category in $rootScope.unsyncedJSON){
+                for(var unsEntry = 0; 
+                    unsEntry < $rootScope.unsyncedJSON[category].length; 
+                    unsEntry++){
+                        if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
+                            $scope.deletable = true;
+                    }
+                
+                }
+            
+            }
+            
+        };
+    
+        $scope.deleteView = function(){
+            console.log("hello");
+            SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON, $rootScope.chosenJSONlist, $rootScope.listJSON);     
+        };
+    })
+*/
 
 /* Will be used to refactor current expandable text :/
 

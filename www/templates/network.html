@@ -1,8 +1,13 @@
-<ion-view title="Site Networks" id="page10" >
-    <ion-header-bar class="bar-dark">
-        <button class="button-flat" ng-click="back(); closeModal();"><h4 style="color:#FFF;">Back</h4></button>
-        <button deletable class="button-flat">Delete</button>
-    </ion-header-bar>
+<ion-view title="Site Networks" id="page10">
+    <ion-nav-buttons side="right">
+        <div ng-init="isDeletable();" ng-show="deletable" ng-click="deleteView();">
+            <button class="button-clear center-text" 
+                    ng-click="" 
+                    style="padding-right: 1em; padding-left: .5em;">
+                <h4>Delete</h4>
+            </button>
+        </div>
+    </ion-nav-buttons>
     
     <ion-content class="has-header content-bg padding">
     <!--controller scope var: project
@@ -95,4 +100,3 @@
         <i class="icon ion-android-document" style="color:white;"></i>
     </button>
 </ion-view>
-    

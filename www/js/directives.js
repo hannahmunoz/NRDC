@@ -128,23 +128,40 @@ angular.module('app.directives', [])
     return dir;
 })
 
-
+/*
 .directive('deletable', function(){
     
-    function deletableController($scope, $rootScope){
-        //determine is my current view in deletable
+    function deletableController($scope, $rootScope, SaveNew){
+        $scope.deletable = false;
+        
+        //determine if my current view in deletable
+        //by checking for membership in unsyncedJSON
         $scope.isDeletable = function(){
-            for (var category in $rootScope.unsyncedJSON){
-                console.log(category);
+            for(var category in $rootScope.unsyncedJSON){
+                for(var unsEntry = 0; 
+                    unsEntry < $rootScope.unsyncedJSON[category].length; 
+                    unsEntry++){
+                        if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
+                            $scope.deletable = true;
+                    }
+                
+                }
+            
             }
-        }
+            
+        };
+    
+        $scope.deleteView = function(){
+            SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON, $rootScope.chosenJSONlist, $rootScope.listJSON);     
+        };
     }
+    
     
     return{
         restrict: 'A',
         controller: deletableController
     }
-});
+});*/
 
 
 

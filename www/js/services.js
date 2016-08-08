@@ -465,7 +465,7 @@ angular.module('app.services', [])
         }
 
         // print json to console for debugging
-		//console.log (JSON);
+		console.log (JSON);
 		if (isitNew){
 			finalJSON.push (JSON);
 		}
@@ -487,6 +487,7 @@ angular.module('app.services', [])
 				JSONlist.splice (i, 1);	
 			}
 		}
+        
 	}
 
 	function deletePeople (name, unsyncedJSON, JSONlist, listJSON){
