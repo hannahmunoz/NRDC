@@ -54,6 +54,7 @@ angular.module('app.services', [])
 				}, function Error (response){
 				console.warn ("Post Error :" + response.statusText)
 				File.checkandWriteFile ('Unsynced', JSON);
+				console.log (response);
 				$cordovaToast.showLongBottom ("Post Error: " + response.statusText);
 				reject (response.status);
 			//toast to tell user what happened
@@ -491,6 +492,7 @@ angular.module('app.services', [])
 	}
 
 	function deletePeople (name, unsyncedJSON, JSONlist, listJSON){
+
 		for (var i = 0; i < unsyncedJSON.length; i ++){
 			if (name == (unsyncedJSON[i]['First Name'] + unsyncedJSON[i]['Last Name'])){
 				unsyncedJSON.splice (i, 1);	
@@ -504,10 +506,12 @@ angular.module('app.services', [])
 				JSONlist.splice (i, 1);	
 			}
 		}
+
+
 	}
 
 	return {save: save,
 			deleteJSON: deleteJSON,
-            deletePeople: deletePeople}
+			deletePeople: deletePeople}
     
 	});
