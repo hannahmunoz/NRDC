@@ -1,10 +1,11 @@
-angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngFileUpload', 'ngStorage', 'ngSanitize', 'initialValue'])
+angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngStorage'])
 
    
-.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew) {
+.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew, Camera) {
 	$scope.JSON = DynamicPage.getJSON();
-	console.log ($scope.JSON);
+	$scope.imageData = $scope.JSON ['Photo'];
 	$scope.checked = true;
+
 	if (DynamicPage.getTitle() != "Service Entries"){
 		for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
 			if ($scope.JSON ['Unique Identifier'].toUpperCase() === $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier'].toUpperCase()){
@@ -12,6 +13,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			}
 		}
 	}
+
 	else{
 		for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i ++){
 			if ($scope.JSON ['Unique Identifier'].toUpperCase() === $rootScope.unsyncedJSON.ServiceEntries[i]['Unique Identifier'].toUpperCase()){
@@ -35,10 +37,19 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 					$scope.JSON['Site'] = JSON.stringify($scope.JSON['Site']);
 				break;
 			case 'Deployments':
+					$scope.JSON ['Established Date'] = new Date($scope.JSON ['Established Date'] );
+					$scope.JSON ['Abandoned Date'] = new Date($scope.JSON ['Abandoned Date'] );
 					$scope.JSON ['System'] = JSON.stringify($scope.JSON['System']);
 				break;
 			case 'Components':
+					$scope.JSON ['Installation Date'] = new Date($scope.JSON ['Installation Date'] );
+					$scope.JSON ['Last Calibrated Date'] = new Date($scope.JSON ['Last Calibrated Date'] );
 					$scope.JSON['Deployment'] = JSON.stringify($scope.JSON['Deployment']);
+					break;
+			case 'Service Entries':
+				$scope.JSON ['Date'] = new Date($scope.JSON ['Date'] );
+				break;
+
 		}
     
      //custom back button functionality
@@ -58,16 +69,19 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	// in root scope so it can be called from all buttons
 	$rootScope.choosePicture = function (imageData){
 		Camera.checkPermissions();
-		$scope.imageData = Camera.openGallery ();
+		Camera.openGallery ().then (function (image){
+    		$scope.imageData = image;
+		});
 	}
 
 	//wrapper for the take image factory so we can call it from the takePhoto button
 	// in root scope so it can be called from all buttons
 	$rootScope.takePicture = function (imageData){
     		Camera.checkPermissions();
-    		imageData = Camera.openCamera ();
+    		Camera.openCamera ().then (function (image){
+    			$scope.imageData = image;
+    		});
 	}
-
 
 	//wrapper for the GPS factory so we can call it from the getGPS button
 	// in root scope so it can be called from all buttons
@@ -77,7 +91,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	}
 })
    
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, logger, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
 
 	// create global variables
 	$rootScope.peopleSyncedJSON = {};
@@ -100,6 +114,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$rootScope.servicelistJSON = {};
 	$rootScope.serviceJSONlist = [];
 
+	$rootScope.documentlistJSON = {};
+	$rootScope.documentJSONlist = [];
+
 	$rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 
@@ -114,7 +131,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     //randomizes the appearance of tile buttons on main page
     $scope.setRndTimingOffsets = function(){
     	
-
         numTiles = $window.document.getElementsByClassName("tile-btn").length;
         
         for( tile = 0; tile < numTiles; tile++ ){
@@ -125,10 +141,12 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     }
 
     $scope.uploadJSONS = function(){
-    	console.log ($rootScope.unsyncedJSON);
     	var promise = sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON);
-    	console.log (promise);
-    	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
+    	promise.then (function (){
+    		console.log (promise);
+    		$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
+    		$scope.init ();
+    	});
     }
 
     $scope.listSwitch = function (JSON, syncedJSON, title, route){
@@ -163,15 +181,28 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 // only runs the first time the program is called. 
 // Reads from the server and inputs into array
 // TODO: add to local phone storage and read from there if server is unavaible
-    var init = function (){
+    $scope. init = function (){
         
     	//get permissions
     	//unblock before packaging
     	//Camera.checkPermissions();
     	File.createDirectory();
+
+var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
+console.log (File.checkFile ('Unsynced'));
+    if (File.checkFile ('Unsynced')){
+			  File.readFile ('Unsynced').then (function Success (response){
+				if (response != null){
+						for (var i = 0; i < list.length; i++){
+							$rootScope.unsyncedJSON[list[i]] = $rootScope.unsyncedJSON[list[i]].concat (response[list[i]]);
+						}
+				console.log ($rootScope.unsyncedJSON);
+				}
+			})
+	}
  
     	// people read
-    	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/").then (function(result){
+    	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/", {timeout: 10000}).then (function(result){
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.peopleSyncedJSON = result.data;
     		File.checkandWriteFile ( 'People', $rootScope.peopleSyncedJSON);
@@ -200,21 +231,18 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	//site read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/", $rootScope.siteSyncedJSON,'Site', $rootScope.siteJSON).then(function(result){
     	$rootScope.siteSyncedJSON = result;
-    	console.log (result);
     	File.checkandWriteFile('Site', $rootScope.siteSyncedJSON);
     });
 
     // 	system read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/", $rootScope.systemSyncedJSON, 'System', $rootScope.systemJSON).then (function(result){
     	$rootScope.systemSyncedJSON = result;
-    	console.log (result);
     	File.checkandWriteFile('System', $rootScope.systemSyncedJSON);
     })
 
     // deployment read
     sync.read($rootScope.baseURL + $rootScope.urlPaths[4]+"/", $rootScope.deploymentSyncedJSON, 'Deployment', $rootScope.deploymentJSON).then (function(result){
     	$rootScope.deploymentSyncedJSON = result;
-    	console.log (result);
     	File.checkandWriteFile('Deployment', $rootScope.deploymentSyncedJSON);
     });
 
@@ -226,16 +254,14 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     // 	document read
 	sync.read($rootScope.baseURL + $rootScope.urlPaths[6]+"/", $rootScope.documentSyncedJSON, 'Document', $rootScope.documentJSON).then (function(result){
-		console.log (result);
 		$rootScope.documentSyncedJSON = result;
 		File.checkandWriteFile('Document', $rootScope.documentSyncedJSON);
 	});
 
    // 	service Entries read
-     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/").then (function(result){
+     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/", {timeout: 10000}).then (function(result){
     		console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.serviceSyncedJSON = result.data;
-    		console.log (result.data);
     		File.checkandWriteFile ( 'ServiceEntries', $rootScope.serviceSyncedJSON);
     		resolve ($rootScope.serviceSyncedJSON);
 
@@ -252,28 +278,16 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			}
     	})
 
-var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
-    if (File.checkFile ('Unsynced')){
-			  File.readFile ('Unsynced').then (function Success (response){
-				if (response != null){
-						for (var i = 0; i < list.length; i++){
-							$rootScope.unsyncedJSON[list[i]] = $rootScope.unsyncedJSON[list[i]].concat (response[list[i]]);
-						}
-				console.log ($rootScope.unsyncedJSON);
-				}
-			})
-
-	}
 }
     
     //Indicating Initilaize is loading
     $ionicLoading.show({
-            templateUrl: 'templates/loadingSpinner.html',
-            noBackdrop: false
+        templateUrl: 'templates/loadingSpinner.html',
+        noBackdrop: false
     });
     
     //initalize
-    init ();
+    $scope.init ();
     
     //hide loading screen
     $ionicLoading.hide();
@@ -286,7 +300,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     binds to arrow objects,
     hides arrow objects
 */
-.controller('scrollController', function($scope, $state, $ionicScrollDelegate, logger) {
+.controller('scrollController', function($scope, $state, $ionicScrollDelegate) {
     $scope.isBottom = false;
     smoothnessOffset = 15;  //ensures smooth dissapearnce of arrow 
     
@@ -414,9 +428,8 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
     			$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
     		}
 			$rootScope.chosenJSONlist.push ($scope.JSON);
-        
-			console.log ($scope.unsyncedJSON);	
-			console.log ($rootScope.chosenJSONlist);
+			$scope.JSON = {};
+
 	};
 
 
@@ -424,7 +437,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 	// in root scope so it can be called from all buttons
 	$rootScope.choosePicture = function (imageData){
 		Camera.checkPermissions();
-		$scope.imageData = Camera.openGallery ().then (function (image){
+		Camera.openGallery ().then (function (image){
     		$scope.imageData = image;
 		});
 	}
@@ -508,13 +521,13 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 		$scope.JSON ['Component'] = null;
 		$scope.JSON ['Service Entry'] = null;
 
-		var JSON = DynamicPage.getJSON();
-		$scope.JSON [DynamicPage.getTitle().slice (0,-1)] = JSON [DynamicPage.getTitle().slice (0,-1)];
+		var JSONbefore = DynamicPage.getJSON();
+		$scope.JSON [DynamicPage.getTitle().slice (0,-1)] = JSONbefore [DynamicPage.getTitle().slice (0,-1)];
 
 		SaveNew.save ("Documents", true, $scope.JSON, $rootScope.unsyncedJSON['Documents'], $scope.imageData);
-    	$rootScope.listJSON [ObjectCounter.count ($rootScope.listJSON)] = $scope.JSON['Name'];
-		$rootScope.chosenJSONlist.push ($scope.JSON);	
-		console.log ($scope.JSON);
+    	$rootScope.documentlistJSON [ObjectCounter.count ($rootScope.documentlistJSON)] = $scope.JSON['Name'];
+		$rootScope.documentJSONlist.push ($scope.JSON);	
+		$scope.JSON = {};
 	};
 
     $scope.back = function(){
@@ -580,6 +593,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
 		$rootScope.servicelistJSON [ObjectCounter.count ($rootScope.servicelistJSON)] = $scope.JSON['Name'];
 		$rootScope.serviceJSONlist.push ($scope.JSON);	
+		$scope.JSON = {};
 	};
 
 
@@ -587,7 +601,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 	// in root scope so it can be called from all buttons
 	$rootScope.choosePicture = function (imageData){
 		Camera.checkPermissions();
-		$scope.imageData = Camera.openGallery ().then (function (image){
+		Camera.openGallery ().then (function (image){
     		$scope.imageData = image;
 		});
 	}

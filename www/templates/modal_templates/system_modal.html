@@ -11,7 +11,7 @@
         min|max req: not implemented --> 
         <form name = "nameForm" id="system-form23" class="list " novalidate>
             <label class="item item-input " id="system-input31">
-                <ion-md-input type="text" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" required></ion-md-input>
             </label>
         </form>
 
@@ -22,7 +22,7 @@
         min|max req: not implemented --> 
         <form name = "detailsForm" id="system-form24" class="list " novalidate>
             <label class="item item-input " id="system-input32" >
-                <ion-md-input type="text" placeholder="Details" name="details" ng-model = "JSON['Details']" required=""></ion-md-input>
+                <ion-md-input type="text" maxlength="100"  placeholder="Details" name="details" ng-model = "JSON['Details']" ></ion-md-input>
             </label>
         </form>
 
@@ -33,7 +33,7 @@
         min|max req: not implemented --> 
         <form name = "powerForm" id="system-form25" class="list " novalidate>
             <label class="item item-input " id="system-input33" >
-                <ion-md-input type="text" placeholder="Power" name="power" ng-model = "JSON['Power']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Power" name="power" ng-model = "JSON['Power']" ></ion-md-input>
             </label>
         </form>
 
@@ -44,7 +44,7 @@
         min|max req: not implemented --> 
         <form name = "installForm" id="system-form26" class="list " novalidate>
             <label class="item item-input " id="system-input34" >
-                <ion-md-input type="text" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" required> </ion-md-input>
+                <ion-md-input type="text" maxlength="200" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" > </ion-md-input>
             </label>
         </form>
 
@@ -84,7 +84,7 @@
         </span>
 
 
-        <a ui-sref="mainMenu" id="system-button6" class=" button button-positive wide button-block " ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid" ng-click = "saveJSON(); back(); destroyModal();">Save</a>
+        <a  id="system-button6" class=" button button-positive wide button-block " ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid || checked" ng-click = "saveJSON(); back(); destroyModal();">Save</a>
 
 
             <!-- error handling for the above forms -->

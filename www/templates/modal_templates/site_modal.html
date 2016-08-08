@@ -14,7 +14,7 @@
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
     </ion-header-bar>
  
-    <ion-content 
+      <ion-content 
       delegate-handle="scrollable" 
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
@@ -27,7 +27,7 @@
         min|max req: not implemented -->
         <form name = "nameForm" class="list " novalidate>
             <label class="item item-input " id="site-input24">
-                <ion-md-input type="text" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required></ion-md-input>
             </label>
         </form>
 
@@ -46,7 +46,7 @@
             </label>
 
             <label class="item item-input " id="site-input23" name="siteElevation">
-                <ion-md-input type="text" placeholder="Altitude" name = "siteElevation" ng-model = "JSON['Altitude']" required></ion-md-input>
+                <ion-md-input type="text" placeholder="Altitude" name = "siteElevation" ng-model = "JSON['Elevation']" required></ion-md-input>
             </label>
 
             <button id="site-button4" class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)" >Get GPS Location</button>
@@ -60,7 +60,7 @@
         min|max req: not implemented --> 
         <form name = "aliasForm" class = "list" novalidate>
             <label class="item item-input " id="site-input28" name="alias">
-                <ion-md-input type="text" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="20" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required></ion-md-input>
             </label>
         </form>
 
@@ -71,7 +71,13 @@
         min|max req: not implemented --> 
         <form name = "notesForm" class = "list" novalidate="">
             <label class="item item-input " id="site-input27">
-                <ion-md-input type="text" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="200" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required></ion-md-input>
+            </label>
+        </form>
+
+        <form name = "landmarForm" class = "list" novalidate="">
+            <label class="item item-input " id="site-input27">
+                <ion-md-input type="text" maxlength="50" placeholder="GPS Landmark"  name = "gpsLandmark" ng-model = "JSON['GPS Landmark']" required></ion-md-input>
             </label>
         </form>
 
@@ -92,8 +98,7 @@
             <div class="select-container">
                 <select ng-model = "JSON['Permit Holder']" 
                         ng-options = "key as people for (key, people) in peopleJSON" 
-                        class="wide"
-                        required>
+                        class="wide">
                     <option value="">Permit Holder</option>
                 </select>
             </div>
@@ -103,8 +108,7 @@
             <div class="select-container">
                         <select ng-model = "JSON['Land Owner']" 
                                 ng-options = "key as people for (key, people) in peopleJSON" 
-                                class="wide"
-                                required>
+                                class="wide">
                 <option value="">Land Owner</option>
                 </select>
             </div>
