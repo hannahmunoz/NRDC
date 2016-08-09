@@ -5,6 +5,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$scope.JSON = DynamicPage.getJSON();
 	$scope.imageData = $scope.JSON ['Photo'];
 	$scope.checked = true;
+    
+    console.log($scope.JSON);
 
 	if (DynamicPage.getTitle() != "Service Entries"){
 		for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
@@ -89,30 +91,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		GPS.checkPermissions();
 		GPS.getLocation(JSON);
 	}
-    
-/*  $rootScope.deletable = false;
-        
-    //determine if my current view in deletable
-    //by checking for membership in unsyncedJSON
-    $scope.isDeletable = function(){
-        for(var category in $rootScope.unsyncedJSON){
-            for(var unsEntry = 0; 
-                unsEntry < $rootScope.unsyncedJSON[category].length; 
-                unsEntry++){
-                    if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
-                        $scope.deletable = true;
-                }
-
-            }
-
-        }
-
-    };
-
-    $rootScope.deleteView = function(){
-        SaveNew.deleteJSON($scope.JSON['Name'], $rootScope.unsyncedJSON, $rootScope.chosenJSONlist, $rootScope.listJSON);     
-        $ionicHistory.goBack();
-    };*/
+ 
 })
    
 .controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
@@ -143,6 +122,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 	$rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
+    
+    $rootScope.level = 0;
 
 
 	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
@@ -172,6 +153,26 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     		$scope.init ();
     	});
     }
+    
+    
+    $scope.progressiveListSwitch = function(){
+        var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
+        var tieredRoutes = ["network", "site", "system", "deployment", "component"];
+        var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
+        var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSynchedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
+        
+        $scope.listSwitch(tieredJSON[$rootScope.level], tieredSyncedJSON[$rootScope.level], tieredTitles[$rootScope.level], tieredRoutes[$rootScope.level]);
+        
+        DynamicPage.setTitle(tieredTitles[$rootScope.level]);
+        DynamicPage.setRoute(tieredRoutes[$rootScope.level]);
+        
+        
+        $rootScope.level += 1;
+        
+        
+        console.log($rootScope.unsyncedJSON);
+    }
+    
 
     $scope.listSwitch = function (JSON, syncedJSON, title, route){
     	$scope.unsyncedListJSON = {};
@@ -197,14 +198,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
 		}
 
-    	$rootScope.listJSON = angular.extend ({},JSON,$scope.unsyncedListJSON)
-    	DynamicPage.setTitle (title);
-    	DynamicPage.setRoute (route);
+    	$rootScope.listJSON = angular.extend ({},JSON,$scope.unsyncedListJSON);
+
     }
 
-// only runs the first time the program is called. 
-// Reads from the server and inputs into array
-// TODO: add to local phone storage and read from there if server is unavaible
+    // only runs the first time the program is called. 
+    // Reads from the server and inputs into array
+    // TODO: add to local phone storage and read from there if server is unavaible
     $scope. init = function (){
         
     	//get permissions
@@ -352,11 +352,6 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 
 	// wrapper for person select button
 	$scope.select = function(JSON){
-        /*Ionic Loading*/
-        $ionicLoading.show({
-            templateUrl: 'templates/directive_templates/loading-spinner.html',
-            noBackdrop: true
-        });
         
         for (var i = 0; i < $rootScope.chosenJSONlist.length; i++){
         	if (DynamicPage.getTitle() != "People"){
@@ -371,18 +366,133 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
         	}
         }
 		
-        $ionicLoading.hide();
-        
-		$state.go ($scope.route);
 	}
+    
+    $scope.viewItem = function(){
+        $state.go($scope.route);
+    }
+    
+    
+    
+    $scope.progressiveListSwitch = function(){
+        var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
+        var tieredRoutes = ["network", "site", "system", "deployment", "component"];
+        var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
+        var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSyncedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
+        
+        //store the json of the
+        //list item clicked
+        $scope.clickedJSON = DynamicPage.getJSON();
+        
+        
+        if($rootScope.level < tieredTitles.length){
+            
+            DynamicPage.setTitle(tieredTitles[$rootScope.level]);
+            DynamicPage.setRoute(tieredRoutes[$rootScope.level]);
+            
+            //switch to a new list
+            $scope.listSwitch(tieredJSON[$rootScope.level], tieredSyncedJSON[$rootScope.level], tieredTitles[$rootScope.level], tieredRoutes[$rootScope.level]);
+
+            
+            //increment our current level in tired hierarchy
+            //if we are not at the end
+            $rootScope.level += 1;
+            
+            
+        }
+
+        
+    }
+    
+/*_----------------------------------------------
+Under COnstruction
+************************************************/
+    
+    $scope.regressiveListSwitch = function(){
+        var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
+        var tieredRoutes = ["network", "site", "system", "deployment", "component"];
+        var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
+        var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSyncedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
+        
+        //store the json of the
+        //list item clicked
+        $scope.clickedJSON = DynamicPage.getJSON();
+        
+        
+        if($rootScope.level > 0){
+            
+            //increment our current level in tired hierarchy
+            //if we are not at the end
+            $rootScope.level -= 1;
+            
+            //switch to a new list
+            $scope.listSwitch(tieredJSON[$rootScope.level], tieredSyncedJSON[$rootScope.level], tieredTitles[$rootScope.level], tieredRoutes[$rootScope.level]);
+            
+                       
+            DynamicPage.setTitle(tieredTitles[$rootScope.level]);
+            DynamicPage.setRoute(tieredRoutes[$rootScope.level]);
+        }
+
+        
+    }
+    
+    
+    
+    $scope.listSwitch = function (JSON, syncedJSON, title, route){
+    	$scope.unsyncedListJSON = {};
+        
+        console.log(JSON);
+        console.log(syncedJSON);
+        console.log(title);
+        console.log(route);
+
+    	if (title != "Service Entries"){
+    		for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
+    			if (title == "People")	{
+    				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['First Name'] + " "+ $rootScope.unsyncedJSON[title][i]['Last Name'];
+    			}
+    			else{
+    				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['Name'];
+    			}
+			}
+
+		$rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat (syncedJSON[title]);	
+		}
+
+		else {
+			for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i++){
+				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON.ServiceEntries[i]['Name'];
+			}
+
+			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
+		}
+
+    	$rootScope.listJSON = angular.extend ({},JSON,$scope.unsyncedListJSON);
+
+        
+        
+    	DynamicPage.setTitle (title);
+    	DynamicPage.setRoute (route);
+    }
+    
+    
+    
+    
+    
     
     //custom back button functinality
     $scope.back = function(){
+        
+        if($rootScope.level > 0){
+            $scope.regressiveListSwitch();
+        }
+        
         //conditional to fix problem of double
         //back when modal closed
-        if($rootScope.modalHidden != false){
+        else if($rootScope.modalHidden != false){
             $ionicHistory.goBack();
         }
+
     }
     
     //required for ink ripple effect on material button press
@@ -394,7 +504,6 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
 	$scope.JSON = {};
 	$scope.imageData = null;
 	$scope.checked = false;
-    $scope.template = 'templates/modal_templates/' + DynamicPage.getRoute() + '_modal.html';
     
     $rootScope.modalHidden = true;
     $scope.modal = null;
@@ -410,7 +519,7 @@ var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components"
         // If a modal is not
         // already instantiated in this scope
         if($scope.modal == null){
-            $ionicModal.fromTemplateUrl($scope.template, {
+            $ionicModal.fromTemplateUrl('templates/modal_templates/' + DynamicPage.getRoute() + '_modal.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function(modal) {

@@ -79,6 +79,10 @@ not rest on the save button with max scroll*/
     width: auto;
 }
 
+.right-header-btn{
+    
+}
+
 
 /*Color Pallette and Theming
 ===================================*/
@@ -95,17 +99,16 @@ not rest on the save button with max scroll*/
 
 /*Orange*/
 .compliment{
-    background-color: #F99300;
+    background-color: #F99300 !important;
 }
 
 .tertiary{
     background-color: #F9BD00;
 }
 
-/*Black*/
-.text {
-    text-decoration-color: #000;
-    color: #F2F2F2;
+/*white text*/
+.text{
+    color: #F2F2F2 !important;
 }
 
 /*white*/

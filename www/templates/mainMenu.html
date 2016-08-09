@@ -10,7 +10,7 @@
       padding="true"
       has-footer="true"
       class="has-header text-center content-bg"
-      ng-init="setRndTimingOffsets()"
+      ng-init="setRndTimingOffsets();"
       > 
         <div class="fill-parent home-container">
           <div class="row">
@@ -26,7 +26,7 @@
               </button>
               <button ui-sref="list" 
                       class= "button button-large button-block main-menu-button accent animated flipInX"
-                      ng-click = "listSwitch(networkJSON, networkSyncedJSON, 'Networks', 'network')"
+                      ng-click = "progressiveListSwitch()"
                       ng-style="randomTimingOffset[1]">
                   <h3 class="text">Site Networks</h3>
                </button>

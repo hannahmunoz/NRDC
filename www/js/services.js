@@ -514,4 +514,14 @@ angular.module('app.services', [])
 			deleteJSON: deleteJSON,
 			deletePeople: deletePeople}
     
-	});
+	})
+
+.factory('StrainerService', function(){
+    
+    //function which pares down
+    //my current JSON list
+    function sift(){
+        
+    }
+    
+});
