@@ -4,102 +4,45 @@
     </ion-header-bar>
     
    <ion-content 
-      class="has-header content-bg padding"> 
-<!--    controller scope var: people
-        var name: firstName
-        type: text
-        error checking: no
-        min|max req: not implemented -->
-
-        <form name ="firstNameForm" class="list" novalidate>
-            <label class="item item-input " id="people-input125">
-                <ion-md-input type="text" maxlength="20" placeholder="First Name" name = "firstName" ng-model = "JSON['First Name']" required></ion-md-input>
+        <form name ="firstNameForm" class="list" >
+            <label class="item item-input ">
+                <ion-md-input type="text" maxlength="20" placeholder="First Name" name = "firstName" ng-model = "JSON['First Name']" required/>
             </label>
         </form>
 
-<!--    controller scope var: people
-        var name: lastName
-        type: text
-        error checking: no
-        min|max req: not implemented -->
-
-        <form name ="lastNameForm" class="list" novalidate>
-            <label class="item item-input " id="people-input6" >
-                <ion-md-input type="text" maxlength="50" placeholder="Last name" name = "lastName" ng-model = "JSON['Last Name'] " required></ion-md-input>
+        <form name ="lastNameForm" class="list">
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="50" placeholder="Last name" name = "lastName" ng-model = "JSON['Last Name'] " required/>
             </label>
         </form>
 
-<!--    controller scope var: people
-        var name: organization
-        type: text
-        error checking: no
-        min|max req: not implemented -->
-
-        <form name ="organizationForm" class="list" novalidate>
-            <label class="item item-input " id="people-input9" >
-                <ion-md-input type="text" maxlength="100" placeholder="Organization" name = "organization" ng-model = "JSON['Organization']"></ion-md-input>
+        <form name ="organizationForm" class="list" >
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="100" placeholder="Organization" name = "organization" ng-model = "JSON['Organization']"/>
             </label>
         </form>
 
-<!--    controller scope var: people
-        var name: email
-        type: email
-        error checking: yes, for valid email. Else: error is shown, user is not allowed to save
-        min|max req  not implemented -->
-
-        <form name="emailForm" class="list" novalidate>
-            <label class="item item-input " id="people-input8" >
-                <ion-md-input type="email" maxlength="100" placeholder="Email" name = "email" ng-model = "JSON['Email']" ></ion-md-input>
+        <form name="emailForm" class="list" >
+            <label class="item item-input " >
+                <ion-md-input type="email" maxlength="100" placeholder="Email" name = "email" ng-model = "JSON['Email']" />
             </label>
         </form>
 
-<!--    controller scope var: people
-        var name: phone
-        type: text
-        error checking: yes, for 10 digit phone number. Else: error is shown, user is not allowed to save
-        min|max req : 10|10 -->
-
-        <form name="phoneForm" class="list" novalidate>
-            <label class="item item-input " id="people-input10">
-                <ion-md-input type="text" placeholder="Phone" ng-maxlength = "13" name = "phone" ng-model="JSON['Phone']" ></ion-md-input>
+        <form name="phoneForm" class="list" >
+            <label class="item item-input ">
+                <ion-md-input type="text" placeholder="Phone" ng-maxlength = "13" name = "phone" ng-model="JSON['Phone']" />
             </label> 
         </form>
         
         <span>
-    <!--    controller scope var: n/a
-            var name: photo
-            type: file upload
-            error checking: onchange -->
-
-             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-model = "JSON['Photo']" ng-click = "choosePicture()"></button>
-
-    <!--    controller scope var: n/a
-            var name: takePhoto
-            type: file upload
-            error checking: onchange -->
-
-            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-model = "JSON['Photo']" ng-click = "takePicture(imageData)"></button>
+            <button class = "button big-icon-button button-positive button-large icon ion-images" ng-model = "JSON['Photo']" ng-click = "choosePicture()"></button>
+            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-model = "JSON['Photo']" ng-click = "takePicture(imageData)"> </button>
         </span>
 
-<!--    var name: n/a
-        type: button
-        onclick fucntion: savePeopleJSON()
-        error checking: checks if all input are of valid types and lengths -->
-        <a id="people-button1" 
-           class="button button-positive button-large button-block wide" 
-           ng-disabled="phoneForm.$invalid || emailForm.$invalid || organizationForm.$invalid || lastNameForm.$invalid || firstNameForm.$invalid || photoForm.$invalid || takePhotoForm.$invalid || checked" 
-           ng-click = "saveJSON(); back (); destroyModal();">Save</a>
-
-
-<!-- error handling for the above forms -->
-<!-- 
-    <div class="padding">
-        <p ng-show="emailForm.email.$invalid && emailForm.email.$dirty">* Email address not valid</p>
-        <p ng-show="phoneForm.phone.$error.minlength || phoneForm.phone.$error.maxlength">* Phone number must be 10 digits</p>
-        <p ng-show="firstNameForm.firstName.$error.required || lastNameForm.lastName.$error.required || organizationForm.organization.$error.required || emailForm.email.$error.required || phoneForm.phone.$error.required" >* All inputs must be completed</p>
-        <p ng-show = "photoForm.$invalid || takePhotoForm.$invalid"> * Photo of user required</p>
-
-    </div> -->
+        <a class="button button-positive button-large button-block wide" 
+           ng-disabled="phoneForm.$invalid || emailForm.$invalid || organizationForm.$invalid || lastNameForm.$invalid || firstNameForm.$invalid || photoForm.$invalid || takePhotoForm.$invalid||checked" 
+           ng-click = "saveJSON(); back (); destroyModal();">
+           Save</a>
     </ion-content>
     
 </ion-modal-view>

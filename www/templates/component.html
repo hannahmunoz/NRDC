@@ -17,108 +17,86 @@
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
 
-        <form name = "nameForm" id="component-form41" class="list ">
-            <label class="item item-input " id="component-input46" >
-                <ion-md-input type="text" maxlength="50" placeholder="Name" name="componentName" ng-model = "JSON['Name']" required></ion-md-input>
+        <form name = "nameForm" class="list">
+            <label class="item item-input" >
+                <ion-md-input type="text" maxlength="50" placeholder="Name" name="componentName" ng-model = "JSON['Name']" required/>
             </label>
         </form>
 
-        <form name = "manufaturerForm" id="component-form42" class="list ">
-            <label class="item item-input " id="component-input47" >
-                <ion-md-input type="text" maxlength="50" placeholder="Manufacturer" name="manufacturer"  ng-model = "JSON['Manufacturer']"></ion-md-input>
+        <form name = "manufaturerForm" class="list">
+            <label class="item item-input" >
+                <ion-md-input type="text" maxlength="50" placeholder="Manufacturer" name="manufacturer"  ng-model = "JSON['Manufacturer']"/>
             </label>
         </form>
 
-        <form name = "modelForm" id="component-form43" class="list ">
-            <label class="item item-input " id="component-input48" >
-                <ion-md-input type="text" maxlength="50"  placeholder="Model" name="model" ng-model = "JSON['Model']"></ion-md-input>
+        <form name = "modelForm" class="list ">
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="50"  placeholder="Model" name="model" ng-model = "JSON['Model']"/>
             </label>
         </form>
 
 
-        <form name = "serialForm" id="component-form44" class="list ">
-            <label class="item item-input " id="component-input49" >
-                <ion-md-input type="text" maxlength="50" placeholder="Serial Number" ng-model = "JSON['Serial Number']" name="serialNumber"  ></ion-md-input>
+        <form name = "serialForm" class="list ">
+            <label class="item item-input "  >
+                <ion-md-input type="text" maxlength="50" placeholder="Serial Number" ng-model = "JSON['Serial Number']" name="serialNumber" />
             </label>
         </form>
 
-        <form name = "vendorForm" id="component-form45" class="list ">
-            <label class="item item-input " id="component-input50" >
-                <ion-md-input type="text" maxlength="50" placeholder="Vendor" name="vendor" ng-model = "JSON['Vendor']"  ></ion-md-input>
+        <form name = "vendorForm" class="list ">
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="50" placeholder="Vendor" name="vendor" ng-model = "JSON['Vendor']"/>
             </label>
         </form>
 
-        <form name = "supplierForm" id="component-form46" class="list ">
-            <label class="item item-input " id="component-input51" >
-                <ion-md-input type="text" maxlength="50" placeholder="Supplier" name="supplier" ng-model = "JSON['Supplier']"  ></ion-md-input>
+        <form name = "supplierForm" " class="list ">
+            <label class="item item-input ">
+                <ion-md-input type="text" maxlength="50" placeholder="Supplier" name="supplier" ng-model = "JSON['Supplier']" />
             </label>
         </form>
 
-        <form name = "wiringForm" id="component-form48" class="list ">
-            <label class="item item-input " id="component-input53" >
-                <ion-md-input type="text" maxlength="100" placeholder="Wiring Notes" ng-model= "JSON['Wiring Notes']" name="wiringNotes" ></ion-md-input>
+        <form name = "wiringForm" class="list ">
+            <label class="item item-input "  >
+                <ion-md-input type="text" maxlength="100" placeholder="Wiring Notes" ng-model= "JSON['Wiring Notes']" name="wiringNotes"/>
             </label>
         </form>
 
-        <form name = "installationForm" id="component-form47" class="list ">
-            <label class="item item-input " id="component-input52" >
-                <ion-md-input type="text" maxlength="100" placeholder="Installation Details" name="installationDetails" ng-model = "JSON['Installation Details']" ></ion-md-input>
+        <form name = "installationForm" class="list ">
+            <label class="item item-input "  >
+                <ion-md-input type="text" maxlength="100" placeholder="Installation Details" name="installationDetails" ng-model = "JSON['Installation Details']"/>
             </label>
         </form>
 
         <form name="dateForm">
-        <label>Installation Date</label>
-        <input type="date" name="date"  ng-model = "JSON['Installation Date']"/>
+            <label>Installation Date</label>
+            <input type="date" name="date"  ng-model = "JSON['Installation Date']"/>
        </form>
-
-
-
 
         <form name="calibratedForm">
-        <label>Last Calibrated Date</label>
-        <input type="date" name="caliDate" ng-model = "JSON['Last Calibrated Date']"/>
+            <label>Last Calibrated Date</label>
+            <input type="date" name="caliDate" ng-model = "JSON['Last Calibrated Date']"/>
        </form>
 
-        <form name = "deploymentForm" id="component-form49" class="list ">
- <div class="select-container">
+        <form name = "deploymentForm"  class="list ">
+            <div class="select-container">
                 <select class="wide" ng-model = "JSON['Deployment']" ng-options = "key as deployment for (key, deployment) in deploymentJSON" required>
                     <option value>Deployment</option>
                 </select>
-</div>
+            </div>
         </form>
-<!--         <form id="component-form50" class="list ">
-            <label class="item item-input " id="component-input54" name="deploymentCalivrated">
-                <span class="input-label">Last Calibrated Date</span>
-                <ion-md-input type="date" placeholder="">
-            </label>
-        </form> -->
+
         <span>
-    <!--    controller scope var: n/a
-            var name: photo
-            type: file upload
-            error checking: onchange -->
-
-             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
-
-
-    <!--    controller scope var: n/a
-            var name: takePhoto
-            type: file upload
-            error checking: onchange -->
-
+            <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
             <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>
         </span>
 
 
-    <a id="component-button9" class=" button button-positive button-large button-block wide" ng-disabled = "nameForm.$invalid || vendorForm.$invalid || supplierForm.$invalid || installationForm.$invalid || wiringForm.$invalid || serialForm.$invalid || modelForm.$invalid || manufacturerForm.$invalid || deploymentForm.$invalid || checked" ng-click = "saveJSON(); back(); destroyModal();">Save</a>
+        <a  class=" button button-positive button-large button-block wide" 
+            ng-disabled = "nameForm.$invalid || vendorForm.$invalid || supplierForm.$invalid || installationForm.$invalid || wiringForm.$invalid || serialForm.$invalid || modelForm.$invalid || manufacturerForm.$invalid || deploymentForm.$invalid || checked" 
+            ng-click = "saveJSON(); back(); destroyModal();">
+            Save
+        </a>
 
-
-        <!-- error handling for the above forms -->
-<!--     <div class="padding"> 
-     <p ng-show="nameForm.componentName.$error.required || vendorForm.vendor.$error.required  || supplierForm.supplier.$error.required  || installationForm.installationDetails.$error.required || wiringForm.wiringNotes.$error.required || serialForm.serialNumber.$error.required || modelForm.model.$error.required || manufacturerForm.model.$error.required" >* All inputs must be completed</p>
-    </div> -->
-    
-    <div class = "overscroll"></div>
+        <div class = "overscroll"></div>
         
     </ion-content>
     

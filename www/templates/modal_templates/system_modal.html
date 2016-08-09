@@ -4,52 +4,31 @@
     </ion-header-bar>
     
     <ion-content class="has-header content-bg padding">
-<!--    controller scope var: system
-        var name: systemName
-        type: text
-        error checking: no
-        min|max req: not implemented --> 
-        <form name = "nameForm" id="system-form23" class="list " novalidate>
-            <label class="item item-input " id="system-input31">
-                <ion-md-input type="text" maxlength="50" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" required></ion-md-input>
+        <form name = "nameForm" class="list " >
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="50" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" required/>
             </label>
         </form>
 
-<!--    controller scope var: system
-        var name: details
-        type: text
-        error checking: no
-        min|max req: not implemented --> 
-        <form name = "detailsForm" id="system-form24" class="list " novalidate>
-            <label class="item item-input " id="system-input32" >
-                <ion-md-input type="text" maxlength="100"  placeholder="Details" name="details" ng-model = "JSON['Details']" ></ion-md-input>
+        <form name = "detailsForm" class="list ">
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="100"  placeholder="Details" name="details" ng-model = "JSON['Details']" />
             </label>
         </form>
 
-<!--    controller scope var: system
-        var name: power
-        type: text
-        error checking: no
-        min|max req: not implemented --> 
-        <form name = "powerForm" id="system-form25" class="list " novalidate>
-            <label class="item item-input " id="system-input33" >
-                <ion-md-input type="text" maxlength="50" placeholder="Power" name="power" ng-model = "JSON['Power']" ></ion-md-input>
+        <form name = "powerForm"  class="list " >
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="50" placeholder="Power" name="power" ng-model = "JSON['Power']"/>
             </label>
         </form>
 
-<!--    controller scope var: system
-        var name: installLocation
-        type: text
-        error checking: no
-        min|max req: not implemented --> 
-        <form name = "installForm" id="system-form26" class="list " novalidate>
-            <label class="item item-input " id="system-input34" >
-                <ion-md-input type="text" maxlength="200" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" > </ion-md-input>
+        <form name = "installForm" class="list " >
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="200" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" />
             </label>
         </form>
 
-
-        <form name = "managerForm" id="system-form28" class="list ">
+        <form name = "managerForm"  class="list ">
             <div class="select-container">
                 <select class="wide" ng-model = "JSON ['Manager']" ng-options = "key as people for (key, people) in peopleJSON" required>
                     <option value="">Manager</option>
@@ -57,41 +36,24 @@
             </div>
         </form>
 
-
-        <form name = "siteForm" id="system-form30" class="list ">
+        <form name = "siteForm"  class="list ">
             <div class="select-container">
                 <select class="wide" ng-model = "JSON['Site']" ng-options = "key as site for (key, site) in siteJSON" required>
                     <option value="">Site</option>
-                    </select>
+                </select>
             </div>
         </form>
         
         <span>
-    <!--    controller scope var: n/a
-            var name: photo
-            type: file upload
-            error checking: onchange -->
-
              <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
-
-
-    <!--    controller scope var: n/a
-            var name: takePhoto
-            type: file upload
-            error checking: onchange -->
-
             <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>
         </span>
 
 
-        <a  id="system-button6" class=" button button-positive wide button-block " ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid || checked" ng-click = "saveJSON(); back(); destroyModal();">Save</a>
-
-
-            <!-- error handling for the above forms -->
-<!--     <div class="padding"> 
-     <p ng-show="nameForm.siteName.$error.required || detailsForm.details.$error.required  || powerForm.power.$error.required  || installForm.installLocation.$error.required" >* All inputs must be completed</p>
-     </div>
- -->
+        <a class=" button button-positive wide button-block " 
+           ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid || checked" 
+           ng-click = "saveJSON(); back(); destroyModal();">
+           Save</a>
         
     <div class="overscroll"></div>
     </ion-content>
