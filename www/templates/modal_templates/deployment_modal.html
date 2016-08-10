@@ -7,86 +7,54 @@
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
 
-<!--    controller scope var: deployment
-        var name: name
-        type: text
-        error checking: no
-        min|max req: not implemented -->
-        <form name = "nameForm" id="deployment-form31" class="list" novalidate>
-            <label class="item item-input " id="deployment-input37">
-                <ion-md-input type="text" maxlength="100" placeholder="Name" name = "deploymentName" ng-model = "JSON['Name']" required></ion-md-input>
+        <form name = "nameForm" class="list" >
+            <label class="item item-input " i>
+                <ion-md-input type="text" maxlength="100" placeholder="Name" name = "deploymentName" ng-model = "JSON['Name']" required/>
             </label>
         </form>
 
-<!--    controller scope var: deployment
-        var name: purpose
-        type: text
-        error checking: no
-        min|max req: not implemented -->
-        <form name = "purposeForm" id="deployment-form32" class="list">
-            <label class="item item-input " id="deployment-input38" >
-                <ion-md-input type="text" maxlength="100" placeholder="Purpose" name="purpose" ng-model = "JSON['Purpose']"></ion-md-input>
+        <form name = "purposeForm" class="list">
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="100" placeholder="Purpose" name="purpose" ng-model = "JSON['Purpose']"/>
             </label>
         </form>
 
-
-<!--    controller scope var: deployment
-        var name: latitude, longitude, altitude
-        type: text
-        error checking: no
-        min|max req: not implemented -->
-
-        <form  name = "GPSForm" id="deployment-form33" class="list ">
-            <label class="item item-input " id="deployment-input40" >
-                <ion-md-input type="text" placeholder="Latitude" name="deploymentLatitude" ng-model = "JSON['Latitude']"></ion-md-input>
+        <form  name = "GPSForm"  class="list ">
+            <label class="item item-input " >
+                <ion-md-input type="text" placeholder="Latitude" name="deploymentLatitude" ng-model = "JSON['Latitude']"/>
             </label>
 
-            <label class="item item-input " id="deployment-input39" >
-                <ion-md-input type="text" placeholder="Longitude" name="deploymentLongitude" ng-model= "JSON['Longitude']" ></ion-md-input>
+            <label class="item item-input ">
+                <ion-md-input type="text" placeholder="Longitude" name="deploymentLongitude" ng-model= "JSON['Longitude']"/>
             </label>
 
-            <label class="item item-input " id="deployment-input41" >
-                <ion-md-input type="text" placeholder="Altitude" name="deploymentAltitude" ng-model = "JSON['Elevation']" ></ion-md-input>
+            <label class="item item-input " >
+                <ion-md-input type="text" placeholder="Altitude" name="deploymentAltitude" ng-model = "JSON['Elevation']"/>
             </label>
             <button id="deployment-button8" class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)" >Get GPS Location</button>
         </form>
 
-<!--    controller scope var: deployment
-        var name: offset
-        type: text
-        error checking: no
-        min|max req: not implemented -->
-        <form name = "offsetForm" id="deployment-form36" class="list ">
-            <label class="item item-input " id="deployment-input42" >
-                <ion-md-input type="text" maxlength="50" placeholder="Center Offset" name="offset" ng-model = "JSON['Center Offset']"></ion-md-input>
+        <form name = "offsetForm" class="list ">
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="50" placeholder="Center Offset" name="offset" ng-model = "JSON['Center Offset']"/>
             </label>
         </form>
 
-<!--    controller scope var: deployment
-        var name: height
-        type: text
-        error checking: no
-        min|max req: not implemented -->
-        <form name = "heightForm" id="deployment-form37" class="list ">
-            <label class="item item-input " id="deployment-input43">
-                <ion-md-input type="text" placeholder="Height From Ground" name="height" ng-model = "JSON['Height From Ground']"></ion-md-input>
+        <form name = "heightForm"  class="list ">
+            <label class="item item-input " >
+                <ion-md-input type="text" placeholder="Height From Ground" name="height" ng-model = "JSON['Height From Ground']"/>
             </label>
         </form>
 
-<!--    controller scope var: deployment
-        var name: logger
-        type: text
-        error checking: no
-        min|max req: not implemented -->
-        <form name = "loggerForm" id="deployment-form38" class="list ">
-            <label class="item item-input " id="deployment-input44" >
-                <ion-md-input type="text" maxlength="100" placeholder="Parent Logger" name="logger" ng-model = "JSON['Parent Logger']"></ion-md-input>
+        <form name = "loggerForm" class="list ">
+            <label class="item item-input "  >
+                <ion-md-input type="text" maxlength="100" placeholder="Parent Logger" name="logger" ng-model = "JSON['Parent Logger']"/>
             </label>
         </form>
 
-        <form name = "notesForm" id="deployment-form38" class="list ">
-            <label class="item item-input " id="deployment-input44" >
-                <ion-md-input type="text" maxlength="200" placeholder="Notes" name="notes" ng-model = "JSON['Notes']"></ion-md-input>
+        <form name = "notesForm"  class="list ">
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="200" placeholder="Notes" name="notes" ng-model = "JSON['Notes']"/>
             </label>
         </form>
 
@@ -101,24 +69,19 @@
              <input type="date" name="date" ng-model = "JSON['Abandoned Date']" />
         </form>
 
-        <form name = "systemForm" id="deployment-form39" class="list ">
+        <form name = "systemForm"  class="list ">
             <div class="select-container">
                 <select class="wide" ng-model = "JSON ['System']" ng-options = "key as system for (key, system) in systemJSON" required>
                     <option value=""> System</option>
                 </select>
             </div>
         </form>
-
-
-<!--         <form name = "dateForm" id="deployment-form40" class="list ">
-            <label class="item item-input " id="deployment-input45" name="deploymentEstablish">
-                <span class="input-label">Established Date</span>
-                <ion-md-input type="date" placeholder="">
-            </label>
-        </form> -->
         
-        <a id="deployment-button7" class=" button button-positive button-large button-block wide" ng-disabled = "nameForm.$invalid || purposeForm.$invalid || GPSForm.$invalid || offsetForm.$invalid || heightForm.$invalid || loggerForm.$invalid || systemForm.$invalid || checked" ng-click = "saveJSON(); back(); destroyModal();">Save</a> 
-        
+        <a 
+        class=" button button-positive button-large button-block wide" 
+        ng-disabled = "nameForm.$invalid || purposeForm.$invalid || GPSForm.$invalid || offsetForm.$invalid || heightForm.$invalid || loggerForm.$invalid || systemForm.$invalid || checked"
+        ng-click = "saveJSON(); back(); destroyModal();">
+        Save</a> 
         <div class = "overscroll"></div>
 
 

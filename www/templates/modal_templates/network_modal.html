@@ -1,93 +1,49 @@
-<ion-modal-view title="Site Networks" id="page10" >
+<ion-modal-view title="Site Networks" >
     <ion-header-bar class="bar-dark">
         <button class="button-flat" ng-click="back(); closeModal();"><h4 style="color:#FFF;">Back</h4></button>
     </ion-header-bar>
     
   
     <ion-content class="has-header content-bg padding">
-    <!--controller scope var: project
-        var name: name
-        type: text
-        error checking: no
-        min|max req: not implemented -->
 
-        <form name ="nameForm" class="list" novalidate>
-            <label class="item item-input " id="project-input63">
-                <ion-md-input type="text"  placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" required></ion-md-input>
+        <form name ="nameForm" class="list" >
+            <label class="item item-input " >
+                <ion-md-input type="text"  placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" required/>
             </label>
         </form>
-
-    <!--controller scope var: project
-        var name: institution
-        type: text
-        error checking: no
-        min|max req: not implemented -->
 
         <form name ="institutionForm" class="list " novalidate>
             <label class="item item-input " id="project-input64" >
-                <ion-md-input type="text" maxlength="50" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required/>
             </label>
         </form>
 
-    <!--controller scope var: project
-        var name: funding
-        type: text
-        error checking: no
-        min|max req: not implemented -->
-
-        <form name ="fundingForm" class="list " novalidate>
-            <label class="item item-input " id="project-input65" >
-                <ion-md-input type="text" maxlength="100" placeholder="Original Funding Agency" name="funding" ng-model = "JSON['Original Funding Agency'] " required></ion-md-input>
+        <form name ="fundingForm" class="list " >
+            <label class="item item-input "  >
+                <ion-md-input type="text" maxlength="100" placeholder="Original Funding Agency" name="funding" ng-model = "JSON['Original Funding Agency'] " required/>
             </label>
         </form>
 
-    <!--controller scope var: project
-        var name: grantNumber
-        type: number
-        error checking: no
-        min|max req: not implemented -->
-
-        <form name ="grantForm" class="list " novalidate>
-            <label class="item item-input " id="project-input66">
-                <ion-md-input type="text" maxlength="20" placeholder="Grant Number" name="grantNumber" ng-model = "JSON['Grant Number String']" required></ion-md-input>
+        <form name ="grantForm" class="list " >
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="20" placeholder="Grant Number" name="grantNumber" ng-model = "JSON['Grant Number String']" required/>
             </label>
         </form>
 
-    <!--controller scope var: project
-        var name: investigator
-        type: spinner
-        error checking: no
-        min|max req: not implemented -->
-  <form name ="investigatorForm" class="list" novalidate> 
-    <div class="select-container">
-     <select class="wide"
-             ng-model = "JSON ['Principal Investigator']" 
-             ng-options="key as people for (key, people) in peopleJSON" required>
-                <option value=""> Prinicipal Investigator</option>
-    </select>
-    </div>
-</form> 
+        <form name ="investigatorForm" class="list" novalidate> 
+            <div class="select-container">
+                 <select class="wide"
+                         ng-model = "JSON ['Principal Investigator']" 
+                         ng-options="key as people for (key, people) in peopleJSON" required>
+                    <option value=""> Prinicipal Investigator</option>
+                 </select>
+             </div>
+        </form> 
 
-
-    <!--var name: n/a
-        type: button
-        onclick fucntion: saveProjectJSON()
-        onclick function: remove modal and free memory
-        error checking: checks if all input are of valid types and lengths 
-        toFix: back() function call causes modal to not respawn upon attempt to add second
-                item -->
-
-        <a id="project-button12" 
-           class=" button button-large button-block button-positive wide" 
-           ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid||checked" ng-click="saveJSON(); back(); destroyModal();">Save</a>
-
-
-    <!-- error handling for the above forms -->
-<!--     
-    <div class="padding">
-         <p ng-show= "nameForm.name.$error.required || institutionForm.institution.$error.required || fundingForm.funding.$error.required || grantForm.grantNumber.$error.required || investigatorForm.investigator.$error.required "> *All inputs must be completed </p>
-   </div> -->
-    
+        <a class=" button button-large button-block button-positive wide" 
+           ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid||checked" 
+           ng-click="saveJSON(); back(); destroyModal();">
+           Save</a>
     </ion-content>
     
     <!--FAB Link for the addition of documents-->

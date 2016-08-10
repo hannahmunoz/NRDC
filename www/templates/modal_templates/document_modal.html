@@ -7,41 +7,34 @@
       delegate-handle="scrollable" 
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()"> 
-<!--    controller scope var: document
-        var name: documentName
-        type: text
-        error checking: no
-        min|max req: not implemented --> 
-        <form name = "nameForm" id="document-form53" class="list " novalidate>
-            <label class="item item-input " id="document-input55" >
-                <ion-md-input type="text" maxlength="50" placeholder="Name" name="documentName" ng-model = "JSON['Name']" required></ion-md-input>
-            </label>
-        </form>
 
-<!--    controller scope var: document
-        var name: notes
-        type: text
-        error checking: no
-        min|max req: not implemented --> 
-        <form name = "notesForm" id="document-form54" class="list " novalidate>
-            <label class="item item-input " id="document-input56" >
-                <ion-md-input type="text" maxlength="50" name="notes" placeholder="Notes" ng-model = "JSON['Notes']" required></ion-md-input>
-            </label>
-        </form>
-
-<!--    controller scope var: documents
-        var name: path
-        type: text
-        error checking: no
-        min|max req: not implemented --> 
-        <form name = "pathForm" id="document-form55" class="list " novalidate>
-            <label class="item item-input " id="document-input57" >
-                <ion-md-input type="text"  placeholder="Path" name="path" ng-model = "JSON['Path']" required></ion-md-input>
+        <form name = "nameForm" class="list " >
+            <label class="item item-input "  >
+                <ion-md-input type="text" maxlength="50" placeholder="Name" name="documentName" ng-model = "JSON['Name']" required/>
             </label>
         </form>
 
 
-  <a id="site-button23" class=" button button-positive button-large button-block wide" ng-disabled = "nameForm.$invalid || notesForm.$invalid || pathForm.$invalid" ng-click = "saveJSON(); back(); destroyModal();" >Save</a>
+        <form name = "notesForm"  class="list " >
+            <label class="item item-input ">
+                <ion-md-input type="text" maxlength="50" name="notes" placeholder="Notes" ng-model = "JSON['Notes']" required/>
+            </label>
+        </form>
+
+
+        <form name = "pathForm"  class="list ">
+            <label class="item item-input " >
+                <ion-md-input type="text"  placeholder="Path" name="path" ng-model = "JSON['Path']" required/>
+            </label>
+        </form>
+
+
+        <a 
+        class=" button button-positive button-large button-block wide" 
+        ng-disabled = "nameForm.$invalid || notesForm.$invalid || pathForm.$invalid" 
+        ng-click = "saveJSON(); back(); destroyModal();" >
+        Save</a>
+
 
 
             <!-- error handling for the above forms -->

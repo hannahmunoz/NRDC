@@ -2,67 +2,85 @@ angular.module('app.services', [])
 
 // factory: sync
 // fucntion(s): 
-//		create
 //		read
-
+//		post
 .factory ('sync', function($q, $http, $cordovaFile, File, ObjectCounter, $cordovaToast){
 
-// function:		create
-// purpose: post request to http link 
-// var: string (url), JSON
-// return: empty JSON upon success
+
 
 // function: read
 // purpose:  retreive info from http link 
 // var: string (url)
-// return: filled JSON upon success
+// return: filled syncedJSON
 	function read (url, syncedJSON, title, JSON){
 		var ret;
-		var promise = $q (function (resolve, reject){  $http.get (url, {timeout: 10000})
-			.then (function Success (response){
-				console.log (url + " " + response.status +": " + response.statusText);
-					syncedJSON = response.data;
+		// returns a promise 
+		var promise = $q (function (resolve, reject){  
+			// get from the given url, timeout given in ms
+			$http.get (url, {timeout: 10000}).then (function Success (response){
+				//console.log (url + " " + response.status +": " + response.statusText);
+				// fills synced json
+				syncedJSON = response.data;
+				// gives return data
 				ret = response.data;
+				// resolves promise
 				resolve (response.data);
 			}, function Error (response){
 				console.warn (url + " " + response.status +": " + response.statusText);
-				File.readFile (title).then (function(success){
-					syncedJSON = success
-				ret = success;
-				resolve (success);
+				//	reads last known synced JSON from local data
+				File.readFile (title).then (function Success (success){
+					// fills synced json
+					syncedJSON = success;
+					// gives return data
+					ret = success;
+					// resolves promise
+					resolve (success);
 				})
-			})})
-			return (promise.then (function (success){
-				for (var i = 0; i < syncedJSON[title+'s'].length; i++){
+		})})
+			
+		// once promise is returned	
+		return (promise.then (function (success){
+			// fill JSONlist
+			for (var i = 0; i < syncedJSON[title+'s'].length; i++){
 				JSON [syncedJSON[title+'s'][i][title]] =  syncedJSON[title+'s'][i]['Name']; 
-				}
-				return ret;
-			}));
+			}
+			// return
+			return ret;
+		}));
 	}	
 
+// function: post
+// purpose: post request to http link 
+// var: string (url), JSON
+// return: promise
 	function post (url, JSON){
+		// return promise
 		return $q (function (resolve, reject){ 
-			config = {timeout: 10000};
-			$http.post (url, JSON, config).then (function Success (response){
-				console.log (File.checkFile ('Unsynced') );
+			// post to url, timeout in ms
+			$http.post (url, JSON, {timeout: 10000}).then (function Success (response){
+				// check if there is unsynced data saved
 				if (File.checkFile ('Unsynced')){
+					// remove it
 					$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
 				}
+				// show success
 				$cordovaToast.showLongBottom ("Post Successful");
+				// resolve promise
 				resolve (response.status);
-			//toast for successful post
-				}, function Error (response){
-				console.warn ("Post Error :" + response.statusText)
+			}, function Error (response){
+				// log error
+				console.warn ("Post Error :" + response.statusText);
+				// write to unsynced file
 				File.checkandWriteFile ('Unsynced', JSON);
-				console.log (response);
+				// toast failure
 				$cordovaToast.showLongBottom ("Post Error: " + response.statusText);
+				// reject promise
 				reject (response.status);
-			//toast to tell user what happened
 			})
 		})
-		// })
 	}
 	
+	// return factories
 	return{read: read,
 		   post: post};
 })
@@ -73,33 +91,36 @@ angular.module('app.services', [])
 //		checkPermissions
 // 		setOptions
 //		openCamera
-//		convertToBase64
+//		openGallery
 .factory('Camera', function( $q, $cordovaCamera, $cordovaToast) {
-
 // function: checkPermissions
 // purpose:  checks and asks for camera permissions
 // var: n/a
 // return: n/a
 	function checkPermissions (){
 		// add event listener
-      document.addEventListener("deviceready", onDeviceReady, false);
-      // wait for device to be ready
-      function onDeviceReady() {
-      	// check if camera permissions have been requested
-    	cordova.plugins.diagnostic.isCameraAuthorized(function(authorized){
-    		// if not, request access
-    	if (!authorized){
-			cordova.plugins.diagnostic.requestCameraAuthorization(function(status){
-        	}, function(error){
+    	document.addEventListener("deviceready", onDeviceReady, false);
+      	// wait for device to be ready
+    	function onDeviceReady() {
+      		// check if camera permissions have been requested
+    		cordova.plugins.diagnostic.isCameraAuthorized( function Success (authorized){
+    			// if not, request access
+    			if (!authorized){
+					cordova.plugins.diagnostic.requestCameraAuthorization( function Success (status){
+        		}, function Failure (error){
+        			// display error
         		    $cordovaToast.showLongBottom ("Camera Permissions Requested Error: "+ error);
-        		console.error ("Camera Permissions Request Error:" + error);
+        		    // log error
+        			console.error ("Camera Permissions Request Error:" + error);
         		});
+				}
+			}, function Failure (error){
+				// log error
+				console.error ("Camera Autherization Request Check Error:" + error);
+				// display error
+    			$cordovaToast.showLongBottom ("Camera Autherization Request Error: "+ error);
+			});
 		}
-		}, function(error){
-			console.error ("Camera Autherization Request Check Error:" + error)
-    		$cordovaToast.showLongBottom ("Camera Autherization Request Error: "+ error);
-		});
-	}
 	}
 
 // function: setOptions
@@ -122,66 +143,88 @@ angular.module('app.services', [])
 // function: openCamera
 // purpose:  opens the camera and take the picture
 // var: n/a
-// return: n/a (eventually will return the encoded image)
+// return: hexidemical image string or null
 	function openCamera() {
+		// return promise
 		return $q (function (resolve, reject){ 
-		document.addEventListener ("deviceready", function(){
-
-    	var options = setOptions(Camera.PictureSourceType.CAMERA);
-			navigator.camera.getPicture(function onSuccess (imageData){
-   			var image =  atob (imageData)
-				var result = "";
-    			for (var i = 0; i < image.length; i++) {
-        			result += image.charCodeAt(i).toString(16);
-    			}
-				resolve (result);
-			}, function onFail(error){
-				if (error != "Camera Cancelled"){
-					$cordovaToast.showLongBottom ("Camera Error");
-					console.error ("Camera Error: " + error);
-				}
-				reject (null);
+			// wait for device to be ready
+			document.addEventListener ("deviceready", function(){
+				// get camera options
+    			var options = setOptions(Camera.PictureSourceType.CAMERA);
+    			// get the picture
+				navigator.camera.getPicture( function Success (imageData){
+					// convert base 64 to string
+   					var image =  atob (imageData);
+   					// convert to hexidecimal string
+					var result = "";
+    				for (var i = 0; i < image.length; i++) {
+        				result += image.charCodeAt(i).toString(16);
+    				}
+    				// resolve promise
+					resolve (result);
+				}, function Failure (error){
+					if (error != "Camera Cancelled"){
+						// show/log error
+						$cordovaToast.showLongBottom ("Camera Error");
+						console.error ("Camera Error: " + error);
+					}
+					// reject promise
+					reject (null);
 			}, options);
-	})
-
+		})
 	})
 }
 
 // function: openGallery
 // purpose:  opens the gallery to select a picture
 // var: n/a
-// return: n/a (eventually will return the encoded image)
+// return: hexidemical image string or null
 	function openGallery() {
+		// return promise
 		return $q (function (resolve, reject){
-		document.addEventListener ("deviceready", function(){
-			var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
-    		navigator.camera.getPicture(function cameraSuccess(imageData) {
-    			var image =  atob (imageData)
-				var result = "";
-    			for (var i = 0; i < image.length; i++) {
-        			result += image.charCodeAt(i).toString(16);
-    			}
+			// wait for device to be ready
+			document.addEventListener ("deviceready", function(){
+				//	get options
+				var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
+				// get the picture
+    			navigator.camera.getPicture( function Success(imageData) {
+    				// convert image
+    				var image =  atob (imageData);
+    				// to hexidecimal
+					var result = "";
+    				for (var i = 0; i < image.length; i++) {
+        				result += image.charCodeAt(i).toString(16);
+    				}
+    			// resolve promise
 				resolve (result);
-    		}, function cameraError(error) {
+    		}, function Failure (error) {
     			if (error != "Selection cancelled."){
+    				// show/log error
     				$cordovaToast.showLongBottom ("Gallery Error");
         			console.error ("Gallery Error: " + error);
         		}
-        	reject (null);
-    	}, options);
-	})
-	})
-}
+        		// reject promise
+        		reject (null);
+    		}, options);
+			})
+		})
+	}
 
 // return values
 	return {checkPermissions: checkPermissions,
 			setOptions: setOptions,
 			openCamera: openCamera,
-			openGallery: openGallery,
-		};
-
+			openGallery: openGallery};
 })
 
+// factory: DynamicPage
+// function(s): 
+//		getTitle
+// 		setTitle
+//		getRoute
+//		setRoute
+//		setJSON
+//		getJSON
 .factory ('DynamicPage', function(){
 	var title = null;
 	var route = null;
@@ -195,160 +238,233 @@ angular.module('app.services', [])
 			getJSON: function(){return JSON;}};
 })
 
+// factory: ObjectCounter
+// function(s): 
+//		count
 .factory ('ObjectCounter', function(){
+	// returns the number of items in an object
 	function count (object){
 		var i = 0;
 		for (var x in object){
-			if (object.hasOwnProperty (x)){
-				i++;
-			}
+			if (object.hasOwnProperty (x)){ i++;}
 		}
 		return i;
 	}
 
+	// return
 	return{count: count};
 })
 
 // factory: GPS
 // function(s): 
 //		checkPermissions
-// 		setOptions
-//		openCamera
-//		convertToBase64
+//		getLocation
 .factory('GPS', function($cordovaToast) {
-
 // function: checkPermission
 // 	purpose: checks and asks for permission to access gps
 // 	var: n/a
 //	return: n/a
 	function checkPermissions(){
-		//check if location is enabled
-		cordova.plugins.diagnostic.isLocationAuthorized(function(enabled){
-    		   if (!enabled){
-			cordova.plugins.diagnostic.requestLocationAuthorization(function(status){
-		}, function(error){
-    		console.error("GPS Permissions Request Error:" + error);
-    		$cordovaToast.showLongBottom ("GPS Permissions Request Error:" + error);
+		// check if location is enabled
+		cordova.plugins.diagnostic.isLocationAuthorized( function Success (enabled){
+    		if (!enabled){
+    		   	// if not enabled, request Autherization
+				cordova.plugins.diagnostic.requestLocationAuthorization(function(status){
+			}, function Failure (error){
+				// show/log error
+    			console.error("GPS Permissions Request Error:" + error);
+    			$cordovaToast.showLongBottom ("GPS Permissions Request Error:" + error);
+			}); 
+			}}, function Failure (error){
+				// show/log error
+    			console.error("GPS Permissions Request Check Error:" + error);
+    			$cordovaToast.showLongBottom ("GPS Permissions Request Check Error:" + error);
 		});
-	}}, function(error){
-    		console.error("GPS Permissions Request Check Error:" + error);
-    		$cordovaToast.showLongBottom ("GPS Permissions Request Check Error:" + error);
-	});
 	}
 
+// function: getLocation
+// 	purpose: returns the location in the JSON variables Longitude, Latitude and Elevation
+// 	var: JSON
+//	return: n/a
 	function getLocation(JSON){
-		navigator.geolocation.getCurrentPosition(function onSuccess (position){
+		// get location
+		navigator.geolocation.getCurrentPosition( function Success (position){
   			JSON ['Longitude'] = position.coords.longitude;
   			JSON ['Latitude'] = position.coords.latitude;
   			JSON ['Elevation'] = position.coords.altitude;
-		}, function onError(){
-        console.error ('Location Error:' + error.code + ' ' + error.message);
-    	$cordovaToast.showLongBottom ("Unable to retreive location");
+		}, function Error(){
+			// log/show error
+       		console.error ('Location Error:' + error.code + ' ' + error.message);
+    		$cordovaToast.showLongBottom ("Unable to retreive location");
 		}, { enableHighAccuracy: true });
 	}
 
+	// return
 	return{checkPermissions: checkPermissions,
 		   getLocation: getLocation};
-	})
+})
 
-
+// factory: File
+// function(s): 
+//		createDiretory
+//		checkFile
+// 		createFile
+//		checkandWriteFile
+// 		readFile
 .factory ('File', function($cordovaFile, $q, $cordovaToast){
 
+// function: createDirectory
+// 	purpose: checks to see if the NRDC directory exists. If not, creates it
+// 	var: n/a
+//	return: n/a
 	function createDirectory(){
-		document.addEventListener ("deviceready", function(){
-			$cordovaFile.checkDir (cordova.file.cacheDirectory,'NRDC').then (function (success){
-		},function (error){
-			if (error.code == 1){
-				$cordovaFile.createDir (cordova.file.cacheDirectory,'NRDC', false);	
-			}
-			else{
-			    console.error ('Create Directory Error:' + error);
-    			$cordovaToast.showLongBottom ("Unable to use local storage");	
-			}
+		// waits for device to be ready
+		document.addEventListener ("deviceready", function Success (){
+			// check for directory
+			$cordovaFile.checkDir (cordova.file.cacheDirectory,'NRDC').then (function Success (success){},function Failure (error){
+				// if the error is file does not exist
+				if (error.code == 1){
+					// create file
+					$cordovaFile.createDir (cordova.file.cacheDirectory,'NRDC', false);	
+				}
+				else{
+					// show/ log error
+			   		console.error ('Create Directory Error:' + error);
+    				$cordovaToast.showLongBottom ("Unable to use local storage");	
+				}
 			})
 		})
 	}
 
+// function: checkFile
+// 	purpose: checks to see if the file exists
+// 	var: title
+//	return: promise
 	function checkFile(title){
-	return $q (function (resolve, reject){document.addEventListener ("deviceready",function(){
-			 $cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then (function (success){
-			 	resolve (success.isFile);
-			 }, (function (error){
-			 	reject (false);
-			 }))
+		//return promise
+		return $q (function (resolve, reject){ 
+			// wait for device to be ready
+			document.addEventListener ("deviceready", function (){
+				// check file
+			 	$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then ( function Success(success){
+			 		// resolve promise
+			 		resolve (success.isFile);
+				}, (function Failure (error){
+					// reject promise
+			 		reject (false);
+				}))
+			})
 		})
-	})
 	}
 
+// function: createFile
+// 	purpose: creates a file in the NRDC directory
+// 	var: title
+//	return: promise
 	function createFile (title){
-		document.addEventListener ("deviceready",function(){
-			$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then(function(success){
-			},function(error){
-					$cordovaFile.createFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt',  true);
-				})
+		// wait for device to be ready
+		document.addEventListener ("deviceready", function(){
+			// make sure the file exists
+			$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then( function Success (success){},function Failure (error){
+					// creates the file
+					$cordovaFile.createFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', true);
+			})
 		})
 	}
 
+// function: checkandWriteFile
+// 	purpose: checks that file exists and writes to it
+// 	var: title, JSON
+//	return: n/a
 	function checkandWriteFile (title, JSON){
-		document.addEventListener ("deviceready",function(){
-		$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then(function(success){
-			$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt',JSON, true);
-		},function(error){
-		if (error.code == 1){
-				$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', JSON,  true).then (function (){			});
+		//wait for device to be ready
+		document.addEventListener ("deviceready", function (){
+			// check that file exists
+			$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then(function Success (success){
+				// write to file
+				$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt',JSON, true);
+			}, function Failure (error){
+				if (error.code == 1){
+					$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', JSON,  true).then (function (){			});
 					return error;
 				}
-		else{
-			console.error ("File Write Error: " + title + " " + error.code);
-			$cordovaToast.showLongBottom ("Unable to use local storage");
-			}
-		}
-		)
-	})}
-
-
-	function readFile (title){
-		return $q(function (resolve, reject){
-			document.addEventListener ("deviceready", function(){
-				$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
-					 $cordovaFile.readAsText (cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
-						resolve (JSON.parse(result));
-						}, function (error){
-							console.error("File Read Error:" + title + " " + error.code);
-							reject (error);
-						})
-					}, function (error){
-						console.error ("Directory Error: " + title + " " + error.code);
-						reject (error);
-				})
+				else{
+					// show/log error
+					console.error ("File Write Error: " + title + " " + error.code);
+					$cordovaToast.showLongBottom ("Unable to use local storage");
+				}
+			})
 		})
-	})
+	}
+
+// function: readFile
+// 	purpose: reads the data from the file
+// 	var: string
+//	return: JSON, promise
+	function readFile (title){
+		// return promise
+		return $q(function (resolve, reject){
+			// wait for device to be ready
+			document.addEventListener ("deviceready", function(){
+				// check that file exists
+				$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then ( function Success (result){
+					// read the file to a string
+					$cordovaFile.readAsText (cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
+						// resolve promise
+						resolve (JSON.parse(result));
+					}, function Failure (error){
+						// log error
+						console.error("File Read Error:" + title + " " + error.code);
+						// reject promise
+						reject (error);
+					})
+				}, function Failure (error){
+					// log error
+					console.error ("Directory Error: " + title + " " + error.code);
+					// reject promise
+					reject (error);
+				})
+			})
+		})
 	}
 	
+	//return
 	return {createDirectory: createDirectory,
 			checkFile: checkFile,
 			createFile: createFile,
 			checkandWriteFile: checkandWriteFile,
 			readFile: readFile};
-
 })
 
+
+// factory: SaveNew
+// function(s): 
+//		save
+//		deleteJSON
+//		deletePeople
 .factory ('SaveNew', function(uuid2, ObjectCounter){
 
+// function: save
+// 	purpose: save the JSON to the unsynced JSON
+// 	var: string
+//	return: n/a
 	function save (type, isitNew, JSON, finalJSON, imageData){
 
+		// all entries need a modification date
 		JSON ["Modification Date"] = new Date();
 
+		// if new (for possible future synced edits)
 		if (isitNew){
 			JSON ["Creation Date"] = new Date();		
 			JSON ["Unique Identifier"] = uuid2.newuuid();
 		}
 
+		// switch based on type, fills the JSON with the needed data
 		switch (type){
 			case 'Networks':
 				JSON ["Started Date"] = new Date();
 				JSON ["Principal Investigator"] = parseInt (JSON ["Principal Investigator"]);
-				break;
+			break;
 
 			case 'People':
 				if (angular.isUndefined (JSON ['Phone']))
@@ -359,14 +475,16 @@ angular.module('app.services', [])
 					 JSON ['Organization'] = null;
 				JSON ["Started Date"] = new Date();
 				JSON ["Photo"] = imageData;
-				break;
+			break;
 
 			case 'Sites':
+				// timezones for site
 				var TZAJSON = {10:'HST', 9: 'AKST', 8: 'PST', 7: 'MST', 6: 'CST', 5: 'EST', 4: 'AST'};
 				var TZJSON = {10:'Hawaii-Aleutian Standard Time', 9: 'Alaska Standard Time', 8: 'Pacific Standard Time', 7: 'Mountain Standard Time', 6: 'Central Standard Time', 5: ' Eastern Standard Time', 4: 'Atlantic Standard Time'};
-				JSON ["Network"] = parseInt (JSON ["Network"]);
+				
+				JSON ['Network'] = parseInt (JSON ['Network']);
 				if (angular.isUndefined (JSON ['Permit Holder']))
-				 JSON ['Permit Holder'] = null;
+					JSON ['Permit Holder'] = null;
 				else
 					JSON ['Permit Holder'] = parseInt (JSON ['Permit Holder']);
 				if (angular.isUndefined (JSON ['Land Owner']))
@@ -374,123 +492,135 @@ angular.module('app.services', [])
 				else
 					JSON ['Land Owner'] = parseInt (JSON ['Land Owner']);
 				JSON ['Longitude'] = parseFloat (parseFloat(JSON ['Longitude']).toFixed (7));
-
   				JSON ['Latitude'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));
-  				console.log (JSON ['Latitude']);
   				JSON ['Elevation'] = parseFloat (parseFloat (JSON ['Elevation']).toFixed (7));
 				JSON ['Landmark Photo'] = imageData;
 				JSON ['Time Zone Name'] = TZJSON[new Date().getTimezoneOffset()/60 + 1];
 				JSON ['Time Zone Offset'] = (new Date().getTimezoneOffset());
 				JSON ['Time Zone Abbreviation'] = TZAJSON[new Date().getTimezoneOffset()/60 + 1];
-				break;
+			break;
 
 			case 'Systems':
 				if (angular.isUndefined (JSON ['Details']))
-				 JSON ['Details'] = null;
+					JSON ['Details'] = null;
 				if (angular.isUndefined (JSON ['Power']))
-				 JSON ['Power'] = null;
+					JSON ['Power'] = null;
 				if (angular.isUndefined (JSON ['Installation Location']))
-				 JSON ['Installation Location'] = null;				 				 			
-
+					JSON ['Installation Location'] = null;				 				 			
 				JSON ["Manager"] = parseInt (JSON ["Manager"]);
 				JSON ["Site"] = parseInt (JSON ["Site"]);
 				JSON ["Photo"] = imageData;
-				break;
+			break;
 
 			case 'Deployments':
 				if (angular.isUndefined (JSON ['Purpose']))
-				 JSON ['Purpose'] = null;
+					JSON ['Purpose'] = null;
 				if (angular.isUndefined (JSON ['Center Offset']))
-				 JSON ['Center Offset'] = null;
+					JSON ['Center Offset'] = null;
 				if (angular.isUndefined (JSON ['Longitude']))
-				 JSON ['Longitude'] = null;
+					JSON ['Longitude'] = null;
 				else
 					JSON ['Longitude'] = parseFloat (parseFloat (JSON ['Longitude']).toFixed (7));
 				if (angular.isUndefined (JSON ['Latitude']))
-				 JSON ['Latitude'] = null;
+					JSON ['Latitude'] = null;
 				else
 					JSON ['Latitude'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));
 				if (angular.isUndefined (JSON ['Elevation']))
-				 JSON ['Elevation'] = null;
+					JSON ['Elevation'] = null;
 				else
 					JSON ['Elevation'] = parseFloat (parseFloat (JSON ['Elevation']).toFixed (7));;
 				if (angular.isUndefined (JSON ['Height From Ground']))
-				 JSON ['Height From Ground'] = null;
-				 if (angular.isUndefined (JSON ['Parent Logger']))
-				 JSON ['Parent Logger'] = null;
+					JSON ['Height From Ground'] = null;
+				if (angular.isUndefined (JSON ['Parent Logger']))
+					JSON ['Parent Logger'] = null;
 				else
-				  JSON ['Height From Ground'] = parseFloat (parseFloat (JSON ['Height From Ground']).toFixed (7));
-				 if (angular.isUndefined (JSON ['Notes']))
-				 JSON ['Notes'] = null; 	
+				 	JSON ['Height From Ground'] = parseFloat (parseFloat (JSON ['Height From Ground']).toFixed (7));
+				if (angular.isUndefined (JSON ['Notes']))
+					JSON ['Notes'] = null; 	
 				if (angular.isUndefined (JSON ['Established Date']))
-				 JSON ['Established Date'] = null;
+					JSON ['Established Date'] = null;
 			 	if (angular.isUndefined (JSON ['Abandoned Date']))
-				 JSON ['Abandoned Date'] = null;			 				 				 			
+					JSON ['Abandoned Date'] = null;			 				 				 			
 				JSON ["System"] = parseInt (JSON ["System"]);
-				break;
+			break;
 
 			case 'Components':
 				if (angular.isUndefined (JSON ['Last Calibrated Date']))
-				 JSON ['Last Calibrated Date'] = null;
+					JSON ['Last Calibrated Date'] = null;
 				if (angular.isUndefined (JSON ['Manufacturer']))
-				 JSON ['Manufacturer'] = null;
+					JSON ['Manufacturer'] = null;
 				if (angular.isUndefined (JSON ['Model']))
-				 JSON ['Model'] = null;
+					JSON ['Model'] = null;
 				if (angular.isUndefined (JSON ['Serial Number']))
-				 JSON ['Serial Number'] = null;
+					JSON ['Serial Number'] = null;
 				if (angular.isUndefined (JSON ['Vendor']))
-				 JSON ['Vendor'] = null;
+					JSON ['Vendor'] = null;
 				if (angular.isUndefined (JSON ['Supplier']))
-				 JSON ['Supplier'] = null;
+					JSON ['Supplier'] = null;
 				if (angular.isUndefined (JSON ['Installation Date']))
-				 JSON ['Installation Date'] = null;
+					JSON ['Installation Date'] = null;
 				if (angular.isUndefined (JSON ['Installation Details']))
-				 JSON ['Installation Details'] = null;
+					JSON ['Installation Details'] = null;
 				if (angular.isUndefined (JSON ['Wiring Notes']))
-				 JSON ['Wiring Notes'] = null;
+					JSON ['Wiring Notes'] = null;
 				JSON ["Started Date"] = new Date();
 				JSON ["Photo"] = imageData;
 				JSON ["Deployment"] = parseInt (JSON ["Deployment"]);
-				break;
+			break;
 
 			case 'Documents':
 				JSON ["Started Date"] = new Date();
-				break;
+			break;
 
 			case 'Service Entries':
-			if (angular.isUndefined (JSON ['Date']))
-				 JSON ['Date'] = null;
+				if (angular.isUndefined (JSON ['Date']))
+					JSON ['Date'] = null;
 				JSON ["Photo"] = imageData;
 				JSON ["Creator"] = parseInt (JSON ["Creator"]);
-				break;
+			break;
         }
 
         // print json to console for debugging
-		console.log (JSON);
+		//console.log (JSON);
+		//another check for possible future edits
 		if (isitNew){
+			// pushes into unsyncedJSON
 			finalJSON.push (JSON);
 		}
+
 		JSON = {};
 	}
 
+// function: deleteJSON
+// 	purpose: deletes in UnsyncedJSON
+// 	var: string
+//	return: n/a
 	function deleteJSON (name, unsyncedJSON, JSONlist, listJSON){
-
+		// find in unsyncedJSON
 		for (var i = 0; i < unsyncedJSON.length; i ++){
 			if (name == unsyncedJSON[i]['Name']){
+				// remove
 				unsyncedJSON.splice (i, 1);	
 			}
 		}
 
+		// remove from listJSON
 		delete listJSON[JSONlist.length - 1];
 
+		// find in JSONlist
 		for (var i = 0; i < JSONlist.length; i ++){
 			if (name == JSONlist[i]['Name']){
+				// remove
 				JSONlist.splice (i, 1);	
 			}
 		}
         
 	}
 
+// function: deletePeople
+// 	purpose: deletes People in UnsyncedJSON. Same as aboec, but with first name/last name
+// 	var: string
+//	return: n/a
 	function deletePeople (name, unsyncedJSON, JSONlist, listJSON){
 
 		for (var i = 0; i < unsyncedJSON.length; i ++){
@@ -510,6 +640,7 @@ angular.module('app.services', [])
 
 	}
 
+	//return
 	return {save: save,
 			deleteJSON: deleteJSON,
 			deletePeople: deletePeople}
@@ -523,5 +654,4 @@ angular.module('app.services', [])
     function sift(){
         
     }
-    
 });
