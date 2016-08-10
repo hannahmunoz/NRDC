@@ -53,30 +53,40 @@ angular.module('app.services', [])
 // purpose: post request to http link 
 // var: string (url), JSON
 // return: promise
-	function post (url, JSON){
+	function post (url, JSON, loggedIn){
 		// return promise
 		return $q (function (resolve, reject){ 
-			// post to url, timeout in ms
-			$http.post (url, JSON, {timeout: 10000}).then (function Success (response){
-				// check if there is unsynced data saved
-				if (File.checkFile ('Unsynced')){
-					// remove it
-					$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
-				}
-				// show success
-				$cordovaToast.showLongBottom ("Post Successful");
-				// resolve promise
-				resolve (response.status);
-			}, function Error (response){
-				// log error
-				console.warn ("Post Error :" + response.statusText);
+			if (loggedIn){
+				// post to url, timeout in ms
+				$http.post (url, JSON, {timeout: 10000}).then (function Success (response){
+					// check if there is unsynced data saved
+					if (File.checkFile ('Unsynced')){
+						// remove it
+						$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
+					}
+					// show success
+					$cordovaToast.showLongBottom ("Post Successful");
+					// resolve promise
+					resolve (response.status);
+				}, function Error (response){
+					// log error
+					console.warn ("Post Error :" + response.statusText);
+					// write to unsynced file
+					File.checkandWriteFile ('Unsynced', JSON);
+					// toast failure
+					$cordovaToast.showLongBottom ("Post Error: " + response.statusText);
+					// reject promise
+					reject (response.status);
+				})
+			}
+			else{
 				// write to unsynced file
 				File.checkandWriteFile ('Unsynced', JSON);
 				// toast failure
-				$cordovaToast.showLongBottom ("Post Error: " + response.statusText);
+				$cordovaToast.showLongBottom ("Not Logged In");
 				// reject promise
-				reject (response.status);
-			})
+				reject ();
+			}
 		})
 	}
 	
@@ -94,7 +104,6 @@ angular.module('app.services', [])
 // 	var: string, string
 //	return: n/a
 	function adminLogin(JSON){
-
 		return $q (function (resolve, reject){  
 			JSON ['Password'] = (sha256(JSON ['Password']));
 			$http.post ("http://sensor.nevada.edu/GS/Services/admin/", JSON, {timeout: 10000}).then (function Success (response){
