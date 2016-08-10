@@ -85,6 +85,66 @@ angular.module('app.services', [])
 		   post: post};
 })
 
+// factory: Login
+// function(s): 
+//		adminLogin
+.factory ('Login', function($q, $http, $cordovaToast, File, $cordovaFile){
+// function: adminLogin
+// 	purpose: logs into the server as an admin
+// 	var: string, string
+//	return: n/a
+	function adminLogin(JSON){
+
+		return $q (function (resolve, reject){  
+			JSON ['Password'] = (sha256(JSON ['Password']));
+			$http.post ("http://sensor.nevada.edu/GS/Services/admin/", JSON, {timeout: 10000}).then (function Success (response){
+				if (response.data.AssociatedSites.length != 0){
+					var promise = $q (function (resolve, reject){ 
+						File.checkFile ('Logins').then (function Success (){
+							File.readFile ('Logins').then (function Success (json){
+								if (response != null){
+									json[JSON ['Username']] = response.data.AssociatedSites;
+									File.checkandWriteFile ('Logins', json);
+								}
+							})
+							resolve (true);
+						}, function Failure (){
+							var array = {};
+							array [JSON ['Username']] = response.data.AssociatedSites;
+							File.createFile ('Logins').then (function Success (){
+								File.checkandWriteFile ('Logins', array);
+							});
+							resolve (true);
+						})
+					})
+
+					promise.then (function Success (){
+						$cordovaToast.showLongBottom ("Login Successful");
+			 			resolve (response.data.AssociatedSites);	
+					})
+				}
+
+				else {
+					$cordovaToast.showLongBottom ("Login Failed");
+	 				reject ('{}');
+				}
+			}, function Failure (error){
+		 		File.checkFile ('Logins').then (function Success (){
+					File.readFile ('Logins').then (function Success (json){
+						reject (json [JSON['Username']]);
+					})
+				})
+				$cordovaToast.showLongBottom ("Server cannot be reached");
+		 	})
+		})
+	}
+
+	return {
+		adminLogin:adminLogin
+	}
+})
+
+
 
 // factory: Camera
 // function(s): 
@@ -351,7 +411,7 @@ angular.module('app.services', [])
 			 		resolve (success.isFile);
 				}, (function Failure (error){
 					// reject promise
-			 		reject (false);
+			 		reject (error.code);
 				}))
 			})
 		})
@@ -362,14 +422,21 @@ angular.module('app.services', [])
 // 	var: title
 //	return: promise
 	function createFile (title){
+		return $q (function (resolve, reject){ 
 		// wait for device to be ready
 		document.addEventListener ("deviceready", function(){
 			// make sure the file exists
-			$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then( function Success (success){},function Failure (error){
-					// creates the file
-					$cordovaFile.createFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', true);
+			$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then( function Success (success){
+				reject (false);
+			},function Failure (error){
+				// creates the file
+				$cordovaFile.createFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', true).then (function Success (){
+					resolve (true);
+				})
+
 			})
 		})
+	})
 	}
 
 // function: checkandWriteFile
@@ -382,7 +449,7 @@ angular.module('app.services', [])
 			// check that file exists
 			$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then(function Success (success){
 				// write to file
-				$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt',JSON, true);
+				$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', JSON, true);
 			}, function Failure (error){
 				if (error.code == 1){
 					$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', JSON,  true).then (function (){			});
@@ -411,7 +478,12 @@ angular.module('app.services', [])
 					// read the file to a string
 					$cordovaFile.readAsText (cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
 						// resolve promise
-						resolve (JSON.parse(result));
+						if (result != ""){
+							resolve (JSON.parse(result));
+						}
+						else {
+							resolve (null);
+						}
 					}, function Failure (error){
 						// log error
 						console.error("File Read Error:" + title + " " + error.code);
@@ -420,7 +492,7 @@ angular.module('app.services', [])
 					})
 				}, function Failure (error){
 					// log error
-					console.error ("Directory Error: " + title + " " + error.code);
+					console.error ("File Not Found: " + title + " " + error.code);
 					// reject promise
 					reject (error);
 				})

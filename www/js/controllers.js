@@ -102,7 +102,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 })
   
  // controller for the main menu  
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, Login, $http, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
 
 	// create global variables,could probably be cut down but that would mean changing everything
 	$rootScope.peopleSyncedJSON = {};
@@ -135,6 +135,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
     $rootScope.level = 0;
 
+    $scope.loginJSON = {};
+    $rootScope.associatedNetworks = {};
+    $rootScope.loggedIn = false;
+
 	// URL list
 	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
 	$rootScope.urlPaths = ["people", "networks", "sites", "systems", "deployments", "components", "documents","service_entries"];
@@ -165,6 +169,20 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     		// the menu is reinitiated
     		$scope.init ();
     	});
+    }
+
+    $scope.login = function (){
+        $scope.loginJSON ['Username'] = "Admin";
+        $scope.loginJSON ['Password'] = "Password";
+        Login.adminLogin ($scope.loginJSON).then (function Success (response){
+            $rootScope.associatedNetworks = response;
+            $rootScope.loggedIn = true;
+        }, function Failure (error){
+            $rootScope.associatedNetworks = error;
+            console.log ($rootScope.associatedNetworks);
+            $rootScope.loggedIn = false;
+        });
+
     }
     
     
