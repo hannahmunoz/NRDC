@@ -29,7 +29,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		}	
 	}
 
-		// loads the data into the page based on the title of the page
+
+	// loads the data into the page based on the title of the page
 	switch (DynamicPage.getTitle()){
 		case 'Networks':
 				$scope.JSON['Principal Investigator'] = JSON.stringify($scope.JSON['Principal Investigator']);
@@ -102,7 +103,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 })
   
  // controller for the main menu  
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, $http, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, Login, $http, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
 
 	// create global variables,could probably be cut down but that would mean changing everything
 	$rootScope.peopleSyncedJSON = {};
@@ -135,6 +136,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
     $rootScope.level = 0;
 
+    $scope.loginJSON = {};
+    $rootScope.associatedNetworks = {};
+    $rootScope.loggedIn = false;
+
 	// URL list
 	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
 	$rootScope.urlPaths = ["people", "networks", "sites", "systems", "deployments", "components", "documents","service_entries"];
@@ -157,14 +162,28 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     // upload button
     $scope.uploadJSONS = function(){
-    	// posts the unsynced json to edge
-    	var promise = sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON);
-    	promise.then ( function (){
-    		// once finished, the unsynced json is cleared
-    		$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
-    		// the menu is reinitiated
-    		$scope.init ();
-    	});
+    	   // posts the unsynced json to edge
+    	   var promise = sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON, $rootScope.loggedIn);
+    	   promise.then ( function (){
+    		  // once finished, the unsynced json is cleared
+    		  $rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
+    		  // the menu is reinitiated
+    		  $scope.init ();
+    	   });
+        
+    }
+
+    $scope.login = function (){
+        $scope.loginJSON ['Username'] = "Admin";
+        $scope.loginJSON ['Password'] = "password";
+        Login.adminLogin ($scope.loginJSON).then (function Success (response){
+            $rootScope.associatedNetworks = response;
+            $rootScope.loggedIn = true;
+        }, function Failure (error){
+            $rootScope.associatedNetworks = error;
+            $rootScope.loggedIn = false;
+        });
+
     }
     
     

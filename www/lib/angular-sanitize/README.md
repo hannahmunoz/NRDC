@@ -1,7 +1,7 @@
-# packaged angular-animate
+# packaged angular-sanitize
 
 This repo is for distribution on `npm` and `bower`. The source for this module is in the
-[main AngularJS repo](https://github.com/angular/angular.js/tree/master/src/ngAnimate).
+[main AngularJS repo](https://github.com/angular/angular.js/tree/master/src/ngSanitize).
 Please file issues and pull requests against that repo.
 
 ## Install
@@ -11,52 +11,43 @@ You can install this package either with `npm` or with `bower`.
 ### npm
 
 ```shell
-npm install angular-animate
+npm install angular-sanitize
+```
+
+Then add `ngSanitize` as a dependency for your app:
+
+```javascript
+angular.module('myApp', [require('angular-sanitize')]);
+```
+
+### bower
+
+```shell
+bower install angular-sanitize
 ```
 
 Add a `<script>` to your `index.html`:
 
 ```html
-<script src="/node_modules/angular-animate/angular-animate.js"></script>
+<script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
 ```
 
-Then add `ngAnimate` as a dependency for your app:
+Then add `ngSanitize` as a dependency for your app:
 
 ```javascript
-angular.module('myApp', ['ngAnimate']);
-```
-
-Note that this package is not in CommonJS format, so doing `require('angular-animate')` will
-return `undefined`.
-
-### bower
-
-```shell
-bower install angular-animate
-```
-
-Then add a `<script>` to your `index.html`:
-
-```html
-<script src="/bower_components/angular-animate/angular-animate.js"></script>
-```
-
-Then add `ngAnimate` as a dependency for your app:
-
-```javascript
-angular.module('myApp', ['ngAnimate']);
+angular.module('myApp', ['ngSanitize']);
 ```
 
 ## Documentation
 
 Documentation is available on the
-[AngularJS docs site](http://docs.angularjs.org/api/ngAnimate).
+[AngularJS docs site](http://docs.angularjs.org/api/ngSanitize).
 
 ## License
 
 The MIT License
 
-Copyright (c) 2010-2012 Google, Inc. http://angularjs.org
+Copyright (c) 2010-2015 Google, Inc. http://angularjs.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
