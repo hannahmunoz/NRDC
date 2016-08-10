@@ -168,28 +168,28 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     }
     
     
+    //Initial progressive list switch
+    //Called from main menu
     $scope.progressiveListSwitch = function(){
         var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
         var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
         var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSynchedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
         
-        $scope.listSwitch(tieredJSON[$rootScope.level], tieredSyncedJSON[$rootScope.level], tieredTitles[$rootScope.level], tieredRoutes[$rootScope.level]);
-        
+        //set the title and route of dynamic page one level back
+        //so we can view the info of what we just clicked
         DynamicPage.setTitle(tieredTitles[$rootScope.level]);
         DynamicPage.setRoute(tieredRoutes[$rootScope.level]);
         
-        
-        $rootScope.level += 1;
-        
-        
-        console.log($rootScope.unsyncedJSON);
+        $scope.listSwitch(tieredJSON[$rootScope.level], tieredSyncedJSON[$rootScope.level], tieredTitles[$rootScope.level], tieredRoutes[$rootScope.level]);
     }
     
 
     // used to gather data for listView depending on the type selected
     $scope.listSwitch = function (JSON, syncedJSON, title, route){
     	$scope.unsyncedListJSON = {};
+        
+        console.log($rootScope.level);
 
     	// adds elements to unsyncedListJSON object 
     	if (title != "Service Entries"){
@@ -362,8 +362,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 // listView controller
 .controller('listCtrl', function($scope, $rootScope, DynamicPage, $state, ObjectCounter, $ionicHistory, ionicMaterialInk, $ionicLoading) {
 	// gets data from the DynamicPage factory. Only works on first load
-	$scope.title = DynamicPage.getTitle();
-	$scope.route = DynamicPage.getRoute();
+    $scope.title = DynamicPage.getTitle();
+    $scope.route = DynamicPage.getRoute();
+    
+    $scope.itemSelecHist = [];
 
 	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
 		// works on every load after
@@ -387,7 +389,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         		}
         	}
         }
-		
+		console.log(DynamicPage.getJSON());
 	}
     
     $scope.viewItem = function(){
@@ -406,23 +408,39 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //list item clicked
         $scope.clickedJSON = DynamicPage.getJSON();
         
+        //store clicks except
+        //when we are at the component level
+        if($scope.level != 4){
+            $scope.itemSelecHist.push($scope.clickedJSON);
+        }
         
-        if($rootScope.level < tieredTitles.length){
+        //set the title and route of dynamic page one level back
+        //so we can view the info of what we just clicked
+        DynamicPage.setRoute(tieredRoutes[$rootScope.level]);
+        $scope.route = DynamicPage.getRoute();
+        
+        if($rootScope.level == tieredTitles.length){
+            return;
+        }
+        else if($rootScope.level < tieredTitles.length-1){
             
-            DynamicPage.setTitle(tieredTitles[$rootScope.level]);
-            DynamicPage.setRoute(tieredRoutes[$rootScope.level]);
             
-            //switch to a new list
-            $scope.listSwitch(tieredJSON[$rootScope.level], tieredSyncedJSON[$rootScope.level], tieredTitles[$rootScope.level], tieredRoutes[$rootScope.level]);
-
             
             //increment our current level in tired hierarchy
             //if we are not at the end
             $rootScope.level += 1;
             
+            //switch to a new list
+            $scope.listSwitch(tieredJSON[$rootScope.level], tieredSyncedJSON[$rootScope.level], tieredTitles[$rootScope.level], tieredRoutes[$rootScope.level]);
             
+           
         }
+        
+        //reset our current title and route
+        DynamicPage.setTitle(tieredTitles[$rootScope.level]);
+        $scope.title = DynamicPage.getTitle();
 
+        
         
     }
     
@@ -438,21 +456,22 @@ Under COnstruction
         
         //store the json of the
         //list item clicked
-        $scope.clickedJSON = DynamicPage.getJSON();
+        $scope.clickedJSON = $scope.itemSelecHist.pop()
+        DynamicPage.setJSON($scope.clickedJSON);
+        $scope.title = DynamicPage.getTitle();
+        $scope.route = DynamicPage.getRoute();
         
+            
+        //increment our current level in tired hierarchy
+        //if we are not at the end
+        $rootScope.level -= 1;
+
+        //switch to a new list
+        $scope.listSwitch(tieredJSON[$rootScope.level], tieredSyncedJSON[$rootScope.level], tieredTitles[$rootScope.level], tieredRoutes[$rootScope.level]);
         
         if($rootScope.level > 0){
-            
-            //increment our current level in tired hierarchy
-            //if we are not at the end
-            $rootScope.level -= 1;
-            
-            DynamicPage.setTitle(tieredTitles[$rootScope.level]);
-            DynamicPage.setRoute(tieredRoutes[$rootScope.level]);
-            
-            //switch to a new list
-            $scope.listSwitch(tieredJSON[$rootScope.level], tieredSyncedJSON[$rootScope.level], tieredTitles[$rootScope.level], tieredRoutes[$rootScope.level]);
-            
+            DynamicPage.setTitle(tieredTitles[$rootScope.level - 1]);
+            DynamicPage.setRoute(tieredRoutes[$rootScope.level - 1]);
         }
 
         
@@ -467,6 +486,10 @@ Under COnstruction
         console.log(syncedJSON);
         console.log(title);
         console.log(route);
+        console.log($rootScope.level);
+        
+        //reset the title with every 
+		$scope.title = title;
 
     	if (title != "Service Entries"){
     		for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
@@ -491,10 +514,6 @@ Under COnstruction
 
     	$rootScope.listJSON = angular.extend ({},JSON,$scope.unsyncedListJSON);
 
-        
-        
-    	DynamicPage.setTitle (title);
-    	DynamicPage.setRoute (route);
     }
     
     
