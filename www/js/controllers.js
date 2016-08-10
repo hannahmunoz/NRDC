@@ -425,12 +425,12 @@ Under COnstruction
             //if we are not at the end
             $rootScope.level -= 1;
             
+            DynamicPage.setTitle(tieredTitles[$rootScope.level]);
+            DynamicPage.setRoute(tieredRoutes[$rootScope.level]);
+            
             //switch to a new list
             $scope.listSwitch(tieredJSON[$rootScope.level], tieredSyncedJSON[$rootScope.level], tieredTitles[$rootScope.level], tieredRoutes[$rootScope.level]);
             
-                       
-            DynamicPage.setTitle(tieredTitles[$rootScope.level]);
-            DynamicPage.setRoute(tieredRoutes[$rootScope.level]);
         }
 
         
