@@ -390,11 +390,11 @@ angular.module('app.services', [])
 		// waits for device to be ready
 		document.addEventListener ("deviceready", function Success (){
 			// check for directory
-			$cordovaFile.checkDir (cordova.file.cacheDirectory,'NRDC').then (function Success (success){},function Failure (error){
+			$cordovaFile.checkDir (cordova.file.dataDirectory,'NRDC').then (function Success (success){},function Failure (error){
 				// if the error is file does not exist
 				if (error.code == 1){
 					// create file
-					$cordovaFile.createDir (cordova.file.cacheDirectory,'NRDC', false);	
+					$cordovaFile.createDir (cordova.file.dataDirectory,'NRDC', false);	
 				}
 				else{
 					// show/ log error
@@ -415,7 +415,7 @@ angular.module('app.services', [])
 			// wait for device to be ready
 			document.addEventListener ("deviceready", function (){
 				// check file
-			 	$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then ( function Success(success){
+			 	$cordovaFile.checkFile(cordova.file.dataDirectory, 'NRDC/'+title).then ( function Success(success){
 			 		// resolve promise
 			 		resolve (success.isFile);
 				}, (function Failure (error){
@@ -435,11 +435,11 @@ angular.module('app.services', [])
 		// wait for device to be ready
 		document.addEventListener ("deviceready", function(){
 			// make sure the file exists
-			$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then( function Success (success){
+			$cordovaFile.checkFile(cordova.file.dataDirectory, 'NRDC/'+title).then( function Success (success){
 				reject (false);
 			},function Failure (error){
 				// creates the file
-				$cordovaFile.createFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', true).then (function Success (){
+				$cordovaFile.createFile (cordova.file.dataDirectory, 'NRDC/'+title, true).then (function Success (){
 					resolve (true);
 				})
 
@@ -456,12 +456,12 @@ angular.module('app.services', [])
 		//wait for device to be ready
 		document.addEventListener ("deviceready", function (){
 			// check that file exists
-			$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+title+'.txt').then(function Success (success){
+			$cordovaFile.checkFile(cordova.file.dataDirectory, 'NRDC/'+title).then(function Success (success){
 				// write to file
-				$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', JSON, true);
+				$cordovaFile.writeFile (cordova.file.dataDirectory, 'NRDC/'+title, JSON, true);
 			}, function Failure (error){
 				if (error.code == 1){
-					$cordovaFile.writeFile (cordova.file.cacheDirectory, 'NRDC/'+title+'.txt', JSON,  true).then (function (){			});
+					$cordovaFile.writeFile (cordova.file.dataDirectory, 'NRDC/'+title, JSON,  true).then (function (){			});
 					return error;
 				}
 				else{
@@ -483,9 +483,9 @@ angular.module('app.services', [])
 			// wait for device to be ready
 			document.addEventListener ("deviceready", function(){
 				// check that file exists
-				$cordovaFile.checkFile(cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then ( function Success (result){
+				$cordovaFile.checkFile(cordova.file.dataDirectory, 'NRDC/'+ title).then ( function Success (result){
 					// read the file to a string
-					$cordovaFile.readAsText (cordova.file.cacheDirectory, 'NRDC/'+ title +'.txt').then (function (result){
+					$cordovaFile.readAsText (cordova.file.dataDirectory, 'NRDC/'+ title).then (function (result){
 						// resolve promise
 						if (result != ""){
 							resolve (JSON.parse(result));

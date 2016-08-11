@@ -104,7 +104,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
   
  // controller for the main menu  
 .controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, Login, $http, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
-
+	document.addEventListener("deviceready", onDeviceReady, false);
+		function onDeviceReady() {
+			$rootScope.platform = device.platform;
+		}
 	// create global variables,could probably be cut down but that would mean changing everything
 	$rootScope.peopleSyncedJSON = {};
 	$rootScope.peopleJSON = {};
