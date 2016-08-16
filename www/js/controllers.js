@@ -211,8 +211,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         $scope.viewState = {};
         
         $scope.viewState.item = {};
-        $scope.viewState.listLevel = $rootScope.listLevel;
-        $scope.viewState.itemLevel = $rootScope.itemLevel;
         
         //set the title and route of dynamic page one level back
         //so we can view the info of what we just clicked
@@ -224,18 +222,18 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         
         
         $scope.listSwitch(tieredJSON[$rootScope.listLevel], tieredSyncedJSON[$rootScope.listLevel], tieredTitles[$rootScope.listLevel], tieredRoutes[$rootScope.listLevel]);
-        
+                
         $scope.viewState.list = $rootScope.listJSON;
+        
         
         //increment the level of my list and of my
         //item clicked
         $rootScope.listLevel++;
         $rootScope.itemLevel++;
-        
-        $rootScope.traversalHistory.push($scope.viewState);
 
         
     }
+    
     
 
     // used to gather data for listView depending on the type selected
@@ -418,7 +416,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var parent = ["Unique Identifier", "Network", "Site", "System", "Deployment"];
         var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
         var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSyncedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
-    
+        
+        $scope.presentViewState = {};
         
     
     
@@ -457,11 +456,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         $state.go($scope.route);
     }
     
-    
-    //calls for the next tier of
-    //items in the site network hierarchy
-    $scope.progressiveListSwitch = function(){
-        //storage list traversal history
+    $scope.storePresentState = function(){
         var viewState = {
             item: {},
             list: {},
@@ -469,17 +464,50 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             route: '',
             listLevel: 0,
             itemLevel: 0,
-        }
-
+            dpTitle: '',
+            dpRoute: '',
+            dpItem: {}
+        };
+        
         viewState.listLevel = $rootScope.listLevel;
         viewState.itemLevel = $rootScope.itemLevel;
+        viewState.list = $rootScope.listJSON;
+        viewState.route = $scope.route;
+        viewState.title = $scope.title;
+        viewState.item = $scope.clickedJSON;
+        viewState.dpTitle = DynamicPage.getTitle();
+        viewState.dpRoute = DynamicPage.getRoute();
+        viewState.dpItem = DynamicPage.getJSON();
+        
+        if($rootScope.traversalHistory.length < 5){
+            $rootScope.traversalHistory.push(viewState);
+        }
+    }
+    
+    $scope.restoreStateContext = function(){
+        viewContext = $rootScope.traversalHistory.pop();
+        
+        $rootScope.listLevel = viewContext.listLevel;
+        $rootScope.itemLevel = viewContext.itemLevel;
+        $rootScope.listJSON = viewContext.list;
+        $scope.route = viewContext.route;
+        $scope.title = viewContext.title;
+        $scope.clickedJSON = viewContext.item;
+        DynamicPage.getTitle(viewContext.dpTitle);
+        DynamicPage.getRoute(viewContext.dpRoute);
+        DynamicPage.getJSON(viewContext.dpItem);
+        
+//        $rootScope.traversalHistory.push(viewContext);
+    }
+    
+    //calls for the next tier of
+    //items in the site network hierarchy
+    $scope.progressiveListSwitch = function(){
+        
 
         //store the json of the
         //list item clicked
         $scope.clickedJSON = DynamicPage.getJSON();
-        //ensure we go no more than 4 levels deep
-        
-       viewState.item = $scope.clickedJSON;
 
         
         //set the route of dynamic page one level back
@@ -487,9 +515,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         DynamicPage.setTitle(tieredTitles[$rootScope.listLevel]);
         DynamicPage.setRoute(tieredRoutes[$rootScope.itemLevel]);
         
-        $scope.route = viewState.route = DynamicPage.getRoute();
-        $scope.title = viewState.title = DynamicPage.getTitle();
-    
+        
+        $scope.route = DynamicPage.getRoute();
+        $scope.title = DynamicPage.getTitle();
+        
+
         
         
         $scope.listSwitch(tieredJSON[$rootScope.listLevel], tieredSyncedJSON[$rootScope.listLevel], tieredTitles[$rootScope.listLevel], tieredRoutes[$rootScope.listLevel]);
@@ -505,44 +535,19 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             $rootScope.itemLevel++;
         }
         
-        viewState.list = $rootScope.listJSON;
         
-        if($rootScope.traversalHistory.length < 5){
-            $rootScope.traversalHistory.push(viewState);
-        }
         
-                
+        console.log("----------Forward After----------", $scope.route, $scope.title, $scope.clickedJSON, $rootScope.listJSON, $rootScope.itemLevel, $rootScope.listLevel);
         console.log($rootScope.traversalHistory);
-        console.log(viewState);
+        //console.log(viewState)
         
     }
     
-/*-----------------------------------------------
-Under Construction
-------------------------------------------------*/
+
     
     $scope.regressiveListSwitch = function(){
         
-        var previousView = $rootScope.traversalHistory.pop();
-        
-        if($scope.viewState.route === previousView.route){     
-            previousView = $rootScope.traversalHistory.pop();
-        }
-        
-        console.log(previousView);
-        
-        $scope.clickedJSON = previousView.item; 
-        DynamicPage.setRoute(previousView.route);
-        DynamicPage.setTitle(previousView.title);
-        $rootScope.listJSON = previousView.list;
-        
-        $rootScope.itemLevel = previousView.itemLevel;
-        $rootScope.listLevel = previousView.listLevel;
-        
-        DynamicPage.setJSON($scope.clickedJSON);
-        $scope.route = DynamicPage.getRoute();
-        $scope.title = DynamicPage.getTitle();
-        
+        $scope.restoreStateContext();
         
        
     }
@@ -631,14 +636,17 @@ Under Construction
     //custom back button functinality
     $scope.back = function(){
         
-        if($rootScope.listLevel > 0){
+        if($rootScope.listLevel > 1){
             $scope.regressiveListSwitch();
         }else{  
-        //conditional to fix problem of double
-        //back when modal closed
-        if($rootScope.modalHidden != false){
-            $ionicHistory.goBack();
-        }
+            //conditional to fix problem of double
+            //back when modal closed
+            if($rootScope.modalHidden != false){
+                $ionicHistory.goBack();
+                //reset list levels
+                $rootScope.itemLevel = -1;
+                $rootScope.listLevel =  0;
+            }
         }
 
     }
