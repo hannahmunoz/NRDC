@@ -105,7 +105,7 @@ angular.module('app.services', [])
 //	return: n/a
 	function adminLogin(JSON){
 		return $q (function (resolve, reject){  
-			JSON ['Password'] = (sha256(JSON ['Password']));
+//			JSON ['Password'] = (sha256(JSON ['Password']));
 			$http.post ("http://sensor.nevada.edu/GS/Services/admin/", JSON, {timeout: 10000}).then (function Success (response){
 				if (response.data.AssociatedSites.length != 0){
 					var promise = $q (function (resolve, reject){ 
