@@ -728,11 +728,33 @@ angular.module('app.services', [])
     
 	})
 
-.factory('StrainerService', function(){
+.factory('ListOrganizationService', function(){
+        var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
+        var tieredRoutes = ["network", "site", "system", "deployment", "component"];
+        var tieredParents = ["Unique Identifier", "Network", "Site", "System", "Deployment"];
     
-    //function which pares down
-    //my current JSON list
-    function sift(){
+        var getParentTitle = function(title){
+            var titleNdx = tieredTitles.indexOf(title);
+            var parentNdx = titleNdx - 1;
+            
+            return tieredTitles[parentNdx];
+        };
+    
+        var getChildTitle = function(title){
+            var titleNdx = tieredTitles.indexOf(title);
+            var parentNdx = titleNdx++;
+            
+            return tieredTitles[parentNdx];
+        }
+    
         
-    }
+    
+        return{
+            titles: tieredTitles,
+            routes: tieredRoutes,
+            parents: tieredParents,
+            getParentTitle: getParentTitle,
+            getChildTitle: getChildTitle
+        };
+    
 });

@@ -460,7 +460,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
         //store my previous view's JSON for return
         storePrevJSON();
-        console.log($scope.clickedJSONHist);
         
         //increment the level of my list and of my
         //item clicked until we hit the bottom list
@@ -603,7 +602,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
     
     //custom back button functinality
-    $scope.back = function(){
+    $rootScope.back = function(){
         if($rootScope.itemLevel >= 0){
             $scope.regressiveListSwitch();
         }
@@ -634,16 +633,31 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.modal = null;
     
     
+    var getModalRoute = function(selectedRoute){
+        var tieredRoutes = ["network", "site", "system", "deployment", "component"];
+        var newRouteNdx = tieredRoutes.indexOf(DynamicPage.getRoute());
+        
+        
+        if(newRouteNdx == 4){
+            return tieredRoutes[newRouteNdx];
+        }
+        
+        newRouteNdx++;
+        return tieredRoutes[newRouteNdx];
+        
+    }
+    
     //open a modal for viewing
     //creates a new modal if one has not been instantiated
     //elsewise opens the old modal
     $scope.openModal = function() {
         $rootScope.modalHidden = false;
         
+        
         // If a modal is not
         // already instantiated in this scope
         if($scope.modal == null){
-            $ionicModal.fromTemplateUrl('templates/modal_templates/' + DynamicPage.getRoute() + '_modal.html', {
+            $ionicModal.fromTemplateUrl('templates/modal_templates/' + getModalRoute(DynamicPage.getRoute()) + '_modal.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function(modal) {

@@ -131,8 +131,9 @@ angular.module('app.directives', [])
 
 .directive('deletable', function(){
     
-    function deletableController($scope, $rootScope, SaveNew, $ionicHistory, DynamicPage){
+    function deletableController($scope, $rootScope, SaveNew, $ionicHistory, DynamicPage, ListOrganizationService){
         $scope.deletable = false;
+        
         
         //determine if my current view in deletable
         //by checking for membership in unsyncedJSON
@@ -153,9 +154,21 @@ angular.module('app.directives', [])
         
         //delete the current view JSON from the list of unsynced items
         $scope.deleteView = function(){
-            SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON[DynamicPage.getTitle()],
-                               $rootScope.chosenJSONlist, $rootScope.listJSON);
+            //variables            
+            $scope.JSON = DynamicPage.getJSON();
+            $scope.title = ListOrganizationService.getParentTitle(DynamicPage.getTitle());
+            
+            console.log($scope.title);
+            
             $ionicHistory.goBack();
+
+            
+            console.log($scope.JSON.Name, $scope.title, $rootScope.chosenJSONlist, $rootScope.listJSON)
+            
+            SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON[$scope.title],
+                               $rootScope.chosenJSONlist, $rootScope.listJSON);
+            
+            $rootScope.back();
         };
         
         $scope.deletePeople = function(){
