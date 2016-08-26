@@ -68,12 +68,12 @@
 
         <form name="dateForm">
             <label>Installation Date</label>
-            <input type="date" name="date"  ng-model = "JSON['Installation Date']"/>
+            <input date-input type="date" name="date"  ng-model = "JSON['Installation Date']"/>
        </form>
 
         <form name="calibratedForm">
             <label>Last Calibrated Date</label>
-            <input type="date" name="caliDate" ng-model = "JSON['Last Calibrated Date']"/>
+            <input date-input type="date" name="caliDate" ng-model = "JSON['Last Calibrated Date']"/>
        </form>
 
         <form name = "deploymentForm"  class="list ">
@@ -90,8 +90,11 @@
         </span>
 
 
-        <a  class=" button button-positive button-large button-block wide" 
-            ng-disabled = "nameForm.$invalid || vendorForm.$invalid || supplierForm.$invalid || installationForm.$invalid || wiringForm.$invalid || serialForm.$invalid || modelForm.$invalid || manufacturerForm.$invalid || deploymentForm.$invalid || checked" 
+        <a  class=" button button-positive button-large button-block wide"
+            deletable 
+            ng-init="isDeletable();" 
+            ng-show="deletable"  
+            ng-disabled = "nameForm.$invalid || vendorForm.$invalid || supplierForm.$invalid || installationForm.$invalid || wiringForm.$invalid || serialForm.$invalid || modelForm.$invalid || manufacturerForm.$invalid || deploymentForm.$invalid" 
             ng-click = "saveJSON(); back(); destroyModal();">
             Save
         </a>

@@ -47,10 +47,13 @@
              </div>
         </form> 
 
-        <a class=" button button-large button-block button-positive wide" 
-           ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid||checked" 
-           ng-click="saveJSON(); back(); destroyModal();">
-           Save</a>
+        <a class=" button button-large button-block button-positive wide"
+            deletable 
+            ng-init="isDeletable();" 
+            ng-show="deletable" 
+            ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid" 
+            ng-click="saveJSON(); back(); destroyModal();">
+            Save</a>
     </ion-content>
     
     <!--FAB Link for the addition of documents-->

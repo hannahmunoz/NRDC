@@ -4,30 +4,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 .controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew, Camera) {
 	// get the JSON
 	$scope.JSON = DynamicPage.getJSON();
-	$scope.imageData = $scope.JSON ['Photo'];
-
-	// controls the save button. When true, save button is unclickable
-	$scope.checked = true;
-    
-
-	// if in the unsynced json, is false and the savee button is clickable
-	if (DynamicPage.getTitle() != "Service Entries"){
-		for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
-			if ($scope.JSON ['Unique Identifier'].toUpperCase() === $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier'].toUpperCase()){
-				$scope.checked = false;
-			}
-		}
+	if ( angular.isDefined ($scope.JSON ['Photo'])){
+		$scope.imageData = $scope.JSON ['Photo'];
 	}
-
-	// checker for service entries
-	else{
-		for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i ++){
-			if ($scope.JSON ['Unique Identifier'].toUpperCase() === $rootScope.unsyncedJSON.ServiceEntries[i]['Unique Identifier'].toUpperCase()){
-				$scope.checked = false;
-			}
-		}	
-	}
-
 
 	// loads the data into the page based on the title of the page
 	switch (DynamicPage.getTitle()){
@@ -36,7 +15,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			break;
 				
 		case 'Sites':
-                console.log ($scope.JSON)
                 $scope.JSON['Network'] = JSON.stringify ($scope.JSON['Network']);
 				$scope.JSON['Project'] = JSON.stringify($scope.JSON['Project']);
 				$scope.JSON ['Permit Holder'] = JSON.stringify($scope.JSON['Permit Holder']);
@@ -49,20 +27,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			break;
 
 		case 'Deployments':
-				$scope.JSON ['Established Date'] = new Date($scope.JSON ['Established Date'] );
-				$scope.JSON ['Abandoned Date'] = new Date($scope.JSON ['Abandoned Date'] );
 				$scope.JSON ['System'] = JSON.stringify($scope.JSON['System']);
 			break;
 
 		case 'Components':
-				$scope.JSON ['Installation Date'] = new Date($scope.JSON ['Installation Date'] );
-				$scope.JSON ['Last Calibrated Date'] = new Date($scope.JSON ['Last Calibrated Date'] );
 				$scope.JSON['Deployment'] = JSON.stringify($scope.JSON['Deployment']);
-				break;
-
-		case 'Service Entries':
-			$scope.JSON ['Date'] = new Date($scope.JSON ['Date'] );
 			break;
+
 	}
     
      //custom back button functionality
@@ -203,7 +174,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     //calls for the next tier of
     //items in the site network hierarchy
     $scope.progressiveListSwitch = function(){
-         var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
+        var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
         var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
         var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSyncedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
@@ -311,7 +282,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/", $rootScope.networkSyncedJSON, 'Network', $rootScope.networkJSON).then (function (result){
     		// redudant, but nessecary.  Doesnt work otherwise for some reason
     		$rootScope.networkSyncedJSON = result;
-            console.log ($rootScope.networkJSON);
     		// writes to local storage
     		File.checkandWriteFile('Network', $rootScope.networkSyncedJSON);
     	})
@@ -501,21 +471,22 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //increment the level of my list and of my
         //item clicked until we hit the bottom list
         //presently components
-        if($rootScope.listLevel != $rootScope.itemLevel){
-            $rootScope.listLevel--;
+        if ($rootScope.listLevel != 0){
+        	if($rootScope.listLevel != $rootScope.itemLevel){
+            	$rootScope.listLevel--;
+        	}
+        
+       		 //determine the level of our selected route
+       		 if($rootScope.itemLevel != 4){
+           		 $rootScope.itemLevel = $rootScope.listLevel - 1;
+        		} else {
+           		 $rootScope.itemLevel--;
+       		 }
+        
+        	$scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
+        
+        	$scope.select($scope.clickedJSONHist.pop());
         }
-        
-        //determine the level of our selected route
-        if($rootScope.itemLevel != 4){
-            $rootScope.itemLevel = $rootScope.listLevel - 1;
-        } else {
-            $rootScope.itemLevel--;
-        }
-        
-        $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
-        
-        $scope.select($scope.clickedJSONHist.pop());
-        
         //store the json of the
         //list item clicked
         $scope.clickedJSON = DynamicPage.getJSON();
@@ -637,13 +608,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
         var newRouteNdx = tieredRoutes.indexOf(DynamicPage.getRoute());
         
-        
-        if(newRouteNdx == 4){
+        if (newRouteNdx == 0){
             return tieredRoutes[newRouteNdx];
         }
-        
-        newRouteNdx++;
-        return tieredRoutes[newRouteNdx];
+
+       		 newRouteNdx++;
+        	return tieredRoutes[newRouteNdx];
+        }
         
     }
     

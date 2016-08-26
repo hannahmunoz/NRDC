@@ -61,7 +61,10 @@
 
 
         <a class=" button button-positive wide button-block " 
-           ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid || checked" 
+            deletable 
+            ng-init="isDeletable();" 
+            ng-show="deletable" 
+           ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid" 
            ng-click = "saveJSON(); back(); destroyModal();">
            Save</a>
         

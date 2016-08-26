@@ -134,7 +134,6 @@ angular.module('app.directives', [])
     function deletableController($scope, $rootScope, SaveNew, $ionicHistory, DynamicPage, ListOrganizationService){
         $scope.deletable = false;
         
-        
         //determine if my current view in deletable
         //by checking for membership in unsyncedJSON
         $scope.isDeletable = function(){
@@ -184,7 +183,43 @@ angular.module('app.directives', [])
         restrict: 'A',
         controller: deletableController
     }
-});
+})
+
+//http://stackoverflow.com/questions/30537886/error-ngmodeldatefmt-expected-2015-05-29t190616-693209z-to-be-a-date-a/35014420
+.directive('dateInput', function(){
+    return {
+        restrict : 'A',
+        scope : {
+            ngModel : '='
+        },
+        link: function (scope) {
+            if (scope.ngModel) scope.ngModel = new Date(scope.ngModel);
+        }
+    }
+})
+
+// .directive('spinnerInput', function(){
+//     return {
+//         restrict : 'A',
+//         scope : {
+//             ngModel : '='
+//         },
+//         link: function (scope) {
+//             if (!angular.isUndefined (scope.ngModel)){
+//                 if (!angular.isString (scope.ngModel)){
+//                    scope.ngModel = JSON.stringify (scope.ngModel);
+//                 }
+//                 else{
+//                     scope.ngModel = parseInt (scope.ngModel); 
+//                 }
+//             }
+//             else{
+//                 if (scope.ngModel) scope.ngModel = null;
+//             }
+//         }
+//     }
+// });
+
 
 
 
