@@ -386,11 +386,24 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     // gets data from the DynamicPage factory. Only works on first load
     $scope.title = DynamicPage.getTitle();
     $scope.route = DynamicPage.getRoute();
+    $scope.modalCheck = true;
+        	console.log (DynamicPage.getJSON());
+    if (angular.isDefined (DynamicPage.getJSON())){
+    	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
+    	console.log (DynamicPage.getTitle());
+
+    	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
+			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
+				$scope.modalCheck = false;
+			}
+		}
+	}
 
 	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
 		// works on every load after
 		$scope.title = DynamicPage.getTitle();
 		$scope.route = DynamicPage.getRoute();
+
 	})
 
 	// wrapper for person select button
@@ -423,14 +436,25 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     //calls for the next tier of
     //items in the site network hierarchy
     $scope.progressiveListSwitch = function(){
-
+    	$scope.modalCheck = true;
         //store my previous view's JSON for return
         storePrevJSON();
+
+    if (angular.isDefined (DynamicPage.getJSON())){
+    	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
+    	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
+			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
+				$scope.modalCheck = false;
+			}
+		}
+
+	}
         
         //increment the level of my list and of my
         //item clicked until we hit the bottom list
         //presently components
         if($rootScope.listLevel < (tieredTitles.length - 1)){
+
             $rootScope.listLevel++;
         }
         
@@ -440,13 +464,15 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         } else {
             $rootScope.itemLevel = 4;
         }
-        
+        $scope.level = $rootScope.listLevel;
         $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
-        
-        
+		 $rootScope.listLevel = $scope.level;
+
+
         //store the json of the
         //list item clicked
         $scope.clickedJSON = DynamicPage.getJSON();
+
 
         //set the route of dynamic page one level back
         //so we can view the info of what we just clicked
@@ -472,6 +498,17 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //increment the level of my list and of my
         //item clicked until we hit the bottom list
         //presently components
+	$scope.modalCheck = true;
+
+    if (angular.isDefined (DynamicPage.getJSON())){
+    	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
+    	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
+			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
+				$scope.modalCheck = false;
+			}
+		}
+	}
+
         if ($rootScope.listLevel != 0){
         	if($rootScope.listLevel != $rootScope.itemLevel){
             	$rootScope.listLevel--;
@@ -547,8 +584,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     promise.then ( function success (){
         $rootScope.listJSON = $scope.filter($rootScope.chosenJSONlist, level);
     })
-           
-    }
+   }
     
     
     
@@ -557,7 +593,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var parentName = parent[listLevel];
         var lastClickedJSON = DynamicPage.getJSON();
         var filteredList = [];
-        console.log (listLevel);
         if(parent[listLevel] == "Unique Identifier"){
             return unfilteredList;
         }
@@ -609,17 +644,17 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $rootScope.modalHidden = true;
     $scope.modal = null;
     
-    
     var getModalRoute = function(selectedRoute){
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
         var newRouteNdx = tieredRoutes.indexOf(DynamicPage.getRoute());
         
-        if (newRouteNdx == 0){
+        if (newRouteNdx == 4){
             return tieredRoutes[newRouteNdx];
         }
-
-       	newRouteNdx++;
-        return tieredRoutes[newRouteNdx];
+        else {
+       		newRouteNdx++;
+        	return tieredRoutes[newRouteNdx];
+        }
     }
     
     //open a modal for viewing
@@ -627,7 +662,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     //elsewise opens the old modal
     $scope.openModal = function() {
         $rootScope.modalHidden = false;
-          $scope.modal = null;
         
         // If a modal is not
         // already instantiated in this scope
