@@ -157,15 +157,9 @@ angular.module('app.directives', [])
             $scope.JSON = DynamicPage.getJSON();
             $scope.title = ListOrganizationService.getParentTitle(DynamicPage.getTitle());
             
-            console.log($scope.title);
-            
             $ionicHistory.goBack();
-
-            
-            console.log($scope.JSON.Name, $scope.title, $rootScope.chosenJSONlist, $rootScope.listJSON)
-            
             SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON[$scope.title],
-                               $rootScope.chosenJSONlist, $rootScope.listJSON);
+                               $rootScope.chosenJSONlist, $rootScope.listJSON,$scope.title);
             
             $rootScope.back();
         };

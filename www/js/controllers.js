@@ -1,7 +1,7 @@
 angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngStorage'])
 
    // used to view JSONs that have already been created.
-.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew, Camera) {
+.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew, Camera, GPS) {
 	// get the JSON
 	$scope.JSON = DynamicPage.getJSON();
 	if ( angular.isDefined ($scope.JSON ['Photo'])){
@@ -242,11 +242,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 // only runs the first time the program is called. 
 // Reads from the server and inputs into array
     $scope.init = function (){
-        
+        $scope.show();
     	//get permissions
     	//unblock before packaging
     	//Camera.checkPermissions();
-
+	$q (function (resolve, reject){
     	// gets unsynced data back from local storage and puts in unsyncedJSON 
 		var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
     	if (File.checkFile ('Unsynced')){
@@ -257,8 +257,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 					}
 				}
 			})
+			resolve();
 		}
- 
+	}).then (function () {
+ 		$q (function (resolve, reject){
+
     	// people read. Same as sync.read factory, but has to be seperated because we need first and last name
     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/", {timeout: 10000}).then (function(result){
     		//console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);
@@ -276,8 +279,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     		for (var i = 0; i < $rootScope.peopleSyncedJSON.People.length; i++){
 				$rootScope.peopleJSON [$rootScope.peopleSyncedJSON.People[i]['Person']] =  $rootScope.peopleSyncedJSON.People[i]['First Name'] + " " + $rootScope.peopleSyncedJSON.People[i]['Last Name']; 
 			}
+			resolve ();
     	})
-
+   	}).then (function () {
+ 		$q (function (resolve, reject){
 
     	// site network read
     	sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/", $rootScope.networkSyncedJSON, 'Network', $rootScope.networkJSON).then (function (result){
@@ -285,37 +290,56 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     		$rootScope.networkSyncedJSON = result;
     		// writes to local storage
     		File.checkandWriteFile('Network', $rootScope.networkSyncedJSON);
+    		resolve ();
     	})
+    }).then (function () {
+ 		$q (function (resolve, reject){
 
     	// site read
     	sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/", $rootScope.siteSyncedJSON,'Site', $rootScope.siteJSON).then(function(result){
     		$rootScope.siteSyncedJSON = result;
     		File.checkandWriteFile('Site', $rootScope.siteSyncedJSON);
+    		resolve();
     	});
+
+    }).then (function () {
+ 		$q (function (resolve, reject){
 
     	// system read
     	sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/", $rootScope.systemSyncedJSON, 'System', $rootScope.systemJSON).then (function(result){
     		$rootScope.systemSyncedJSON = result;
     		File.checkandWriteFile('System', $rootScope.systemSyncedJSON);
+    		resolve();
     	})
+    }).then (function () {
+ 		$q (function (resolve, reject){
 
     	// deployment read
     	sync.read($rootScope.baseURL + $rootScope.urlPaths[4]+"/", $rootScope.deploymentSyncedJSON, 'Deployment', $rootScope.deploymentJSON).then (function(result){
     		$rootScope.deploymentSyncedJSON = result;
     		File.checkandWriteFile('Deployment', $rootScope.deploymentSyncedJSON);
-    	});
+    		resolve();
+    	})
+    }).then (function () {
+ 		$q (function (resolve, reject){
 
     	// component read
     	sync.read($rootScope.baseURL + $rootScope.urlPaths[5]+"/", $rootScope.componentSyncedJSON, 'Component', $rootScope.componentJSON).then (function(result){
     		$rootScope.componentSyncedJSON = result;
     		File.checkandWriteFile('Component', $rootScope.componentSyncedJSON);
+    		resolve();
     	});
+    }).then (function () {
+ 		$q (function (resolve, reject){
 
     	// 	document read
 		sync.read($rootScope.baseURL + $rootScope.urlPaths[6]+"/", $rootScope.documentSyncedJSON, 'Document', $rootScope.documentJSON).then (function(result){
 			$rootScope.documentSyncedJSON = result;
 			File.checkandWriteFile('Document', $rootScope.documentSyncedJSON);
+			resolve()
 		});
+	}).then (function () {
+ 		$q (function (resolve, reject){
 
    		// service Entries read. Seperate due to service enteries having a space
     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/", {timeout: 10000}).then (function(result){
@@ -332,21 +356,28 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
   	 	promise.then (function(result){
     		for (var i = 0; i < $rootScope.serviceSyncedJSON.ServiceEntries.length; i++){
 				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
+				resolve();
 			}
     	})
+  	 }).then (function (){
+   		 //hide loading screen
+   		 $ionicLoading.hide();
+  	 })})})})})})})})})
+
 	}
-    
-    //Indicating Initilaize is loading
-    $ionicLoading.show({
-        templateUrl: 'templates/loadingSpinner.html',
-        noBackdrop: false
-    });
-    
+
+    $scope.show = function(){
+    	//Indicating Initilaize is loading
+    	$ionicLoading.show({
+    		//template says its not loading
+        	templateUrl: 'templates/loadingSpinner.html',
+        	noBackdrop: false
+    	});
+    }
+
     //initalize
     $scope.init ();
     
-    //hide loading screen
-    $ionicLoading.hide();
 })
 
 /**
@@ -387,7 +418,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.title = DynamicPage.getTitle();
     $scope.route = DynamicPage.getRoute();
     $scope.modalCheck = true;
-        	console.log (DynamicPage.getJSON());
+
     if (angular.isDefined (DynamicPage.getJSON())){
     	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
     	console.log (DynamicPage.getTitle());
@@ -409,13 +440,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	// wrapper for person select button
 	$scope.select = function(JSON){
         
-        // sets the JSON selected from the list so it can be grabbed in the viewCtrl
-        	if (DynamicPage.getTitle() != "People"){
-                DynamicPage.setJSON (JSON);
-        	}
-        	else {
+        // // sets the JSON selected from the list so it can be grabbed in the viewCtrl
+        // 	if (DynamicPage.getTitle() != "People"){
+        //         DynamicPage.setJSON (JSON);
+        // 	}
+        // 	else {
         		DynamicPage.setJSON(JSON);
-        	}
+        	// }
 	}
     
     //enables the viewing of our currently selected
@@ -611,8 +642,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         }
     }
     
-    
-    
     //custom back button functinality
     $rootScope.back = function(){
         if($rootScope.itemLevel >= 0){
@@ -644,29 +673,28 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $rootScope.modalHidden = true;
     $scope.modal = null;
     
-    var getModalRoute = function(selectedRoute){
-        var tieredRoutes = ["network", "site", "system", "deployment", "component"];
-        var newRouteNdx = tieredRoutes.indexOf(DynamicPage.getRoute());
+    // var getModalRoute = function(selectedRoute){
+    //     var tieredRoutes = ["network", "site", "system", "deployment", "component"];
+    //     var newRouteNdx = tieredRoutes.indexOf(DynamicPage.getRoute());
         
-        if (newRouteNdx == 4){
-            return tieredRoutes[newRouteNdx];
-        }
-        else {
-       		newRouteNdx++;
-        	return tieredRoutes[newRouteNdx];
-        }
-    }
+    //     if (newRouteNdx == 4){
+    //         return tieredRoutes[newRouteNdx];
+    //     }
+    //     else {
+    //    		newRouteNdx++;
+    //     	return tieredRoutes[newRouteNdx];
+    //     }
+    // }
     
     //open a modal for viewing
     //creates a new modal if one has not been instantiated
     //elsewise opens the old modal
     $scope.openModal = function() {
         $rootScope.modalHidden = false;
-        
         // If a modal is not
         // already instantiated in this scope
         if($scope.modal == null){
-            $ionicModal.fromTemplateUrl('templates/modal_templates/' + getModalRoute(DynamicPage.getRoute()) + '_modal.html', {
+            $ionicModal.fromTemplateUrl('templates/modal_templates/' + DynamicPage.getTitle() + '_modal.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function(modal) {
@@ -707,7 +735,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$scope.saveJSON = function (){
 		// go to SaveNew factory
 		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData);
-
+		// I have no idea why it doesnt work with Networks
+		if (DynamicPage.getTitle() != "Networks")
+			$rootScope.listJSON.push ($scope.JSON);
 		$rootScope.chosenJSONlist.push($scope.JSON);
 	};
 

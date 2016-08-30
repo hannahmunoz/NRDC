@@ -361,7 +361,7 @@ angular.module('app.services', [])
   			JSON ['Longitude'] = position.coords.longitude;
   			JSON ['Latitude'] = position.coords.latitude;
   			JSON ['Elevation'] = position.coords.altitude;
-		}, function Error(){
+		}, function Error(error){
 			// log/show error
        		console.error ('Location Error:' + error.code + ' ' + error.message);
     		$cordovaToast.showLongBottom ("Unable to retreive location");
@@ -523,7 +523,7 @@ angular.module('app.services', [])
 //		save
 //		deleteJSON
 //		deletePeople
-.factory ('SaveNew', function(uuid2, ObjectCounter){
+.factory ('SaveNew', function(uuid2, ObjectCounter, File, $q){
 
 // function: save
 // 	purpose: save the JSON to the unsynced JSON
@@ -676,25 +676,46 @@ angular.module('app.services', [])
 // 	purpose: deletes in UnsyncedJSON
 // 	var: string
 //	return: n/a
-	function deleteJSON (name, unsyncedJSON, JSONlist, listJSON){
-		// find in unsyncedJSON
-		for (var i = 0; i < unsyncedJSON.length; i ++){
-			if (name == unsyncedJSON[i]['Name']){
-				// remove
-				unsyncedJSON.splice (i, 1);	
+	function deleteJSON (name, unsyncedJSON, JSONlist, listJSON, title){
+			// find in unsyncedJSON
+			for (var i = 0; i < unsyncedJSON.length; i ++){
+				if (name == unsyncedJSON[i]['Name']){
+					// remove
+					unsyncedJSON.splice (i, 1);	
+				}
 			}
-		}
 
-		// remove from listJSON
-		delete listJSON[JSONlist.length - 1];
+			// remove from listJSON
+			delete listJSON[JSONlist.length - 1];
 
-		// find in JSONlist
-		for (var i = 0; i < JSONlist.length; i ++){
-			if (name == JSONlist[i]['Name']){
-				// remove
-				JSONlist.splice (i, 1);	
+			// find in JSONlist
+			for (var i = 0; i < JSONlist.length; i ++){
+				if (name == JSONlist[i]['Name']){
+					// remove
+					JSONlist.splice (i, 1);	
+				}
 			}
-		}
+
+		// find in local storage
+		return $q(function (resolve, reject){
+			File.checkFile ('Unsynced').then (function Success (){
+				File.readFile ('Unsynced').then (function Success (json){
+					for (var i = 0; i < json[title].length; i ++){
+						if (name == json[title][i]['Name']){
+							// remove
+							json[title].splice (i, 1);	
+						}
+					}
+					resolve (json);
+				}, function failure (){
+					resolve ();
+				})
+			})	
+		}).then ( function Success (json){
+			// write jon back to file
+			File.checkandWriteFile ('Unsynced', json);
+		})
+
         
 	}
 
