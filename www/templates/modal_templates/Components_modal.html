@@ -68,14 +68,14 @@
             <input type="date" name="caliDate" ng-model = "JSON['Last Calibrated Date']"/>
        </form>
 
-        <form name = "deploymentForm"  class="list ">
+<!--         <form name = "deploymentForm"  class="list ">
             <div class="select-container">
                 <select class="wide" ng-model = "JSON['Deployment']" ng-options = "key as deployment for (key, deployment) in deploymentJSON" required>
                     <option value>Deployment</option>
                 </select>
             </div>
         </form>
-
+ -->
         <span>
             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
             <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>

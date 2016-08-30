@@ -105,7 +105,7 @@ angular.module('app.services', [])
 //	return: n/a
 	function adminLogin(JSON){
 		return $q (function (resolve, reject){  
-//			JSON ['Password'] = (sha256(JSON ['Password']));
+			JSON ['Password'] = (sha256(JSON ['Password']));
 			$http.post ("http://sensor.nevada.edu/GS/Services/admin/", JSON, {timeout: 10000}).then (function Success (response){
 				if (response.data.AssociatedSites.length != 0){
 					var promise = $q (function (resolve, reject){ 
@@ -529,8 +529,8 @@ angular.module('app.services', [])
 // 	purpose: save the JSON to the unsynced JSON
 // 	var: string
 //	return: n/a
-	function save (type, isitNew, JSON, finalJSON, imageData){
-
+	function save (type, isitNew, JSON, finalJSON, imageData, related){
+console.log (JSON);
 		// all entries need a modification date
 		JSON ["Modification Date"] = new Date();
 
@@ -563,7 +563,7 @@ angular.module('app.services', [])
 				var TZAJSON = {10:'HST', 9: 'AKST', 8: 'PST', 7: 'MST', 6: 'CST', 5: 'EST', 4: 'AST'};
 				var TZJSON = {10:'Hawaii-Aleutian Standard Time', 9: 'Alaska Standard Time', 8: 'Pacific Standard Time', 7: 'Mountain Standard Time', 6: 'Central Standard Time', 5: ' Eastern Standard Time', 4: 'Atlantic Standard Time'};
 				
-				JSON ['Network'] = parseInt (JSON ['Network']);
+				JSON ['Network'] = related;
 				if (angular.isUndefined (JSON ['Permit Holder']))
 					JSON ['Permit Holder'] = null;
 				else
@@ -588,8 +588,8 @@ angular.module('app.services', [])
 					JSON ['Power'] = null;
 				if (angular.isUndefined (JSON ['Installation Location']))
 					JSON ['Installation Location'] = null;				 				 			
-				JSON ["Manager"] = parseInt (JSON ["Manager"]);
-				JSON ["Site"] = parseInt (JSON ["Site"]);
+				JSON ['Manager'] = parseInt (JSON ['Manager']);
+				JSON ["Site"] = related;
 				JSON ["Photo"] = imageData;
 			break;
 
@@ -622,7 +622,7 @@ angular.module('app.services', [])
 					JSON ['Established Date'] = null;
 			 	if (angular.isUndefined (JSON ['Abandoned Date']))
 					JSON ['Abandoned Date'] = null;			 				 				 			
-				JSON ["System"] = parseInt (JSON ["System"]);
+				JSON ["System"] = related;
 			break;
 
 			case 'Components':
@@ -646,7 +646,7 @@ angular.module('app.services', [])
 					JSON ['Wiring Notes'] = null;
 				JSON ["Started Date"] = new Date();
 				JSON ["Photo"] = imageData;
-				JSON ["Deployment"] = parseInt (JSON ["Deployment"]);
+				JSON ["Deployment"] = related;
 			break;
 
 			case 'Documents':
@@ -662,7 +662,7 @@ angular.module('app.services', [])
         }
 
         // print json to console for debugging
-		//console.log (JSON);
+		console.log (JSON);
 		//another check for possible future edits
 		if (isitNew){
 			// pushes into unsyncedJSON
