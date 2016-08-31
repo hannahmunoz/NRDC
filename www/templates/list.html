@@ -13,7 +13,7 @@
     <ion-nav-title>{{clickedJSON.Name}}</ion-nav-title>
     <ion-content padding="false" class="has-header content-bg">
         <ul>
-            <div class = "item waves-button ink text-center accent" ng-click = "">
+            <div class = "item waves-button ink text-center accent">
                     <h2 class="text">Associated {{title}}</h2>
             </div>
     		<li repeat-directive ng-repeat = "(key, item) in listJSON" >
@@ -23,7 +23,7 @@
             </li>
           </ul>
  </ion-content>
-    <button ng-show = "modalCheck" class="button button-fab button-fab-bottom-right pane compliment" ng-controller="modalController" ng-click="sendModalRequest(); openModal();">
+    <button ng-show = "modalCheck" class="button button-fab button-fab-bottom-right pane compliment" ng-controller="modalController" ng-click="openModal();">
         <i class="icon ion-plus" style="color: #FFFFFF;"></i>
     </button>
 </ion-view>

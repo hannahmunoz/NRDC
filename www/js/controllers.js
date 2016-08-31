@@ -169,6 +169,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	// special lists for documents for listView
 	$rootScope.documentlistJSON = {};
 	$rootScope.documentJSONlist = [];
+	$rootScope.docListJSON = [];
 
 	//$rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
@@ -636,6 +637,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         
         //set the route of dynamic page one level back
         //so we can view the info of what we just clicked
+        // if ($rootScope.listLevel < 0)
+        // 	$rootScope.listLevel ++;
         DynamicPage.setTitle(tieredTitles[$rootScope.listLevel]);
         DynamicPage.setRoute(tieredRoutes[$rootScope.itemLevel]);
         
@@ -719,6 +722,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         }
     }
 
+
     //custom back button functinality
     $rootScope.back = function(){
         if($rootScope.itemLevel >= 0){
@@ -737,6 +741,39 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
     //required for ink ripple effect on material button press
     ionicMaterialInk.displayEffect();
+})
+
+.controller('documentListCtrl', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $ionicHistory) {
+	$scope.documentList = function (selectedTitle, selected){
+		// setting up the page
+        //store the json of the
+        //list item clicked
+        $rootScope.docJSON = selected;
+
+    	$scope.temp = $rootScope.documentSyncedJSON['Documents'].concat ($rootScope.unsyncedJSON['Documents']);
+    	for (var i = 0; i < $scope.temp.length; i ++){
+    		if (angular.isDefined ($scope.temp[i][selectedTitle]) && $scope.temp[i][selectedTitle] == selected[selectedTitle]){
+    			$rootScope.docListJSON.push ($scope.temp[i]);
+    		}
+    	}
+    }
+
+    //custom back button functinality
+    $scope.backList = function(){
+    	DynamicPage.setRoute ($rootScope.storedRoute);
+    	DynamicPage.setJSON ($rootScope.storedJSON);
+		$rootScope.docListJSON = [];
+		$ionicHistory.goBack();
+    }
+
+    $scope.select = function(item){
+    	$rootScope.storedRoute = DynamicPage.getRoute();
+    	DynamicPage.setRoute ('Document');
+    	$rootScope.storedJSON = DynamicPage.getRoute();
+    	DynamicPage.setJSON (item);
+    	$state.go ('document');
+    }
+
 })
 
 // for when a new entry is being created
@@ -858,16 +895,14 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 // document modal controller, works the same as the ModalController, but needs to be its on controller so in can show up inside a modal
 .controller('DocumentModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter ) {
-    $scope.JSON = {};
 	$scope.checked = false;
-    $scope.template = 'templates/modal_templates/document_modal.html';
+    $scope.template = 'templates/modal_templates/Documents_modal.html';
     $scope.modal = null;
     
     //set flag in root scope to indicate weither modal
     //hidden or shown
-    $scope.openModal = function() {
+    $scope.openModal = function(JSON) {
         $rootScope.modalHidden = false;
-        
         // If a modal is not
         // already instantiated in this scope
         // create a new modal
@@ -876,6 +911,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function(modal) {
+            	$scope.JSON = {};
                 $scope.modal = modal;
                 $scope.modal.show();
             });
@@ -899,6 +935,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
      $scope.destroyModal = function() {
         $scope.modal.remove().then (function (){
             $scope.JSON = {};  
+            $scope.modal = null;
         });
         $rootScope.modalHidden = true;
     };
@@ -914,15 +951,12 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		$scope.JSON ['Service Entry'] = null;
 
 		// adds data for the entry the document is related to 
-		var JSONbefore = DynamicPage.getJSON();
-		$scope.JSON [DynamicPage.getTitle().slice (0,-1)] = JSONbefore [DynamicPage.getTitle().slice (0,-1)];
-
+		$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = $rootScope.docJSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
 		// SaveNew factory
 		SaveNew.save ("Documents", true, $scope.JSON, $rootScope.unsyncedJSON['Documents'], $scope.imageData);
-    	$rootScope.documentlistJSON [ObjectCounter.count ($rootScope.documentlistJSON)] = $scope.JSON['Name'];
-
+    	//$rootScope.documentlistJSON [ObjectCounter.count ($rootScope.documentlistJSON)] = $scope.JSON['Name'];
     	// pushes into list
-		$rootScope.documentJSONlist.push ($scope.JSON);	
+		$rootScope.docListJSON.push ($scope.JSON);	
 
 	};
 
@@ -991,7 +1025,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 		// adds data for the entry the service entry is related to 
 		var JSON = DynamicPage.getJSON();
-		$scope.JSON [DynamicPage.getTitle().slice (0,-1)] = JSON [DynamicPage.getTitle().slice (0,-1)];
+		$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1) +'s'] = JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1) +'s'];
 		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
 		$rootScope.servicelistJSON [ObjectCounter.count ($rootScope.servicelistJSON)] = $scope.JSON['Name'];
 		$rootScope.serviceJSONlist.push ($scope.JSON);	
