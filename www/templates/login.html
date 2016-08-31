@@ -1,0 +1,25 @@
+<ion-view title="Login">
+	<ion-nav-bar align-title="center"  title="Login" class="bar-dark"></ion-nav-bar>
+	  <ion-content  
+      scroll=false 
+      padding="true"
+      has-footer="true"
+      class="has-header text-center content-bg"
+      > 
+     <form name ="UsernameForm" class="list ">
+     		<label class="item item-input " >
+                <ion-md-input type="text" placeholder="Username" name="Username" ng-model = "loginJSON ['Username']" required/>
+            </label>
+        </form>
+
+        <form name ="passwordForm" class="list" >
+        	<label class="item item-input " >
+                <input type=password placeholder="Password" name="password" ng-model = "loginJSON ['Password']" required/>
+            </label>
+        </form>
+
+        <a class=" button button-large button-block button-positive wide"
+           ng-click="login();">
+           Login</a>
+       </ion-content>
+</ion-view>

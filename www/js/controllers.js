@@ -21,7 +21,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 				
 		case 'Sites':
                 related = $scope.JSON['Network'];
-				$scope.JSON['Project'] = JSON.stringify($scope.JSON['Project']);
 				$scope.JSON ['Permit Holder'] = JSON.stringify($scope.JSON['Permit Holder']);
 				$scope.JSON ['Land Owner'] = JSON.stringify($scope.JSON['Land Owner']);
 			break;
@@ -69,6 +68,73 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		GPS.checkPermissions();
 		GPS.getLocation(JSON);
 	}
+})
+
+.controller('LoginController', function($ionicModal, $scope, $rootScope, $q, Login){
+    $rootScope.modalHidden = true;
+    $scope.modal = null;
+
+    //open a modal for viewing
+    //creates a new modal if one has not been instantiated
+    //elsewise opens the old modal
+    $scope.openModal = function() {
+        $rootScope.modalHidden = false;
+        // If a modal is not
+        // already instantiated in this scope
+        if($scope.modal == null){
+            $ionicModal.fromTemplateUrl('templates/login.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function(modal) {
+                $scope.modal = modal;
+                $scope.modal.show();
+            })
+
+        }
+    };
+    
+    //close Modal
+    $scope.closeModal = function() {
+        /*if($scope.modal != null){
+            $scope.modal.hide();
+        }*/
+        $scope.modal.remove().then (function (){
+                $scope.modal = null;
+        });
+        $rootScope.modalHidden = true;
+    };
+    
+    //destroy modal to prevent memory leaks
+    $scope.destroyModal = function() {       
+        return $q(function (resolve, reject){
+        	$rootScope.modalHidden = true;
+        	$scope.modal.remove().then (function (){
+                $scope.modal = null;
+                resolve();
+        	});
+        })
+
+    };
+
+
+    $scope.login = function (){
+        // $scope.loginJSON ['Username'] = "Admin";
+        // $scope.loginJSON ['Password'] = "password";
+        $scope.destroyModal().then(function (){
+        	Login.adminLogin ($scope.loginJSON).then (function Success (response){;
+        		$rootScope.associatedNetworks = response;
+            	$rootScope.loggedIn = true;
+        	}, function Failure (error){
+            	$rootScope.associatedNetworks = error;
+            	$rootScope.loggedIn = false;
+        	});
+
+        	$scope.loginJSON ['Username'] = null;
+        	$scope.loginJSON ['Password'] = null;
+      	})
+    }
+
+
 })
   
  // controller for the main menu  
@@ -155,22 +221,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     }
 
     
-    
-    $scope.login = function (){
-        $scope.loginJSON ['Username'] = "Admin";
-        $scope.loginJSON ['Password'] = "password";
-        Login.adminLogin ($scope.loginJSON).then (function Success (response){
-            $rootScope.associatedNetworks = response;
-            $rootScope.loggedIn = true;
-        }, function Failure (error){
-            $rootScope.associatedNetworks = error;
-            $rootScope.loggedIn = false;
-        });
 
-    }
-    
-
-    
     //calls for the next tier of
     //items in the site network hierarchy
     $scope.progressiveListSwitch = function(){
@@ -389,8 +440,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.show = function(){
     	//Indicating Initilaize is loading
     	$ionicLoading.show({
+    		template: '<div class="loading-spinner spinner"> <div class="loading-spinner-inner spinner-rev"></div></div>',
     		//template says its not loading
-        	templateUrl: 'templates/loadingSpinner.html',
+        	//templateUrl: './directive_templates/loadingSpinner.html',
         	noBackdrop: false
     	});
     }
