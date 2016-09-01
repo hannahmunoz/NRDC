@@ -6,7 +6,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	var related;
 	//http://stackoverflow.com/questions/4878756/javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
 	var title = DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().substr(1).toLowerCase() + 's';
-	console.log (title);
 
 	$scope.JSON = DynamicPage.getJSON();
 	if ( angular.isDefined ($scope.JSON ['Photo'])){
@@ -121,16 +120,17 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         // $scope.loginJSON ['Username'] = "Admin";
         // $scope.loginJSON ['Password'] = "password";
         $scope.destroyModal().then(function (){
-        	Login.adminLogin ($scope.loginJSON).then (function Success (response){;
+        	Login.adminLogin ($scope.loginJSON).then (function Success (response){
         		$rootScope.associatedNetworks = response;
             	$rootScope.loggedIn = true;
+            	$scope.loginJSON ['Username'] = null;
+        		$scope.loginJSON ['Password'] = null;
         	}, function Failure (error){
             	$rootScope.associatedNetworks = error;
             	$rootScope.loggedIn = false;
         	});
 
-        	$scope.loginJSON ['Username'] = null;
-        	$scope.loginJSON ['Password'] = null;
+
       	})
     }
 
@@ -139,7 +139,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
   
  // controller for the main menu  
 .controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, Login, $http, $ionicModal, DynamicPage, ObjectCounter, File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams) {
-	document.addEventListener("deviceready", onDeviceReady, false);
 		function onDeviceReady() {
 			$rootScope.platform = device.platform;
 		}
@@ -215,6 +214,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	   promise.then ( function (){
     		  // once finished, the unsynced json is cleared
     		  $rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
+    		  console.log ($rootScope.unsyncedJSON);
     		  // the menu is reinitiated
     		  $scope.init ();
     	   });
@@ -749,10 +749,15 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //store the json of the
         //list item clicked
         $rootScope.docJSON = selected;
-
     	$scope.temp = $rootScope.documentSyncedJSON['Documents'].concat ($rootScope.unsyncedJSON['Documents']);
+    	console.log ($scope.temp);
+    	console.log (selectedTitle);
     	for (var i = 0; i < $scope.temp.length; i ++){
-    		if (angular.isDefined ($scope.temp[i][selectedTitle]) && $scope.temp[i][selectedTitle] == selected[selectedTitle]){
+    		console.log (angular.isDefined ($scope.temp[i][selectedTitle]));
+    		console.log ($scope.temp[i] );
+    		console.log (selected)
+    		if (angular.isDefined ($scope.temp[i][selectedTitle]) && ($scope.temp[i][selectedTitle] == selected[selectedTitle])){
+    			console.log ("hello");
     			$rootScope.docListJSON.push ($scope.temp[i]);
     		}
     	}
@@ -943,7 +948,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
 	$scope.saveJSON = function (){
 		// nulls entries that may not have any data
-		$scope.JSON ['Network'] = null;
+		$scope.JSON ['Site Network'] = null;
 		$scope.JSON ['Site'] = null;
 		$scope.JSON ['System'] = null;
 		$scope.JSON ['Deployment'] = null;

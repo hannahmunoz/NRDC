@@ -142,9 +142,10 @@ angular.module('app.directives', [])
                     unsEntry < $rootScope.unsyncedJSON[category].length; 
                     unsEntry++){
                         if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
+                            console.log ("hello")
+                            console.log ($rootScope.unsyncedJSON[category][unsEntry], $scope.JSON)
                             $scope.deletable = true;
                     }
-                
                 }
             
             }
@@ -170,13 +171,17 @@ angular.module('app.directives', [])
                                $rootScope.chosenJSONlist, $rootScope.listJSON);
             $ionicHistory.goBack();
         };
-    }
+            
+        };
+    
     
     
     return{
         restrict: 'A',
         controller: deletableController
     }
+
+
 })
 
 //http://stackoverflow.com/questions/30537886/error-ngmodeldatefmt-expected-2015-05-29t190616-693209z-to-be-a-date-a/35014420
