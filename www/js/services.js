@@ -687,11 +687,10 @@ console.log (JSON);
 			}
 
 			// remove from listJSON
-			delete listJSON[JSONlist.length - 1];
-
+			//delete listJSON[JSONlist.length - 1];
 			// find in JSONlist
 			for (var i = 0; i < JSONlist.length; i ++){
-				if (name == JSONlist[i]['Name']){
+				if (angular.isDefined (JSONlist[i]) && name == JSONlist[i]['Name']){
 					// remove
 					JSONlist.splice (i, 1);	
 				}
@@ -702,16 +701,16 @@ console.log (JSON);
 			File.checkFile ('Unsynced').then (function Success (){
 				File.readFile ('Unsynced').then (function Success (json){
 					for (var i = 0; i < json[title].length; i ++){
-						if (name == json[title][i]['Name']){
+						if (json[title][i]['Name']){
 							// remove
 							json[title].splice (i, 1);	
 						}
 					}
-					resolve (json);
-				}, function failure (){
-					resolve ();
-				})
-			})	
+				resolve (json);
+			}, function failure (){
+				resolve ();
+			})
+		})	
 		}).then ( function Success (json){
 			// write jon back to file
 			File.checkandWriteFile ('Unsynced', json);

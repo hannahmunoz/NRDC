@@ -5,7 +5,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	// get the JSON
 	var related;
 	//http://stackoverflow.com/questions/4878756/javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
-	var title = DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().substr(1).toLowerCase() + 's';
+	$scope.title = DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().substr(1).toLowerCase() + 's';
 
 	$scope.JSON = DynamicPage.getJSON();
 	if ( angular.isDefined ($scope.JSON ['Photo'])){
@@ -13,7 +13,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	}
 
 	// loads the data into the page based on the title of the page
-	switch (title){
+	switch ($scope.title){
 		case 'Networks':
 				$scope.JSON['Principal Investigator'] = JSON.stringify($scope.JSON['Principal Investigator']);
 			break;
@@ -44,7 +44,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     // save JSON button
 	$scope.saveJSON = function (){
-				SaveNew.save (title, false, $scope.JSON, $rootScope.unsyncedJSON[title], null, related);	
+				SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], null, related);	
 	};
 
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.
@@ -512,6 +512,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 	// wrapper for person select button
 	$scope.select = function(JSON){
+		console.log (JSON);
 		$rootScope.related = JSON [DynamicPage.getTitle().slice (0, -1)];
         console.log ($rootScope.related);
         
@@ -527,6 +528,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     //enables the viewing of our currently selected
     //JSON
     $scope.viewItem = function(){
+    	console.log (DynamicPage.getJSON())
     	console.log ($scope.route);
         $state.go($scope.route);
     }
@@ -750,14 +752,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //list item clicked
         $rootScope.docJSON = selected;
     	$scope.temp = $rootScope.documentSyncedJSON['Documents'].concat ($rootScope.unsyncedJSON['Documents']);
-    	console.log ($scope.temp);
-    	console.log (selectedTitle);
     	for (var i = 0; i < $scope.temp.length; i ++){
-    		console.log (angular.isDefined ($scope.temp[i][selectedTitle]));
-    		console.log ($scope.temp[i] );
-    		console.log (selected)
     		if (angular.isDefined ($scope.temp[i][selectedTitle]) && ($scope.temp[i][selectedTitle] == selected[selectedTitle])){
-    			console.log ("hello");
     			$rootScope.docListJSON.push ($scope.temp[i]);
     		}
     	}
@@ -774,7 +770,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.select = function(item){
     	$rootScope.storedRoute = DynamicPage.getRoute();
     	DynamicPage.setRoute ('Document');
-    	$rootScope.storedJSON = DynamicPage.getRoute();
+    	$rootScope.storedJSON = DynamicPage.getJSON();
     	DynamicPage.setJSON (item);
     	$state.go ('document');
     }
@@ -948,7 +944,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
 	$scope.saveJSON = function (){
 		// nulls entries that may not have any data
-		$scope.JSON ['Site Network'] = null;
+		$scope.JSON ['Network'] = null;
 		$scope.JSON ['Site'] = null;
 		$scope.JSON ['System'] = null;
 		$scope.JSON ['Deployment'] = null;
@@ -959,8 +955,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = $rootScope.docJSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
 		// SaveNew factory
 		SaveNew.save ("Documents", true, $scope.JSON, $rootScope.unsyncedJSON['Documents'], $scope.imageData);
-    	//$rootScope.documentlistJSON [ObjectCounter.count ($rootScope.documentlistJSON)] = $scope.JSON['Name'];
-    	// pushes into list
+		// pushes into list
 		$rootScope.docListJSON.push ($scope.JSON);	
 
 	};
@@ -970,6 +965,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //back when modal closed
         if($rootScope.modalHidden != false){
             $ionicHistory.goBack();
+            console.log ($ionicHistory.goBack())
         }
      };
 })

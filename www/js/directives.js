@@ -142,8 +142,6 @@ angular.module('app.directives', [])
                     unsEntry < $rootScope.unsyncedJSON[category].length; 
                     unsEntry++){
                         if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
-                            console.log ("hello")
-                            console.log ($rootScope.unsyncedJSON[category][unsEntry], $scope.JSON)
                             $scope.deletable = true;
                     }
                 }
@@ -156,14 +154,26 @@ angular.module('app.directives', [])
         $scope.deleteView = function(){
             //variables            
             $scope.JSON = DynamicPage.getJSON();
+            console.log ($scope.JSON)
             $scope.title = ListOrganizationService.getParentTitle(DynamicPage.getTitle());
-            
+            console.log ($scope.title)
             $ionicHistory.goBack();
+            console.log ($scope.JSON.Name, $rootScope.unsyncedJSON[$scope.title],
+                               $rootScope.chosenJSONlist, $rootScope.listJSON,$scope.title)
             SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON[$scope.title],
                                $rootScope.chosenJSONlist, $rootScope.listJSON,$scope.title);
-            
             $rootScope.back();
         };
+
+        $scope.deleteDocument = function(){
+            //variables            
+            $scope.JSON = DynamicPage.getJSON();
+            $ionicHistory.goBack();
+            SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON[$scope.title],
+                               $rootScope.docListJSON, null, $scope.title);
+            $ionicHistory.goBack();
+        };
+        
         
         $scope.deletePeople = function(){
             SaveNew.deletePeople(($scope.JSON['First Name'] + $scope.JSON['Last Name']), 
