@@ -125,7 +125,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         		$scope.loginJSON ['Password'] = null;
         	}, function Failure (error){
             	$rootScope.associatedNetworks = error;
-            	$rootScope.loggedIn = false;
+            	$rootScope.loggedIn = false;;
+        		$scope.loginJSON ['Password'] = null;
         	});
 
 
@@ -182,7 +183,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     $scope.loginJSON = {};
     $rootScope.associatedNetworks = {};
-    $rootScope.loggedIn = true;
+    $rootScope.loggedIn = false;
 
 	// URL list
 	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
