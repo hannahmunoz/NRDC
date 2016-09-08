@@ -4,6 +4,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 .controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew, Camera, GPS) {
 	// get the JSON
 	var related;
+	$scope.document = false;
+	$scope.service = false;
 	//http://stackoverflow.com/questions/4878756/javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
 	$scope.title = DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().substr(1).toLowerCase() + 's';
 
@@ -12,9 +14,12 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		$scope.imageData = $scope.JSON ['Photo'];
 	}
 
+
+console.log ($scope.title)
 	// loads the data into the page based on the title of the page
 	switch ($scope.title){
 		case 'Networks':
+				$scope.service = true;
 				$scope.JSON['Principal Investigator'] = JSON.stringify($scope.JSON['Principal Investigator']);
 			break;
 				
@@ -34,8 +39,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			break;
 
 		case 'Components':
+				$scope.service = true;
 				related = $scope.JSON['Deployment'];
 			break;
+
+		case 'Serviceentriess':
+				$scope.service = true;
+			break;	
 
 	}
     
@@ -125,7 +135,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         		$scope.loginJSON ['Password'] = null;
         	}, function Failure (error){
             	$rootScope.associatedNetworks = error;
-            	$rootScope.loggedIn = false;;
+            	$rootScope.loggedIn = false;
         		$scope.loginJSON ['Password'] = null;
         	});
 
@@ -226,8 +236,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         
     }
 
-    
-
     //calls for the next tier of
     //items in the site network hierarchy
     $scope.progressiveListSwitch = function(){
@@ -239,20 +247,17 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         console.log($rootScope.listLevel);
         
         $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
-        
-                
+               
         DynamicPage.setJSON();
         //store the json of the
         //list item clicked
         $scope.clickedJSON = DynamicPage.getJSON();
-
         
         //set the route of dynamic page one level back
         //so we can view the info of what we just clicked
         DynamicPage.setTitle(tieredTitles[$rootScope.listLevel]);
         DynamicPage.setRoute(tieredRoutes[$rootScope.itemLevel]);
-        
-        
+         
         $scope.route = DynamicPage.getRoute();
         $scope.title = DynamicPage.getTitle();
         
@@ -264,7 +269,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var title = titles[level];
         var syncedJSON = syncedJSONs[level];
 
-        
         //reset the title with every 
 		$scope.title = title;
 
@@ -337,7 +341,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		}
 	}).then (function () {
  		$q (function (resolve, reject){
-
     	// people read. Same as sync.read factory, but has to be seperated because we need first and last name
     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/", {timeout: 10000}).then (function(result){
     		//console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);

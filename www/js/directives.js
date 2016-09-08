@@ -81,16 +81,14 @@ angular.module('app.directives', [])
 .directive('fabCluster', function(){
     
     function HideController($scope, $rootScope, $ionicModal){
-        
-        $scope.active = false;
-        
+        //$scope.active = false;
+
         $scope.toggleActive = function(){
                 $scope.active = true;
         };
         
         $scope.toggleInactive = function(){
                 $scope.active = false;
-                console.log("called");
         };
         
     }
@@ -143,6 +141,7 @@ angular.module('app.directives', [])
                     unsEntry++){
                         if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
                             $scope.deletable = true;
+                            $scope.active = false;
                     }
                 }
             
