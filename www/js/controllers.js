@@ -117,8 +117,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 
     $scope.login = function (){
-        // $scope.loginJSON ['Username'] = "Admin";
-        // $scope.loginJSON ['Password'] = "password";
         $scope.destroyModal().then(function (){
         	Login.adminLogin ($scope.loginJSON).then (function Success (response){
         		$rootScope.associatedNetworks = response;
@@ -206,7 +204,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         }
     }
 
-    
+  	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
+		// for when user hits the back bottom arrow to head back to the main menu
+		if (fromState.name == "list"){
+         $rootScope.itemLevel =  0;
+         $rootScope.listLevel =  0;
+		}
+	})  
     
     // upload button
     $scope.uploadJSONS = function(){
@@ -215,7 +219,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	   promise.then ( function (){
     		  // once finished, the unsynced json is cleared
     		  $rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
-    		  console.log ($rootScope.unsyncedJSON);
     		  // the menu is reinitiated
     		  $scope.init ();
     	   });
@@ -507,13 +510,17 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		// works on every load after
 		$scope.title = DynamicPage.getTitle();
 		$scope.route = DynamicPage.getRoute();
-
 	})
 
 	// wrapper for person select button
 	$scope.select = function(JSON){
 		console.log (JSON);
-		$rootScope.related = JSON [DynamicPage.getTitle().slice (0, -1)];
+		console.log (DynamicPage.getTitle().slice (0, -1))
+		DynamicPage.getRoute();
+		if (angular.isDefined (JSON)){
+			$rootScope.related = JSON [DynamicPage.getTitle().slice (0, -1)];
+		}
+		
         console.log ($rootScope.related);
         
         // // sets the JSON selected from the list so it can be grabbed in the viewCtrl
@@ -653,8 +660,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		}
 		else
 			$scope.viewInfo = false;
-        
-        
+         
         console.log(tieredRoutes[$rootScope.itemLevel], $rootScope.itemLevel, tieredTitles[$rootScope.listLevel], $rootScope.listLevel);
     }
     
@@ -844,6 +850,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         // If a modal is not
         // already instantiated in this scope
         if($scope.modal == null){
+        	console.log (DynamicPage.getTitle());
             $ionicModal.fromTemplateUrl('templates/modal_templates/' + DynamicPage.getTitle() + '_modal.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
