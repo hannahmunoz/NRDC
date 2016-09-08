@@ -154,12 +154,8 @@ angular.module('app.directives', [])
         $scope.deleteView = function(){
             //variables            
             $scope.JSON = DynamicPage.getJSON();
-            console.log ($scope.JSON)
             $scope.title = ListOrganizationService.getParentTitle(DynamicPage.getTitle());
-            console.log ($scope.title)
             $ionicHistory.goBack();
-            console.log ($scope.JSON.Name, $rootScope.unsyncedJSON[$scope.title],
-                               $rootScope.chosenJSONlist, $rootScope.listJSON,$scope.title)
             SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON[$scope.title],
                                $rootScope.chosenJSONlist, $rootScope.listJSON,$scope.title);
             $rootScope.back();
@@ -173,6 +169,16 @@ angular.module('app.directives', [])
                                $rootScope.docListJSON, null, $scope.title);
             $ionicHistory.goBack();
         };
+
+        $scope.deleteService = function(){
+            //variables            
+            $scope.JSON = DynamicPage.getJSON();
+            $ionicHistory.goBack();
+            SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON["ServiceEntries"],
+                               $rootScope.serviceEntryListJSON, null, $scope.title);
+            $ionicHistory.goBack();
+        };
+        
         
         
         $scope.deletePeople = function(){

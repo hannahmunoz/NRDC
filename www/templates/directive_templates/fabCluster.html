@@ -8,11 +8,12 @@
      class="nrdc-fab-container-lower-right"
      >
     <!--Documents-->
-    <button class="button button-fab tertiary animated fadeIn"  ng-controller='DocumentModalController' ng-click="openModal();">
+    <button class="button button-fab tertiary animated fadeIn" ui-sref="docList" ng-controller= "documentListCtrl" ng-click = "documentList (title.slice (0, -1 ), JSON);">
         <i class="icon ion-android-document" style="color:white;"></i>
     </button>
+
     <!--Service Entries-->
-    <button class="button button-fab tertiary animated fadeIn" ng-controller='ServiceModalController' ng-click="openModal();">
+    <button class="button button-fab tertiary animated fadeIn" ui-sref="seList" ng-controller= "ServiceListCtrl" ng-click = "serviceList (title.slice (0, -1 ), JSON);">
         <i class="icon ion-wrench" style="color:white;"></i>
     </button>
     <!--Hide Fab Cluster-->

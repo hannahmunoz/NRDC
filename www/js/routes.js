@@ -104,6 +104,12 @@ angular.module('app.routes', [])
     controller: 'documentListCtrl'
   })
 
+  .state('seList', {
+    url: '/seList',
+    templateUrl: 'templates/seList.html',
+    controller: 'ServiceListCtrl'
+  })
+
   .state('createNew', {
     url: '/CreateNew',
     templateUrl: 'templates/createNew.html',

@@ -164,6 +164,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	// special lists for service entries for list
 	$rootScope.servicelistJSON = {};
 	$rootScope.serviceJSONlist = [];
+	$rootScope.serviceEntryListJSON = [];
 
 	// special lists for documents for listView
 	$rootScope.documentlistJSON = {};
@@ -231,7 +232,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
         var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSyncedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
 
-        
         console.log($rootScope.listLevel);
         
         $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
@@ -750,6 +750,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		// setting up the page
         //store the json of the
         //list item clicked
+        $rootScope.docListJSON = [];
         $rootScope.docJSON = selected;
     	$scope.temp = $rootScope.documentSyncedJSON['Documents'].concat ($rootScope.unsyncedJSON['Documents']);
     	for (var i = 0; i < $scope.temp.length; i ++){
@@ -773,6 +774,41 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	$rootScope.storedJSON = DynamicPage.getJSON();
     	DynamicPage.setJSON (item);
     	$state.go ('document');
+    }
+
+})
+
+
+.controller('ServiceListCtrl', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $ionicHistory) {
+	$scope.serviceList = function (selectedTitle, selected){
+		// setting up the page
+        //store the json of the
+        //list item clicked
+        $rootScope.serviceEntryListJSON = [];
+        $rootScope.seJSON = selected;
+        console.log ($rootScope.serviceSyncedJSON);
+    	$scope.temp = $rootScope.serviceSyncedJSON['ServiceEntries'].concat ($rootScope.unsyncedJSON['ServiceEntries']);
+    	for (var i = 0; i < $scope.temp.length; i ++){
+    		if (angular.isDefined ($scope.temp[i][selectedTitle]) && ($scope.temp[i][selectedTitle] == selected[selectedTitle])){
+    			$rootScope.serviceEntryListJSON.push ($scope.temp[i]);
+    		}
+    	}
+    }
+
+    //custom back button functinality
+    $scope.backList = function(){
+    	DynamicPage.setRoute ($rootScope.storedRoute);
+    	DynamicPage.setJSON ($rootScope.storedJSON);
+		$rootScope.serviceEntryListJSON = [];
+		$ionicHistory.goBack();
+    }
+
+    $scope.select = function(item){
+    	$rootScope.storedRoute = DynamicPage.getRoute();
+    	DynamicPage.setRoute ('ServiceEntries');
+    	$rootScope.storedJSON = DynamicPage.getJSON();
+    	DynamicPage.setJSON (item);
+    	$state.go ('serviceEntry');
     }
 
 })
@@ -972,7 +1008,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 //Controls the behavior of the service modals for particular networks, sites, sysyems etc
 .controller('ServiceModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
-    $scope.JSON = {};
 	$scope.imageData = null;
 	$scope.checked = false;
     $scope.modal = null;
@@ -993,6 +1028,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function(modal) {
+            	$scope.JSON = {};
                 $scope.modal = modal;
                 $scope.modal.show();
             });
@@ -1010,9 +1046,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         }
         $rootScope.modalHidden = true;
     };
+
      $scope.destroyModal = function() {
         $scope.modal.remove().then ( function () {
             $scope.JSON = {};
+            $scope.modal = null;
         });
         $rootScope.modalHidden = true;
     };
@@ -1026,10 +1064,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 		// adds data for the entry the service entry is related to 
 		var JSON = DynamicPage.getJSON();
-		$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1) +'s'] = JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1) +'s'];
+		$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
 		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
-		$rootScope.servicelistJSON [ObjectCounter.count ($rootScope.servicelistJSON)] = $scope.JSON['Name'];
-		$rootScope.serviceJSONlist.push ($scope.JSON);	
+		// pushes into list
+		$rootScope.serviceEntryListJSON.push ($scope.JSON);	
 	};
 
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.

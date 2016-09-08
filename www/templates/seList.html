@@ -5,20 +5,20 @@
             </button>
         </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-nav-title>{{docJSON.Name}}</ion-nav-title>
+    <ion-nav-title>{{seJSON.Name}}</ion-nav-title>
     <ion-content padding="false" class="has-header content-bg">
         <ul>
             <div class = "item waves-button ink text-center accent">
-                    <h2 class="text">Associated Documents</h2>
+                    <h2 class="text">Associated Service Entries</h2>
             </div>
-    		<li repeat-directive ng-repeat = "(key, item) in docListJSON" >
+    		<li repeat-directive ng-repeat = "(key, item) in serviceEntryListJSON" >
                 <div class = "item waves-button ink text-center" ng-click = "select(item);">
                     <h2>{{item.Name}}</h2>
     			</div>
             </li>
           </ul>
  </ion-content>
-    <button class="button button-fab button-fab-bottom-right compliment"  ng-controller='DocumentModalController' ng-click="openModal();" ng-show="modalHidden">
+    <button class="button button-fab button-fab-bottom-right compliment"  ng-controller='ServiceModalController' ng-click="openModal();" ng-show="modalHidden">
          <i class="icon ion-plus" style="color: #FFFFFF;"></i>
     </button>
 </ion-view>
