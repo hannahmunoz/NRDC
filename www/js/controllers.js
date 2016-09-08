@@ -206,7 +206,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
   	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
 		// for when user hits the back bottom arrow to head back to the main menu
-		if (fromState.name == "list"){
+		if (fromState.name == "list" && toState.name == "mainMenu"){
          $rootScope.itemLevel =  0;
          $rootScope.listLevel =  0;
 		}
@@ -847,10 +847,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     //elsewise opens the old modal
     $scope.openModal = function() {
         $rootScope.modalHidden = false;
+            $scope.modal = null;
         // If a modal is not
-        // already instantiated in this scope
+        // already instantiated in this scope;
         if($scope.modal == null){
-        	console.log (DynamicPage.getTitle());
             $ionicModal.fromTemplateUrl('templates/modal_templates/' + DynamicPage.getTitle() + '_modal.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
@@ -932,6 +932,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //back when modal closed
         if($rootScope.modalHidden != false){
             $ionicHistory.goBack();
+            $scope.modal = null;
         }
     }
 
