@@ -105,31 +105,31 @@ angular.module('app.services', [])
 //	return: n/a
 	function adminLogin(JSON){
 		return $q (function (resolve, reject){  
-			JSON ['Password'] = (sha256(JSON ['Password']));
-			$http.post ("http://sensor.nevada.edu/GS/Services/admin/", JSON, {timeout: 10000}).then (function Success (response){
-				if (response.data.AssociatedSites.length != 0){
+			$http.post ("http://sensor.nevada.edu/GS/Services/admin/networks/", JSON, {timeout: 10000}).then (function Success (response){
+				console.log (response);
+				if (response.data.AssociatedNetworks.length != 0){
 					var promise = $q (function (resolve, reject){ 
 						File.checkFile ('Logins').then (function Success (){
 							File.readFile ('Logins').then (function Success (json){
 								if (response != null){
-									json[JSON ['Username']] = response.data.AssociatedSites;
+									json[JSON ['Username']] = response.data.AssociatedNetworks;
 									File.checkandWriteFile ('Logins', json);
 								}
 							})
 							resolve (true);
 						}, function Failure (){
 							var array = {};
-							array [JSON ['Username']] = response.data.AssociatedSites;
+							array [JSON ['Username']] = response.data.AssociatedNetworks;
 							File.createFile ('Logins').then (function Success (){
 								File.checkandWriteFile ('Logins', array);
 							});
 							resolve (true);
-						})
+						})	
 					})
 
 					promise.then (function Success (){
 						$cordovaToast.showLongBottom ("Login Successful");
-			 			resolve (response.data.AssociatedSites);	
+			 			resolve (response.data.AssociatedNetworks);	
 					})
 				}
 
@@ -574,8 +574,7 @@ console.log (JSON);
 					JSON ['Land Owner'] = parseInt (JSON ['Land Owner']);
 				JSON ['Longitude'] = parseFloat (parseFloat(JSON ['Longitude']).toFixed (7));
   				JSON ['Latitude'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));
-  				JSON ['Elevation'] = parseFloat (parseFloat (JSON ['Elevation']).toFixed (7));
-				JSON ['Landmark Photo'] = imageData;
+  				JSON ['Elevation'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));
 				JSON ['Time Zone Name'] = TZJSON[new Date().getTimezoneOffset()/60 + 1];
 				JSON ['Time Zone Offset'] = (new Date().getTimezoneOffset());
 				JSON ['Time Zone Abbreviation'] = TZAJSON[new Date().getTimezoneOffset()/60 + 1];

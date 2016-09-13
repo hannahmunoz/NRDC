@@ -243,10 +243,20 @@ console.log ($scope.title)
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
         var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
         var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSyncedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
-
-        console.log($rootScope.listLevel);
-        
-        $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
+		$scope.temp = [];
+       
+           		// should work to sort list based on log in
+        	$scope.temp = {};
+        	for (var j = 0; j < $rootScope.associatedNetworks.length; j++){
+        		for ( var i = 0; i < $rootScope.networkSyncedJSON.Networks.length; i ++){
+        			if ($rootScope.associatedNetworks [j]['Network ID'] == $rootScope.networkSyncedJSON.Networks [i]['Unique Identifier']){
+        				        $scope.temp[$scope.temp.length] = $rootScope.networkSyncedJSON.Networks [i];
+        			}
+        		}
+        	}
+        	$rootScope.listLevel.Networks = [];
+        	$rootScope.listLevel.Networks = $scope.temp;
+            $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);       	
                
         DynamicPage.setJSON();
         //store the json of the
@@ -285,6 +295,8 @@ console.log ($scope.title)
 		  $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
 		}
 
+
+
 		else {
 			for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i++){
 				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON.ServiceEntries[i]['Name'];
@@ -293,21 +305,7 @@ console.log ($scope.title)
 			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
 		}
 
-		// should work to sort list based on log in
-    //     if (title == "Networks"){
-    //     	$scope.temp = {};
-    //     	for (var j = 0; j < $rootScope.associatedNetworks; j++){
-    //     		for ( var i = 0; i < $scope.unsyncedListJSON; i ++){
-    //     			if ($rootScope.associatedNetworks [j]['Unique Identifier'] == $scope.unsyncedListJSON [i]['Unique Identifier']){
-    //     				        $scope.temp[j] =  $scope.unsyncedListJSON[i];
-    //     			}
-    //     		}
-    //     	}
- 			// $rootScope.chosenJSONlist= $scope.temp;
-    //     }
-
-        $rootScope.listJSON = $rootScope.chosenJSONlist;	
-          
+        $rootScope.listJSON = $rootScope.chosenJSONlist;	       
     }
 
         //helper function
@@ -501,7 +499,6 @@ console.log ($scope.title)
 
     if (angular.isDefined (DynamicPage.getJSON())){
     	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
-    	console.log (DynamicPage.getTitle());
 
     	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
 			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
@@ -518,29 +515,17 @@ console.log ($scope.title)
 
 	// wrapper for person select button
 	$scope.select = function(JSON){
-		console.log (JSON);
-		console.log (DynamicPage.getTitle().slice (0, -1))
 		DynamicPage.getRoute();
 		if (angular.isDefined (JSON)){
 			$rootScope.related = JSON [DynamicPage.getTitle().slice (0, -1)];
 		}
-		
-        console.log ($rootScope.related);
-        
-        // // sets the JSON selected from the list so it can be grabbed in the viewCtrl
-        // 	if (DynamicPage.getTitle() != "People"){
-        //         DynamicPage.setJSON (JSON);
-        // 	}
-        // 	else {
-        		DynamicPage.setJSON(JSON);
-        	// }
+
+        DynamicPage.setJSON(JSON);
 	}
     
     //enables the viewing of our currently selected
     //JSON
     $scope.viewItem = function(){
-    	console.log (DynamicPage.getJSON())
-    	console.log ($scope.route);
         $state.go($scope.route);
     }
     
@@ -670,7 +655,7 @@ console.log ($scope.title)
     
     
     $scope.listSwitch = function(syncedJSONs, titles, level){
-    	        //console.log ("hello");
+    	      //  console.log ("hello");
     	$scope.unsyncedListJSON = {};
         var title = titles[level];
         var syncedJSON = syncedJSONs[level];
