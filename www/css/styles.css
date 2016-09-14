@@ -334,3 +334,38 @@ li > .item{
     height: 100px !important;
     width: 49%;
 }
+
+/* Date input Redesign */
+input[date-input]{
+    border: 0px;
+    border-left: 2px solid rgba( 0, 0, 0, .1) !important;
+    border-right: 2px solid rgba( 0, 0, 0, .1) !important;
+
+    
+    padding-top: 1em;
+    padding-left: 1em;
+    padding-bottom: 1em;
+
+    margin-bottom: 1em;
+    margin-top: .5em;
+    
+    font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    font-size: 18px;
+    
+    width: 100%;
+}
+
+.date-container{
+    padding: 0px;
+    margin-left: 2em;
+    margin-right: 1em;
+}
+
+
+
+.date-container > label{
+    color: darkslategrey;
+    letter-spacing: .25rem;
+    font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    font-size: 14px;
+}

@@ -67,13 +67,17 @@
         </form>
 
         <form name="dateForm">
-            <label>Installation Date</label>
-            <input date-input type="date" name="date"  ng-model = "JSON['Installation Date']"/>
+            <div class="date-container">
+                <label>Installation Date</label>
+                <input date-input type="date" name="date"  ng-model = "JSON['Installation Date']"/>
+            </div>
        </form>
 
         <form name="calibratedForm">
-            <label>Last Calibrated Date</label>
-            <input date-input type="date" name="caliDate" ng-model = "JSON['Last Calibrated Date']"/>
+            <div class="date-container">
+                <label>Last Calibrated Date</label>
+                <input date-input type="date" name="caliDate" ng-model = "JSON['Last Calibrated Date']"/>
+            </div>
        </form>
 
 <!--         <form name = "deploymentForm"  class="list ">
