@@ -920,6 +920,7 @@ console.log ($scope.title)
     	Camera.checkPermissions();
     	Camera.openCamera ().then (function (image){
     		$scope.imageData = image;
+            console.log(image);
     	});
 	}
 
