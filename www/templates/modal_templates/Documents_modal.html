@@ -1,6 +1,7 @@
 <ion-modal-view ng-controller="scrollController" title="Document" id="page9" style="" class=" ">
     <ion-header-bar class="bar-dark">
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
+        <div class="title header-item" ng-bind="JSON['Name']"></div>
     </ion-header-bar>
     
     <ion-content 
@@ -10,7 +11,7 @@
 
         <form name = "nameForm" class="list " >
             <label class="item item-input "  >
-                <ion-md-input type="text" maxlength="50" placeholder="Name" name="documentName" ng-model = "JSON['Name']" required/>
+                <ion-md-input type="text" maxlength="50" placeholder="Name" name="documentName" ng-model = "JSON['Name']" ng-click="clear()" required/>
             </label>
         </form>
 

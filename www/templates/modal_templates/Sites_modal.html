@@ -4,9 +4,7 @@
           class=" ">
     <ion-nav-bar class="bar-dark">
             <ion-nav-back-button class="button-flat" ng-click="back(); closeModal();"></ion-nav-back-button>
-        <ion-nav-buttons class="" side = "right"> 
-            <div ng-html-bind= htmlString></div>
-        </ion-nav-buttons>
+            <div class="title header-item" ng-bind="JSON['Name']"></div>
     </ion-nav-bar>
 
 
@@ -21,7 +19,7 @@
 
         <form name = "nameForm" class="list ">
             <label class="item item-input " >
-                <ion-md-input type="text" maxlength="50" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required/>
+                <ion-md-input type="text" maxlength="50" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" ng-click="clear()" required/>
             </label>
         </form>
 

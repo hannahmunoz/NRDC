@@ -162,11 +162,12 @@ angular.module('app.services', [])
 //		openCamera
 //		openGallery
 .factory('Camera', function( $q, $cordovaCamera, $cordovaToast) {
+    
 // function: checkPermissions
 // purpose:  checks and asks for camera permissions
 // var: n/a
 // return: n/a
-	function checkPermissions (){
+	function checkPermissions (){       
 		// add event listener
     	document.addEventListener("deviceready", onDeviceReady, false);
       	// wait for device to be ready
@@ -221,16 +222,19 @@ angular.module('app.services', [])
 				// get camera options
     			var options = setOptions(Camera.PictureSourceType.CAMERA);
     			// get the picture
-				navigator.camera.getPicture( function Success (imageData){
+				navigator.camera.getPicture( function Success (imageData){        
 					// convert base 64 to string
-   					var image =  atob (imageData);
+   					var image =  atob(imageData);
+                    
    					// convert to hexidecimal string
 					var result = "";
     				for (var i = 0; i < image.length; i++) {
         				result += image.charCodeAt(i).toString(16);
     				}
     				// resolve promise
-					resolve (result);
+					resolve(
+                        {result: result, 
+                             raw: imageData});
 				}, function Failure (error){
 					if (error != "Camera Cancelled"){
 						// show/log error
@@ -257,15 +261,15 @@ angular.module('app.services', [])
 				var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
 				// get the picture
     			navigator.camera.getPicture( function Success(imageData) {
-    				// convert image
-    				var image =  atob (imageData);
-    				// to hexidecimal
-					var result = "";
-    				for (var i = 0; i < image.length; i++) {
-        				result += image.charCodeAt(i).toString(16);
-    				}
-    			// resolve promise
-				resolve (result);
+    			
+                //encode image data into hex string
+                result = encode(imageData);
+                
+                // resolve promise
+                // pass raw value back for rendering
+				resolve ({result: result, 
+                             raw: imageData});
+                    
     		}, function Failure (error) {
     			if (error != "Selection cancelled."){
     				// show/log error
@@ -279,11 +283,26 @@ angular.module('app.services', [])
 		})
 	}
 
+    var encode = function(rawImage){
+        // convert image
+        var image = atob(rawImage);
+        
+        // to hexidecimal
+        var result = "";
+        /*for (var i = 0; i < image.length; i++) {
+            result += image.charCodeAt(i).toString(16);
+        }
+        */
+        return result;
+    } 
+    
 // return values
 	return {checkPermissions: checkPermissions,
 			setOptions: setOptions,
 			openCamera: openCamera,
-			openGallery: openGallery};
+			openGallery: openGallery,
+            encode: encode
+           };
 })
 
 // factory: DynamicPage
@@ -330,9 +349,9 @@ angular.module('app.services', [])
 //		getLocation
 .factory('GPS', function($cordovaToast) {
 // function: checkPermission
-// 	purpose: checks and asks for permission to access gps
-// 	var: n/a
-//	return: n/a
+// purpose: checks and asks for permission to access gps
+// var: n/a
+// return: n/a
 	function checkPermissions(){
 		// check if location is enabled
 		cordova.plugins.diagnostic.isLocationAuthorized( function Success (enabled){
@@ -352,9 +371,9 @@ angular.module('app.services', [])
 	}
 
 // function: getLocation
-// 	purpose: returns the location in the JSON variables Longitude, Latitude and Elevation
-// 	var: JSON
-//	return: n/a
+// purpose: returns the location in the JSON variables Longitude, Latitude and Elevation
+// var: JSON
+// return: n/a
 	function getLocation(JSON){
 		// get location
 		navigator.geolocation.getCurrentPosition( function Success (position){

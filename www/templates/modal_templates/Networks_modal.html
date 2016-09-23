@@ -1,6 +1,7 @@
 <ion-modal-view title="Site Networks" >
     <ion-header-bar class="bar-dark">
         <button class="button-flat" ng-click="back(); closeModal();"><h4 style="color:#FFF;">Back</h4></button>
+        <div class="title header-item" ng-bind="JSON['Name']"></div>
     </ion-header-bar>
     
   
@@ -8,7 +9,7 @@
 
         <form name ="nameForm" class="list" >
             <label class="item item-input " >
-                <ion-md-input type="text"  placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" required/>
+                <ion-md-input type="text"  placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" ng-click="clear()" required/>
             </label>
         </form>
 

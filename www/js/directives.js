@@ -42,20 +42,21 @@ angular.module('app.directives', [])
         var textSize = element[0];                          //hidden div holding text 
                                                             // for height measurement
         var localTxt = element.parent()[0].childNodes[0];   //text area to be modified
-        var label = element.parent()[0].childNodes[1];      //input label eg 'name'
-        
+        var label = element.parent()[0].childNodes[1];      //input label eg 'name
         
         //on intial load reasize any already populated text fields
-        localTxt.onclick = function(){
+        scope.$watch(attrs.textAreaSize, function(){
+            
             //update data in localdiv to be localTxt height
             textSize.innerHTML = localTxt.value + "<br/>";
             localTxt.style.height = textSize.offsetHeight + 'px';
             
             //maintain the offset of the input label so it remains above the text box
             label.style = ' transform: translate3d(0,-' + (textSize.offsetHeight + 25) + 'px, 0) scale(.9); transition: all 0s linear;';
-        }
+        });
         
-        
+  
+        //resize on text input
         localTxt.oninput = function(){
             
             //update data in localdiv to be localTxt height
@@ -66,7 +67,7 @@ angular.module('app.directives', [])
             label.style = ' transform: translate3d(0,-' + (textSize.offsetHeight + 25) + 'px, 0) scale(.9); transition: all 0s linear;';
         }
     };
-    
+        
     return {
         restrict: 'E',
         replace: true,
@@ -211,6 +212,34 @@ angular.module('app.directives', [])
         }
     }
 })
+
+.directive('imageButton', function(){
+    //the final directive
+    return{
+        restrict: 'E',
+        scope: {
+            funct: '=funct',
+            icon: '=icon'
+        },
+        templateUrl: 'templates/directive_templates/image-button.html',
+        replace: true,
+        link: function(scope, element, attr){
+            
+            element.on('click', function(e){
+                scope.funct().then(function(image){
+                    element.css({
+                      'background-image': 'url(data:image/jpeg;base64,' + image + ')',
+                      'background-size': '200px 200px'
+                    });
+                });
+            });
+            
+            console.log(element);
+            
+        }
+    }
+})
+
 
 // .directive('spinnerInput', function(){
 //     return {

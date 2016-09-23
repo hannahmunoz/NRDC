@@ -1,5 +1,5 @@
 <ion-view ng-controller="scrollController" 
-          title="Site" 
+          title="{{JSON['Name']}} Info" 
           id="page4"  
           class=" ">
     <ion-nav-buttons side="right">
@@ -19,7 +19,7 @@
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
 
-        <form name = "nameForm" class="list ">
+        <form name = "nameForm" class="list">
             <label class="item item-input " >
                 <ion-md-input type="text" maxlength="50" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required></ion-md-input>
             </label>
@@ -92,8 +92,7 @@
         </form>
         
         <span>
-             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"/>
-
+            <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()" />
             <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"/>
         </span>
 

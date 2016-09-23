@@ -1,6 +1,7 @@
 <ion-modal-view ng-controller="scrollController" title="Component" id="page7" style="" class=" ">
     <ion-header-bar class="bar-dark">
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
+        <div class="title header-item" ng-bind="JSON['Name']"></div>
     </ion-header-bar>
     
    <!--Scrollable Content; Calls function to check visibility of translucent down arrow.-->
@@ -11,7 +12,7 @@
       on-scroll="cndHideArrow()">
         <form name = "nameForm" class="list">
             <label class="item item-input" >
-                <ion-md-input type="text" maxlength="50" placeholder="Name" name="componentName" ng-model = "JSON['Name']" required/>
+                <ion-md-input type="text" maxlength="50" placeholder="Name" name="componentName" ng-model="JSON['Name']" ng-click="clear()" required/>
             </label>
         </form>
 
@@ -40,7 +41,7 @@
             </label>
         </form>
 
-        <form name = "supplierForm" " class="list ">
+        <form name = "supplierForm"  class="list ">
             <label class="item item-input ">
                 <ion-md-input type="text" maxlength="50" placeholder="Supplier" name="supplier" ng-model = "JSON['Supplier']" />
             </label>
@@ -58,14 +59,18 @@
             </label>
         </form>
 
-        <form name="dateForm">
-            <label>Installation Date</label>
-            <input type="date" name="date"  ng-model = "JSON['Installation Date']"/>
+       <form name="dateForm">
+            <div class="date-container">
+                <label>Installation Date</label>
+                <input date-input type="date" name="date"  ng-model = "JSON['Installation Date']"/>
+            </div>
        </form>
 
         <form name="calibratedForm">
-            <label>Last Calibrated Date</label>
-            <input type="date" name="caliDate" ng-model = "JSON['Last Calibrated Date']"/>
+            <div class="date-container">
+                <label>Last Calibrated Date</label>
+                <input date-input type="date" name="caliDate" ng-model = "JSON['Last Calibrated Date']"/>
+            </div>
        </form>
 
 <!--         <form name = "deploymentForm"  class="list ">

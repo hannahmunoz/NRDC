@@ -1,12 +1,13 @@
 <ion-modal-view title="System" id="page5" style="" class=" ">
     <ion-header-bar class="bar-dark">
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
+        <div class="title header-item" ng-bind="JSON['Name']"></div>
     </ion-header-bar>
     
     <ion-content class="has-header content-bg padding">
         <form name = "nameForm" class="list " >
             <label class="item item-input " >
-                <ion-md-input type="text" maxlength="50" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" required/>
+                <ion-md-input type="text" maxlength="50" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" ng-click="clear()" required/>
             </label>
         </form>
 
@@ -22,7 +23,7 @@
             </label>
         </form>
 
-        <form name = "installForm" class="list " >
+        <form name = "installForm" class="list">
             <label class="item item-input " >
                 <ion-md-input type="text" maxlength="200" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" />
             </label>
@@ -42,13 +43,16 @@
                     <option value="">Site</option>
                 </select>
             </div>
-        </form> -->
+        </form> 
+
+        function="choosePicture()"
+        function="takePicture()"
+-->
         
         <span>
-             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
-            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>
+            <image-button funct="choosePicture" icon="ion-images"></image-button>
+            <image-button funct="takePicture" icon="ion-android-camera"></image-button>
         </span>
-
 
         <a class=" button button-positive wide button-block " 
            ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid " 

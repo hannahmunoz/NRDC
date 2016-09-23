@@ -446,9 +446,7 @@ console.log ($scope.title)
     $scope.show = function(){
     	//Indicating Initilaize is loading
     	$ionicLoading.show({
-    		template: '<div class="loading-spinner spinner"> <div class="loading-spinner-inner spinner-rev"></div></div>',
-    		//template says its not loading
-        	//templateUrl: './directive_templates/loadingSpinner.html',
+        	templateUrl: 'templates/directive_templates/loading-spinner.html',
         	noBackdrop: false
     	});
     }
@@ -809,7 +807,7 @@ console.log ($scope.title)
 })
 
 // for when a new entry is being created
-.controller('modalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
+.controller('modalController', function($scope, $rootScope, $state, $ionicModal, $ionicLoading, $q, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
 
 	// set imageData to null in case there is no picture
 	$scope.imageData = null;
@@ -817,19 +815,14 @@ console.log ($scope.title)
 	$scope.checked = false;
     $rootScope.modalHidden = true;
     $scope.modal = null;
+
     
-    // var getModalRoute = function(selectedRoute){
-    //     var tieredRoutes = ["network", "site", "system", "deployment", "component"];
-    //     var newRouteNdx = tieredRoutes.indexOf(DynamicPage.getRoute());
-        
-    //     if (newRouteNdx == 4){
-    //         return tieredRoutes[newRouteNdx];
-    //     }
-    //     else {
-    //    		newRouteNdx++;
-    //     	return tieredRoutes[newRouteNdx];
-    //     }
-    // }
+    
+    $scope.clear = function(){
+        if($scope.JSON['Name'] == "New " + DynamicPage.getTitle()){
+            $scope.JSON['Name'] = "";
+        }
+    }
     
     //open a modal for viewing
     //creates a new modal if one has not been instantiated
@@ -846,6 +839,8 @@ console.log ($scope.title)
             }).then(function(modal) {
             	// create JSON
 				$scope.JSON = {};
+                $scope.JSON['Name'] = "New " + DynamicPage.getTitle();
+                
                 $scope.modal = modal;
                 $scope.modal.show();
             });
@@ -884,28 +879,49 @@ console.log ($scope.title)
 		// go to SaveNew factory
 		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData, $rootScope.related);
 		// I have no idea why it doesnt work with Networks
-		if (DynamicPage.getTitle() != "Networks")
-			$rootScope.listJSON.push ($scope.JSON);
+		if (DynamicPage.getTitle() != "Networks"){
+			$rootScope.listJSON.push($scope.JSON);
+        }
 		$rootScope.chosenJSONlist.push($scope.JSON);
 	};
+    
+    
 
 
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.
 	// in root scope so it can be called from all buttons
-	$rootScope.choosePicture = function (imageData){
-		Camera.checkPermissions();
-		Camera.openGallery ().then (function (image){
-    		$scope.imageData = image;
-		});
-	}
+	$rootScope.choosePicture = function (){
+        return $q(
+            function(resolve, reject){
+                Camera.checkPermissions();
+                Camera.openGallery()
+                 .then($ionicLoading.show({
+                    templateUrl: 'templates/directive_templates/loading-spinner.html',
+                    noBackdrop: true
+                }))
+                .then (function (image){
+                    $ionicLoading.hide();
+                    
+                    $scope.imageData = image.result;
+                
+                    resolve(image.raw);
+                });
+            }
+        )
+    };
 
 	//wrapper for the take image factory so we can call it from the takePhoto button
 	// in root scope so it can be called from all buttons
-	$rootScope.takePicture = function (imageData){
+	$rootScope.takePicture = function (){
     	Camera.checkPermissions();
-    	Camera.openCamera ().then (function (image){
-    		$scope.imageData = image;
-            console.log(image);
+    	Camera.openCamera()
+        .then($ionicLoading.show({
+        	templateUrl: 'templates/directive_templates/loading-spinner.html',
+        	noBackdrop: false
+    	}))
+        .then(function (image){
+            $ionicLoading.hide();
+    		$scope.imageData = image.result;
     	});
 	}
 
