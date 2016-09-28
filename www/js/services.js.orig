@@ -215,7 +215,7 @@ angular.module('app.services', [])
 // var: n/a
 // return: hexidemical image string or null
 	function openCamera() {
-
+		var result;
 		// return promise
 		return $q (function (resolve, reject){ 
 			// wait for device to be ready
@@ -224,9 +224,14 @@ angular.module('app.services', [])
     			var options = setOptions(Camera.PictureSourceType.CAMERA);
     			// get the picture
 				navigator.camera.getPicture( function Success (imageData){        
+<<<<<<< HEAD
+                	//encode image data into hex string
+               		 result = encode(imageData);
+=======
    					// convert to hexidecimal string
                     result = encode(imageData);
                     
+>>>>>>> 948ab935e2428fa52fc3ad863a86efdc3a94b36f
     				// resolve promise
 					resolve(
                         {result: result, 
@@ -586,7 +591,6 @@ console.log (JSON);
 					JSON ['Land Owner'] = null;
 				else
 					JSON ['Land Owner'] = parseInt (JSON ['Land Owner']);
-				JSON ["Photo"] = imageData;
 				JSON ['Longitude'] = parseFloat (parseFloat(JSON ['Longitude']).toFixed (7));
   				JSON ['Latitude'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));
   				JSON ['Elevation'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));

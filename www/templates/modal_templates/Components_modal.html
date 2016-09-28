@@ -1,13 +1,11 @@
-<ion-modal-view ng-controller="scrollController" title="Component" id="page7" style="" class=" ">
+<ion-modal-view  title="Component" id="page7" style="" class=" ">
     <ion-header-bar class="bar-dark">
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
         <div class="title header-item" ng-bind="JSON['Name']"></div>
     </ion-header-bar>
     
-   <!--Scrollable Content; Calls function to check visibility of translucent down arrow.-->
-<!--Scrollable Content; Calls function to check visibility of translucent down arrow.-->
+
     <ion-content 
-      delegate-handle="scrollable" 
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
         <form name = "nameForm" class="list">

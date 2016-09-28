@@ -206,7 +206,6 @@ console.log ($scope.title)
     // upload button
     $scope.uploadJSONS = function(){
     	   // posts the unsynced json to edge
-           console.log ($rootScope.unsyncedJSON)
     	   var promise = sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON, $rootScope.loggedIn);
     	   promise.then ( function (){
     		  // once finished, the unsynced json is cleared
@@ -877,7 +876,7 @@ console.log ($scope.title)
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.
 	// in root scope so it can be called from all buttons
 	$rootScope.choosePicture = function (){
-
+        var unencoded;
                 Camera.checkPermissions();
                 Camera.openGallery()
                  .then($ionicLoading.show({
@@ -886,13 +885,20 @@ console.log ($scope.title)
                 }))
                 .then (function (image){
                     $ionicLoading.hide();
+<<<<<<< HEAD
                    $scope.imageData = image.result;
+=======
+                    $scope.imageData = image.result;
+                    resolve(image.raw);
+>>>>>>> 948ab935e2428fa52fc3ad863a86efdc3a94b36f
                 });
     };
 
 	//wrapper for the take image factory so we can call it from the takePhoto button
 	// in root scope so it can be called from all buttons
 	$rootScope.takePicture = function (){
+<<<<<<< HEAD
+        var unencoded;
     	Camera.checkPermissions();
     	Camera.openCamera()
         .then($ionicLoading.show({
@@ -904,6 +910,23 @@ console.log ($scope.title)
     		$scope.imageData =  image.result;
     	});
         
+=======
+        return $q(
+            function(resolve, reject){
+                Camera.checkPermissions();
+                Camera.openCamera()
+                .then($ionicLoading.show({
+                    templateUrl: 'templates/directive_templates/loading-spinner.html',
+                    noBackdrop: true
+                }))
+                .then(function (image){
+                    $ionicLoading.hide();
+                    $scope.imageData = image.result;
+                    resolve(image.raw);
+                });
+            }
+        )
+>>>>>>> 948ab935e2428fa52fc3ad863a86efdc3a94b36f
 	}
 
 
