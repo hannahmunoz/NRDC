@@ -57,26 +57,6 @@ console.log ($scope.title)
 				SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], null, related);	
 	};
 
-	//wrapper for the openGallery factory so we can call it from the choosePicture button.
-	// in root scope so it can be called from all buttons
-	$rootScope.choosePicture = function (imageData){
-		Camera.checkPermissions();
-		$scope.imageData = Camera.openGallery ().then ( function (image){ $scope.imageData = image; });
-	}
-
-	//wrapper for the take image factory so we can call it from the takePhoto button
-	// in root scope so it can be called from all buttons
-	$rootScope.takePicture = function (imageData){
-    		Camera.checkPermissions();
-    		$scope.imageData = Camera.openCamera ().then (function (image){ $scope.imageData = image;});
-	}
-
-	//wrapper for the GPS factory so we can call it from the getGPS button
-	// in root scope so it can be called from all buttons
-	$rootScope.getGPS = function (JSON){
-		GPS.checkPermissions();
-		GPS.getLocation(JSON);
-	}
 })
 
 .controller('LoginController', function($ionicModal, $scope, $rootScope, $q, Login){
@@ -839,7 +819,6 @@ console.log ($scope.title)
             }).then(function(modal) {
             	// create JSON
 				$scope.JSON = {};
-                $scope.JSON['Name'] = "New " + DynamicPage.getTitle();
                 
                 $scope.modal = modal;
                 $scope.modal.show();
@@ -854,9 +833,9 @@ console.log ($scope.title)
     
     //close Modal
     $scope.closeModal = function() {
-        /*if($scope.modal != null){
+        if($scope.modal != null){
             $scope.modal.hide();
-        }*/
+        }
         $scope.modal.remove().then (function (){
                 $scope.JSON = {};
                 $scope.modal = null;
@@ -891,8 +870,7 @@ console.log ($scope.title)
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.
 	// in root scope so it can be called from all buttons
 	$rootScope.choosePicture = function (){
-        return $q(
-            function(resolve, reject){
+        var unencoded;
                 Camera.checkPermissions();
                 Camera.openGallery()
                  .then($ionicLoading.show({
@@ -901,18 +879,14 @@ console.log ($scope.title)
                 }))
                 .then (function (image){
                     $ionicLoading.hide();
-                    
-                    $scope.imageData = image.result;
-                
-                    resolve(image.raw);
+                   $scope.imageData = image.result;
                 });
-            }
-        )
     };
 
 	//wrapper for the take image factory so we can call it from the takePhoto button
 	// in root scope so it can be called from all buttons
 	$rootScope.takePicture = function (){
+        var unencoded;
     	Camera.checkPermissions();
     	Camera.openCamera()
         .then($ionicLoading.show({
@@ -921,8 +895,9 @@ console.log ($scope.title)
     	}))
         .then(function (image){
             $ionicLoading.hide();
-    		$scope.imageData = image.result;
+    		$scope.imageData =  image.result;
     	});
+        
 	}
 
 
@@ -1084,23 +1059,6 @@ console.log ($scope.title)
 		$rootScope.serviceEntryListJSON.push ($scope.JSON);	
 	};
 
-	//wrapper for the openGallery factory so we can call it from the choosePicture button.
-	// in root scope so it can be called from all buttons
-	$rootScope.choosePicture = function (imageData){
-		Camera.checkPermissions();
-		Camera.openGallery ().then (function (image){
-    		$scope.imageData = image;
-		});
-	}
-
-	//wrapper for the take image factory so we can call it from the takePhoto button
-	// in root scope so it can be called from all buttons
-	$rootScope.takePicture = function (imageData){
-    	Camera.checkPermissions();
-    	Camera.openCamera ().then (function (image){
-    		$scope.imageData = image;
-    	});
-	}
 
     $scope.back = function(){
         //conditional to fix problem of double
@@ -1117,5 +1075,7 @@ console.log ($scope.title)
 .controller('TextAreaController', function($scope, $rootScope){
     
 })
+
+
 */
 

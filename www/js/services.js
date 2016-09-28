@@ -215,6 +215,7 @@ angular.module('app.services', [])
 // var: n/a
 // return: hexidemical image string or null
 	function openCamera() {
+		var result;
 		// return promise
 		return $q (function (resolve, reject){ 
 			// wait for device to be ready
@@ -223,14 +224,8 @@ angular.module('app.services', [])
     			var options = setOptions(Camera.PictureSourceType.CAMERA);
     			// get the picture
 				navigator.camera.getPicture( function Success (imageData){        
-					// convert base 64 to string
-   					var image =  atob(imageData);
-                    
-   					// convert to hexidecimal string
-					var result = "";
-    				for (var i = 0; i < image.length; i++) {
-        				result += image.charCodeAt(i).toString(16);
-    				}
+                	//encode image data into hex string
+               		 result = encode(imageData);
     				// resolve promise
 					resolve(
                         {result: result, 
@@ -289,10 +284,9 @@ angular.module('app.services', [])
         
         // to hexidecimal
         var result = "";
-        /*for (var i = 0; i < image.length; i++) {
+        for (var i = 0; i < image.length; i++) {
             result += image.charCodeAt(i).toString(16);
         }
-        */
         return result;
     } 
     
