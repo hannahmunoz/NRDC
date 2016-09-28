@@ -223,14 +223,9 @@ angular.module('app.services', [])
     			var options = setOptions(Camera.PictureSourceType.CAMERA);
     			// get the picture
 				navigator.camera.getPicture( function Success (imageData){        
-					// convert base 64 to string
-   					var image =  atob(imageData);
-                    
    					// convert to hexidecimal string
-					var result = "";
-    				for (var i = 0; i < image.length; i++) {
-        				result += image.charCodeAt(i).toString(16);
-    				}
+                    result = encode(imageData);
+                    
     				// resolve promise
 					resolve(
                         {result: result, 

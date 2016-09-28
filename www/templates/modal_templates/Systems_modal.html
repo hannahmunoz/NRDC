@@ -3,62 +3,63 @@
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
         <div class="title header-item" ng-bind="JSON['Name']"></div>
     </ion-header-bar>
+
     
     <ion-content class="has-header content-bg padding">
-        <form name = "nameForm" class="list " >
-            <label class="item item-input " >
-                <ion-md-input type="text" maxlength="50" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" ng-click="clear()" required/>
-            </label>
-        </form>
+            <form name = "nameForm" class="list " >
+                <label class="item item-input " >
+                    <ion-md-input type="text" maxlength="50" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" ng-click="clear()" required/>
+                </label>
+            </form>
 
-        <form name = "detailsForm" class="list ">
-            <label class="item item-input " >
-                <ion-md-input type="text" maxlength="100"  placeholder="Details" name="details" ng-model = "JSON['Details']" />
-            </label>
-        </form>
+            <form name = "detailsForm" class="list">
+                <label class="item item-input" >
+                    <ion-md-input type="text" maxlength="100"  placeholder="Details" name="details" ng-model = "JSON['Details']" />
+                </label>
+            </form>
 
-        <form name = "powerForm"  class="list " >
-            <label class="item item-input " >
-                <ion-md-input type="text" maxlength="50" placeholder="Power" name="power" ng-model = "JSON['Power']"/>
-            </label>
-        </form>
+            <form name = "powerForm"  class="list " >
+                <label class="item item-input" >
+                    <ion-md-input type="text" maxlength="50" placeholder="Power" name="power" ng-model = "JSON['Power']"/>
+                </label>
+            </form>
 
-        <form name = "installForm" class="list">
-            <label class="item item-input " >
-                <ion-md-input type="text" maxlength="200" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" />
-            </label>
-        </form>
+            <form name = "installForm" class="list">
+                <label class="item item-input " >
+                    <ion-md-input type="text" maxlength="200" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" />
+                </label>
+            </form>
 
-        <form name = "managerForm"  class="list ">
-            <div class="select-container">
-                <select class="wide" ng-model = "JSON ['Manager']" ng-options = "key as people for (key, people) in peopleJSON" required>
-                    <option value="">Manager</option>
-                </select>
-            </div>
-        </form>
+            <form name = "managerForm"  class="list ">
+                <div class="select-container">
+                    <select class="wide" ng-model = "JSON ['Manager']" ng-options = "key as people for (key, people) in peopleJSON" required>
+                        <option value="">Manager</option>
+                    </select>
+                </div>
+            </form>
 
-<!--         <form name = "siteForm"  class="list ">
-            <div class="select-container">
-                <select class="wide" ng-model = "JSON['Site']" ng-options = "key as site for (key, site) in siteJSON" required>
-                    <option value="">Site</option>
-                </select>
-            </div>
-        </form> 
+    <!--         <form name = "siteForm"  class="list ">
+                <div class="select-container">
+                    <select class="wide" ng-model = "JSON['Site']" ng-options = "key as site for (key, site) in siteJSON" required>
+                        <option value="">Site</option>
+                    </select>
+                </div>
+            </form> 
 
-        function="choosePicture()"
-        function="takePicture()"
--->
-        
-        <span>
-            <image-button funct="choosePicture" icon="ion-images"></image-button>
-            <image-button funct="takePicture" icon="ion-android-camera"></image-button>
-        </span>
+            function="choosePicture()"
+            function="takePicture()"
+    -->
 
-        <a class=" button button-positive wide button-block " 
-           ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid " 
-           ng-click = "saveJSON(); back(); destroyModal();">
-           Save</a>
-        
-    <div class="overscroll"></div>
+            <span>
+                <image-button funct="choosePicture" icon="images"></image-button>
+                <image-button funct="takePicture" icon="camera"></image-button>
+            </span>
+
+            <a class=" button button-positive wide button-block " 
+               ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid " 
+               ng-click = "saveJSON(); back(); destroyModal();">
+               Save</a>
+
+        <div class="overscroll"></div>
     </ion-content>
 </ion-modal-view>

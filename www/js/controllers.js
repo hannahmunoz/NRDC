@@ -813,8 +813,14 @@ console.log ($scope.title)
 	$scope.imageData = null;
 	// allow saves
 	$scope.checked = false;
+    
+    //start with modal hidden and
+    //modal nonexistant
     $rootScope.modalHidden = true;
     $scope.modal = null;
+    
+    $scope.images = 'ion-images';
+    $scope.camera = "ion-android-camera";
 
     
     
@@ -901,9 +907,7 @@ console.log ($scope.title)
                 }))
                 .then (function (image){
                     $ionicLoading.hide();
-                    
                     $scope.imageData = image.result;
-                
                     resolve(image.raw);
                 });
             }
@@ -913,16 +917,21 @@ console.log ($scope.title)
 	//wrapper for the take image factory so we can call it from the takePhoto button
 	// in root scope so it can be called from all buttons
 	$rootScope.takePicture = function (){
-    	Camera.checkPermissions();
-    	Camera.openCamera()
-        .then($ionicLoading.show({
-        	templateUrl: 'templates/directive_templates/loading-spinner.html',
-        	noBackdrop: false
-    	}))
-        .then(function (image){
-            $ionicLoading.hide();
-    		$scope.imageData = image.result;
-    	});
+        return $q(
+            function(resolve, reject){
+                Camera.checkPermissions();
+                Camera.openCamera()
+                .then($ionicLoading.show({
+                    templateUrl: 'templates/directive_templates/loading-spinner.html',
+                    noBackdrop: true
+                }))
+                .then(function (image){
+                    $ionicLoading.hide();
+                    $scope.imageData = image.result;
+                    resolve(image.raw);
+                });
+            }
+        )
 	}
 
 

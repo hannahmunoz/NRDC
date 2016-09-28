@@ -42,7 +42,7 @@ angular.module('app.directives', [])
         var textSize = element[0];                          //hidden div holding text 
                                                             // for height measurement
         var localTxt = element.parent()[0].childNodes[0];   //text area to be modified
-        var label = element.parent()[0].childNodes[1];      //input label eg 'name
+        var label = element.parent()[0].childNodes[1];      //input label eg 'name'
         
         //on intial load reasize any already populated text fields
         scope.$watch(attrs.textAreaSize, function(){
@@ -52,7 +52,7 @@ angular.module('app.directives', [])
             localTxt.style.height = textSize.offsetHeight + 'px';
             
             //maintain the offset of the input label so it remains above the text box
-            label.style = ' transform: translate3d(0,-' + (textSize.offsetHeight + 25) + 'px, 0) scale(.9); transition: all 0s linear;';
+            label.style = ' transform: translate3d(0,-' + (textSize.offsetHeight + 25) + 'px, 0) scale(1); transition: all 0s linear;';
         });
         
   
@@ -64,7 +64,7 @@ angular.module('app.directives', [])
             localTxt.style.height = textSize.offsetHeight + 'px';
             
             //maintain the offset of the input label so it remains above the text box
-            label.style = ' transform: translate3d(0,-' + (textSize.offsetHeight + 25) + 'px, 0) scale(.9); transition: all 0s linear;';
+            label.style = ' transform: translate3d(0,-' + (textSize.offsetHeight + 25) + 'px, 0) scale(1); transition: all 0s linear;';
         }
     };
         
@@ -213,7 +213,9 @@ angular.module('app.directives', [])
     }
 })
 
+
 .directive('imageButton', function(){
+    
     //the final directive
     return{
         restrict: 'E',
@@ -225,17 +227,19 @@ angular.module('app.directives', [])
         replace: true,
         link: function(scope, element, attr){
             
+            //on click
+            //call the function bound to funct
             element.on('click', function(e){
                 scope.funct().then(function(image){
                     element.css({
                       'background-image': 'url(data:image/jpeg;base64,' + image + ')',
-                      'background-size': '200px 200px'
+                      'background-position': 'center', 
+                      'background-size': '300px 300px',
+                      'height':'300px',
+                      'width':'300px'
                     });
                 });
-            });
-            
-            console.log(element);
-            
+            });   
         }
     }
 })
