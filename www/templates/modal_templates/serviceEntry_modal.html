@@ -1,4 +1,4 @@
-<ion-modal-view ng-controller="scrollController" 
+<ion-view ng-controller="scrollController" 
                 title="Service Entry" 
                 id="page8" 
                 style="background-color:#0471A6;" 
@@ -64,10 +64,11 @@
     </select>
     </div>
 </form>  -->
-    <span>
-        <button class = "button big-icon-button button-positive button-large icon ion-images" ng-model = "JSON['Photo']" ng-click = "choosePicture()"/>
-        <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-model = "JSON['Photo']" ng-click = "takePicture(imageData)"/>
-    </span>
+      
+        <span>
+            <image-button funct="choosePicture" icon="images"></image-button>
+            <image-button funct="takePicture" icon="camera"></image-button>
+        </span>
         
         <button ng-disabled = "nameForm.$invalid || notesForm.$invalid || operationForm.$invalid  ||  dataForm.$invalid || creatorForm.$invalid" 
                 class=" button button-positive button-large button-block " 
@@ -75,4 +76,4 @@
                 Save</button>
 
     </ion-content>
-</ion-modal-view>
+</ion-view>

@@ -6,6 +6,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	var related;
 	$scope.document = false;
 	$scope.service = false;
+
 	//http://stackoverflow.com/questions/4878756/javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
 	$scope.title = DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().substr(1).toLowerCase() + 's';
 
@@ -513,6 +514,20 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		$scope.route = DynamicPage.getRoute();
 	})
 
+    //enables the viewing of our currently selected
+    //data (i.e. will enable us to see the current network,
+    //doxument, component, site etc.)
+    $scope.viewItem = function(){
+        $state.go($scope.route);
+    }
+
+    //for the creation of a new item
+    $scope.newItem = function(){
+        console.log($scope.title);
+        $state.go("createNew"+$scope.title);
+    }
+
+
 	// wrapper for person select button
 	$scope.select = function(JSON){
 		DynamicPage.getRoute();
@@ -523,11 +538,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         DynamicPage.setJSON(JSON);
 	}
     
-    //enables the viewing of our currently selected
-    //JSON
-    $scope.viewItem = function(){
-        $state.go($scope.route);
-    }
     
     
     function storePrevJSON(){
@@ -544,15 +554,15 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //store my previous view's JSON for return
         storePrevJSON();
 
-    if (angular.isDefined (DynamicPage.getJSON())){
-    	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
-    	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
-			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
-				$scope.modalCheck = false;
-			}
-		}
+        if (angular.isDefined (DynamicPage.getJSON())){
+        	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
+        	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
+    			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
+    				$scope.modalCheck = false;
+    			}
+    		}
 
-	}
+    	}
         
         //increment the level of my list and of my
         //item clicked until we hit the bottom list
@@ -771,6 +781,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	$state.go ('document');
     }
 
+    $scope.newDoc = function(){
+        console.log(DynamicPage.route + " " + DynamicPage.title);
+        $state.go("createNewDocuments");
+    }
+
 })
 
 
@@ -806,11 +821,15 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	$state.go ('serviceEntry');
     }
 
+    $scope.newSE = function(){
+        console.log(DynamicPage.route + " " + DynamicPage.title);
+        $state.go("createNewServiceEntries");
+    }
 })
 
 // for when a new entry is being created
 .controller('modalController', function($scope, $rootScope, $state, $ionicModal, $ionicLoading, $q, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
-
+    $scope.rawImg;
 	// set imageData to null in case there is no picture
 	$scope.imageData = null;
 	// allow saves
@@ -820,6 +839,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     //modal nonexistant
     $rootScope.modalHidden = true;
     $scope.modal = null;
+    
+    // create JSON
+    $scope.JSON = {};
+
     
     $scope.images = 'ion-images';
     $scope.camera = "ion-android-camera";
@@ -831,55 +854,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             $scope.JSON['Name'] = "";
         }
     }
-    
-    //open a modal for viewing
-    //creates a new modal if one has not been instantiated
-    //elsewise opens the old modal
-    $scope.openModal = function() {
-        $rootScope.modalHidden = false;
-            $scope.modal = null;
-        // If a modal is not
-        // already instantiated in this scope;
-        if($scope.modal == null){
-            $ionicModal.fromTemplateUrl('templates/modal_templates/' + DynamicPage.getTitle() + '_modal.html', {
-                scope: $scope,
-                animation: 'slide-in-up'
-            }).then(function(modal) {
-            	// create JSON
-				$scope.JSON = {};
-                
-                $scope.modal = modal;
-                $scope.modal.show();
-            });
-        }
-        
-        //prevent show before modal create error
-        if($scope.modal != null){
-            $scope.modal.show();
-        }
-    };
-    
-    //close Modal
-    $scope.closeModal = function() {
-        if($scope.modal != null){
-            $scope.modal.hide();
-        }
-        $scope.modal.remove().then (function (){
-                $scope.JSON = {};
-                $scope.modal = null;
-        });
-        $rootScope.modalHidden = true;
-    };
-    
-    //destroy modal to prevent memory leaks
-    $scope.destroyModal = function() {       
-        $rootScope.modalHidden = true;
-        $scope.modal.remove().then (function (){
-                $scope.JSON = {};
-                $scope.modal = null;
-        });
 
-    };
 
   	// save JSON
 	$scope.saveJSON = function (){
@@ -898,32 +873,46 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.
 	// in root scope so it can be called from all buttons
 	$rootScope.choosePicture = function (){
-
-                Camera.checkPermissions();
-                Camera.openGallery()
-                 .then($ionicLoading.show({
-                    templateUrl: 'templates/directive_templates/loading-spinner.html',
-                    noBackdrop: true
-                }))
-                .then (function (image){
-                    $ionicLoading.hide();
-                   $scope.imageData = image.result;
-                });
+        return $q (
+            function (resolve, reject){
+                    $ionicLoading.show({
+                        templateUrl: 'templates/directive_templates/loading-spinner.html',
+                        noBackdrop: true
+                    })
+                    Camera.checkPermissions();
+                    Camera.openGallery()
+                    .then(function (image){
+                        $ionicLoading.hide();
+                        $scope.imageData = image.result;
+                        resolve(image.raw);
+                    })
+                    .catch(function(error){
+                        $ionicLoading.hide();
+                    });
+            }
+        )
     };
 
 	//wrapper for the take image factory so we can call it from the takePhoto button
 	// in root scope so it can be called from all buttons
 	$rootScope.takePicture = function (){
-    	Camera.checkPermissions();
-    	Camera.openCamera()
-        .then($ionicLoading.show({
-        	templateUrl: 'templates/directive_templates/loading-spinner.html',
-        	noBackdrop: false
-    	}))
-        .then(function (image){
-            $ionicLoading.hide();
-    		$scope.imageData =  image.result;
-    	});
+         return $q(
+            function (resolve, reject){
+                Camera.checkPermissions();
+                Camera.openCamera()
+                .then($ionicLoading.show({
+                    templateUrl: 'templates/directive_templates/loading-spinner.html',
+                    noBackdrop: false
+                }))
+                .then(function (image){
+                    $ionicLoading.hide();
+                    $scope.imageData =  image.result;
+                    resolve(image.raw);
+                })
+                .catch(function(error){
+                        $ionicLoading.hide();
+                });
+            });
         
 	}
 
@@ -946,55 +935,19 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 })
 
+
 // document modal controller, works the same as the ModalController, but needs to be its on controller so in can show up inside a modal
 .controller('DocumentModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter ) {
 	$scope.checked = false;
     $scope.template = 'templates/modal_templates/Documents_modal.html';
     $scope.modal = null;
-    
-    //set flag in root scope to indicate weither modal
-    //hidden or shown
-    $scope.openModal = function(JSON) {
-        $rootScope.modalHidden = false;
-        // If a modal is not
-        // already instantiated in this scope
-        // create a new modal
-        if($scope.modal == null){
-            $ionicModal.fromTemplateUrl($scope.template, {
-                scope: $scope,
-                animation: 'slide-in-up'
-            }).then(function(modal) {
-            	$scope.JSON = {};
-                $scope.modal = modal;
-                $scope.modal.show();
-            });
-        }
-        
-        //prevent show before modal create error
-        if($scope.modal != null){
-            $scope.modal.show();
-        }
-    };
-    
-    
-    $scope.closeModal = function() {
-        if($scope.modal != null){
-            $scope.modal.hide();
-        }
-        $rootScope.modalHidden = true;
-    };
-
-    
-     $scope.destroyModal = function() {
-        $scope.modal.remove().then (function (){
-            $scope.JSON = {};  
-            $scope.modal = null;
-        });
-        $rootScope.modalHidden = true;
-    };
+    $scope.JSON = {};
     
     
 	$scope.saveJSON = function (){
+        console.log(DynamicPage.getRoute() + " " + DynamicPage.getTitle());
+
+
 		// nulls entries that may not have any data
 		$scope.JSON ['Network'] = null;
 		$scope.JSON ['Site'] = null;
@@ -1008,7 +961,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		// SaveNew factory
 		SaveNew.save ("Documents", true, $scope.JSON, $rootScope.unsyncedJSON['Documents'], $scope.imageData);
 		// pushes into list
-		$rootScope.docListJSON.push ($scope.JSON);	
+		$rootScope.docListJSON.push ($scope.JSON);
+        $scope.JSON = {};
 
 	};
 
@@ -1017,10 +971,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //back when modal closed
         if($rootScope.modalHidden != false){
             $ionicHistory.goBack();
-            console.log ($ionicHistory.goBack())
         }
      };
 })
+
 
 //Controls the behavior of the service modals for particular networks, sites, sysyems etc
 .controller('ServiceModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
@@ -1028,51 +982,15 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$scope.checked = false;
     $scope.modal = null;
     
+    $scope.JSON = {};
+
     $scope.template = 'templates/modal_templates/serviceEntry_modal.html';
-    
 
-    //set flag in root scope to indicate weither modal
-    //hidden or shown
-    $scope.openModal = function() {
-        $rootScope.modalHidden = false;
-        
-        // If a modal is not
-        // already instantiated in this scope
-        // create a new modal
-        if($scope.modal == null){
-            $ionicModal.fromTemplateUrl($scope.template, {
-                scope: $scope,
-                animation: 'slide-in-up'
-            }).then(function(modal) {
-            	$scope.JSON = {};
-                $scope.modal = modal;
-                $scope.modal.show();
-            });
-        }
-        
-        //prevent show before modal create error
-        if($scope.modal != null){
-            $scope.modal.show();
-        }
-    };
-    
-    $scope.closeModal = function() {
-        if($scope.modal != null){
-            $scope.modal.hide();
-        }
-        $rootScope.modalHidden = true;
-    };
-
-     $scope.destroyModal = function() {
-        $scope.modal.remove().then ( function () {
-            $scope.JSON = {};
-            $scope.modal = null;
-        });
-        $rootScope.modalHidden = true;
-    };
-    
     
 	$scope.saveJSON = function (){
+        console.log(DynamicPage.getRoute() + " " + DynamicPage.getTitle());
+
+
 		// nulls entries that may not have any data
 		$scope.JSON ['Site'] = null;
 		$scope.JSON ['System'] = null;
@@ -1083,7 +1001,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
 		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
 		// pushes into list
-		$rootScope.serviceEntryListJSON.push ($scope.JSON);	
+		$rootScope.serviceEntryListJSON.push ($scope.JSON);
+
+        $scope.JSON = {};
 	};
 
 

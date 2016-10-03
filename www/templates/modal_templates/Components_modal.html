@@ -1,4 +1,4 @@
-<ion-modal-view  title="Component" id="page7" style="" class=" ">
+<ion-view  title="Component" id="page7" style="" class=" ">
     <ion-header-bar class="bar-dark">
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
         <div class="title header-item" ng-bind="JSON['Name']"></div>
@@ -80,8 +80,8 @@
         </form>
  -->
         <span>
-            <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
-            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>
+            <image-button funct="choosePicture" icon="images"></image-button>
+            <image-button funct="takePicture" icon="camera"></image-button>
         </span>
 
 
@@ -94,4 +94,4 @@
         
     </ion-content>
 
-</ion-modal-view>
+</ion-view>

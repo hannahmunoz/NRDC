@@ -278,11 +278,15 @@ angular.module('app.services', [])
                         {result: result, 
                              raw: imageData});
 				}, function Failure (error){
-					if (error != "Camera Cancelled"){
+
+console.log("is this called");
+
+					if (error != "Camera cancelled."){
 						// show/log error
 						$cordovaToast.showLongBottom ("Camera Error");
 						console.error ("Camera Error: " + error);
 					}
+
 					// reject promise
 					reject (null);
 			}, options);
@@ -306,7 +310,7 @@ angular.module('app.services', [])
     			
                 //encode image data into hex string
                 result = encode(imageData);
-                
+                    
                 // resolve promise
                 // pass raw value back for rendering
 				resolve ({result: result, 
@@ -319,7 +323,7 @@ angular.module('app.services', [])
         			console.error ("Gallery Error: " + error);
         		}
         		// reject promise
-        		reject (null);
+        		reject (error);
     		}, options);
 			})
 		})
