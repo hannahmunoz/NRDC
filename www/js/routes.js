@@ -68,7 +68,53 @@ angular.module('app.routes', [])
     url: '/network',
     templateUrl: 'templates/network.html',
     controller: 'networkCtrl'
-  })  
+  }) 
+
+  .state('createNewNetworks', {
+    url: '/createNetwork',
+    templateUrl: 'templates/modal_templates/Networks_modal.html',
+    controller: 'modalController'
+  })
+
+
+  .state('createNewSites', {
+    url: '/createSite',
+    templateUrl: 'templates/modal_templates/Sites_modal.html',
+    controller: 'modalController'
+  })
+
+
+  .state('createNewSystems', {
+    url: '/createSystem',
+    templateUrl: 'templates/modal_templates/Systems_modal.html',
+    controller: 'modalController'
+  })
+
+
+  .state('createNewDeployments', {
+    url: '/createDeploymentd',
+    templateUrl: 'templates/modal_templates/Deployments_modal.html',
+    controller: 'modalController'
+  })
+
+
+  .state('createNewComponents', {
+    url: '/createComponent',
+    templateUrl: 'templates/modal_templates/Components_modal.html',
+    controller: 'modalController'
+  })
+
+  .state('createNewDocuments', {
+    url: '/createDocument',
+    templateUrl: 'templates/modal_templates/Documents_modal.html',
+    controller: 'DocumentModalController'
+  })
+
+  .state('createNewServiceEntries', {
+    url: '/createServiceEntry',
+    templateUrl: 'templates/modal_templates/serviceEntry_modal.html',
+    controller: 'ServiceModalController'
+  })
 
   // .state('createNew.mainMenu', {
   //   url: '/mainMenu',

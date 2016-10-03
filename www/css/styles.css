@@ -277,18 +277,16 @@ of the text area*/
 
 /*Manual overrides of md-input css*/
 /*EM scales element according to text size*/
-.item-md-label textarea{
+.item-md-label > textarea{
     background-color: inherit !important;
     color: black !important;
     resize: none;
-    font-size: large;
+    font-size: large ;
     font: arial;
     height: 2em;
-    width: 80%
     padding: .5em;
     line-height: 1em;
-    
-    overflow: hidden;
+
     
     border-bottom: 2px solid rgba( 0, 0, 0, .05);
 }

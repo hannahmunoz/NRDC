@@ -1,11 +1,11 @@
-<ion-modal-view ng-controller="scrollController" 
+<ion-view ng-controller="scrollController" 
           title="Site" 
           id="page4"  
           class=" ">
-    <ion-nav-bar class="bar-dark">
-            <ion-nav-back-button class="button-flat" ng-click="back(); closeModal();"></ion-nav-back-button>
+    <ion-header-bar class="bar-dark">
+            <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
             <div class="title header-item" ng-bind="JSON['Name']"></div>
-    </ion-nav-bar>
+    </ion-header-bar>
 
 
     <ion-header-bar class="bar-dark">
@@ -89,9 +89,8 @@
         </form>
         
         <span>
-             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"/>
-
-            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"/>
+            <image-button funct="choosePicture" icon="images"></image-button>
+            <image-button funct="takePicture" icon="camera"></image-button>
         </span>
 
         <button class=" button button-positive button-large button-block " 
@@ -103,4 +102,4 @@
 
     </ion-content>   
     
-</ion-modal-view>
+</ion-view>

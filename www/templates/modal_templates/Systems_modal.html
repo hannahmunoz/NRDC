@@ -1,4 +1,4 @@
-<ion-modal-view title="System" id="page5" style="" class=" ">
+<ion-view title="System" id="page5" style="" class=" ">
     <ion-header-bar class="bar-dark">
         <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
         <div class="title header-item" ng-bind="JSON['Name']"></div>
@@ -38,18 +38,6 @@
                 </div>
             </form>
 
-    <!--         <form name = "siteForm"  class="list ">
-                <div class="select-container">
-                    <select class="wide" ng-model = "JSON['Site']" ng-options = "key as site for (key, site) in siteJSON" required>
-                        <option value="">Site</option>
-                    </select>
-                </div>
-            </form> 
-
-            function="choosePicture()"
-            function="takePicture()"
-    -->
-
             <span>
                 <image-button funct="choosePicture" icon="images"></image-button>
                 <image-button funct="takePicture" icon="camera"></image-button>
@@ -62,4 +50,4 @@
 
         <div class="overscroll"></div>
     </ion-content>
-</ion-modal-view>
+</ion-view>

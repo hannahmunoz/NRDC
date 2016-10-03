@@ -226,20 +226,25 @@ angular.module('app.directives', [])
         templateUrl: 'templates/directive_templates/image-button.html',
         replace: true,
         link: function(scope, element, attr){
-            
+            var clearSiblingCSS = function(e){
+                e.parent().children().css({
+                    'background-image': ''
+                })
+            }
+
             //on click
             //call the function bound to funct
             element.on('click', function(e){
-                scope.funct().then(function(image){
+                scope.funct()
+                .then(function(image){
+                    clearSiblingCSS(element);
                     element.css({
                       'background-image': 'url(data:image/jpeg;base64,' + image + ')',
                       'background-position': 'center', 
                       'background-size': '300px 300px',
-                      'height':'300px',
-                      'width':'300px'
                     });
                 });
-            });   
+            });
         }
     }
 })
