@@ -12,48 +12,35 @@
     </ion-nav-buttons>
     
     <ion-content class="has-header content-bg padding">
-
-        <form name ="nameForm" class="list" >
-            <label class="item item-input " >
+<form name ="networkForm"> 
+            <label  >
                 <ion-md-input type="text"  placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" required/>
             </label>
-        </form>
-
-        <form name ="institutionForm" class="list " novalidate>
-            <label class="item item-input " id="project-input64" >
+            <label >
                 <ion-md-input type="text" maxlength="50" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required/>
             </label>
-        </form>
-
-        <form name ="fundingForm" class="list " >
-            <label class="item item-input "  >
+            <label >
                 <ion-md-input type="text" maxlength="100" placeholder="Original Funding Agency" name="funding" ng-model = "JSON['Original Funding Agency'] " required/>
             </label>
-        </form>
-
-        <form name ="grantForm" class="list " >
-            <label class="item item-input " >
+            <label >
                 <ion-md-input type="text" maxlength="20" placeholder="Grant Number" name="grantNumber" ng-model = "JSON['Grant Number String']" required/>
             </label>
-        </form>
-
-        <form name ="investigatorForm" class="list" novalidate> 
             <div class="select-container">
                  <select class="wide"
+                         name = "investigator"  
                          ng-model = "JSON ['Principal Investigator']" 
                          ng-options="key as people for (key, people) in peopleJSON" required>
                     <option value=""> Prinicipal Investigator</option>
                  </select>
              </div>
-        </form> 
-
         <a class=" button button-large button-block button-positive wide"
             deletable 
             ng-init="isDeletable();" 
-            ng-show="deletable" 
-            ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid" 
-            ng-click="saveJSON(); back(); destroyModal();">
+            ng-show="deletable || loggedIn" 
+            ng-disabled="(networkForm.$invalid) || (!networkForm.modified) " 
+            ng-click="saveJSON(); back();">
             Save</a>
+    </form>
     </ion-content>
 
    <fab-cluster></fab-cluster>

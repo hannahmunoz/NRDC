@@ -38,7 +38,7 @@
         <a class=" button button-positive button-large button-block wide" 
         deletable 
         ng-init="isDeletable();" 
-        ng-show="deletable" 
+        ng-show="deletable || loggedIn" 
         ng-disabled = "nameForm.$invalid || notesForm.$invalid || pathForm.$invalid" 
         ng-click = "saveJSON(); back(); destroyModal();" >
         Save</a>

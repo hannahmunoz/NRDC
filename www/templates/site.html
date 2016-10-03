@@ -20,22 +20,22 @@
       on-scroll="cndHideArrow()">
 
         <form name = "nameForm" class="list">
-            <label class="item item-input " >
-                <ion-md-input type="text" maxlength="50" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required></ion-md-input>
+            <label class="item item-input ">
+                <ion-md-input type="text" maxlength="50" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required/>
             </label>
         </form>
 
         <form name="GPSForm" class="list " >
             <label class="item item-input " >
-                <ion-md-input type="text" placeholder="Latitude" name = "siteLatitude"  ng-model = "JSON['Latitude']" required></ion-md-input>
+                <ion-md-input type="text" placeholder="Latitude" name = "siteLatitude"  ng-model = "JSON['Latitude']" required/>
             </label>
 
             <label class="item item-input "  name="siteLongitude" >
-                <ion-md-input type="text" placeholder="Longitude" name = "siteLongitude" ng-model = "JSON['Longitude']" required></ion-md-input>
+                <ion-md-input type="text" placeholder="Longitude" name = "siteLongitude" ng-model = "JSON['Longitude']" required/>
             </label>
 
             <label class="item item-input " name="siteElevation">
-                <ion-md-input type="text" placeholder="Altitude" name = "siteElevation" ng-model = "JSON['Elevation']" required></ion-md-input>
+                <ion-md-input type="text" placeholder="Altitude" name = "siteElevation" ng-model = "JSON['Elevation']" required/>
             </label>
 
             <button class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)" >Get GPS Location</button>
@@ -43,34 +43,21 @@
 
         <form name = "aliasForm" class = "list">
             <label class="item item-input " name="alias">
-                <ion-md-input type="text" maxlength="20" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="20" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required/>
             </label>
         </form>
 
         <form name = "notesForm" class = "list" >
             <label class="item item-input " >
-                <ion-md-input type="text" maxlength="200" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="200" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required/>
             </label>
         </form>
 
         <form name = "landmarkForm" class = "list">
             <label class="item item-input " >
-                <ion-md-input type="text" maxlength="50" placeholder="GPS Landmark"  name = "gpsLandmark" ng-model = "JSON['GPS Landmark']" required></ion-md-input>
+                <ion-md-input type="text" maxlength="50" placeholder="GPS Landmark"  name = "gpsLandmark" ng-model = "JSON['GPS Landmark']" required/>
             </label>
         </form>
-
-
-<!--         <form name="projectForm" class="list" >
-            <div class="select-container">
-                <select ng-model = "JSON.Network" 
-                        ng-options = "key as network for (key, network) in networkJSON" 
-                        class="wide"
-                        required>
-                <option value="">Network</option>
-                </select>
-            </div>
-        </form> -->
-
         <form name="permitForm" class="list">
             <div class="select-container">
                 <select ng-model = "JSON['Permit Holder']" 
@@ -99,7 +86,7 @@
         <button class=" button button-positive button-large button-block "
                 deletable 
                 ng-init="isDeletable();" 
-                ng-show="deletable"  
+                ng-show="deletable || loggedIn"  
                 ng-disabled="nameForm.$invalid || GPSForm.$invalid || landmarkForm.$invalid || aliasForm.$invalid || notesForm.$invalid || projectForm.$invalid  || permitForm.$invalid  || landownerForm.$invalid " 
                 ng-click = "saveJSON(); back(); destroyModal();" >
                 Save</button>

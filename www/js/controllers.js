@@ -1,4 +1,4 @@
-angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngStorage'])
+angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngStorage', 'ngInputModified'])
 
    // used to view JSONs that have already been created.
 .controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew, Camera, GPS) {
@@ -14,8 +14,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		$scope.imageData = $scope.JSON ['Photo'];
 	}
 
-
-console.log ($scope.title)
 	// loads the data into the page based on the title of the page
 	switch ($scope.title){
 		case 'Networks':
@@ -54,7 +52,13 @@ console.log ($scope.title)
 
     // save JSON button
 	$scope.saveJSON = function (){
-				SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], null, related);	
+        if ($scope.deletable == false && $scope.loggedIn == true){
+            console.log ($scope.JSON);
+            SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON[$scope.title], $scope.imageData, related);
+        }
+        else{
+		  SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], $scope.imageData, related);	
+        }
 	};
 
 })
@@ -160,7 +164,8 @@ console.log ($scope.title)
 	$rootScope.documentJSONlist = [];
 	$rootScope.docListJSON = [];
 
-	//$rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
+    // posting JSONs
+	$rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
 	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
     
     //levels for tiered traversal of
@@ -206,9 +211,10 @@ console.log ($scope.title)
     // upload button
     $scope.uploadJSONS = function(){
     	   // posts the unsynced json to edge
-           console.log ($rootScope.unsyncedJSON)
+           console.log ($rootScope.unsyncedJSON, $rootScope.editJSON)
     	   var promise = sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON, $rootScope.loggedIn);
     	   promise.then ( function (){
+                sync.edit ($rootScope.baseURL, $rootScope.editJSON, $rootScope.loggedIn);
     		  // once finished, the unsynced json is cleared
     		  $rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
     		  // the menu is reinitiated
@@ -305,6 +311,21 @@ console.log ($scope.title)
     	//get permissions
     	//unblock before packaging
     	//Camera.checkPermissions();
+        $q (function (resolve, reject){
+        // gets unsynced data back from local storage and puts in unsyncedJSON 
+        var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
+
+        if (File.checkFile ('Edit')){
+            File.readFile ('Edit').then (function Success (response){
+                if (response != null){
+                    for (var i = 0; i < list.length; i++){
+                        $rootScope.editJSON[list[i]] = $rootScope.editJSON[list[i]].concat (response[list[i]]);
+                    }
+                }
+            })
+            resolve();
+        }
+    }).then (function () {
 	$q (function (resolve, reject){
     	// gets unsynced data back from local storage and puts in unsyncedJSON 
 		var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
@@ -420,7 +441,7 @@ console.log ($scope.title)
   	 }).then (function (){
    		 //hide loading screen
    		 $ionicLoading.hide();
-  	 })})})})})})})})})
+  	 })})})})})})})})})})
 
 	}
 
