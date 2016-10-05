@@ -62,7 +62,7 @@ angular.module('app.services', [])
 					// check if there is unsynced data saved
 					if (File.checkFile ('Unsynced')){
 						// remove it
-						$cordovaFile.removeFile (cordova.file.cacheDirectory, 'NRDC/Unsynced.txt');
+						$cordovaFile.removeFile (cordova.file.dataDirectory, 'NRDC/Unsynced');
 					}
 					// show success
 					$cordovaToast.showLongBottom ("Post Successful");
@@ -81,7 +81,7 @@ angular.module('app.services', [])
 			}
 			else{
 				// write to unsynced file
-				File.checkandWriteFile ('Unsynced', JSON);
+				//File.checkandWriteFile ('Unsynced', JSON);
 				// toast failure
 				$cordovaToast.showLongBottom ("Not Logged In");
 				// reject promise
@@ -89,10 +89,56 @@ angular.module('app.services', [])
 			}
 		})
 	}
-	
+
+// function: edit
+// purpose: edit request to http link 
+// var: string (url), JSON
+// return: promise
+	function edit (url, JSON, loggedIn){
+		var types = ["people", "networks", "sites", "systems", "deployments", "components", "documents","serviceentries"];
+		var titles = ["People", "Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"]
+		// return promise
+		return $q (function (resolve, reject){ 
+			if (loggedIn){
+				for (var i = 0; i < types.length; i++){
+					for (var j = 0; j < JSON[titles[i]].length; j++){
+						$http.put (url + types[i] + '/', JSON, {timeout: 10000}).then (function Success (response){
+							// check if there is edit data saved
+							if (File.checkFile ('Edit')){
+								// remove it
+								$cordovaFile.removeFile (cordova.file.dataDirectory, 'NRDC/Edit');
+							}
+							// show success
+							$cordovaToast.showLongBottom ("Post Successful");
+							// resolve promise
+							resolve (response.status);
+						}, function Error (response){
+							// log error
+							console.warn ("Post Error :" + response.statusText);
+							// write to unsynced file
+							File.checkandWriteFile ('Edit', JSON);
+							// toast failure
+							$cordovaToast.showLongBottom ("Post Error: " + response.statusText);
+							// reject promise
+							reject (response.status);
+						})
+					}
+				}
+			}
+		else{
+				// write to unsynced file
+			//	File.checkandWriteFile ('Edit', JSON);
+				// toast failure
+				$cordovaToast.showLongBottom ("Not Logged In");
+				// reject promise
+				reject ();
+			}	
+		})
+	}
 	// return factories
 	return{read: read,
-		   post: post};
+		   post: post,
+		   edit: edit};
 })
 
 // factory: Login
@@ -429,7 +475,7 @@ console.log("is this called");
 //	return: promise
 	function checkFile(title){
 		//return promise
-		return $q (function (resolve, reject){ 
+		return $q (function (resolve, reject){
 			// wait for device to be ready
 			document.addEventListener ("deviceready", function (){
 				// check file
@@ -548,7 +594,6 @@ console.log("is this called");
 // 	var: string
 //	return: n/a
 	function save (type, isitNew, JSON, finalJSON, imageData, related){
-console.log (JSON);
 		// all entries need a modification date
 		JSON ["Modification Date"] = new Date();
 
@@ -681,12 +726,8 @@ console.log (JSON);
 
         // print json to console for debugging
 		console.log (JSON);
-		//another check for possible future edits
-		if (isitNew){
-			// pushes into unsyncedJSON
-			finalJSON.push (JSON);
-		}
-
+		// pushes into unsyncedJSON
+		finalJSON.push (JSON);
 		JSON = {};
 	}
 

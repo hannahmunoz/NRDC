@@ -48,15 +48,7 @@
                 </select>
             </div>
         </form>
-<!-- 
-        <form name = "siteForm"  class="list ">
-            <div class="select-container">
-                <select class="wide" ng-model = "JSON['Site']" ng-options = "key as site for (key, site) in siteJSON" required>
-                    <option value="">Site</option>
-                </select>
-            </div>
-        </form>
-         -->
+
         <span>
              <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
             <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>
@@ -66,7 +58,7 @@
         <a class=" button button-positive wide button-block " 
             deletable 
             ng-init="isDeletable();" 
-            ng-show="deletable" 
+            ng-show="deletable || loggedIn" 
            ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid" 
            ng-click = "saveJSON(); back(); destroyModal();">
            Save</a>
