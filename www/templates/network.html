@@ -10,14 +10,14 @@
             </button>
         </div>
     </ion-nav-buttons>
-    
+
     <ion-content class="has-header content-bg padding">
 <form name ="networkForm"> 
-            <label  >
-                <ion-md-input type="text"  placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" required/>
+            <label>
+                <ion-md-input type="text" placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" required/>
             </label>
             <label >
-                <ion-md-input type="text" maxlength="50" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required/>
+                <ion-md-input type="text"  maxlength="50" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required/>
             </label>
             <label >
                 <ion-md-input type="text" maxlength="100" placeholder="Original Funding Agency" name="funding" ng-model = "JSON['Original Funding Agency'] " required/>
@@ -34,9 +34,6 @@
                  </select>
              </div>
         <a class=" button button-large button-block button-positive wide"
-            deletable 
-            ng-init="isDeletable();" 
-            ng-show="deletable || loggedIn" 
             ng-disabled="(networkForm.$invalid) || (!networkForm.modified) " 
             ng-click="saveJSON(); back();">
             Save</a>

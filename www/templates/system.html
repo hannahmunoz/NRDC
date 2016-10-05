@@ -14,31 +14,19 @@
     
     <ion-content class="has-header content-bg padding">
  
-        <form name = "nameForm" class="list " >
-            <label class="item item-input " >
+        <form name = "systemForm">
+            <label >
                 <ion-md-input type="text" maxlength="50" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" required/>
             </label>
-        </form>
-
-        <form name = "detailsForm" class="list ">
-            <label class="item item-input " >
+            <label >
                 <ion-md-input type="text" maxlength="100"  placeholder="Details" name="details" ng-model = "JSON['Details']" />
             </label>
-        </form>
-
-        <form name = "powerForm"  class="list " >
-            <label class="item item-input " >
+            <label >
                 <ion-md-input type="text" maxlength="50" placeholder="Power" name="power" ng-model = "JSON['Power']"/>
             </label>
-        </form>
-
-        <form name = "installForm" class="list " >
             <label class="item item-input " >
                 <ion-md-input type="text" maxlength="200" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" />
             </label>
-        </form>
-
-        <form name = "managerForm"  class="list ">
             <div class="select-container">
                 <select class="wide" ng-model = "JSON ['Manager']" ng-options = "key as people for (key, people) in peopleJSON" required>
                     <option value="">Manager</option>
@@ -53,11 +41,8 @@
 
 
         <a class=" button button-positive wide button-block " 
-            deletable 
-            ng-init="isDeletable();" 
-            ng-show="deletable || loggedIn" 
-           ng-disabled="nameForm.$invalid || detailsForm.$invalid || powerForm.$invalid || installForm.$invalid || managerForm.$invalid || siteForm.$invalid" 
-           ng-click = "saveJSON(); back(); destroyModal();">
+           ng-disabled="systemForm.$invalid || !systemForm.modified" 
+           ng-click = "saveJSON(); back();">
            Save</a>
         
         <div class="overscroll"></div>

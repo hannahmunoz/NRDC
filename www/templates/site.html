@@ -19,46 +19,32 @@
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
 
-        <form name = "nameForm" class="list">
-            <label class="item item-input ">
+        <form name = "siteForm">
+            <label>
                 <ion-md-input type="text" maxlength="50" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required/>
             </label>
-        </form>
-
-        <form name="GPSForm" class="list " >
-            <label class="item item-input " >
+            <label>
                 <ion-md-input type="text" placeholder="Latitude" name = "siteLatitude"  ng-model = "JSON['Latitude']" required/>
             </label>
 
-            <label class="item item-input "  name="siteLongitude" >
+            <label >
                 <ion-md-input type="text" placeholder="Longitude" name = "siteLongitude" ng-model = "JSON['Longitude']" required/>
             </label>
 
-            <label class="item item-input " name="siteElevation">
+            <label>
                 <ion-md-input type="text" placeholder="Altitude" name = "siteElevation" ng-model = "JSON['Elevation']" required/>
             </label>
 
             <button class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)" >Get GPS Location</button>
-        </form>
-
-        <form name = "aliasForm" class = "list">
-            <label class="item item-input " name="alias">
+            <label>
                 <ion-md-input type="text" maxlength="20" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required/>
             </label>
-        </form>
-
-        <form name = "notesForm" class = "list" >
-            <label class="item item-input " >
+            <label >
                 <ion-md-input type="text" maxlength="200" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required/>
             </label>
-        </form>
-
-        <form name = "landmarkForm" class = "list">
-            <label class="item item-input " >
+            <label >
                 <ion-md-input type="text" maxlength="50" placeholder="GPS Landmark"  name = "gpsLandmark" ng-model = "JSON['GPS Landmark']" required/>
             </label>
-        </form>
-        <form name="permitForm" class="list">
             <div class="select-container">
                 <select ng-model = "JSON['Permit Holder']" 
                         ng-options = "key as people for (key, people) in peopleJSON" 
@@ -66,9 +52,6 @@
                     <option value="">Permit Holder</option>
                 </select>
             </div>
-        </form>
-
-        <form name="landownerForm" class="list">
             <div class="select-container">
                         <select ng-model = "JSON['Land Owner']" 
                                 ng-options = "key as people for (key, people) in peopleJSON" 
@@ -83,12 +66,9 @@
             <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"/>
         </span>
 
-        <button class=" button button-positive button-large button-block "
-                deletable 
-                ng-init="isDeletable();" 
-                ng-show="deletable || loggedIn"  
-                ng-disabled="nameForm.$invalid || GPSForm.$invalid || landmarkForm.$invalid || aliasForm.$invalid || notesForm.$invalid || projectForm.$invalid  || permitForm.$invalid  || landownerForm.$invalid " 
-                ng-click = "saveJSON(); back(); destroyModal();" >
+        <button class=" button button-positive button-large button-block " 
+                ng-disabled="siteForm.$invalid || !siteForm.modified" 
+                ng-click = "saveJSON(); back();" >
                 Save</button>
                 
     <div class = "overscroll"></div>

@@ -6,8 +6,6 @@ angular.module('app.services', [])
 //		post
 .factory ('sync', function($q, $http, $cordovaFile, File, ObjectCounter, $cordovaToast){
 
-
-
 // function: read
 // purpose:  retreive info from http link 
 // var: string (url)

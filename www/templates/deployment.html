@@ -15,66 +15,40 @@
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
 
-        <form name = "nameForm" class="list" >
-            <label class="item item-input " >
+        <form name = "deploymentForm">
+            <label>
                 <ion-md-input type="text" maxlength="100" placeholder="Name" name = "deploymentName" ng-model = "JSON['Name']" required/>
             </label>
-        </form>
-
-        <form name = "purposeForm" class="list">
-            <label class="item item-input " >
+            <label>
                 <ion-md-input type="text" maxlength="100" placeholder="Purpose" name="purpose" ng-model = "JSON['Purpose']"/>
-            </label>
-        </form>
-
-        <form  name = "GPSForm"  class="list ">
-            <label class="item item-input " >
+            </label> 
+            <label>
                 <ion-md-input type="text" placeholder="Latitude" name="deploymentLatitude" ng-model = "JSON['Latitude']"/>
             </label>
-
-            <label class="item item-input ">
+            <label>
                 <ion-md-input type="text" placeholder="Longitude" name="deploymentLongitude" ng-model= "JSON['Longitude']"/>
             </label>
 
-            <label class="item item-input " >
+            <label>
                 <ion-md-input type="text" placeholder="Altitude" name="deploymentAltitude" ng-model = "JSON['Elevation']"/>
             </label>
             <button id="deployment-button8" class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)" >Get GPS Location</button>
-        </form>
-
-        <form name = "offsetForm" class="list ">
-            <label class="item item-input " >
+            <label >
                 <ion-md-input type="text" maxlength="50" placeholder="Center Offset" name="offset" ng-model = "JSON['Center Offset']"/>
             </label>
-        </form>
-
-        <form name = "heightForm"  class="list ">
-            <label class="item item-input " >
+            <label >
                 <ion-md-input type="text" placeholder="Height From Ground" name="height" ng-model = "JSON['Height From Ground']"/>
             </label>
-        </form>
-
-        <form name = "loggerForm" class="list ">
-            <label class="item item-input "  >
+            <label>
                 <ion-md-input type="text" maxlength="100" placeholder="Parent Logger" name="logger" ng-model = "JSON['Parent Logger']"/>
             </label>
-        </form>
-
-        <form name = "notesForm"  class="list ">
-            <label class="item item-input " >
+            <label>
                 <ion-md-input type="text" maxlength="200" placeholder="Notes" name="notes" ng-model = "JSON['Notes']"/>
             </label>
-        </form>
-
-        <form name="dateEstForm">
             <div class="select-container">
                 <label>Established Date</label>
                 <input date-input class="date-input" type="date" name="dateest" ng-model = "JSON['Established Date']" />
             </div>
-        </form>
-
-
-        <form name="dateForm">
             <div class="select-container">
                 <label>Abandoned Date</label>
                 <input date-input type="date" name="date" ng-model = "JSON['Abandoned Date']" />
@@ -82,10 +56,7 @@
         </form>
         
         <a class=" button button-positive button-large button-block wide" 
-        deletable 
-        ng-init="isDeletable();" 
-        ng-show="deletable || loggedIn" 
-        ng-disabled = "nameForm.$invalid || purposeForm.$invalid || GPSForm.$invalid || offsetForm.$invalid || heightForm.$invalid || loggerForm.$invalid || systemForm.$invalid"
+        ng-disabled = "deploymentForm.$invalid || !deploymentForm.modified"
         ng-click = "saveJSON(); back();">
         Save</a> 
         

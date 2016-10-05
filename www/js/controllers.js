@@ -53,9 +53,16 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     // save JSON button
 	$scope.saveJSON = function (){
-        if ($scope.deletable == false && $scope.loggedIn == true){
-            console.log ($scope.JSON);
-            SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON[$scope.title], $scope.imageData, related);
+        if ($scope.deletable == false){
+            var bool = false;
+            for (var i = 0; i < $rootScope.editJSON[$scope.title].length; i ++){
+                if ($scope.JSON["Unique Identifier"] == $rootScope.editJSON[$scope.title][i]["Unique Identifier"]){
+                    $rootScope.editJSON[$scope.title][i] = $scope.JSON;
+                    bool = true;
+                }
+            }
+            if (bool == false)
+                SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON[$scope.title], $scope.imageData, related);
         }
         else{
 		  SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], $scope.imageData, related);	
@@ -213,13 +220,14 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.uploadJSONS = function(){
     	   // posts the unsynced json to edge
            console.log ($rootScope.unsyncedJSON, $rootScope.editJSON)
-    	   var promise = sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON, $rootScope.loggedIn);
-    	   promise.then ( function (){
-                sync.edit ($rootScope.baseURL, $rootScope.editJSON, $rootScope.loggedIn);
-    		  // once finished, the unsynced json is cleared
-    		  $rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
-    		  // the menu is reinitiated
-    		  $scope.init ();
+    	   sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON, $rootScope.loggedIn).then ( function (){
+                sync.edit ($rootScope.baseURL, $rootScope.editJSON, $rootScope.loggedIn).then (function (){
+                    // once finished, the unsynced json is cleared
+                    $rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
+                    // the menu is reinitiated
+                    $scope.init (); 
+                });
+
     	   });
         
     }
@@ -332,6 +340,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
     	if (File.checkFile ('Unsynced')){
 			File.readFile ('Unsynced').then (function Success (response){
+                console.log (response);
 				if (response != null){
 					for (var i = 0; i < list.length; i++){
 						$rootScope.unsyncedJSON[list[i]] = $rootScope.unsyncedJSON[list[i]].concat (response[list[i]]);
@@ -685,6 +694,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			}
 
 		  $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
+          for (var i = 0; i < $rootScope.editJSON[title].length; i++){
+            for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
+                if ($rootScope.editJSON[title][i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
+                    $rootScope.chosenJSONlist[j] = $rootScope.editJSON[title][i];
+                }
+            }
+          }
 		}
 
 		else {
@@ -693,7 +709,16 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			}
 
 			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
+                      for (var i = 0; i < $rootScope.editJSON.ServiceEntries.length; i++){
+            for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
+                if ($rootScope.editJSON.ServiceEntries[i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
+                    $rootScope.chosenJSONlist[j] = $rootScope.editJSON.ServiceEntries[i];
+                }
+            }
+          }
+        
 		}
+
 		resolve ($rootScope.chosenJSONlist);
 	});
     
