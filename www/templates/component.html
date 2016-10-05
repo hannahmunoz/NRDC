@@ -1,4 +1,7 @@
 <ion-view ng-controller="scrollController" title="{{JSON['Name']}} Info" id="page7" style="" class=" ">
+        <ion-nav-buttons class="" side="left">          
+             <button class="button button-icon button-clear ion-chevron-left" ng-click="back();"></button>
+        </ion-nav-buttons>
         <ion-nav-buttons side="right">
         <div deletable 
              ng-init="isDeletable();" 
