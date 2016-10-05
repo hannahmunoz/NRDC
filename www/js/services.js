@@ -79,7 +79,7 @@ angular.module('app.services', [])
 			}
 			else{
 				// write to unsynced file
-				//File.checkandWriteFile ('Unsynced', JSON);
+				File.checkandWriteFile ('Unsynced', JSON);
 				// toast failure
 				$cordovaToast.showLongBottom ("Not Logged In");
 				// reject promise
@@ -115,6 +115,7 @@ angular.module('app.services', [])
 							console.warn ("Post Error :" + response.statusText);
 							// write to unsynced file
 							File.checkandWriteFile ('Edit', JSON);
+							console.log (File.checkFile ('Edit'));
 							// toast failure
 							$cordovaToast.showLongBottom ("Post Error: " + response.statusText);
 							// reject promise
@@ -124,8 +125,8 @@ angular.module('app.services', [])
 				}
 			}
 		else{
-				// write to unsynced file
-			//	File.checkandWriteFile ('Edit', JSON);
+				// write to edit file
+				File.checkandWriteFile ('Edit', JSON);
 				// toast failure
 				$cordovaToast.showLongBottom ("Not Logged In");
 				// reject promise
@@ -523,8 +524,11 @@ console.log("is this called");
 				$cordovaFile.writeFile (cordova.file.dataDirectory, 'NRDC/'+title, JSON, true);
 			}, function Failure (error){
 				if (error.code == 1){
-					$cordovaFile.writeFile (cordova.file.dataDirectory, 'NRDC/'+title, JSON,  true).then (function (){			});
-					return error;
+					$cordovaFile.createFile (cordova.file.dataDirectory, 'NRDC/'+title, JSON,  true).then (function (){		
+						$cordovaFile.writeFile (cordova.file.dataDirectory, 'NRDC/'+title, JSON, true).then (function () {
+							return error;
+						});
+					});
 				}
 				else{
 					// show/log error

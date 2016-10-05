@@ -12,12 +12,18 @@
     </ion-nav-buttons>
 
     <ion-content class="has-header content-bg padding">
-        <form name ="networkForm"> 
+<<<<<<< HEAD
+<form name ="networkForm"> 
             <label>
                 <ion-md-input type="text" placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" required/>
+=======
+        <form name ="networkForm"> 
+            <label>
+                <ion-md-input type="text"  placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" required/>
+>>>>>>> 04061e1fa58d43886f997a9a745267f9bf371399
             </label>
             <label >
-                <ion-md-input type="text" maxlength="50" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required/>
+                <ion-md-input type="text"  maxlength="50" placeholder="Institution Name" name="institution" ng-model = "JSON['Institution Name']" required/>
             </label>
             <label >
                 <ion-md-input type="text" maxlength="100" placeholder="Original Funding Agency" name="funding" ng-model = "JSON['Original Funding Agency'] " required/>

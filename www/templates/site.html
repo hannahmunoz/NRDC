@@ -2,6 +2,9 @@
           title="{{JSON['Name']}} Info" 
           id="page4"  
           class=" ">
+    <ion-nav-buttons class="" side="left">          
+             <button class="button button-icon button-clear ion-chevron-left" ng-click="back(); siteForm.reset()"></button>
+    </ion-nav-buttons>
     <ion-nav-buttons side="right">
         <div deletable 
              ng-init="isDeletable();" 

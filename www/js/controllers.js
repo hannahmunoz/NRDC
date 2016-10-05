@@ -221,15 +221,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	   // posts the unsynced json to edge
            console.log ($rootScope.unsyncedJSON, $rootScope.editJSON)
     	   sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON, $rootScope.loggedIn).then ( function (){
-                sync.edit ($rootScope.baseURL, $rootScope.editJSON, $rootScope.loggedIn).then (function (){
-                    // once finished, the unsynced json is cleared
-                    $rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
-                    // the menu is reinitiated
-                    $scope.init (); 
-                });
-
+                $rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
+            });
+           sync.edit ($rootScope.baseURL, $rootScope.editJSON, $rootScope.loggedIn).then (function (){
+                 $rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
+                // the menu is reinitiated
+                $scope.init (); 
     	   });
-        
     }
 
     //calls for the next tier of
@@ -239,20 +237,30 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
         var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
         var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSyncedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
-		$scope.temp = [];
-       
            		// should work to sort list based on log in
-        	$scope.temp = {};
-        	for (var j = 0; j < $rootScope.associatedNetworks.length; j++){
-        		for ( var i = 0; i < $rootScope.networkSyncedJSON.Networks.length; i ++){
-        			if ($rootScope.associatedNetworks [j]['Network ID'] == $rootScope.networkSyncedJSON.Networks [i]['Unique Identifier']){
-        				        $scope.temp[$scope.temp.length] = $rootScope.networkSyncedJSON.Networks [i];
-        			}
-        		}
-        	}
-        	$rootScope.listLevel.Networks = [];
-        	$rootScope.listLevel.Networks = $scope.temp;
-            $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);       	
+            if ($rootScope.loggedIn){
+            	$scope.temp = [];
+            	for (var j = 0; j < $rootScope.associatedNetworks.length; j++){
+            		for ( var i = 0; i < $rootScope.networkSyncedJSON.Networks.length; i ++){
+            			if ($rootScope.associatedNetworks [j]['Network ID'] == $rootScope.networkSyncedJSON.Networks [i]['Unique Identifier']){
+            				        $scope.temp[$scope.temp.length] = $rootScope.networkSyncedJSON.Networks [i];
+            			}
+            		}
+            	}
+                $rootScope.networkSyncedJSON = {Networks:[]};
+                $rootScope.networkSyncedJSON.Networks = $scope.temp;
+            }
+            console.log ($rootScope.editJSON['Networks'], $rootScope.networkSyncedJSON.Networks);
+                for (var i = 0; i < $rootScope.editJSON['Networks'].length; i++){
+                    for (var j = 0; j < $rootScope.networkSyncedJSON.Networks.length; j++){
+                        if ($rootScope.editJSON['Networks'][i]["Unique Identifier"] == $rootScope.networkSyncedJSON.Networks[j]["Unique Identifier"]){
+                            $rootScope.networkSyncedJSON.Networks[j] = $rootScope.editJSON['Networks'][i];
+                        }
+                    }
+                }
+            console.log ($rootScope.networkSyncedJSON);
+
+        $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);       	
                
         DynamicPage.setJSON();
         //store the json of the
@@ -326,6 +334,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
         if (File.checkFile ('Edit')){
             File.readFile ('Edit').then (function Success (response){
+                console.log (response);
                 if (response != null){
                     for (var i = 0; i < list.length; i++){
                         $rootScope.editJSON[list[i]] = $rootScope.editJSON[list[i]].concat (response[list[i]]);
@@ -340,7 +349,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
     	if (File.checkFile ('Unsynced')){
 			File.readFile ('Unsynced').then (function Success (response){
-                console.log (response);
 				if (response != null){
 					for (var i = 0; i < list.length; i++){
 						$rootScope.unsyncedJSON[list[i]] = $rootScope.unsyncedJSON[list[i]].concat (response[list[i]]);
@@ -494,6 +502,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 // listView controller
 .controller('listCtrl', function($scope, $rootScope, DynamicPage, $state, ObjectCounter, $ionicHistory, ionicMaterialInk, $ionicLoading, $q) {
+    console.log ("hello");
 	//local variables to the controller
         var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
@@ -546,9 +555,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
         DynamicPage.setJSON(JSON);
 	}
-    
-    
-    
+      
     function storePrevJSON(){
         var previousViewJSON = $scope.clickedJSON;
         if($scope.clickedJSONHist.length < 5){    
@@ -570,7 +577,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     				$scope.modalCheck = false;
     			}
     		}
-
     	}
         
         //increment the level of my list and of my
@@ -611,8 +617,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		}
 		else
 			$scope.viewInfo = false;
-        
-        
         console.log(tieredRoutes[$rootScope.itemLevel], $rootScope.itemLevel, tieredTitles[$rootScope.listLevel], $rootScope.listLevel);
     }
     
@@ -683,7 +687,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		$scope.title = title;
 
     	var promise = $q (function (resolve, reject){
-    		if (title != "Service Entries"){
+    		if (title != "Service Entries"){;
     		for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
     			if (title == "People")	{
     				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['First Name'] + " "+ $rootScope.unsyncedJSON[title][i]['Last Name'];
@@ -696,6 +700,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		  $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
           for (var i = 0; i < $rootScope.editJSON[title].length; i++){
             for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
+                console.log ($rootScope.editJSON[title][i], $rootScope.chosenJSONlist);
                 if ($rootScope.editJSON[title][i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
                     $rootScope.chosenJSONlist[j] = $rootScope.editJSON[title][i];
                 }
@@ -736,7 +741,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var lastClickedJSON = DynamicPage.getJSON();
         var filteredList = [];
         if(parent[listLevel] == "Unique Identifier"){
-        	//console.log ($rootScope.chosenJSONlist, unfilteredList);
             return unfilteredList;
         }
         else {
