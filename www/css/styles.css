@@ -156,7 +156,7 @@ not rest on the save button with max scroll*/
 .app-header-container{
     min-height: 20em;
     width: 100%;
-    background-image: url(../img/bg1.jpg);
+/*    background-image: url(../img/bg1.jpg);*/
     background-size: 160%;
     background-position: center;
     padding-top: 8em;

@@ -267,6 +267,16 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         }
     }
 
+
+    $scope.setRandomBackground = function(){
+        rand = Math.floor((Math.random() * 100) % 7);
+        $scope.randomBackground = {};
+        $scope.randomBackground["background-image"] = "url(../img/bg" + rand + '.jpg)';
+        $scope.randomBackground["background-size"] = '160%';
+        $scope.randomBackground["background-position"] = 'center';
+    }
+
+
   	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
 		// for when user hits the back bottom arrow to head back to the main menu
 		if (fromState.name == "list" && toState.name == "mainMenu"){
