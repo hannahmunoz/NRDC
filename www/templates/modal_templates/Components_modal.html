@@ -1,6 +1,8 @@
 <ion-view  title="Component" id="page7" style="" class=" ">
+    <ion-nav-buttons class="" side="left">          
+        <button class="button button-icon button-clear ion-chevron-left" ng-click="back(); componentForm.reset()"></button>
+    </ion-nav-buttons>
     <ion-header-bar class="bar-dark">
-        <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
         <div class="title header-item" ng-bind="JSON['Name']"></div>
     </ion-header-bar>
     
@@ -13,7 +15,6 @@
                 <ion-md-input type="text" maxlength="50" placeholder="Name" name="componentName" ng-model="JSON['Name']" ng-click="clear()" required/>
             </label>
         </form>
-
         <form name = "manufaturerForm" class="list">
             <label class="item item-input" >
                 <ion-md-input type="text" maxlength="50" placeholder="Manufacturer" name="manufacturer"  ng-model = "JSON['Manufacturer']"/>
@@ -93,5 +94,6 @@
     <div class = "overscroll"></div>
         
     </ion-content>
+
 
 </ion-view>

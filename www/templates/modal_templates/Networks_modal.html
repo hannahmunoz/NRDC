@@ -1,14 +1,16 @@
 <ion-view title="Site Networks" >
+    <ion-nav-buttons class="" side="left">          
+        <button class="button button-icon button-clear ion-chevron-left" ng-click="back(); componentForm.reset()"></button>
+    </ion-nav-buttons> 
     <ion-header-bar class="bar-dark">
-        <button class="button-flat" ng-click="back(); closeModal();"><h4 style="color:#FFF;">Back</h4></button>
-        <div class="title header-item" ng-bind="JSON['Name']"></div>
+        <div class="title header-item" ng-bind="JSON['Name']">does this change</div>
     </ion-header-bar>
     
   
     <ion-content class="has-header content-bg padding">
 
         <form name ="nameForm" class="list" >
-            <label class="item item-input " >
+            <label class="item item-input ">
                 <ion-md-input type="text"  placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" ng-click="clear()" required/>
             </label>
         </form>

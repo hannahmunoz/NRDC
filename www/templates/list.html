@@ -11,13 +11,13 @@
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-title>{{clickedJSON.Name}}</ion-nav-title>
-    <ion-content padding="false" class="has-header content-bg">
+    <ion-content padding="false" class="has-header grey">
         <ul>
             <div class = "item waves-button ink text-center accent">
                     <h2 class="text">Associated {{title}}</h2>
             </div>
     		<li repeat-directive ng-repeat = "(key, item) in listJSON" >
-                <div class = "item waves-button ink text-center" ng-click = "storePresentState(); select(item); progressiveListSwitch();">
+                <div class = "item waves-button ink text-center content-bg" ng-click = "storePresentState(); select(item); progressiveListSwitch();">
                     <h2>{{item.Name}}</h2>
     			</div>
             </li>

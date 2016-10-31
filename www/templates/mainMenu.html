@@ -7,17 +7,21 @@
     
     <ion-content  
       scroll=false 
-      padding="true"
+      padding="false"
       has-footer="true"
       class="has-header text-center content-bg"
-      ng-init="setRndTimingOffsets();"
+      ng-init="setProgressiveTimingOffsets();"
       > 
-        <div class="fill-parent home-container">
-          <div class="row">
-            <div class="col">
-               
-              <h1 style="margin-top:1em; margin-bottom:2em;">NRDC QA APP</h1>
-                
+      <div class="app-header-container animated slideInRight" ng-style="progressiveTimingOffset[2]">
+
+      </div>
+      <div class="app-title-container animated slideInLeft" ng-style="progressiveTimingOffset[2]">
+          <h1 style="">NRDC QA</h1>
+          <h1>APP</h1>
+        </div>
+        <div class="">
+<!--           <div class="row"> -->
+<!--             <div class="col"> -->
 <!--               <button ui-sref="list" 
                       ng-click = "listSwitch(peopleJSON, peopleSyncedJSON, 'People', 'people')"   
                       class ="button button-large button-block main-menu-button accent animated flipInX"
@@ -25,52 +29,16 @@
                 <h3 class="text">People</h3>
               </button> -->
               <button ui-sref="list" 
-                      class= "button button-large button-block main-menu-button accent animated flipInX"
+                      class= "button button-large button-block main-menu-button accent animated slideInUp"
                       ng-click = "progressiveListSwitch()"
-                      ng-style="randomTimingOffset[1]">
+                      ng-style="">
                   <h3 class="text">Site Networks</h3>
                </button>
-                
-<!-- Here for temporary development -->                
-<!--                <div ui-sref="list" 
-                     ng-click = "listSwitch(siteJSON, siteSyncedJSON, 'Sites', 'site')" 
-                     class="tile-btn accent animated flipInX"
-                     ng-style="randomTimingOffset[2]">
-                <h3 class="text">Sites</h3>
-                </div>
-                <div ui-sref="list" 
-                     ng-click = "listSwitch(systemJSON, systemSyncedJSON, 'Systems', 'system')" 
-                     class=" tile-btn accent animated flipInX"
-                     ng-style="randomTimingOffset[3]">
-                  <h3 class="text">Systems</h3>
-                </div>
-                <div ui-sref="list" 
-                     ng-click = "listSwitch(deploymentJSON, deploymentSyncedJSON, 'Deployments', 'deployment')" class=" tile-btn accent animated flipInX"
-                     ng-style="randomTimingOffset[4]">
-                    <h3 class="text">Deployments</h3>
-                </div>
-                
-                <div ui-sref="list" 
-                     ng-click = "listSwitch(componentJSON, componentSyncedJSON, 'Components', 'component')" 
-                     class=" tile-btn accent animated flipInX"
-                     ng-style="randomTimingOffset[5]">
-                    <h3 class="text">Components</h3>
-                </div>
-                <div ui-sref="list" 
-                      ng-click = "listSwitch(documentJSON, documentSyncedJSON, 'Documents', 'document')" 
-                      class="tile-btn accent animated flipInX"
-                      ng-style="randomTimingOffset[6]">
-                    <h3 class="text ">Documents</h3>
-                </div>
-                <div ui-sref="list" 
-                     ng-click = "listSwitch(serviceJSON, serviceSyncedJSON, 'Service Entries', 'serviceEntry')" class="tile-btn accent animated flipInX"
-                     ng-style="randomTimingOffset[7]">
-                    <h3 class="text">Service Entries</h3>
-                </div> -->
-<!-- Temp Development Area End -->           
-        
-              </div>
-            </div>
+
+        </div>
+        <div  style="padding-top:5em;" class="">
+          <p>Build Version</p>
+          <p>1.0.0</p>
         </div>
 
     </ion-content>

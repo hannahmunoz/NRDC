@@ -37,9 +37,9 @@
             </div>
         </form>
 
-        <span>
-             <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
-            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>
+        <span class="photo-button-holder">
+            <image-button funct="choosePicture" icon="images"></image-button>
+            <image-button funct="takePicture" icon="camera"></image-button>
         </span>
 
 
@@ -52,5 +52,6 @@
     
     </ion-content>
          
-        <fab-cluster></fab-cluster>
+    <fab-cluster></fab-cluster>
+    
 </ion-view>

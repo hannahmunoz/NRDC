@@ -1,11 +1,13 @@
 angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngStorage', 'ngInputModified'])
 
    // used to view JSONs that have already been created.
-.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, SaveNew, Camera, GPS) {
+.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, $q, $ionicLoading, SaveNew, Camera, GPS) {
 	// get the JSON
 	var related;
 	$scope.document = false;
 	$scope.service = false;
+    $scope.images = 'ion-images';
+    $scope.camera = "ion-android-camera";
 
 	//http://stackoverflow.com/questions/4878756/javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
 	$scope.title = DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().substr(1).toLowerCase() + 's';
@@ -68,6 +70,54 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		  SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], $scope.imageData, related);	
         }
 	};
+
+
+
+    //wrapper for the openGallery factory so we can call it from the choosePicture button.
+    // in root scope so it can be called from all buttons
+    $rootScope.choosePicture = function (){
+        return $q (
+            function (resolve, reject){
+                    $ionicLoading.show({
+                        templateUrl: 'templates/directive_templates/loading-spinner.html',
+                        noBackdrop: true
+                    })
+                    Camera.checkPermissions();
+                    Camera.openGallery()
+                    .then(function (image){
+                        $ionicLoading.hide();
+                        $scope.imageData = image.result;
+                        resolve(image.raw);
+                    })
+                    .catch(function(error){
+                        $ionicLoading.hide();
+                    });
+            }
+        )
+    };
+
+    //wrapper for the take image factory so we can call it from the takePhoto button
+    // in root scope so it can be called from all buttons
+    $rootScope.takePicture = function (){
+         return $q(
+            function (resolve, reject){
+                Camera.checkPermissions();
+                Camera.openCamera()
+                .then($ionicLoading.show({
+                    templateUrl: 'templates/directive_templates/loading-spinner.html',
+                    noBackdrop: false
+                }))
+                .then(function (image){
+                    $ionicLoading.hide();
+                    $scope.imageData =  image.result;
+                    resolve(image.raw);
+                })
+                .catch(function(error){
+                        $ionicLoading.hide();
+                });
+            });
+ 
+ };       
 
 })
 
@@ -196,15 +246,24 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	File.createDirectory();
 
     $scope.randomTimingOffset = [];
+    $scope.progressiveTimingOffset = [];
     
     //randomizes the appearance of tile buttons on main page
     $scope.setRndTimingOffsets = function(){
-        numTiles = $window.document.getElementsByClassName("tile-btn").length;
         
-        for( tile = 0; tile < numTiles; tile++ ){
+        for( tile = 0; tile < 10; tile++ ){
             $scope.randomTimingOffset[tile] = {};
             $scope.randomTimingOffset[tile]["-webkit-animation-delay"] = (Math.random()/2) + 's';
             $scope.randomTimingOffset[tile]["animation-delay"] = $scope.randomTimingOffset[tile]["-webkit-animation-delay"];
+        }
+    }
+
+    $scope.setProgressiveTimingOffsets = function(){
+
+        for( tile = 0; tile < 10; tile++ ){
+            $scope.progressiveTimingOffset[tile] = {};
+            $scope.progressiveTimingOffset[tile]["-webkit-animation-delay"] = (tile * .1) + 's';
+            $scope.progressiveTimingOffset[tile]["animation-delay"] = $scope.progressiveTimingOffset[tile]["-webkit-animation-delay"];
         }
     }
 
@@ -636,7 +695,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		}
 	}
 
-        if ($rootScope.listLevel != 0){
+        if ($rootScope.listLevel != -1){
         	if($rootScope.listLevel != $rootScope.itemLevel){
             	$rootScope.listLevel--;
         	}
@@ -658,8 +717,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         
         //set the route of dynamic page one level back
         //so we can view the info of what we just clicked
-        // if ($rootScope.listLevel < 0)
-        // 	$rootScope.listLevel ++;
         DynamicPage.setTitle(tieredTitles[$rootScope.listLevel]);
         DynamicPage.setRoute(tieredRoutes[$rootScope.itemLevel]);
         
@@ -761,17 +818,15 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     //custom back button functinality
     $rootScope.back = function(){
-        if($rootScope.itemLevel >= 0){
+        if($rootScope.listLevel > 0){
             $scope.regressiveListSwitch();
         }
         else{
-            if($rootScope.modalHidden != false){
                 $ionicHistory.goBack();
                 //reset list levels
                 $rootScope.itemLevel =  0;
                 $rootScope.listLevel =  0;
         
-            }
         }
     }
     
@@ -796,8 +851,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     //custom back button functinality
     $scope.backList = function(){
-    	DynamicPage.setRoute ($rootScope.storedRoute);
-    	DynamicPage.setJSON ($rootScope.storedJSON);
 		$rootScope.docListJSON = [];
 		$ionicHistory.goBack();
     }
@@ -811,7 +864,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     }
 
     $scope.newDoc = function(){
-        console.log(DynamicPage.route + " " + DynamicPage.title);
+        console.log(DynamicPage.getRoute() + " " + DynamicPage.getTitle());
         $state.go("createNewDocuments");
     }
 
@@ -836,8 +889,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     //custom back button functinality
     $scope.backList = function(){
-    	DynamicPage.setRoute ($rootScope.storedRoute);
-    	DynamicPage.setJSON ($rootScope.storedJSON);
 		$rootScope.serviceEntryListJSON = [];
 		$ionicHistory.goBack();
     }
@@ -968,8 +1019,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 // document modal controller, works the same as the ModalController, but needs to be its on controller so in can show up inside a modal
 .controller('DocumentModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter ) {
 	$scope.checked = false;
-    $scope.template = 'templates/modal_templates/Documents_modal.html';
-    $scope.modal = null;
     $scope.JSON = {};
     
     
@@ -1008,12 +1057,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 //Controls the behavior of the service modals for particular networks, sites, sysyems etc
 .controller('ServiceModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
 	$scope.imageData = null;
-	$scope.checked = false;
-    $scope.modal = null;
-    
+	$scope.checked = false;   
     $scope.JSON = {};
 
-    $scope.template = 'templates/modal_templates/serviceEntry_modal.html';
+    
+    $scope.images = 'ion-images';
+    $scope.camera = "ion-android-camera";
+
 
     
 	$scope.saveJSON = function (){
@@ -1027,7 +1077,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 		// adds data for the entry the service entry is related to 
 		var JSON = DynamicPage.getJSON();
-		$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
+		
+        $scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
+
 		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
 		// pushes into list
 		$rootScope.serviceEntryListJSON.push ($scope.JSON);

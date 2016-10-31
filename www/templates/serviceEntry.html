@@ -45,8 +45,8 @@
       </form> 
 
     <span>
-        <button class = "button big-icon-button button-positive button-large icon ion-images" ng-model = "JSON['Photo']" ng-click = "choosePicture()"/>
-        <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-model = "JSON['Photo']" ng-click = "takePicture(imageData)"/>
+            <image-button funct="choosePicture" icon="images"></image-button>
+            <image-button funct="takePicture" icon="camera"></image-button>
     </span>
         
         <button ng-disabled = "serviceForm.$invalid || !serviceForm.modified"  

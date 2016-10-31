@@ -1,4 +1,4 @@
-<ion-view ng-controller="scrollController" title="{{JSON['Name']}} Info" id="page7" style="" class=" ">
+<ion-view  title="{{JSON['Name']}} Info" id="page7" style="" class=" ">
         <ion-nav-buttons class="" side="left">          
              <button class="button button-icon button-clear ion-chevron-left" ng-click="back(); componentForm.reset()"></button>
         </ion-nav-buttons>
@@ -55,8 +55,8 @@
        </form>
 
         <span>
-            <button class = "button big-icon-button button-positive button-large icon ion-images" ng-click = "choosePicture()"></button>
-            <button class = "button big-icon-button button-positive button-large icon ion-android-camera" ng-click = "takePicture()"></button>
+            <image-button funct="choosePicture" icon="images"></image-button>
+            <image-button funct="takePicture" icon="camera"></image-button>
         </span>
 
 
@@ -66,8 +66,9 @@
             Save
         </a>
 
-        <div class = "overscroll"/>
+        <div class = "overscroll"></div>
         
     </ion-content>
+
     <fab-cluster></fab-cluster>
 </ion-view>
