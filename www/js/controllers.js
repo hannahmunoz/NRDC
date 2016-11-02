@@ -312,7 +312,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             	$scope.temp = [];
             	for (var j = 0; j < $rootScope.associatedNetworks.length; j++){
             		for ( var i = 0; i < $rootScope.networkSyncedJSON.Networks.length; i ++){
-            			if ($rootScope.associatedNetworks [j]['Network ID'] == $rootScope.networkSyncedJSON.Networks [i]['Unique Identifer']){
+            			if ($rootScope.associatedNetworks [j]['Network ID'] == $rootScope.networkSyncedJSON.Networks [i]['Unique Identifier']){
             				        $scope.temp[$scope.temp.length] = $rootScope.networkSyncedJSON.Networks [i];
             			}
             		}
@@ -323,7 +323,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             console.log ($rootScope.editJSON['Networks'], $rootScope.networkSyncedJSON.Networks);
                 for (var i = 0; i < $rootScope.editJSON['Networks'].length; i++){
                     for (var j = 0; j < $rootScope.networkSyncedJSON.Networks.length; j++){
-                        if ($rootScope.editJSON['Networks'][i]["Unique Identifer"] == $rootScope.networkSyncedJSON.Networks[j]["Unique Identifer"]){
+                        if ($rootScope.editJSON['Networks'][i]["Unique Identifier"] == $rootScope.networkSyncedJSON.Networks[j]["Unique Identifier"]){
                             $rootScope.networkSyncedJSON.Networks[j] = $rootScope.editJSON['Networks'][i];
                         }
                     }
@@ -578,7 +578,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	//local variables to the controller
         var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
-        var parent = ["Unique Identifer", "Network", "Site", "System", "Deployment"];
+        var parent = ["Unique Identifier", "Network", "Site", "System", "Deployment"];
         var tieredSyncedJSON =[$rootScope.networkSyncedJSON, $rootScope.siteSyncedJSON, $rootScope.systemSyncedJSON, $rootScope.deploymentSyncedJSON, $rootScope.componentSyncedJSON];
         
         $scope.clickedJSONHist = [];
@@ -589,10 +589,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.modalCheck = true;
 
     if (angular.isDefined (DynamicPage.getJSON())){
-    	$scope.UUID = DynamicPage.getJSON()['Unique Identifer'];
+    	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
 
     	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
-			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifer']){
+			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
 				$scope.modalCheck = false;
 			}
 		}
@@ -643,9 +643,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         storePrevJSON();
 
         if (angular.isDefined (DynamicPage.getJSON())){
-        	$scope.UUID = DynamicPage.getJSON()['Unique Identifer'];
+        	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
         	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
-    			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifer']){
+    			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
     				$scope.modalCheck = false;
     			}
     		}
@@ -700,9 +700,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$scope.modalCheck = true;
 
     if (angular.isDefined (DynamicPage.getJSON())){
-    	$scope.UUID = DynamicPage.getJSON()['Unique Identifer'];
+    	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
     	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
-			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifer']){
+			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
 				$scope.modalCheck = false;
 			}
 		}
@@ -770,8 +770,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		  $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
           for (var i = 0; i < $rootScope.editJSON[title].length; i++){
             for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
-                console.log ($rootScope.editJSON[title][i]["Unique Identifer"] , $rootScope.chosenJSONlist[j]["Unique Identifer"]);
-                if ($rootScope.editJSON[title][i]["Unique Identifer"] == $rootScope.chosenJSONlist[j]["Unique Identifer"]){
+                console.log ($rootScope.editJSON[title][i]["Unique Identifier"] , $rootScope.chosenJSONlist[j]["Unique Identifier"]);
+                if ($rootScope.editJSON[title][i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
                     $rootScope.chosenJSONlist[j] = $rootScope.editJSON[title][i];
                 }
             }
@@ -787,14 +787,14 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
                       for (var i = 0; i < $rootScope.editJSON.ServiceEntries.length; i++){
             for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
-                if ($rootScope.editJSON.ServiceEntries[i]["Unique Identifer"] == $rootScope.chosenJSONlist[j]["Unique Identifer"]){
+                if ($rootScope.editJSON.ServiceEntries[i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
                     $rootScope.chosenJSONlist[j] = $rootScope.editJSON.ServiceEntries[i];
                 }
             }
           }
         
 		}
-
+        console.log ($rootScope.chosenJSONlist)
 		resolve ($rootScope.chosenJSONlist);
 	});
     
@@ -811,7 +811,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var parentName = parent[listLevel];
         var lastClickedJSON = DynamicPage.getJSON();
         var filteredList = [];
-        if(parent[listLevel] == "Unique Identifer"){
+        if(parent[listLevel] == "Unique Identifier"){
             return unfilteredList;
         }
         else {
