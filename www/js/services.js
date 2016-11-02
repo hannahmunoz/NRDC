@@ -677,10 +677,10 @@ console.log("is this called");
 					JSON ['Elevation'] = parseFloat (parseFloat (JSON ['Elevation']).toFixed (7));;
 				if (angular.isUndefined (JSON ['Height From Ground']))
 					JSON ['Height From Ground'] = null;
-				if (angular.isUndefined (JSON ['Parent Logger']))
-					JSON ['Parent Logger'] = null;
 				else
 				 	JSON ['Height From Ground'] = parseFloat (parseFloat (JSON ['Height From Ground']).toFixed (7));
+				if (angular.isUndefined (JSON ['Parent Logger']))
+					JSON ['Parent Logger'] = null;
 				if (angular.isUndefined (JSON ['Notes']))
 					JSON ['Notes'] = null; 	
 				if (angular.isUndefined (JSON ['Established Date']))
