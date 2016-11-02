@@ -136,17 +136,20 @@ angular.module('app.directives', [])
         //determine if my current view in deletable
         //by checking for membership in unsyncedJSON
         $scope.isDeletable = function(){
+             console.log ($scope.JSON,$rootScope.unsyncedJSON)
             for(var category in $rootScope.unsyncedJSON){
                 for(var unsEntry = 0; 
                     unsEntry < $rootScope.unsyncedJSON[category].length; 
                     unsEntry++){
                         if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
+                            console.log ($scope.JSON,$rootScope.unsyncedJSON[category][unsEntry] )
                             $scope.deletable = true;
                             $scope.active = false;
                     }
                 }
             
             }
+            console.log ($scope.deletable);
         };
         
         //delete the current view JSON from the list of unsynced items

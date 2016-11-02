@@ -52,22 +52,43 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
      //custom back button functionality
     $scope.back = function(){ $ionicHistory.goBack();}
-
+    $scope.check = function (deletable){
+        console.log (deletable);
+    }
     // save JSON button
 	$scope.saveJSON = function (deletable){
-        if (deletable == false){
+        console.log (deletable);
+        if (!angular.isDefined (deletable) || deletable == false){
             var bool = false;
-            for (var i = 0; i < $rootScope.editJSON[$scope.title].length; i ++){
-                if ($scope.JSON["Unique Identifier"] == $rootScope.editJSON[$scope.title][i]["Unique Identifier"]){
-                    $rootScope.editJSON[$scope.title][i] = $scope.JSON;
-                    bool = true;
+            console.log ($scope.title )
+            if ($scope.title != "Serviceentriess"){
+                for (var i = 0; i < $rootScope.editJSON[$scope.title].length; i ++){
+                    if ($scope.JSON["Unique Identifier"] == $rootScope.editJSON[$scope.title][i]["Unique Identifier"]){
+                         $rootScope.editJSON[$scope.title][i] = $scope.JSON;
+                         bool = true;
+                    }
                 }
-            }
             if (bool == false)
                 SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON[$scope.title], $scope.imageData, related);
-        }
+             }  
+             else{
+                for (var i = 0; i < $rootScope.editJSON.ServiceEntries.length; i ++){
+                    if ($scope.JSON["Unique Identifier"] == $rootScope.editJSON.ServiceEntries[i]["Unique Identifier"]){
+                         $rootScope.editJSON.ServiceEntries[i] = $scope.JSON;
+                         bool = true;
+                    }
+                }
+            if (bool == false)
+                SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON.ServiceEntries, $scope.imageData, related);
+             }
+        }    
         else{
-		  SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], $scope.imageData, related);	
+            if ($scope.title != "Serviceentriess"){
+		       SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], $scope.imageData, related);
+            }
+            else{
+               SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, related);
+            }	
         }
         console.log ($rootScope.editJSON, $rootScope.unsyncedJSON, $scope.JSON);
 	};
@@ -855,6 +876,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //list item clicked
         $rootScope.docListJSON = [];
         $rootScope.docJSON = selected;
+        console.log (selectedTitle, selected);
     	$scope.temp = $rootScope.documentSyncedJSON['Documents'].concat ($rootScope.unsyncedJSON['Documents']);
     	for (var i = 0; i < $scope.temp.length; i ++){
     		if (angular.isDefined ($scope.temp[i][selectedTitle]) && ($scope.temp[i][selectedTitle] == selected[selectedTitle])){
@@ -882,6 +904,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         $state.go("createNewDocuments");
     }
 
+
+
 })
 
 
@@ -892,7 +916,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //list item clicked
         $rootScope.serviceEntryListJSON = [];
         $rootScope.seJSON = selected;
-        console.log ($rootScope.serviceSyncedJSON);
     	$scope.temp = $rootScope.serviceSyncedJSON['ServiceEntries'].concat ($rootScope.unsyncedJSON['ServiceEntries']);
     	for (var i = 0; i < $scope.temp.length; i ++){
     		if (angular.isDefined ($scope.temp[i][selectedTitle]) && ($scope.temp[i][selectedTitle] == selected[selectedTitle])){
@@ -900,6 +923,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     		}
     	}
     }
+
 
     //custom back button functinality
     $scope.backList = function(){
@@ -1038,8 +1062,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
 	$scope.saveJSON = function (){
         console.log(DynamicPage.getRoute() + " " + DynamicPage.getTitle());
-
-
 		// nulls entries that may not have any data
 		$scope.JSON ['Network'] = null;
 		$scope.JSON ['Site'] = null;
