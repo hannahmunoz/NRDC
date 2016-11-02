@@ -1,53 +1,78 @@
 <ion-view ng-controller="scrollController" 
-          title="{{JSON['Name']}} Info" 
+          title="Site" 
           id="page4"  
           class=" ">
-    <ion-nav-buttons class="" side="left">          
-             <button class="button button-icon button-clear ion-chevron-left" ng-click="back(); siteForm.reset()"></button>
-    </ion-nav-buttons>
-    <ion-nav-buttons side="right">
-        <div deletable 
-             ng-init="isDeletable();" 
-             ng-show="deletable" 
-             ng-click="deleteView();">
-            <button class="button-clear center-text" 
-                    style="padding-right: 1em; padding-left: .5em;">
-                <h4>Delete</h4>
-            </button>
-        </div>
-    </ion-nav-buttons>
+     <ion-nav-buttons class="" side="left">          
+        <button class="button button-icon button-clear ion-chevron-left" ng-click="back(); componentForm.reset()"></button>
+    </ion-nav-buttons> 
+    <ion-header-bar class="bar-dark">
+            <div class="title header-item" ng-bind="JSON['Name']"></div>
+    </ion-header-bar>
+<<<<<<< HEAD
+
+    <ion-header-bar class="bar-dark">
+        <button  class="button-flat" ng-click="back(); closeModal();"><h4>Back</h4></button>
+    </ion-header-bar>
+=======
+>>>>>>> 9c62ea48a7f4b85b9e639f2d78493e0b19826b0a
  
-    <ion-content 
+      <ion-content 
       delegate-handle="scrollable" 
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
 
-        <form name = "siteForm">
-            <label>
-                <ion-md-input type="text" maxlength="50" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" required/>
+        <form name = "nameForm" class="list ">
+            <label class="item item-input " >
+                <ion-md-input type="text" maxlength="50" placeholder="Name" name = "siteName" ng-model = "JSON['Name']" ng-click="clear()" required/>
             </label>
-            <label>
+        </form>
+
+        <form name="GPSForm" class="list " >
+            <label class="item item-input " >
                 <ion-md-input type="text" placeholder="Latitude" name = "siteLatitude"  ng-model = "JSON['Latitude']" required/>
             </label>
 
-            <label >
+            <label class="item item-input "  name="siteLongitude" >
                 <ion-md-input type="text" placeholder="Longitude" name = "siteLongitude" ng-model = "JSON['Longitude']" required/>
             </label>
 
-            <label>
+            <label class="item item-input " name="siteElevation">
                 <ion-md-input type="text" placeholder="Altitude" name = "siteElevation" ng-model = "JSON['Elevation']" required/>
             </label>
 
             <button class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)" >Get GPS Location</button>
-            <label>
+        </form>
+
+        <form name = "aliasForm" class = "list">
+            <label class="item item-input " name="alias">
                 <ion-md-input type="text" maxlength="20" placeholder="Alias" name = "siteAlias" ng-model= "JSON['Alias']" required/>
             </label>
-            <label >
+        </form>
+
+        <form name = "notesForm" class = "list" >
+            <label class="item item-input " >
                 <ion-md-input type="text" maxlength="200" placeholder="Notes"  name = "siteNotes" ng-model = "JSON['Notes']" required/>
             </label>
-            <label >
+        </form>
+
+        <form name = "landmarkForm" class = "list">
+            <label class="item item-input " >
                 <ion-md-input type="text" maxlength="50" placeholder="GPS Landmark"  name = "gpsLandmark" ng-model = "JSON['GPS Landmark']" required/>
             </label>
+        </form>
+
+<!--         <form name="projectForm" class="list" >
+            <div class="select-container">
+                <select ng-model = "JSON['Network']" 
+                        ng-options = "key as network for (key, network) in networkJSON" 
+                        class="wide"
+                        required>
+                <option value ="">Network</option>
+                </select>
+            </div>
+        </form> -->
+
+        <form name="permitForm" class="list">
             <div class="select-container">
                 <select ng-model = "JSON['Permit Holder']" 
                         ng-options = "key as people for (key, people) in peopleJSON" 
@@ -55,6 +80,9 @@
                     <option value="">Permit Holder</option>
                 </select>
             </div>
+        </form>
+
+        <form name="landownerForm" class="list">
             <div class="select-container">
                         <select ng-model = "JSON['Land Owner']" 
                                 ng-options = "key as people for (key, people) in peopleJSON" 
@@ -70,15 +98,12 @@
         </span>
 
         <button class=" button button-positive button-large button-block " 
-                ng-disabled="siteForm.$invalid || !siteForm.modified" 
-                ng-click = "saveJSON(deletable); back(); " >
+                ng-disabled="nameForm.$invalid || GPSForm.$invalid || landmarkForm.$invalid || aliasForm.$invalid || notesForm.$invalid || projectForm.$invalid  || permitForm.$invalid  || landownerForm.$invalid " 
+                ng-click = "saveJSON(); back(); destroyModal();" >
                 Save</button>
                 
     <div class = "overscroll"></div>
 
-    </ion-content>
-    <!--Expnadable Floating Action Bar Group With options for new Document and new service entry.-->
-    <fab-cluster></fab-cluster>
-    
+    </ion-content>   
     
 </ion-view>

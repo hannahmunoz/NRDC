@@ -6,9 +6,12 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	var related;
 	$scope.document = false;
 	$scope.service = false;
+<<<<<<< HEAD
+=======
     $scope.images = 'ion-images';
     $scope.camera = "ion-android-camera";
 
+>>>>>>> 9c62ea48a7f4b85b9e639f2d78493e0b19826b0a
 	//http://stackoverflow.com/questions/4878756/javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
 	$scope.title = DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().substr(1).toLowerCase() + 's';
 
@@ -28,6 +31,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 related = $scope.JSON['Network'];
 				$scope.JSON ['Permit Holder'] = JSON.stringify($scope.JSON['Permit Holder']);
 				$scope.JSON ['Land Owner'] = JSON.stringify($scope.JSON['Land Owner']);
+                $scope.imageData = $scope.JSON ['Landmark Photo'];
 			break;
 
 		case 'Systems':
