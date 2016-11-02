@@ -115,7 +115,6 @@ angular.module('app.services', [])
 							console.warn ("Post Error :" + response.statusText);
 							// write to unsynced file
 							File.checkandWriteFile ('Edit', JSON);
-							console.log (File.checkFile ('Edit'));
 							// toast failure
 							$cordovaToast.showLongBottom ("Post Error: " + response.statusText);
 							// reject promise
@@ -151,7 +150,6 @@ angular.module('app.services', [])
 	function adminLogin(JSON){
 		return $q (function (resolve, reject){  
 			$http.post ("http://sensor.nevada.edu/GS/Services/admin/networks/", JSON, {timeout: 10000}).then (function Success (response){
-				console.log (response);
 				if (response.data.AssociatedNetworks.length != 0){
 					var promise = $q (function (resolve, reject){ 
 						File.checkFile ('Logins').then (function Success (){
@@ -277,9 +275,6 @@ angular.module('app.services', [])
                         {result: result, 
                              raw: imageData});
 				}, function Failure (error){
-
-console.log("is this called");
-
 					if (error != "Camera cancelled."){
 						// show/log error
 						$cordovaToast.showLongBottom ("Camera Error");

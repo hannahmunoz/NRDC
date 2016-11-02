@@ -53,14 +53,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
      //custom back button functionality
     $scope.back = function(){ $ionicHistory.goBack();}
     $scope.check = function (deletable){
-        console.log (deletable);
     }
     // save JSON button
 	$scope.saveJSON = function (deletable){
-        console.log (deletable);
         if (!angular.isDefined (deletable) || deletable == false){
             var bool = false;
-            console.log ($scope.title )
             if ($scope.title != "Serviceentriess"){
                 for (var i = 0; i < $rootScope.editJSON[$scope.title].length; i ++){
                     if ($scope.JSON["Unique Identifier"] == $rootScope.editJSON[$scope.title][i]["Unique Identifier"]){
@@ -90,7 +87,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, related);
             }	
         }
-        console.log ($rootScope.editJSON, $rootScope.unsyncedJSON, $scope.JSON);
 	};
 
 
@@ -341,7 +337,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 $rootScope.networkSyncedJSON = {Networks:[]};
                 $rootScope.networkSyncedJSON.Networks = $scope.temp;
             }
-            console.log ($rootScope.editJSON['Networks'], $rootScope.networkSyncedJSON.Networks);
                 for (var i = 0; i < $rootScope.editJSON['Networks'].length; i++){
                     for (var j = 0; j < $rootScope.networkSyncedJSON.Networks.length; j++){
                         if ($rootScope.editJSON['Networks'][i]["Unique Identifier"] == $rootScope.networkSyncedJSON.Networks[j]["Unique Identifier"]){
@@ -349,7 +344,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                         }
                     }
                 }
-            console.log ($rootScope.networkSyncedJSON);
 
         $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);       	
                
@@ -424,7 +418,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
         if (File.checkFile ('Edit')){
             File.readFile ('Edit').then (function Success (response){
-                console.log (response);
                 if (response != null){
                     for (var i = 0; i < list.length; i++){
                         $rootScope.editJSON[list[i]] = $rootScope.editJSON[list[i]].concat (response[list[i]]);
@@ -595,7 +588,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 // listView controller
 .controller('listCtrl', function($scope, $rootScope, DynamicPage, $state, ObjectCounter, $ionicHistory, ionicMaterialInk, $ionicLoading, $q) {
-    console.log ("hello");
 	//local variables to the controller
         var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
@@ -634,7 +626,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     //for the creation of a new item
     $scope.newItem = function(){
-        console.log($scope.title);
         $state.go("createNew"+$scope.title);
     }
 
@@ -644,6 +635,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		DynamicPage.getRoute();
 		if (angular.isDefined (JSON)){
 			$rootScope.related = JSON [DynamicPage.getTitle().slice (0, -1)];
+            $rootScope.relatedTitle = DynamicPage.getTitle().slice (0, -1);
 		}
 
         DynamicPage.setJSON(JSON);
@@ -710,7 +702,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		}
 		else
 			$scope.viewInfo = false;
-        console.log(tieredRoutes[$rootScope.itemLevel], $rootScope.itemLevel, tieredTitles[$rootScope.listLevel], $rootScope.listLevel);
     }
     
     //navigate in the opposite direction
@@ -764,12 +755,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		else
 			$scope.viewInfo = false;
          
-        console.log(tieredRoutes[$rootScope.itemLevel], $rootScope.itemLevel, tieredTitles[$rootScope.listLevel], $rootScope.listLevel);
     }
     
     
     $scope.listSwitch = function(syncedJSONs, titles, level){
-    	console.log ("hello");
     	$scope.unsyncedListJSON = {};
         var title = titles[level];
         var syncedJSON = syncedJSONs[level];
@@ -791,13 +780,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		  $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
           for (var i = 0; i < $rootScope.editJSON[title].length; i++){
             for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
-                console.log ($rootScope.editJSON[title][i]["Unique Identifier"] , $rootScope.chosenJSONlist[j]["Unique Identifier"]);
                 if ($rootScope.editJSON[title][i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
                     $rootScope.chosenJSONlist[j] = $rootScope.editJSON[title][i];
                 }
             }
           }
-          console.log ($rootScope.chosenJSONlist);
 		}
 
 		else {
@@ -815,7 +802,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
           }
         
 		}
-        console.log ($rootScope.chosenJSONlist)
 		resolve ($rootScope.chosenJSONlist);
 	});
     
@@ -876,7 +862,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //list item clicked
         $rootScope.docListJSON = [];
         $rootScope.docJSON = selected;
-        console.log (selectedTitle, selected);
     	$scope.temp = $rootScope.documentSyncedJSON['Documents'].concat ($rootScope.unsyncedJSON['Documents']);
     	for (var i = 0; i < $scope.temp.length; i ++){
     		if (angular.isDefined ($scope.temp[i][selectedTitle]) && ($scope.temp[i][selectedTitle] == selected[selectedTitle])){
@@ -900,7 +885,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     }
 
     $scope.newDoc = function(){
-        console.log(DynamicPage.getRoute() + " " + DynamicPage.getTitle());
         $state.go("createNewDocuments");
     }
 
@@ -940,7 +924,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     }
 
     $scope.newSE = function(){
-        console.log(DynamicPage.route + " " + DynamicPage.title);
         $state.go("createNewServiceEntries");
     }
 })
@@ -1061,7 +1044,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
     
 	$scope.saveJSON = function (){
-        console.log(DynamicPage.getRoute() + " " + DynamicPage.getTitle());
 		// nulls entries that may not have any data
 		$scope.JSON ['Network'] = null;
 		$scope.JSON ['Site'] = null;
@@ -1070,10 +1052,12 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		$scope.JSON ['Component'] = null;
 		$scope.JSON ['Service Entry'] = null;
 
+        $scope.JSON [$rootScope.relatedTitle] = $rootScope.related;
+
 		// adds data for the entry the document is related to 
-		$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = $rootScope.docJSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
+		//$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = $rootScope.docJSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
 		// SaveNew factory
-		SaveNew.save ("Documents", true, $scope.JSON, $rootScope.unsyncedJSON['Documents'], $scope.imageData);
+		SaveNew.save ("Documents", true, $scope.JSON, $rootScope.unsyncedJSON['Documents'], $scope.imageData, $rootScope.related);
 		// pushes into list
 		$rootScope.docListJSON.push ($scope.JSON);
         $scope.JSON = {};
@@ -1103,9 +1087,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     
 	$scope.saveJSON = function (){
-        console.log(DynamicPage.getRoute() + " " + DynamicPage.getTitle());
-
-
 		// nulls entries that may not have any data
 		$scope.JSON ['Site'] = null;
 		$scope.JSON ['System'] = null;
@@ -1114,9 +1095,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 		// adds data for the entry the service entry is related to 
 		var JSON = DynamicPage.getJSON();
 		
-        $scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
-
-		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData);
+       //$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
+       $scope.JSON [$rootScope.relatedTitle] = $rootScope.related;
+		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, $rootScope.related);
 		// pushes into list
 		$rootScope.serviceEntryListJSON.push ($scope.JSON);
 
