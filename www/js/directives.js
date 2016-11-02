@@ -147,7 +147,6 @@ angular.module('app.directives', [])
                 }
             
             }
-            
         };
         
         //delete the current view JSON from the list of unsynced items

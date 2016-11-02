@@ -1,6 +1,6 @@
 <ion-view title="{{JSON['Name']}} Info">
      <ion-nav-buttons class="" side="left">          
-             <button class="button button-icon button-clear ion-chevron-left" ng-click="back();"></button>
+             <button class="button button-icon button-clear ion-chevron-left" ng-click=" back();"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
         <div deletable ng-init="isDeletable();" ng-show="deletable" ng-click="deleteView();">
@@ -12,7 +12,7 @@
     </ion-nav-buttons>
 
     <ion-content class="has-header content-bg padding">
-        <form name ="networkForm"> 
+        <form name ="networkForm" id = "networkForm"> 
             <label>
                 <ion-md-input type="text" placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" required/>
             </label>
@@ -35,7 +35,7 @@
              </div>
         <a class=" button button-large button-block button-positive wide"
             ng-disabled="(networkForm.$invalid) || (!networkForm.modified) " 
-            ng-click="saveJSON(); back();">
+            ng-click="saveJSON(deletable); back();">
             Save</a>
     </form>
     </ion-content>

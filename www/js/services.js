@@ -98,9 +98,9 @@ angular.module('app.services', [])
 		// return promise
 		return $q (function (resolve, reject){ 
 			if (loggedIn){
-				for (var i = 0; i < types.length; i++){
-					for (var j = 0; j < JSON[titles[i]].length; j++){
-						$http.put (url + types[i] + '/', JSON, {timeout: 10000}).then (function Success (response){
+				// for (var i = 0; i < types.length; i++){
+				// 	for (var j = 0; j < JSON[titles[i]].length; j++){
+						$http.put (url , JSON, {timeout: 10000}).then (function Success (response){
 							// check if there is edit data saved
 							if (File.checkFile ('Edit')){
 								// remove it
@@ -121,8 +121,8 @@ angular.module('app.services', [])
 							// reject promise
 							reject (response.status);
 						})
-					}
-				}
+				// 	}
+				// }
 			}
 		else{
 				// write to edit file
@@ -637,7 +637,7 @@ console.log("is this called");
 					JSON ['Land Owner'] = null;
 				else
 					JSON ['Land Owner'] = parseInt (JSON ['Land Owner']);
-				JSON ["Photo"] = imageData;
+				JSON ["Landmark Photo"] = imageData;
 				JSON ['Longitude'] = parseFloat (parseFloat(JSON ['Longitude']).toFixed (7));
   				JSON ['Latitude'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));
   				JSON ['Elevation'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));
