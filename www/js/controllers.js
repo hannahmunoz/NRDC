@@ -272,7 +272,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.setRandomBackground = function(){
         rand = Math.floor((Math.random() * 100) % 7);
         $scope.randomBackground = {};
-        $scope.randomBackground["background-image"] = "url(../img/bg" + rand + '.jpg)';
+        $scope.randomBackground["background-image"] = "url(img/bg" + rand + '.jpg)';
         $scope.randomBackground["background-size"] = '160%';
         $scope.randomBackground["background-position"] = 'center';
     }
