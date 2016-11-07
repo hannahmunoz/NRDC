@@ -633,10 +633,18 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	// wrapper for person select button
 	$scope.select = function(JSON){
 		DynamicPage.getRoute();
-		if (angular.isDefined (JSON)){
-			$rootScope.related = JSON [DynamicPage.getTitle().slice (0, -1)];
-            $rootScope.relatedTitle = DynamicPage.getTitle().slice (0, -1);
-		}
+		// if ((angular.isDefined (JSON))){
+  //           if ($rootScope.listLevel > 0){
+  //               console.log (DynamicPage.getTitle(), DynamicPage.getRoute());
+		// 	 $rootScope.related = JSON [tieredTitles[$rootScope.listLevel-1].slice (0, -1)];
+  //            $rootScope.relatedTitle = tieredTitles[$rootScope.listLevel-1].slice (0, -1);
+  //           }
+  //           else{
+  //            $rootScope.related = JSON [tieredTitles[$rootScope.listLevel].slice (0, -1)];
+  //            $rootScope.relatedTitle = tieredTitles[$rootScope.listLevel].slice (0, -1);     
+  //           }
+  //           console.log ($rootScope.related, $rootScope.relatedTitle);
+		// }
 
         DynamicPage.setJSON(JSON);
 	}
@@ -733,7 +741,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
        		 }
         
         	$scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
-        
         	$scope.select($scope.clickedJSONHist.pop());
         }
         //store the json of the
@@ -818,12 +825,19 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var parentName = parent[listLevel];
         var lastClickedJSON = DynamicPage.getJSON();
         var filteredList = [];
+        console.log (parentName);
+
         if(parent[listLevel] == "Unique Identifier"){
+            // $rootScope.related = JSON ["Network"];
+           //  $rootScope.relatedTitle = "Network";  
             return unfilteredList;
         }
         else {
-        	filteredList = unfilteredList.filter(belongsToParent(parentName, lastClickedJSON));
-        	return filteredList;
+             $rootScope.related = lastClickedJSON [parentName];
+             $rootScope.relatedTitle = parentName;
+             console.log ($rootScope.related, $rootScope.relatedTitle);
+        	 filteredList = unfilteredList.filter(belongsToParent(parentName, lastClickedJSON));
+        	 return filteredList;
         }
     }
     
@@ -943,12 +957,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
     // create JSON
     $scope.JSON = {};
-
     
     $scope.images = 'ion-images';
     $scope.camera = "ion-android-camera";
-
-    
     
     $scope.clear = function(){
         if($scope.JSON['Name'] == "New " + DynamicPage.getTitle()){
@@ -959,6 +970,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
   	// save JSON
 	$scope.saveJSON = function (){
+        console.log ($rootScope.related, $rootScope.relatedTitle);
 		// go to SaveNew factory
 		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData, $rootScope.related);
 		// I have no idea why it doesnt work with Networks
