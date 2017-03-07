@@ -804,24 +804,37 @@ angular.module('app.services', [])
     
 	})
 
-.factory('ListOrganizationService', function(){
+.factory('ListNavService', function(){
         var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
         var tieredParents = ["Unique Identifier", "Network", "Site", "System", "Deployment"];
     
-        var getParentTitle = function(title){
+        var getParentTitle = getParentTitle;
+        var getChildTitle = getChildTitle;
+
+
+
+        /**
+		  * 
+		  *
+		  *
+		  *	
+          */
+        function getParentTitle(title){
             var titleNdx = tieredTitles.indexOf(title);
             var parentNdx = titleNdx - 1;
             
             return tieredTitles[parentNdx];
         };
     
-        var getChildTitle = function(title){
+        function getChildTitle(title){
             var titleNdx = tieredTitles.indexOf(title);
             var parentNdx = titleNdx++;
             
             return tieredTitles[parentNdx];
         }
+
+
     
         
     

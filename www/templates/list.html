@@ -17,13 +17,13 @@
                     <h2 class="text">Associated {{title}}</h2>
             </div>
     		<li repeat-directive ng-repeat = "(key, item) in listJSON" >
-                <div class = "item waves-button ink text-center content-bg" ng-click = "storePresentState(); select(item); progressiveListSwitch();">
+                <div class="item waves-button ink text-center content-bg" ng-click = "select(item); progressiveListSwitch();">
                     <h2>{{item.Name}}</h2>
     			</div>
             </li>
           </ul>
- </ion-content>
-    <button ng-show = "modalCheck" class="button button-fab button-fab-bottom-right pane compliment" ng-click="newItem();">
+    </ion-content>
+    <button ng-hide="" class="button button-fab button-fab-bottom-right pane compliment" ng-click="newItem();">
         <i class="icon ion-plus" style="color: #FFFFFF;"></i>
     </button>
 </ion-view>

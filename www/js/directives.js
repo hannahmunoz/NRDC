@@ -130,7 +130,7 @@ angular.module('app.directives', [])
 
 .directive('deletable', function(){
     
-    function deletableController($scope, $rootScope, SaveNew, $ionicHistory, DynamicPage, ListOrganizationService){
+    function deletableController($scope, $rootScope, SaveNew, $ionicHistory, DynamicPage, ListNavService){
         $scope.deletable = false;
         
         //determine if my current view in deletable
@@ -156,7 +156,7 @@ angular.module('app.directives', [])
         $scope.deleteView = function(){
             //variables            
             $scope.JSON = DynamicPage.getJSON();
-            $scope.title = ListOrganizationService.getParentTitle(DynamicPage.getTitle());
+            $scope.title = ListNavService.getParentTitle(DynamicPage.getTitle());
             $ionicHistory.goBack();
             SaveNew.deleteJSON($scope.JSON.Name, $rootScope.unsyncedJSON[$scope.title],
                                $rootScope.chosenJSONlist, $rootScope.listJSON,$scope.title);
