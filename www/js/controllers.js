@@ -926,7 +926,12 @@ app administrator.
             return unfilteredList;
         }
         else {
+        	if (angular.isUndefined (lastClickedJSON [parentName])){
+				$rootScope.related = lastClickedJSON["Unique Identifier"];
+         	}
+        	else{
              $rootScope.related = lastClickedJSON [parentName];
+         	}
              $rootScope.relatedTitle = parentName;
              console.log ($rootScope.related, $rootScope.relatedTitle);
         	 filteredList = unfilteredList.filter(belongsToParent(parentName, lastClickedJSON));
