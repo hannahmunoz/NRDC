@@ -7,15 +7,16 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	// get the JSON
 	var related;
 
-    $scope.viewOpen = true;
 
 	$scope.document = false;
 	$scope.service = false;
     $scope.images = 'ion-images';
     $scope.camera = "ion-android-camera";
 
+
 	//http://stackoverflow.com/questions/4878756/javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
 	$scope.title = DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().substr(1).toLowerCase() + 's';
+
 
 	$scope.JSON = DynamicPage.getJSON();
 	if ( angular.isDefined ($scope.JSON ['Photo'])){
@@ -592,6 +593,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	});
     }
 
+
+
 /**********************************************
     Controlling functions for the notification modal
     when init times out.
@@ -615,6 +618,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.removeTimeoutModal = function(){
         $scope.modal.remove();
     }
+
 
 /*************************************************
 Provides an email service which sends an email to
@@ -670,14 +674,45 @@ app administrator.
 
 // listView controller
 .controller('listCtrl', function($scope, $rootScope, DynamicPage, $state, ObjectCounter, $ionicHistory, ionicMaterialInk, $ionicLoading, $q, $ionicPlatform) {
+
+
 	//local variables to the controller
-        var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
-        var tieredRoutes = ["network", "site", "system", "deployment", "component"];
-        var parent = ["Unique Identifier", "Network", "Site", "System", "Deployment"];
-        var tieredSyncedJSON =[$rootScope.networkSyncedJSON, $rootScope.siteSyncedJSON, $rootScope.systemSyncedJSON, $rootScope.deploymentSyncedJSON, $rootScope.componentSyncedJSON];
+    var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
+    var tieredRoutes = ["network", "site", "system", "deployment", "component"];
+    var parent = ["Unique Identifier", "Network", "Site", "System", "Deployment"];
+    var tieredSyncedJSON =[$rootScope.networkSyncedJSON, $rootScope.siteSyncedJSON, $rootScope.systemSyncedJSON, $rootScope.deploymentSyncedJSON, $rootScope.componentSyncedJSON];
         
-        $scope.clickedJSONHist = [];
+    $scope.clickedJSONHist = [];
+
+
+    //custom back button functinality
+    $rootScope.back = function(){
+
+        if($state.$current.self.name != 'list'){
+            $ionicHistory.goBack();
+        }
+        else if($rootScope.listLevel > 0){
+            $scope.regressiveListSwitch();
+        }
+        else{
+            $ionicHistory.goBack();
+
+            //reset list levels
+            $rootScope.itemLevel =  0;
+            $rootScope.listLevel =  0;
+         
+        }
+    }
+
+   //registers custom back button functionality on
+    // hardware back button
+    // 101 - Priority just above "100 - return to previous view"
+    $ionicPlatform.registerBackButtonAction( $rootScope.back, 101);
+
     
+
+
+
     // gets data from the DynamicPage factory. Only works on first load
     $scope.title = DynamicPage.getTitle();
     $scope.route = DynamicPage.getRoute();
@@ -692,6 +727,8 @@ app administrator.
 			}
 		}
 	}
+
+
 
 	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
 		// works on every load after
@@ -782,11 +819,15 @@ app administrator.
             $scope.route = DynamicPage.getRoute();
             $scope.title = DynamicPage.getTitle();
 
-    		if ($scope.title.localeCompare ("Networks")){
-    			$scope.viewInfo = true;
+
+            //sends data to the scope so view
+            // knows to hide FAB button on networks
+    		if ($scope.title.localeCompare("Networks")){
+                console.log($scope.title);
+    			$scope.networkListFlag = true;
     		}
     		else
-    			$scope.viewInfo = false;
+    			$scope.networkListFlag = false;
         }
         else{
 
@@ -805,8 +846,6 @@ app administrator.
 
     //navigate in the opposite direction
     $scope.regressiveListSwitch = function(){
-
-        /**** Not sure what this does ASK HANNAH *****/
 
     	$scope.modalCheck = true;
 
@@ -849,12 +888,15 @@ app administrator.
         
         $scope.route = DynamicPage.getRoute();
         $scope.title = DynamicPage.getTitle();
-
-		if ($scope.title.localeCompare ("Networks")){
-			$scope.viewInfo = true;
-		}
-		else
-			$scope.viewInfo = false;
+      
+        //sends data to the scope so view
+        // knows to hide FAB button on networks
+        if ($scope.title.localeCompare("Networks")){
+            console.log($scope.title);
+            $scope.networkListFlag = true;
+        }
+        else
+            $scope.networkListFlag = false;
          
     }
     
@@ -949,32 +991,12 @@ app administrator.
     }
 
 
-    //custom back button functinality
-    $rootScope.back = function(){
 
-        if($rootScope.listLevel > 0){
-            $scope.regressiveListSwitch();
-        }
-        else{
-            $ionicHistory.goBack();
-            //reset list levels
-            $rootScope.itemLevel =  0;
-            $rootScope.listLevel =  0;
-         
-        }
-    }
-
-   //registers custom back button functionality on
-    // hardware back button
-    // 101 - Priority just above "100 - return to previous view"
-    $ionicPlatform.registerBackButtonAction( $rootScope.back, 101);
-
-    
     //required for ink ripple effect on material button press
     ionicMaterialInk.displayEffect();
 })
 
-.controller('documentListCtrl', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $ionicHistory) {
+.controller('documentListCtrl', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $ionicHistory, $ionicPlatform) {
 	$scope.documentList = function (selectedTitle, selected){
 		// setting up the page
         //store the json of the
