@@ -846,4 +846,8 @@ angular.module('app.services', [])
             getChildTitle: getChildTitle
         };
     
+})
+
+.factory('ContextHolder', function(){
+
 });

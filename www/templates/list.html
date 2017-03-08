@@ -5,7 +5,7 @@
             </button>
          </ion-nav-buttons>
         <ion-nav-buttons class="" side="right">          
-            <button ng-show = "viewInfo" class="button-clear" style="padding-right:10px;" ng-click="viewItem()">
+            <button class="button-clear" style="padding-right:10px;" ng-click="viewItem()">
                 <h4>Info</h4>
             </button>
         </ion-nav-buttons>
@@ -23,7 +23,7 @@
             </li>
           </ul>
     </ion-content>
-    <button ng-hide="" class="button button-fab button-fab-bottom-right pane compliment" ng-click="newItem();">
+    <button ng-show="networkListFlag" class="button button-fab button-fab-bottom-right pane compliment" ng-click="newItem();">
         <i class="icon ion-plus" style="color: #FFFFFF;"></i>
     </button>
 </ion-view>
