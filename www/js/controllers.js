@@ -265,6 +265,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     $scope.loginJSON = {};
     $rootScope.associatedNetworks = {};
+    
     $rootScope.loggedIn = false;
 
 	// URL list
@@ -429,8 +430,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         $scope.show();
         $scope.timeout = true;
 
-
-
         //start timeout
          $timeout(function () {
             if($scope.timeout == true){
@@ -582,7 +581,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
   	})
     })})})})})})})})})
-
 	}
 
     $scope.show = function(){
