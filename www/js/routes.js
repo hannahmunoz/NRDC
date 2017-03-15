@@ -161,6 +161,12 @@ angular.module('app.routes', [])
     abstract:true
   })
 
-$urlRouterProvider.otherwise('/mainMenu')
+  .state('login', {
+    url: '/login',
+    templateUrl: 'templates/login.html',
+    controller: 'LoginController'
+  })
+
+$urlRouterProvider.otherwise('/login')
 
 });

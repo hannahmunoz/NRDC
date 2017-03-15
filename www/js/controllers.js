@@ -147,9 +147,16 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 })
 
-.controller('LoginController', function($ionicModal, $scope, $rootScope, $q, Login){
+.controller('LoginController', function($ionicModal, $scope, $rootScope, $q, $location, Login){
     $rootScope.modalHidden = true;
     $scope.modal = null;
+
+
+    $scope.loginJSON = {};
+    $rootScope.associatedNetworks = {};
+    
+    $rootScope.loggedIn = false;
+
 
     //open a modal for viewing
     //creates a new modal if one has not been instantiated
@@ -193,25 +200,49 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     };
 
+     $scope.resolveLogin = function(){
+        return $q(function(resolve, reject){
+                console.log("I'm secretely not doing anything.")
+                resolve();
+            });
+     }
+
 
     $scope.login = function (){
-        $scope.destroyModal().then(function (){
+        
+/*        var promise = $q (function (resolve, reject){  
         	Login.adminLogin ($scope.loginJSON).then (function Success (response){
         		$rootScope.associatedNetworks = response;
             	$rootScope.loggedIn = true;
             	$scope.loginJSON ['Username'] = null;
         		$scope.loginJSON ['Password'] = null;
+               
         	}, function Failure (error){
             	$rootScope.associatedNetworks = error;
             	$rootScope.loggedIn = false;
         		$scope.loginJSON ['Password'] = null;
+                $location.path('/Login');
+                
         	});
 
-
       	})
+*/
+        $scope.resolveLogin().then(function (){
+            Login.adminLogin ($scope.loginJSON).then (function Success (response){
+                $rootScope.associatedNetworks = response;
+                $rootScope.loggedIn = true;
+                $scope.loginJSON ['Username'] = null;
+                $scope.loginJSON ['Password'] = null;
+                $location.path('/mainMenu');
+            }, function Failure (error){
+                $rootScope.associatedNetworks = error;
+                $rootScope.loggedIn = false;
+                $scope.loginJSON ['Password'] = null;
+                $location.path('/Login');
+            })
+        });
+
     }
-
-
 })
   
  // controller for the main menu  
@@ -263,14 +294,12 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $rootScope.listLevel = 0;
     $rootScope.itemLevel = 0;
 
-    $scope.loginJSON = {};
-    $rootScope.associatedNetworks = {};
-    
-    $rootScope.loggedIn = false;
 
 	// URL list
 	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
 	$rootScope.urlPaths = ["people", "networks", "sites", "systems", "deployments", "components", "documents","service_entries"];
+    var parent = ["Unique Identifier", "Network", "Site", "System", "Deployment"];
+
 
 	// check for main directory
 	File.createDirectory();
@@ -341,8 +370,12 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	   });
     }
 
-    //calls for the next tier of
-    //items in the site network hierarchy
+    /**
+      * Name: Progressive List Switch
+      * Usage: Called from main menu controller to move us into the
+      *        the list controller
+      *
+      */
     $scope.progressiveListSwitch = function(){
         var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
@@ -397,30 +430,72 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //reset the title with every switch
 		$scope.title = title;
 
-        //if title is 
-    	if (title != "Service Entries"){
-    		for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
-    			if (title == "People")	{
-    				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['First Name'] + " "+ $rootScope.unsyncedJSON[title][i]['Last Name'];
+        var promise = $q (function (resolve, reject){
+            //if title is 
+        	if (title != "Service Entries"){
+        		for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
+        			if (title == "People")	{
+        				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['First Name'] + " "+ $rootScope.unsyncedJSON[title][i]['Last Name'];
+        			}
+        			else{
+        				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['Name'];
+        			}
     			}
-    			else{
-    				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['Name'];
+    		  $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
+    		}
+
+
+
+    		else {
+    			for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i++){
+    				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON.ServiceEntries[i]['Name'];
     			}
-			}
-		  $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
-		}
+
+    			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
+    		}
+
+            resolve($rootScope.chosenJSONlist);
+        })
+
+            //return promise 
+        promise.then ( function success (){
+             console.log($rootScope.chosenJSONlist, level);
+            $rootScope.listJSON = $scope.filter($rootScope.chosenJSONlist, level);
+        });
 
 
+        //filter out list according to a specific criteria of a parent at a given level
+        $scope.filter = function (unfilteredList, listLevel){
+            var parentName = parent[listLevel];
+            var lastClickedJSON = DynamicPage.getJSON();
+            var filteredList = [];
 
-		else {
-			for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i++){
-				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON.ServiceEntries[i]['Name'];
-			}
+            if(parentName == "Unique Identifier"){
+                return unfilteredList;
+            }
+            else {
+                if (angular.isUndefined (lastClickedJSON [parentName])){
+                    $rootScope.related = lastClickedJSON["Unique Identifier"];
+                }
+                else{
+                    $rootScope.related = lastClickedJSON [parentName];
+                }
+                 $rootScope.relatedTitle = parentName;
+                 console.log ($rootScope.related, $rootScope.relatedTitle);
+                 filteredList = unfilteredList.filter(belongsToParent(parentName, lastClickedJSON));
+                 return filteredList;
+            }
+        }
+        
+        //helper function
+        function belongsToParent(parent, presentJSON){
+            return function(object){
+                if (object[parent] == presentJSON[parent]){
+                    return object;
+                }
+            }
+        }
 
-			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
-		}
-
-        $rootScope.listJSON = $rootScope.chosenJSONlist;	       
     }
 
 // only runs the first time the program is called. 
@@ -766,11 +841,8 @@ app administrator.
         if($rootScope.listLevel < 4){
         	$scope.modalCheck = true;
 
-
             //store my previous view's JSON for return
             storePrevJSON();
-
-
 
             if (angular.isDefined (DynamicPage.getJSON())){
             	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
@@ -795,12 +867,13 @@ app administrator.
             else{
                 $rootScope.itemLevel = 4;
             }
-            
             $scope.temp = $rootScope.listLevel;
 
-            
+            //call the fucntion which swtiches out switch view data
             $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
-    		$rootScope.listLevel = $scope.temp;
+    		
+
+            $rootScope.listLevel = $scope.temp;
 
 
             //store the json of the
@@ -869,7 +942,7 @@ app administrator.
         		} else {
            		 $rootScope.itemLevel--;
        		 }
-        
+
         	$scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
         	$scope.select($scope.clickedJSONHist.pop());
         }
@@ -947,9 +1020,11 @@ app administrator.
 		resolve ($rootScope.chosenJSONlist);
 	});
     
-    //return promise ?
+    //return promise 
     promise.then ( function success (){
+        console.log($rootScope.chosenJSONlist, "bfeore filter function");
         $rootScope.listJSON = $scope.filter($rootScope.chosenJSONlist, level);
+        console.log($rootScope.chosenJSONlist, "after filter function");
     })
 
    }

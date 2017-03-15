@@ -150,6 +150,7 @@ angular.module('app.services', [])
 	function adminLogin(JSON){
 		return $q (function (resolve, reject){  
 			$http.post ("http://sensor.nevada.edu/GS/Services/admin/networks/", JSON, {timeout: 10000}).then (function Success (response){
+				console.log(response);
 				if (response.data.AssociatedNetworks.length != 0){
 					var promise = $q (function (resolve, reject){ 
 						File.checkFile ('Logins').then (function Success (){
