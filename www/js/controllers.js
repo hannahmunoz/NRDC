@@ -55,9 +55,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 			break;	
 
 	}
-    
-     //custom back button functionality
-    $scope.back = function(){ $ionicHistory.goBack();}
 
     $scope.check = function (deletable){
     }
@@ -89,7 +86,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         }    
         else{
             if ($scope.title != "Serviceentriess"){
-		       SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], $scope.imageData, related);
+                SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], $scope.imageData, related);
             }
             else{
                SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, related);
@@ -816,7 +813,7 @@ app administrator.
 
 
 
-	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
+	$rootScope.$on('$stateChangeSuccess', function(){ 
 		// works on every load after
 		$scope.title = DynamicPage.getTitle();
 		$scope.route = DynamicPage.getRoute();
@@ -907,7 +904,6 @@ app administrator.
             //sends data to the scope so view
             // knows to hide FAB button on networks
     		if ($scope.title.localeCompare("Networks")){
-                console.log($scope.title);
     			$scope.networkListFlag = true;
     		}
     		else
@@ -1035,9 +1031,7 @@ app administrator.
     
     //return promise 
     promise.then ( function success (){
-        console.log($rootScope.chosenJSONlist, "bfeore filter function");
         $rootScope.listJSON = $scope.filter($rootScope.chosenJSONlist, level);
-        console.log($rootScope.chosenJSONlist, "after filter function");
     })
 
    }
