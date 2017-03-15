@@ -62,8 +62,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     // save JSON button
 	$scope.saveJSON = function (deletable){
         if (!angular.isDefined (deletable) || deletable == false){
+        	console.log ("hello");
             var bool = false;
             if ($scope.title != "Serviceentriess"){
+            	        	console.log ("hello");
                 for (var i = 0; i < $rootScope.editJSON[$scope.title].length; i ++){
                     if ($scope.JSON["Unique Identifier"] == $rootScope.editJSON[$scope.title][i]["Unique Identifier"]){
                          $rootScope.editJSON[$scope.title][i] = $scope.JSON;
@@ -71,24 +73,30 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                     }
                 }
             if (bool == false)
+            	        	console.log ("hello");
                 SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON[$scope.title], $scope.imageData, related);
              }  
              else{
+             	        	console.log ("hello");
                 for (var i = 0; i < $rootScope.editJSON.ServiceEntries.length; i ++){
                     if ($scope.JSON["Unique Identifier"] == $rootScope.editJSON.ServiceEntries[i]["Unique Identifier"]){
                          $rootScope.editJSON.ServiceEntries[i] = $scope.JSON;
                          bool = true;
+                                 	console.log ("hello");
                     }
                 }
             if (bool == false)
+            	        	console.log ("hello");
                 SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON.ServiceEntries, $scope.imageData, related);
              }
         }    
         else{
+        	        	console.log ("hello");
             if ($scope.title != "Serviceentriess"){
                 SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], $scope.imageData, related);
             }
             else{
+            	        	console.log ("hello");
                SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, related);
             }	
         }
