@@ -724,8 +724,19 @@ angular.module('app.services', [])
 
         // print json to console for debugging
 		console.log (JSON);
+		console.log (finalJSON);
+		
+		if (!isitNew){
+			for (var i = 0; i < finalJSON.length; i ++){
+				if (finalJSON[i]["Unique Identifier"] == JSON["Unique Identifier"]){
+					finalJSON.splice (i, 1);	
+				}
+			}
+		}
+
 		// pushes into unsyncedJSON
 		finalJSON.push (JSON);
+		console.log (finalJSON);
 		JSON = {};
 	}
 
