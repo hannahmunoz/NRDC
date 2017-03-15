@@ -761,19 +761,32 @@ app administrator.
     //custom back button functinality
     $rootScope.back = function(){
 
-        if($state.$current.self.name != 'list'){
+        console.log($state.$current.self.name);
+
+          //if we are in main menu do nothing
+        if($state.$current.self.name == 'mainMenu'){
+            return;
+        }
+
+        //if we are no in a list go back like normal
+        else if($state.$current.self.name != 'list'){
             $ionicHistory.goBack();
         }
+
+        //if we are in a list but not the top tier
+        // call custom list switch function
         else if($rootScope.listLevel > 0){
             $scope.regressiveListSwitch();
         }
+
+        //if we are in at the network level
+        //of our list
         else{
             $ionicHistory.goBack();
 
             //reset list levels
             $rootScope.itemLevel =  0;
-            $rootScope.listLevel =  0;
-         
+            $rootScope.listLevel =  0;         
         }
     }
 
