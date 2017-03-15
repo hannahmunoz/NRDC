@@ -636,10 +636,10 @@ angular.module('app.services', [])
 				JSON ["Landmark Photo"] = imageData;
 				JSON ['Longitude'] = parseFloat (parseFloat(JSON ['Longitude']).toFixed (7));
   				JSON ['Latitude'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));
-  				JSON ['Elevation'] = parseFloat (parseFloat (JSON ['Latitude']).toFixed (7));
-				JSON ['Time Zone Name'] = TZJSON[new Date().getTimezoneOffset()/60];
+  				JSON ['Elevation'] = parseFloat (parseFloat (JSON ['Elevation']).toFixed (7));
+				JSON ['Time Zone Name'] = TZJSON[new Date().getTimezoneOffset()/60 + 1];
 				JSON ['Time Zone Offset'] = (new Date().getTimezoneOffset());
-				JSON ['Time Zone Abbreviation'] = TZAJSON[new Date().getTimezoneOffset()/60];
+				JSON ['Time Zone Abbreviation'] = TZAJSON[new Date().getTimezoneOffset()/60 + 1];
 			break;
 
 			case 'Systems':
