@@ -430,36 +430,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var title = titles[level];
         var syncedJSON = syncedJSONs[level];
 
-        console.log("Synced JSONs passed into list switch",syncedJSONs);
-
         //reset the title with every switch
 		$scope.title = title;
 
         var promise = $q (function (resolve, reject){
-            /*//if title is 
-        	if (title != "Service Entries"){
-        		for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
-        			if (title == "People")	{
-        				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['First Name'] + " "+ $rootScope.unsyncedJSON[title][i]['Last Name'];
-        			}
-        			else{
-        				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['Name'];
-        			}
-    			}
-    		    $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
-    		}
-
-
-
-    		else {
-    			for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i++){
-    				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON.ServiceEntries[i]['Name'];
-    			}
-
-    			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
-    		}
-
-            resolve($rootScope.chosenJSONlist);*/
 
             if (title != "Service Entries"){
                 for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
@@ -502,7 +476,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
             //return promise 
         promise.then ( function success (){
-            console.log("Sucessful function call on list switch:", $rootScope.chosenJSONlist, level);
             $rootScope.listJSON = $scope.filter($rootScope.chosenJSONlist, level);
         });
 
@@ -1110,7 +1083,6 @@ app administrator.
          	}
             
             $rootScope.relatedTitle = parentName;
-            console.log("Called from filter function Related: %s, Related Title: %s",$rootScope.related, $rootScope.relatedTitle);
     	    filteredList = unfilteredList.filter(belongsToParent(parentName, lastClickedJSON));
     	    return filteredList;
         }
@@ -1369,8 +1341,8 @@ app administrator.
 		// adds data for the entry the service entry is related to 
 		var JSON = DynamicPage.getJSON();
 		
-       //$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
-       $scope.JSON [$rootScope.relatedTitle] = $rootScope.related;
+        console.log("Called from service modal controller.saveJSON: Related: %s, Related Title: %s",$rootScope.related, $rootScope.relatedTitle);
+        $scope.JSON [$rootScope.relatedTitle] = $rootScope.related;
 		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, $rootScope.related);
 		// pushes into list
 		$rootScope.serviceEntryListJSON.push ($scope.JSON);
