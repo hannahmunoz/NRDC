@@ -1148,10 +1148,15 @@ app administrator.
         //list item clicked
         $rootScope.serviceEntryListJSON = [];
         $rootScope.seJSON = selected;
+
+        console.log("Service synced JSON sent",$rootScope.serviceSyncedJSON['ServiceEntries']);
+        console.log("selectedTitle: ", selectedTitle);
+
     	$scope.temp = $rootScope.serviceSyncedJSON['ServiceEntries'].concat ($rootScope.unsyncedJSON['ServiceEntries']);
     	for (var i = 0; i < $scope.temp.length; i ++){
+            console.log("In bounds checking:", $scope.temp[i]);
     		if (angular.isDefined ($scope.temp[i][selectedTitle]) && ($scope.temp[i][selectedTitle] == selected[selectedTitle])){
-    			$rootScope.serviceEntryListJSON.push ($scope.temp[i]);
+    			$rootScope.serviceEntryListJSON.push($scope.temp[i]);
     		}
     	}
     }
