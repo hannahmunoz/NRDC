@@ -554,7 +554,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 $ionicLoading.hide();
                 $scope.makeTimeoutModal();          
             }
-        }, 5000);
+        }, 10000);
 
 
     	//get permissions
@@ -894,6 +894,9 @@ app administrator.
     //calls for the next tier of
     //items in the site network hierarchy
     $scope.progressiveListSwitch = function(){
+
+
+
         if($rootScope.listLevel < 4){
         	$scope.modalCheck = true;
 
@@ -955,18 +958,23 @@ app administrator.
     		else
     			$scope.networkListFlag = false;
         }
+        //this else statmenet makes it so compoanents are a button
+        // that shows component info
         else{
 
             $rootScope.itemLevel++;
             DynamicPage.setRoute(tieredRoutes[$rootScope.itemLevel]);
             $scope.route = DynamicPage.getRoute();
 
-            $scope.route;
+            $rootScope.related = DynamicPage.getJSON()["Component"];
+            $rootScope.relatedTitle = "Component";
 
             $scope.viewItem();
 
             $rootScope.itemLevel--;
         }
+
+
     }
     
 
@@ -1098,12 +1106,13 @@ app administrator.
 				$rootScope.related = lastClickedJSON["Unique Identifier"];
          	}
         	else{
-             $rootScope.related = lastClickedJSON [parentName];
+                $rootScope.related = lastClickedJSON [parentName];
          	}
-             $rootScope.relatedTitle = parentName;
-             console.log ($rootScope.related, $rootScope.relatedTitle);
-        	 filteredList = unfilteredList.filter(belongsToParent(parentName, lastClickedJSON));
-        	 return filteredList;
+            
+            $rootScope.relatedTitle = parentName;
+            console.log("Called from filter function Related: %s, Related Title: %s",$rootScope.related, $rootScope.relatedTitle);
+    	    filteredList = unfilteredList.filter(belongsToParent(parentName, lastClickedJSON));
+    	    return filteredList;
         }
     }
     

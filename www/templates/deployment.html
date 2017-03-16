@@ -35,7 +35,9 @@
             <label>
                 <ion-md-input type="text" placeholder="Altitude" name="deploymentAltitude" ng-model = "JSON['Elevation']"/>
             </label>
-            <button id="deployment-button8" class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)" >Get GPS Location</button>
+
+            <button id="deployment-button8" class=" button button-positive button-large button-block " ng-click = "getGPS(JSON)">Get GPS Location</button>
+            
             <label >
                 <ion-md-input type="text" maxlength="50" placeholder="Center Offset" name="offset" ng-model = "JSON['Center Offset']"/>
             </label>
@@ -61,11 +63,11 @@
         <button class=" button button-positive button-large button-block wide" 
         ng-disabled = "deploymentForm.$invalid || !deploymentForm.modified"
         ng-click = "saveJSON(deletable); back();">
-        Save</a> 
+        Save</button> 
         
         <div class="overscroll"></div>
     </ion-content>
-    
-    <!--Expandable floating action button menu with options for new document and service entry.-->
+
     <fab-cluster></fab-cluster>
+
 </ion-view>
