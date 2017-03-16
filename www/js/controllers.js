@@ -62,41 +62,33 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     // save JSON button
 	$scope.saveJSON = function (deletable){
         if (!angular.isDefined (deletable) || deletable == false){
-        	console.log ("hello");
             var bool = false;
             if ($scope.title != "Serviceentriess"){
-            	        	console.log ("hello");
                 for (var i = 0; i < $rootScope.editJSON[$scope.title].length; i ++){
                     if ($scope.JSON["Unique Identifier"] == $rootScope.editJSON[$scope.title][i]["Unique Identifier"]){
                          $rootScope.editJSON[$scope.title][i] = $scope.JSON;
                          bool = true;
                     }
                 }
-            if (bool == false)
-            	        	console.log ("hello");
-                SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON[$scope.title], $scope.imageData, related);
+                if (bool == false)
+                    SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON[$scope.title], $scope.imageData, related);
              }  
              else{
-             	        	console.log ("hello");
                 for (var i = 0; i < $rootScope.editJSON.ServiceEntries.length; i ++){
                     if ($scope.JSON["Unique Identifier"] == $rootScope.editJSON.ServiceEntries[i]["Unique Identifier"]){
                          $rootScope.editJSON.ServiceEntries[i] = $scope.JSON;
                          bool = true;
-                                 	console.log ("hello");
                     }
                 }
             if (bool == false)
-            	        	console.log ("hello");
                 SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON.ServiceEntries, $scope.imageData, related);
              }
         }    
         else{
-        	        	console.log ("hello");
             if ($scope.title != "Serviceentriess"){
                 SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], $scope.imageData, related);
             }
             else{
-            	        	console.log ("hello");
                SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, related);
             }	
         }
@@ -387,26 +379,32 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
         var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSyncedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
            	
-            // should work to sort list based on log in
-            if ($rootScope.loggedIn){
-            	$scope.temp = [];
-            	for (var j = 0; j < $rootScope.associatedNetworks.length; j++){
-            		for ( var i = 0; i < $rootScope.networkSyncedJSON.Networks.length; i ++){
-            			if ($rootScope.associatedNetworks [j]['Network ID'] == $rootScope.networkSyncedJSON.Networks [i]['Unique Identifier']){
-            				        $scope.temp[$scope.temp.length] = $rootScope.networkSyncedJSON.Networks [i];
-            			}
-            		}
-            	}
-                $rootScope.networkSyncedJSON = {Networks:[]};
-                $rootScope.networkSyncedJSON.Networks = $scope.temp;
-            }
-                for (var i = 0; i < $rootScope.editJSON['Networks'].length; i++){
-                    for (var j = 0; j < $rootScope.networkSyncedJSON.Networks.length; j++){
-                        if ($rootScope.editJSON['Networks'][i]["Unique Identifier"] == $rootScope.networkSyncedJSON.Networks[j]["Unique Identifier"]){
-                            $rootScope.networkSyncedJSON.Networks[j] = $rootScope.editJSON['Networks'][i];
-                        }
-                    }
+
+
+        // should work to sort list based on log in
+        if ($rootScope.loggedIn){
+        	$scope.temp = [];
+        	for (var j = 0; j < $rootScope.associatedNetworks.length; j++){
+        		for ( var i = 0; i < $rootScope.networkSyncedJSON.Networks.length; i ++){
+        			if ($rootScope.associatedNetworks [j]['Network ID'] == $rootScope.networkSyncedJSON.Networks [i]['Unique Identifier']){
+        				        $scope.temp[$scope.temp.length] = $rootScope.networkSyncedJSON.Networks[i];
+        			}
+        		}
+        	}
+            $rootScope.networkSyncedJSON = {Networks:[]};
+            $rootScope.networkSyncedJSON.Networks = $scope.temp;
+        }
+        for (var i = 0; i < $rootScope.editJSON['Networks'].length; i++){
+            for (var j = 0; j < $rootScope.networkSyncedJSON.Networks.length; j++){
+                if ($rootScope.editJSON['Networks'][i]["Unique Identifier"] == $rootScope.networkSyncedJSON.Networks[j]["Unique Identifier"]){
+                    $rootScope.networkSyncedJSON.Networks[j] = $rootScope.editJSON['Networks'][i];
                 }
+            }
+        }
+
+        tieredSyncedJSON[0] = $rootScope.networkSyncedJSON;
+    
+
 
         $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);       	
                
@@ -432,11 +430,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var title = titles[level];
         var syncedJSON = syncedJSONs[level];
 
+        console.log("Synced JSONs passed into list switch",syncedJSONs);
+
         //reset the title with every switch
 		$scope.title = title;
 
         var promise = $q (function (resolve, reject){
-            //if title is 
+            /*//if title is 
         	if (title != "Service Entries"){
         		for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
         			if (title == "People")	{
@@ -446,7 +446,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['Name'];
         			}
     			}
-    		  $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
+    		    $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
     		}
 
 
@@ -459,12 +459,50 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
     		}
 
-            resolve($rootScope.chosenJSONlist);
+            resolve($rootScope.chosenJSONlist);*/
+
+            if (title != "Service Entries"){
+                for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
+                    if (title == "People")  {
+                        $scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['First Name'] + " "+ $rootScope.unsyncedJSON[title][i]['Last Name'];
+                    }
+                    else{
+                        $scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['Name'];
+                    }
+                }
+
+                $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]); 
+                for (var i = 0; i < $rootScope.editJSON[title].length; i++){
+                    for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
+                        if ($rootScope.editJSON[title][i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
+                            $rootScope.chosenJSONlist[j] = $rootScope.editJSON[title][i];
+                        }
+                    }
+                }
+            }
+
+            else {
+                for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i++){
+                    $scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON.ServiceEntries[i]['Name'];
+                }
+
+                $rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
+                for (var i = 0; i < $rootScope.editJSON.ServiceEntries.length; i++){
+                    for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
+                        if ($rootScope.editJSON.ServiceEntries[i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
+                            $rootScope.chosenJSONlist[j] = $rootScope.editJSON.ServiceEntries[i];
+                        }
+                    }
+                }
+            
+            }
+            resolve ($rootScope.chosenJSONlist);
+
         })
 
             //return promise 
         promise.then ( function success (){
-             console.log($rootScope.chosenJSONlist, level);
+            console.log("Sucessful function call on list switch:", $rootScope.chosenJSONlist, level);
             $rootScope.listJSON = $scope.filter($rootScope.chosenJSONlist, level);
         });
 
