@@ -167,6 +167,6 @@ angular.module('app.routes', [])
     controller: 'LoginController'
   })
 
-$urlRouterProvider.otherwise('/login')
+$urlRouterProvider.otherwise('/mainMenu')
 
 });

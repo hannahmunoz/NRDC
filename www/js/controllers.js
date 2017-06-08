@@ -159,6 +159,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     //creates a new modal if one has not been instantiated
     //elsewise opens the old modal
     $scope.openModal = function() {
+        console.log ($scope.modal, $rootScope.modalHidden);
         $rootScope.modalHidden = false;
         // If a modal is not
         // already instantiated in this scope
@@ -172,6 +173,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             })
 
         }
+        else {
+           $scope.modal.show(); 
+        }
     };
     
     //close Modal
@@ -182,7 +186,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         $scope.modal.remove().then (function (){
                 $scope.modal = null;
         });
-        $rootScope.modalHidden = true;
     };
     
     //destroy modal to prevent memory leaks
@@ -195,11 +198,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         	});
         })
 
-    };
+    }; 
 
      $scope.resolveLogin = function(){
         return $q(function(resolve, reject){
-                console.log("I'm secretely not doing anything.")
+               // console.log("I'm secretely not doing anything.")
                 resolve();
             });
      }
