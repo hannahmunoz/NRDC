@@ -210,24 +210,24 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     $scope.login = function (){
         
-/*        var promise = $q (function (resolve, reject){  
+       var promise = $q (function (resolve, reject){  
         	Login.adminLogin ($scope.loginJSON).then (function Success (response){
         		$rootScope.associatedNetworks = response;
             	$rootScope.loggedIn = true;
             	$scope.loginJSON ['Username'] = null;
         		$scope.loginJSON ['Password'] = null;
+                $scope.closeModal();
                
         	}, function Failure (error){
             	$rootScope.associatedNetworks = error;
             	$rootScope.loggedIn = false;
         		$scope.loginJSON ['Password'] = null;
-                $location.path('/Login');
-                
+              //  $location.path('/Login');
         	});
 
       	})
-*/
-        $scope.resolveLogin().then(function (){
+
+       /* $scope.resolveLogin().then(function (){
             Login.adminLogin ($scope.loginJSON).then (function Success (response){
                 $rootScope.associatedNetworks = response;
                 $rootScope.loggedIn = true;
@@ -240,7 +240,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 $scope.loginJSON ['Password'] = null;
                 $location.path('/Login');
             })
-        });
+        });*/
 
     }
 })
