@@ -19,6 +19,9 @@ angular.module('app.services', [])
 				//console.log (url + " " + response.status +": " + response.statusText);
 				// fills synced json
 				syncedJSON = response.data;
+
+				console.log(response);
+
 				// gives return data
 				ret = response.data;
 				// resolves promise

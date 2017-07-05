@@ -527,7 +527,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 $ionicLoading.hide();
                 $scope.makeTimeoutModal();          
             }
-        }, 10000);
+        }, 20000);
 
 
     	//get permissions
@@ -1154,7 +1154,7 @@ app administrator.
 
     	$scope.temp = $rootScope.serviceSyncedJSON['ServiceEntries'].concat ($rootScope.unsyncedJSON['ServiceEntries']);
     	for (var i = 0; i < $scope.temp.length; i ++){
-            console.log("In bounds checking:", $scope.temp[i]);
+            console.log("In bounds checking:", $scope.temp[i][selectedTitle]);
     		if (angular.isDefined ($scope.temp[i][selectedTitle]) && ($scope.temp[i][selectedTitle] == selected[selectedTitle])){
     			$rootScope.serviceEntryListJSON.push($scope.temp[i]);
     		}
