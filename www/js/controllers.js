@@ -25,7 +25,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 	// loads the data into the page based on the title of the page
 	switch ($scope.title){
-		case 'Networks':
+		case 'Site Networks':
 				$scope.service = true;
 				$scope.JSON['Principal Investigator'] = JSON.stringify($scope.JSON['Principal Investigator']);
 			break;
@@ -151,14 +151,21 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     $scope.loginJSON = {};
     $rootScope.associatedNetworks = {};
-    
-    $rootScope.loggedIn = false;
 
+    $scope.initalize = function (){
+        $scope.loginJSON = {};
+        $rootScope.associatedNetworks = {};
+        $rootScope.loggedIn = false;
+        console.log ("loaded");
+    }
+
+    $scope.initalize ();
 
     //open a modal for viewing
     //creates a new modal if one has not been instantiated
     //elsewise opens the old modal
     $scope.openModal = function() {
+        console.log ($scope.modal, $rootScope.modalHidden);
         $rootScope.modalHidden = false;
         // If a modal is not
         // already instantiated in this scope
@@ -172,6 +179,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             })
 
         }
+        else {
+           $scope.modal.show(); 
+        }
     };
     
     //close Modal
@@ -182,7 +192,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         $scope.modal.remove().then (function (){
                 $scope.modal = null;
         });
-        $rootScope.modalHidden = true;
     };
     
     //destroy modal to prevent memory leaks
@@ -195,11 +204,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         	});
         })
 
-    };
+    }; 
 
      $scope.resolveLogin = function(){
         return $q(function(resolve, reject){
-                console.log("I'm secretely not doing anything.")
+               // console.log("I'm secretely not doing anything.")
                 resolve();
             });
      }
@@ -207,24 +216,24 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     $scope.login = function (){
         
-/*        var promise = $q (function (resolve, reject){  
+       var promise = $q (function (resolve, reject){  
         	Login.adminLogin ($scope.loginJSON).then (function Success (response){
         		$rootScope.associatedNetworks = response;
             	$rootScope.loggedIn = true;
             	$scope.loginJSON ['Username'] = null;
         		$scope.loginJSON ['Password'] = null;
+                $scope.closeModal();
                
         	}, function Failure (error){
             	$rootScope.associatedNetworks = error;
             	$rootScope.loggedIn = false;
         		$scope.loginJSON ['Password'] = null;
-                $location.path('/Login');
-                
+              //  $location.path('/Login');
         	});
 
       	})
-*/
-        $scope.resolveLogin().then(function (){
+
+       /* $scope.resolveLogin().then(function (){
             Login.adminLogin ($scope.loginJSON).then (function Success (response){
                 $rootScope.associatedNetworks = response;
                 $rootScope.loggedIn = true;
@@ -237,7 +246,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 $scope.loginJSON ['Password'] = null;
                 $location.path('/Login');
             })
-        });
+        });*/
 
     }
 })
@@ -283,8 +292,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$rootScope.docListJSON = [];
 
     // posting JSONs
-	$rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
-	$rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], ServiceEntries: [] };
+	$rootScope.editJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], "Service Entries": [] };
+	$rootScope.unsyncedJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], "Service Entries": [] };
     
     //levels for tiered traversal of
     //lists
@@ -293,9 +302,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 
 	// URL list
-	$rootScope.baseURL = "http://sensor.nevada.edu/GS/Services/";
-	$rootScope.urlPaths = ["people", "networks", "sites", "systems", "deployments", "components", "documents","service_entries"];
-    var parent = ["Unique Identifier", "Network", "Site", "System", "Deployment"];
+	$rootScope.baseURL = "http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/";
+	$rootScope.urlPaths = ["people", "networks", "sites", "systems", "deployments", "components", "documents","ServiceEntries"];
+    var parent = ["Unique Identifier", "Site Network", "Site", "System", "Deployment"];
 
 
 	// check for main directory
@@ -356,12 +365,12 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     // upload button
     $scope.uploadJSONS = function(){
     	   // posts the unsynced json to edge
-           console.log ($rootScope.unsyncedJSON, $rootScope.editJSON)
-    	   sync.post ($rootScope.baseURL+'edge/', $rootScope.unsyncedJSON, $rootScope.loggedIn).then ( function (){
-                $rootScope.unsyncedJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
+           console.log ($rootScope.loggedIn,$rootScope.unsyncedJSON, $rootScope.editJSON);
+    	   sync.post ($rootScope.baseURL+'Update/', $rootScope.unsyncedJSON, $rootScope.loggedIn).then ( function (){
+                $rootScope.unsyncedJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], "Service Entries":[] };
             });
-           sync.edit ($rootScope.baseURL+'edge/', $rootScope.editJSON, $rootScope.loggedIn).then (function (){
-                 $rootScope.editJSON = {People:[], Networks:[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], ServiceEntries:[] };
+           sync.edit ($rootScope.baseURL+'Update/', $rootScope.editJSON, $rootScope.loggedIn).then (function (){
+                 $rootScope.editJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], "Service Entries":[] };
                 // the menu is reinitiated
                 $scope.init (); 
     	   });
@@ -374,7 +383,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
       *
       */
     $scope.progressiveListSwitch = function(){
-        var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
+        var tieredTitles = ["Site Networks", "Sites", "Systems", "Deployments", "Components"];
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
         var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
         var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSyncedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
@@ -383,21 +392,22 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
         // should work to sort list based on log in
         if ($rootScope.loggedIn){
+            console.log ($rootScope.networkSyncedJSON, $rootScope.associatedNetworks);
         	$scope.temp = [];
         	for (var j = 0; j < $rootScope.associatedNetworks.length; j++){
-        		for ( var i = 0; i < $rootScope.networkSyncedJSON.Networks.length; i ++){
-        			if ($rootScope.associatedNetworks [j]['Network ID'] == $rootScope.networkSyncedJSON.Networks [i]['Unique Identifier']){
-        				        $scope.temp[$scope.temp.length] = $rootScope.networkSyncedJSON.Networks[i];
+        		for ( var i = 0; i < $rootScope.networkSyncedJSON["Site Networks"].length; i ++){
+        			if ($rootScope.associatedNetworks [j] == $rootScope.networkSyncedJSON["Site Networks"][i]['Unique Identifier']){
+        				        $scope.temp[$scope.temp.length] = $rootScope.networkSyncedJSON["Site Networks"][i];
         			}
         		}
         	}
-            $rootScope.networkSyncedJSON = {Networks:[]};
-            $rootScope.networkSyncedJSON.Networks = $scope.temp;
+            $rootScope.networkSyncedJSON = {"Site Networks":[]};
+            $rootScope.networkSyncedJSON["Site Networks"] = $scope.temp;
         }
-        for (var i = 0; i < $rootScope.editJSON['Networks'].length; i++){
-            for (var j = 0; j < $rootScope.networkSyncedJSON.Networks.length; j++){
-                if ($rootScope.editJSON['Networks'][i]["Unique Identifier"] == $rootScope.networkSyncedJSON.Networks[j]["Unique Identifier"]){
-                    $rootScope.networkSyncedJSON.Networks[j] = $rootScope.editJSON['Networks'][i];
+        for (var i = 0; i < $rootScope.editJSON['Site Networks'].length; i++){
+            for (var j = 0; j < $rootScope.networkSyncedJSON["Site Networks"].length; j++){
+                if ($rootScope.editJSON['Site Networks'][i]["Unique Identifier"] == $rootScope.networkSyncedJSON["Site Networks"][j]["Unique Identifier"]){
+                    $rootScope.networkSyncedJSON["Site Networks"][j] = $rootScope.editJSON['Site Networks'][i];
                 }
             }
         }
@@ -545,8 +555,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                     }
                 }
             })
-            if (!angular.isDefined ($rootScope.editJSON['Sync'])){
-                 $rootScope.editJSON['Sync'] = new Date();
+            if (!angular.isDefined ($rootScope.editJSON['Last Sync Date'])){
+                 $rootScope.editJSON['Last Sync Date'] = new Date();
             } 
             resolve();
         }
@@ -567,7 +577,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	}).then (function () {
  		$q (function (resolve, reject){
     	// people read. Same as sync.read factory, but has to be seperated because we need first and last name
-    	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[0]+"/", {timeout: 10000}).then (function(result){
+    	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[0]+"/", {timeout: 10000}).then (function(result){
     		//console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.peopleSyncedJSON = result.data;
     		File.checkandWriteFile ( 'People', $rootScope.peopleSyncedJSON);
@@ -589,7 +599,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
  		$q (function (resolve, reject){
 
     	// site network read
-    	sync.read($rootScope.baseURL + $rootScope.urlPaths[1]+"/", $rootScope.networkSyncedJSON, 'Network', $rootScope.networkJSON).then (function (result){
+    	sync.read($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[1]+"/", $rootScope.networkSyncedJSON, 'Site Network', $rootScope.networkJSON).then (function (result){
     		// redudant, but nessecary.  Doesnt work otherwise for some reason
     		$rootScope.networkSyncedJSON = result;
     		// writes to local storage
@@ -600,7 +610,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
  		$q (function (resolve, reject){
 
     	// site read
-    	sync.read($rootScope.baseURL + $rootScope.urlPaths[2]+"/", $rootScope.siteSyncedJSON,'Site', $rootScope.siteJSON).then(function(result){
+    	sync.read($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[2]+"/", $rootScope.siteSyncedJSON,'Site', $rootScope.siteJSON).then(function(result){
     		$rootScope.siteSyncedJSON = result;
     		File.checkandWriteFile('Site', $rootScope.siteSyncedJSON);
     		resolve();
@@ -610,7 +620,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
  		$q (function (resolve, reject){
 
     	// system read
-    	sync.read($rootScope.baseURL + $rootScope.urlPaths[3]+"/", $rootScope.systemSyncedJSON, 'System', $rootScope.systemJSON).then (function(result){
+    	sync.read($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[3]+"/", $rootScope.systemSyncedJSON, 'System', $rootScope.systemJSON).then (function(result){
     		$rootScope.systemSyncedJSON = result;
     		File.checkandWriteFile('System', $rootScope.systemSyncedJSON);
     		resolve();
@@ -619,7 +629,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
  		$q (function (resolve, reject){
 
     	// deployment read
-    	sync.read($rootScope.baseURL + $rootScope.urlPaths[4]+"/", $rootScope.deploymentSyncedJSON, 'Deployment', $rootScope.deploymentJSON).then (function(result){
+    	sync.read($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[4]+"/", $rootScope.deploymentSyncedJSON, 'Deployment', $rootScope.deploymentJSON).then (function(result){
     		$rootScope.deploymentSyncedJSON = result;
     		File.checkandWriteFile('Deployment', $rootScope.deploymentSyncedJSON);
     		resolve();
@@ -628,7 +638,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
  		$q (function (resolve, reject){
 
     	// component read
-    	sync.read($rootScope.baseURL + $rootScope.urlPaths[5]+"/", $rootScope.componentSyncedJSON, 'Component', $rootScope.componentJSON).then (function(result){
+    	sync.read($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[5]+"/", $rootScope.componentSyncedJSON, 'Component', $rootScope.componentJSON).then (function(result){
     		$rootScope.componentSyncedJSON = result;
     		File.checkandWriteFile('Component', $rootScope.componentSyncedJSON);
     		resolve();
@@ -637,7 +647,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
  		$q (function (resolve, reject){
 
     	// 	document read
-		sync.read($rootScope.baseURL + $rootScope.urlPaths[6]+"/", $rootScope.documentSyncedJSON, 'Document', $rootScope.documentJSON).then (function(result){
+		sync.read($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[6]+"/", $rootScope.documentSyncedJSON, 'Document', $rootScope.documentJSON).then (function(result){
 			$rootScope.documentSyncedJSON = result;
 			File.checkandWriteFile('Document', $rootScope.documentSyncedJSON);
 			resolve()
@@ -646,7 +656,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
  		$q (function (resolve, reject){
 
    		// service Entries read. Seperate due to service enteries having a space
-    	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + $rootScope.urlPaths[7]+"/", {timeout: 10000}).then (function(result){
+    	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[7]+"/", {timeout: 10000}).then (function(result){
     		//console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.serviceSyncedJSON = result.data;
     		File.checkandWriteFile ( 'ServiceEntries', $rootScope.serviceSyncedJSON);
@@ -658,12 +668,16 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     		});
      		})})
   	 	promise.then (function(result){
-    		for (var i = 0; i < $rootScope.serviceSyncedJSON.ServiceEntries.length; i++){
-				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON.ServiceEntries[i]['Service Entry']] =  $rootScope.serviceSyncedJSON.ServiceEntries[i]['Name']; 
+            $rootScope.unsyncedJSON ["Last Sync Date"] = new Date ();
+            console.log ($rootScope.serviceSyncedJSON);
+    		for (var i = 0; i < $rootScope.serviceSyncedJSON["Service Entries"].length; i++){
+				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON["Service Entries"][i]['Service Entry']] =  $rootScope.serviceSyncedJSON["Service Entries"][i]['Name']; 
 				resolve();
 			}
     	})
   	 }).then(function (){
+        
+        console.log ($rootScope.unsyncedJSON);
          //hide loading screen
          $ionicLoading.hide();
 
@@ -766,9 +780,9 @@ app administrator.
 
 
 	//local variables to the controller
-    var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
+    var tieredTitles = ["Site Networks", "Sites", "Systems", "Deployments", "Components"];
     var tieredRoutes = ["network", "site", "system", "deployment", "component"];
-    var parent = ["Unique Identifier", "Network", "Site", "System", "Deployment"];
+    var parent = ["Unique Identifier", "Site Network", "Site", "System", "Deployment"];
     var tieredSyncedJSON =[$rootScope.networkSyncedJSON, $rootScope.siteSyncedJSON, $rootScope.systemSyncedJSON, $rootScope.deploymentSyncedJSON, $rootScope.componentSyncedJSON];
         
     $scope.clickedJSONHist = [];
@@ -868,8 +882,6 @@ app administrator.
     //items in the site network hierarchy
     $scope.progressiveListSwitch = function(){
 
-
-
         if($rootScope.listLevel < 4){
         	$scope.modalCheck = true;
 
@@ -902,6 +914,7 @@ app administrator.
             $scope.temp = $rootScope.listLevel;
 
             //call the fucntion which swtiches out switch view data
+            console.log (tieredTitles);
             $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
     		
 
@@ -946,8 +959,6 @@ app administrator.
 
             $rootScope.itemLevel--;
         }
-
-
     }
     
 
@@ -1016,9 +1027,10 @@ app administrator.
         
         //reset the title with every call
 		$scope.title = title;
+        console.log ($rootScope.unsyncedJSON, title);
 
     	var promise = $q (function (resolve, reject){
-    		if (title != "Service Entries"){;
+    		if (title != "Service Entries"){
     		for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
     			if (title == "People")	{
     				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['First Name'] + " "+ $rootScope.unsyncedJSON[title][i]['Last Name'];
@@ -1058,6 +1070,8 @@ app administrator.
     
     //return promise 
     promise.then ( function success (){
+                console.log ($rootScope.chosenJSONlist);
+
         $rootScope.listJSON = $scope.filter($rootScope.chosenJSONlist, level);
     })
 
@@ -1070,7 +1084,6 @@ app administrator.
         var parentName = parent[listLevel];
         var lastClickedJSON = DynamicPage.getJSON();
         var filteredList = [];
-
         if(parent[listLevel] == "Unique Identifier"){
             return unfilteredList;
         }

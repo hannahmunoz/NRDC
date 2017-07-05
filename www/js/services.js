@@ -42,6 +42,7 @@ angular.module('app.services', [])
 		// once promise is returned	
 		return (promise.then (function (success){
 			// fill JSONlist
+			console.log (syncedJSON, title);
 			for (var i = 0; i < syncedJSON[title+'s'].length; i++){
 				JSON [syncedJSON[title+'s'][i][title]] =  syncedJSON[title+'s'][i]['Name']; 
 			}
@@ -152,21 +153,21 @@ angular.module('app.services', [])
 //	return: n/a
 	function adminLogin(JSON){
 		return $q (function (resolve, reject){  
-			$http.post ("http://sensor.nevada.edu/GS/Services/admin/networks/", JSON, {timeout: 10000}).then (function Success (response){
+			$http.post ("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Login/", JSON, {timeout: 10000}).then (function Success (response){
 				console.log(response);
-				if (response.data.AssociatedNetworks.length != 0){
+				if (response.data.length != 0){
 					var promise = $q (function (resolve, reject){ 
 						File.checkFile ('Logins').then (function Success (){
 							File.readFile ('Logins').then (function Success (json){
 								if (response != null){
-									json[JSON ['Username']] = response.data.AssociatedNetworks;
+									json[JSON ['Username']] = response.data;
 									File.checkandWriteFile ('Logins', json);
 								}
 							})
 							resolve (true);
 						}, function Failure (){
 							var array = {};
-							array [JSON ['Username']] = response.data.AssociatedNetworks;
+							array [JSON ['Username']] = response.data;
 							File.createFile ('Logins').then (function Success (){
 								File.checkandWriteFile ('Logins', array);
 							});
@@ -176,7 +177,7 @@ angular.module('app.services', [])
 
 					promise.then (function Success (){
 						$cordovaToast.showLongBottom ("Login Successful");
-			 			resolve (response.data.AssociatedNetworks);	
+			 			resolve (response.data);	
 					})
 				}
 
@@ -597,9 +598,11 @@ angular.module('app.services', [])
 	function save (type, isitNew, JSON, finalJSON, imageData, related){
 		// all entries need a modification date
 		JSON ["Modification Date"] = new Date();
+		
 
 		// if new (for possible future synced edits)
 		if (isitNew){
+			JSON ['Delete'] = false;
 			JSON ["Creation Date"] = new Date();		
 			JSON ["Unique Identifier"] = uuid2.newuuid();
 		}
