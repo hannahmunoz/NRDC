@@ -20,10 +20,6 @@
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
-    <plugin name="cordova.plugins.diagnostic" version="*" />
-    <plugin name="cordova-custom-config" version="*" />
-    <plugin name="cordova-plugin-geolocation" version="*" />
-    <plugin name="cordova-plugin-camera" version="*" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
@@ -101,10 +97,15 @@
         <splash height="1280" src="resources\wp8\splash\SplashScreenImage.png" width="768" />
     </platform>
     <icon src="resources/ios/icon/icon-small@3x.png" />
+    <engine name="android" spec="^6.2.3" />
+    <plugin name="cordova-custom-config" spec="*" />
+    <plugin name="cordova-plugin-camera" spec="*" />
     <plugin name="cordova-plugin-console" spec="~1.0.3" />
-    <plugin name="cordova-plugin-whitelist" spec="~1.3.2" />
-    <plugin name="cordova-plugin-statusbar" spec="~2.2.2" />
     <plugin name="cordova-plugin-device" spec="~1.1.5" />
-    <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
+    <plugin name="cordova-plugin-geolocation" spec="*" />
     <plugin name="cordova-plugin-splashscreen" spec="~3.2.2" />
+    <plugin name="cordova-plugin-statusbar" spec="~2.2.2" />
+    <plugin name="cordova-plugin-whitelist" spec="~1.3.2" />
+    <plugin name="cordova.plugins.diagnostic" spec="*" />
+    <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
 </widget>

@@ -149,23 +149,25 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.modal = null;
 
 
-    $scope.loginJSON = {};
-    $rootScope.associatedNetworks = {};
+    //$scope.loginJSON = {};
+    //$rootScope.associatedNetworks = {};
 
-    $scope.initalize = function (){
+    var initialize = function (){
         $scope.loginJSON = {};
         $rootScope.associatedNetworks = {};
         $rootScope.loggedIn = false;
-        console.log ("loaded");
     }
 
-    $scope.initalize ();
+
 
     //open a modal for viewing
     //creates a new modal if one has not been instantiated
     //elsewise opens the old modal
     $scope.openModal = function() {
-        console.log ($scope.modal, $rootScope.modalHidden);
+        
+        //clear variable on modal open and that's it
+        initialize();
+
         $rootScope.modalHidden = false;
         // If a modal is not
         // already instantiated in this scope
@@ -186,9 +188,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     
     //close Modal
     $scope.closeModal = function() {
-        /*if($scope.modal != null){
-            $scope.modal.hide();
-        }*/
         $scope.modal.remove().then (function (){
                 $scope.modal = null;
         });
@@ -208,7 +207,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
      $scope.resolveLogin = function(){
         return $q(function(resolve, reject){
-               // console.log("I'm secretely not doing anything.")
                 resolve();
             });
      }
@@ -223,30 +221,16 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             	$scope.loginJSON ['Username'] = null;
         		$scope.loginJSON ['Password'] = null;
                 $scope.closeModal();
-               
+
+                console.log(response);
+
         	}, function Failure (error){
             	$rootScope.associatedNetworks = error;
             	$rootScope.loggedIn = false;
         		$scope.loginJSON ['Password'] = null;
-              //  $location.path('/Login');
         	});
 
       	})
-
-       /* $scope.resolveLogin().then(function (){
-            Login.adminLogin ($scope.loginJSON).then (function Success (response){
-                $rootScope.associatedNetworks = response;
-                $rootScope.loggedIn = true;
-                $scope.loginJSON ['Username'] = null;
-                $scope.loginJSON ['Password'] = null;
-                $location.path('/mainMenu');
-            }, function Failure (error){
-                $rootScope.associatedNetworks = error;
-                $rootScope.loggedIn = false;
-                $scope.loginJSON ['Password'] = null;
-                $location.path('/Login');
-            })
-        });*/
 
     }
 })
@@ -350,12 +334,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
   	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
 		// for when user hits the back bottom arrow to head back to the main menu
-		if (fromState.name == "list" && toState.name == "mainMenu"){
-         $rootScope.itemLevel =  0;
-         $rootScope.listLevel =  0;
+	    if (fromState.name == "list" && toState.name == "mainMenu"){
+            $rootScope.itemLevel =  0;
+            $rootScope.listLevel =  0;
 		}
 	})  
     
+
     /************************************
     Handles uploading of all unsynched
     JSON to edge services
@@ -366,9 +351,12 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $scope.uploadJSONS = function(){
     	   // posts the unsynced json to edge
            console.log ($rootScope.loggedIn,$rootScope.unsyncedJSON, $rootScope.editJSON);
-    	   sync.post ($rootScope.baseURL+'Update/', $rootScope.unsyncedJSON, $rootScope.loggedIn).then ( function (){
+           console.log(JSON.stringify($rootScope.unsyncedJSON.Components[0]));
+    	   
+           sync.post ($rootScope.baseURL+'Update/', $rootScope.unsyncedJSON, $rootScope.loggedIn).then ( function (){
                 $rootScope.unsyncedJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], "Service Entries":[] };
             });
+           
            sync.edit ($rootScope.baseURL+'Update/', $rootScope.editJSON, $rootScope.loggedIn).then (function (){
                  $rootScope.editJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], "Service Entries":[] };
                 // the menu is reinitiated
@@ -392,18 +380,25 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
         // should work to sort list based on log in
         if ($rootScope.loggedIn){
-            console.log ($rootScope.networkSyncedJSON, $rootScope.associatedNetworks);
         	$scope.temp = [];
         	for (var j = 0; j < $rootScope.associatedNetworks.length; j++){
+
         		for ( var i = 0; i < $rootScope.networkSyncedJSON["Site Networks"].length; i ++){
+
         			if ($rootScope.associatedNetworks [j] == $rootScope.networkSyncedJSON["Site Networks"][i]['Unique Identifier']){
         				        $scope.temp[$scope.temp.length] = $rootScope.networkSyncedJSON["Site Networks"][i];
+
         			}
         		}
         	}
+
             $rootScope.networkSyncedJSON = {"Site Networks":[]};
             $rootScope.networkSyncedJSON["Site Networks"] = $scope.temp;
+
+            console.log("networkSyncedJSON - siteNetworks after filter:", $rootScope.networkSyncedJSON["Site Networks"], "associatedNetworks After filter: ", $rootScope.associatedNetworks);
+
         }
+
         for (var i = 0; i < $rootScope.editJSON['Site Networks'].length; i++){
             for (var j = 0; j < $rootScope.networkSyncedJSON["Site Networks"].length; j++){
                 if ($rootScope.editJSON['Site Networks'][i]["Unique Identifier"] == $rootScope.networkSyncedJSON["Site Networks"][j]["Unique Identifier"]){
@@ -454,6 +449,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                         $scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['Name'];
                     }
                 }
+
 
                 $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]); 
                 for (var i = 0; i < $rootScope.editJSON[title].length; i++){
@@ -545,13 +541,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	//Camera.checkPermissions();
         $q (function (resolve, reject){
         // gets unsynced data back from local storage and puts in unsyncedJSON 
-        var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
+        var list = ["People","Site Networks", "Sites", "Systems", "Deployments", "Components", "Documents","Service Entries"];
 
         if (File.checkFile ('Edit')){
             File.readFile ('Edit').then (function Success (response){
                 if (response != null){
                     for (var i = 0; i < list.length; i++){
-                        $rootScope.editJSON[list[i]] = $rootScope.editJSON[list[i]].concat (response[list[i]]);
+                        $rootScope.editJSON[list[i]] = $rootScope.editJSON[list[i]].concat(response[list[i]]);
                     }
                 }
             })
@@ -563,7 +559,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     }).then (function () {
 	$q (function (resolve, reject){
     	// gets unsynced data back from local storage and puts in unsyncedJSON 
-		var list = ["People","Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"];
+		var list = ["People", "Site Networks", "Sites", "Systems", "Deployments", "Components", "Documents", "Service Entries"];
     	if (File.checkFile ('Unsynced')){
 			File.readFile ('Unsynced').then (function Success (response){
 				if (response != null){
@@ -578,7 +574,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
  		$q (function (resolve, reject){
     	// people read. Same as sync.read factory, but has to be seperated because we need first and last name
     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[0]+"/", {timeout: 10000}).then (function(result){
-    		//console.log ($rootScope.baseURL + $rootScope.urlPaths[0]+"/" + " " + result.status +": " + result.statusText);
     		$rootScope.peopleSyncedJSON = result.data;
     		File.checkandWriteFile ( 'People', $rootScope.peopleSyncedJSON);
     		resolve ($rootScope.peopleSyncedJSON);
@@ -657,8 +652,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
    		// service Entries read. Seperate due to service enteries having a space
     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[7]+"/", {timeout: 10000}).then (function(result){
-    		//console.log ($rootScope.baseURL + $rootScope.urlPaths[7]+"/" + " " + result.status +": " + result.statusText);
-    		$rootScope.serviceSyncedJSON = result.data;
+    		
+            $rootScope.serviceSyncedJSON = result.data;
     		File.checkandWriteFile ( 'ServiceEntries', $rootScope.serviceSyncedJSON);
     		resolve ($rootScope.serviceSyncedJSON);
     		}, function (result){
@@ -669,15 +664,18 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
      		})})
   	 	promise.then (function(result){
             $rootScope.unsyncedJSON ["Last Sync Date"] = new Date ();
-            console.log ($rootScope.serviceSyncedJSON);
-    		for (var i = 0; i < $rootScope.serviceSyncedJSON["Service Entries"].length; i++){
+            
+            for (var i = 0; i < $rootScope.serviceSyncedJSON["Service Entries"].length; i++){
 				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON["Service Entries"][i]['Service Entry']] =  $rootScope.serviceSyncedJSON["Service Entries"][i]['Name']; 
-				resolve();
 			}
+
+            //HACK FIX BECAUSE I DONT KNOW HOW THIS WORKS
+            // But it wasn't resolving when there are no service entries was the problem!
+            //*******************************************************************
+            resolve();
     	})
   	 }).then(function (){
         
-        console.log ($rootScope.unsyncedJSON);
          //hide loading screen
          $ionicLoading.hide();
 
@@ -791,8 +789,6 @@ app administrator.
     //custom back button functinality
     $rootScope.back = function(){
 
-        console.log($state.$current.self.name);
-
           //if we are in main menu do nothing
         if($state.$current.self.name == 'mainMenu'){
             return;
@@ -890,10 +886,13 @@ app administrator.
 
             if (angular.isDefined (DynamicPage.getJSON())){
             	$scope.UUID = DynamicPage.getJSON()['Unique Identifier'];
+
             	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
         			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
-        				$scope.modalCheck = false;
-        			}
+        		
+                		$scope.modalCheck = false;
+        		
+                	}
         		}
         	}
             
@@ -914,7 +913,6 @@ app administrator.
             $scope.temp = $rootScope.listLevel;
 
             //call the fucntion which swtiches out switch view data
-            console.log (tieredTitles);
             $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
     		
 
@@ -1010,7 +1008,6 @@ app administrator.
         //sends data to the scope so view
         // knows to hide FAB button on networks
         if ($scope.title.localeCompare("Networks")){
-            console.log($scope.title);
             $scope.networkListFlag = true;
         }
         else
@@ -1027,35 +1024,39 @@ app administrator.
         
         //reset the title with every call
 		$scope.title = title;
-        console.log ($rootScope.unsyncedJSON, title);
 
     	var promise = $q (function (resolve, reject){
-    		if (title != "Service Entries"){
-    		for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
-    			if (title == "People")	{
-    				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['First Name'] + " "+ $rootScope.unsyncedJSON[title][i]['Last Name'];
-    			}
-    			else{
-    				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['Name'];
-    			}
-			}
 
-		  $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
-          for (var i = 0; i < $rootScope.editJSON[title].length; i++){
-            for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
-                if ($rootScope.editJSON[title][i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
-                    $rootScope.chosenJSONlist[j] = $rootScope.editJSON[title][i];
+            //what does this do?
+    		if (title != "Service Entries"){
+
+        		for (var i = 0; i < $rootScope.unsyncedJSON[title].length; i++){
+        			if (title == "People")	{
+        				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['First Name'] + " "+ $rootScope.unsyncedJSON[title][i]['Last Name'];
+        			}
+        			else{
+        				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON[title][i]['Name'];
+        			}
+    			}
+
+    		    $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
+                for (var i = 0; i < $rootScope.editJSON[title].length; i++){
+                    for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
+                        if ($rootScope.editJSON[title][i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
+                            $rootScope.chosenJSONlist[j] = $rootScope.editJSON[title][i];
+                        }
+                    }
                 }
-            }
-          }
-		}
+		    }
 
 		else {
-			for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i++){
-				$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON.ServiceEntries[i]['Name'];
-			}
+			
+            for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i++){
+            	$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON.ServiceEntries[i]['Name'];
+            }
 
 			$rootScope.chosenJSONlist = $rootScope.unsyncedJSON.ServiceEntries.concat (syncedJSON.ServiceEntries);
+
             for (var i = 0; i < $rootScope.editJSON.ServiceEntries.length; i++){
                 for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
                     if ($rootScope.editJSON.ServiceEntries[i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
@@ -1070,8 +1071,6 @@ app administrator.
     
     //return promise 
     promise.then ( function success (){
-                console.log ($rootScope.chosenJSONlist);
-
         $rootScope.listJSON = $scope.filter($rootScope.chosenJSONlist, level);
     })
 
@@ -1102,6 +1101,8 @@ app administrator.
     }
     
     //helper function
+    //uses callback to filter according to weither a
+    //item belongs to filter
     function belongsToParent(parent, presentJSON){
         return function(object){
             if (object[parent] == presentJSON[parent]){
@@ -1109,8 +1110,6 @@ app administrator.
             }
         }
     }
-
-
 
     //required for ink ripple effect on material button press
     ionicMaterialInk.displayEffect();
@@ -1163,7 +1162,6 @@ app administrator.
         $rootScope.seJSON = selected;
 
         console.log("Service synced JSON sent",$rootScope.serviceSyncedJSON['ServiceEntries']);
-        console.log("selectedTitle: ", selectedTitle);
 
     	$scope.temp = $rootScope.serviceSyncedJSON['ServiceEntries'].concat ($rootScope.unsyncedJSON['ServiceEntries']);
     	for (var i = 0; i < $scope.temp.length; i ++){
@@ -1222,7 +1220,6 @@ app administrator.
 
   	// save JSON
 	$scope.saveJSON = function (){
-        console.log ($rootScope.related, $rootScope.relatedTitle);
 		// go to SaveNew factory
 		SaveNew.save (DynamicPage.getTitle(), true, $scope.JSON, $rootScope.unsyncedJSON[DynamicPage.getTitle()], $scope.imageData, $rootScope.related);
 		// I have no idea why it doesnt work with Networks
@@ -1359,7 +1356,6 @@ app administrator.
 		// adds data for the entry the service entry is related to 
 		var JSON = DynamicPage.getJSON();
 		
-        console.log("Called from service modal controller.saveJSON: Related: %s, Related Title: %s",$rootScope.related, $rootScope.relatedTitle);
         $scope.JSON [$rootScope.relatedTitle] = $rootScope.related;
 		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, $rootScope.related);
 		// pushes into list

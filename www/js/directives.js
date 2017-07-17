@@ -82,7 +82,13 @@ angular.module('app.directives', [])
 .directive('fabCluster', function(){
     
     function HideController($scope, $rootScope, $ionicModal){
-        //$scope.active = false;
+        
+        initialize();
+
+
+        function initialize(){
+            $scope.active = false;
+        }
 
         $scope.toggleActive = function(){
                 $scope.active = true;
@@ -131,26 +137,14 @@ angular.module('app.directives', [])
 .directive('deletable', function(){
     
     function deletableController($scope, $rootScope, SaveNew, $ionicHistory, DynamicPage, ListNavService){
-        $scope.deletable = false;
         
-        //determine if my current view in deletable
-        //by checking for membership in unsyncedJSON
-        $scope.isDeletable = function(){
-             console.log ($scope.JSON,$rootScope.unsyncedJSON)
-            for(var category in $rootScope.unsyncedJSON){
-                for(var unsEntry = 0; 
-                    unsEntry < $rootScope.unsyncedJSON[category].length; 
-                    unsEntry++){
-                        if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
-                            console.log ($scope.JSON,$rootScope.unsyncedJSON[category][unsEntry] )
-                            $scope.deletable = true;
-                            $scope.active = false;
-                    }
-                }
-            
-            }
-            console.log ($scope.deletable);
-        };
+        //initialize the required
+        //variables of the controller
+        initialize();
+        
+
+
+      
         
         //delete the current view JSON from the list of unsynced items
         $scope.deleteView = function(){
@@ -190,7 +184,34 @@ angular.module('app.directives', [])
             $ionicHistory.goBack();
         };
             
+          //determine if my current view in deletable
+        //by checking for membership in unsyncedJSON
+        /**
+          * Refactoring notes: Made a function to simplify
+          * frontend-backend interaction.
+          */
+        function isDeletable (){
+        
+            for(var category in $rootScope.unsyncedJSON){
+                for(var unsEntry = 0; 
+                    unsEntry < $rootScope.unsyncedJSON[category].length; 
+                    unsEntry++){
+                        if($scope.JSON === $rootScope.unsyncedJSON[category][unsEntry]){
+                            $scope.deletable = true;
+                            $scope.active = false;
+                    }
+                }
+            
+            }
         };
+
+
+        function initialize(){
+            $scope.deletable = false;
+            isDeletable();
+        }
+
+    };
     
     
     
@@ -223,7 +244,8 @@ angular.module('app.directives', [])
         restrict: 'E',
         scope: {
             funct: '=funct',
-            icon: '=icon'
+            icon: '=icon',
+            image: '=image'
         },
         templateUrl: 'templates/directive_templates/image-button.html',
         replace: true,
@@ -237,9 +259,16 @@ angular.module('app.directives', [])
             //on click
             //call the function bound to funct
             element.on('click', function(e){
+                //performs the function bound
+                //from the view via funct
                 scope.funct()
+                
                 .then(function(image){
+                    
+                    scope.image = image;
+
                     clearSiblingCSS(element);
+
                     element.css({
                       'background-image': 'url(data:image/jpeg;base64,' + image + ')',
                       'background-position': 'center', 
@@ -251,33 +280,84 @@ angular.module('app.directives', [])
     }
 })
 
+//lazy loads image according to uuid
+.directive('imageDisplay', function(){
 
-// .directive('spinnerInput', function(){
-//     return {
-//         restrict : 'A',
-//         scope : {
-//             ngModel : '='
-//         },
-//         link: function (scope) {
-//             if (!angular.isUndefined (scope.ngModel)){
-//                 if (!angular.isString (scope.ngModel)){
-//                    scope.ngModel = JSON.stringify (scope.ngModel);
-//                 }
-//                 else{
-//                     scope.ngModel = parseInt (scope.ngModel); 
-//                 }
-//             }
-//             else{
-//                 if (scope.ngModel) scope.ngModel = null;
-//             }
-//         }
-//     }
-// });
+    return{
+        restrict: 'E',
+        scope: { image: '=', //im not sure if image is needed, we'll see?
+                 id: '=',
+                 context: '@'},
+        template: "<div class='app-header-container'></div>",
+        replace: true,
+        
+        controller: ['$scope', 'LazyLoad', function lazyLoadImageController($scope, LazyLoad){
+            
+            //Executable Code
+            onLoad();
 
 
+            //Function Definitions
+
+            /**
+              * Runs on load of image-display directive.
+              * Retrieves an image associated with an item 
+              * and updates the scope for display.
+              *
+              */
+            function onLoad(){
+
+                console.log($scope.image);
+
+                //variables
+                var imageRequest = {};
+
+                imageRequest[$scope.context] = $scope.id
+
+                LazyLoad.fetchImage(imageRequest)
+
+                .then(
+                    function sucess(response){
+                        $scope.image = response;
+                    },
+                    function failure(response){
+                        console.warn("Failure to retrieve image: " + response);
+
+                    }
+                );
 
 
-// .directive('blankDirective', [function(){
+            }
 
-// }]);
+            /**
+              * Determines if a string is in hex or not
+              *
+              */
+            function isHex(string){
+                return  string.match("^[0-9a-fA-F]+$");
+            }
+
+        }],
+ 
+
+        link: function(scope, element, attrs, ctrl){
+
+            scope.$watch('image', bindElement, true);
+
+            //display the image retrieved from the database
+            function bindElement(){
+
+                if(scope.image != null){
+                    element.css({
+                      'background-image': 'url(data:image/jpeg;base64,' + scope.image + ')',
+                      'background-position': 'center'
+                    });
+                }
+            }
+
+        }
+    }
+
+})
+
 

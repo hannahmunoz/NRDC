@@ -1,37 +1,65 @@
 {
-  "name": "ionic-project",
-  "version": "1.1.1",
-  "description": "An Ionic project",
-  "dependencies": {
-    "angular-input-modified": "^2.3.3",
-    "gulp": "^3.5.6",
-    "gulp-concat": "^2.2.0",
-    "gulp-minify-css": "^0.3.0",
-    "gulp-rename": "^1.2.0",
-    "gulp-sass": "^2.0.4",
-    "promise-do-until": "^1.0.0"
-  },
-  "devDependencies": {
-    "bower": "^1.3.3",
-    "gulp-util": "^2.2.14",
-    "shelljs": "^0.3.0"
-  },
-  "cordovaPlugins": [
-    "ionic-plugin-deploy",
-    {
-      "variables": {
-        "SENDER_ID": "715807807467"
-      },
-      "locator": "phonegap-plugin-push",
-      "id": "phonegap-plugin-push"
+    "name": "ionic-project",
+    "version": "1.1.1",
+    "description": "An Ionic project",
+    "dependencies": {
+        "angular-input-modified": "^2.3.3",
+        "cordova-android": "^6.2.3",
+        "cordova-custom-config": "*",
+        "cordova-plugin-camera": "*",
+        "cordova-plugin-console": "~1.0.3",
+        "cordova-plugin-device": "~1.1.5",
+        "cordova-plugin-geolocation": "*",
+        "cordova-plugin-splashscreen": "~3.2.2",
+        "cordova-plugin-statusbar": "~2.2.2",
+        "cordova-plugin-whitelist": "~1.3.2",
+        "cordova.plugins.diagnostic": "*",
+        "gulp": "^3.5.6",
+        "gulp-concat": "^2.2.0",
+        "gulp-minify-css": "^0.3.0",
+        "gulp-rename": "^1.2.0",
+        "gulp-sass": "^2.0.4",
+        "ionic-plugin-keyboard": "~2.2.1",
+        "promise-do-until": "^1.0.0"
     },
-    {
-      "locator": "https://github.com/apache/cordova-plugin-whitelist.git",
-      "id": "cordova-plugin-whitelist"
+    "devDependencies": {
+        "bower": "^1.3.3",
+        "gulp-util": "^2.2.14",
+        "shelljs": "^0.3.0"
     },
-    "cordova-plugin-file"
-  ],
-  "cordovaPlatforms": [
-    "ios"
-  ]
+    "cordovaPlugins": [
+        "ionic-plugin-deploy",
+        {
+            "variables": {
+                "SENDER_ID": "715807807467"
+            },
+            "locator": "phonegap-plugin-push",
+            "id": "phonegap-plugin-push"
+        },
+        {
+            "locator": "https://github.com/apache/cordova-plugin-whitelist.git",
+            "id": "cordova-plugin-whitelist"
+        },
+        "cordova-plugin-file"
+    ],
+    "cordovaPlatforms": [
+        "ios"
+    ],
+    "cordova": {
+        "plugins": {
+            "cordova-custom-config": {},
+            "cordova-plugin-camera": {},
+            "cordova-plugin-console": {},
+            "cordova-plugin-device": {},
+            "cordova-plugin-geolocation": {},
+            "cordova-plugin-splashscreen": {},
+            "cordova-plugin-statusbar": {},
+            "cordova-plugin-whitelist": {},
+            "cordova.plugins.diagnostic": {},
+            "ionic-plugin-keyboard": {}
+        },
+        "platforms": [
+            "android"
+        ]
+    }
 }

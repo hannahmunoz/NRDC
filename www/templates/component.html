@@ -19,6 +19,9 @@
       delegate-handle="scrollable" 
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
+
+    <image-display image="imageData" context='Component' id="JSON['Unique Identifier']"></image-display>
+    
     <form name ="componentForm">
             <label>
                 <ion-md-input type="text" maxlength="50" placeholder="Name" name="componentName" ng-model = "JSON['Name']" required/>
@@ -55,8 +58,14 @@
        </form>
 
         <span>
-            <image-button funct="choosePicture" icon="images"></image-button>
-            <image-button funct="takePicture" icon="camera"></image-button>
+            <image-button
+                image="imageData"
+                funct="choosePicture" 
+                icon="images"></image-button>
+            <image-button
+                image="imageData" 
+                funct="takePicture" 
+                icon="camera"></image-button>
         </span>
 
 

@@ -59,6 +59,11 @@ angular.module('app.services', [])
 		// return promise
 		return $q (function (resolve, reject){ 
 			if (loggedIn){
+
+				
+
+						console.log("Unsynched JSON before put in edit:", JSON);
+
 				// post to url, timeout in ms
 				$http.post (url, JSON, {timeout: 10000}).then (function Success (response){
 					// check if there is unsynced data saved
@@ -104,7 +109,8 @@ angular.module('app.services', [])
 			if (loggedIn){
 				// for (var i = 0; i < types.length; i++){
 				// 	for (var j = 0; j < JSON[titles[i]].length; j++){
-						$http.put (url , JSON, {timeout: 10000}).then (function Success (response){
+
+						$http.post (url , JSON, {timeout: 10000}).then (function Success (response){
 							// check if there is edit data saved
 							if (File.checkFile ('Edit')){
 								// remove it
@@ -200,6 +206,58 @@ angular.module('app.services', [])
 		adminLogin:adminLogin
 	}
 })
+
+// factory: LazyLoad
+// function(s):
+//		fetchImage
+//
+.factory('LazyLoad', function($q, $http){
+
+	return{
+		fetchImage: fetchImage
+	};
+
+
+	function fetchImage(uuidObj){
+		return $q (function (resolve, reject) {
+			$http.post("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Photo", uuidObj, {timeout: 10000})
+			
+			//evaluate after post
+			.then(
+				function sucess(response){
+					var base64 = baseSwap_16_to_64(response.data);
+					resolve (base64);
+				},
+
+				function failute (error){
+					console.log(error);
+				}
+			)
+
+		})
+
+	}
+
+
+    //converts hex to base64
+	function baseSwap_16_to_64 (hexImage){
+
+        //take hexidemal and conver to base string
+        var result = "";
+		for (var i = 0; i < hexImage.length; i += 2){
+        	result += String.fromCharCode(parseInt(hexImage.substr(i, 2), 16));
+		}
+
+		//rencode string as base 64
+        var image = btoa(result);
+
+
+        return image;
+    } 
+
+
+})
+
 
 
 
@@ -307,9 +365,14 @@ angular.module('app.services', [])
 				// get the picture
     			navigator.camera.getPicture( function Success(imageData) {
     			
+
+
                 //encode image data into hex string
                 result = encode(imageData);
-                    
+
+                console.log(result.substr(0,100));
+
+
                 // resolve promise
                 // pass raw value back for rendering
 				resolve ({result: result, 
@@ -331,14 +394,16 @@ angular.module('app.services', [])
     var encode = function(rawImage){
         // convert image
         var image = atob(rawImage);
-        
+
         // to hexidecimal
         var result = "";
         for (var i = 0; i < image.length; i++) {
-            result += image.charCodeAt(i).toString(16);
+            var hex = image.charCodeAt(i).toString(16);
+            result += (hex.length==2? hex:'0'+hex ); //data is lost without this
         }
         return result;
     } 
+
     
 // return values
 	return {checkPermissions: checkPermissions,
@@ -522,6 +587,9 @@ angular.module('app.services', [])
 			$cordovaFile.checkFile(cordova.file.dataDirectory, 'NRDC/'+title).then(function Success (success){
 				// write to file
 				$cordovaFile.writeFile (cordova.file.dataDirectory, 'NRDC/'+title, JSON, true);
+
+				console.log(cordova.file.externalDataDirectory);
+
 			}, function Failure (error){
 				if (error.code == 1){
 					$cordovaFile.createFile (cordova.file.dataDirectory, 'NRDC/'+title, JSON,  true).then (function (){		
