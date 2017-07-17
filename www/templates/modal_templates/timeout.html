@@ -1,0 +1,16 @@
+<ion-modal-view>
+<ion-view title="System" id="page5" style="" class=" ">
+    <ion-header-bar class="bar-dark">
+        <div></div>
+    </ion-header-bar>
+    <ion-content class="has-header content-bg padding">
+		<p style="text-align:center; margin-top: 3em; margin-bottom: 8em;">We aplogize for the inconvience but it seems an error has occured with our services.</p>
+		<button class= "button button-large button-block main-menu-button" ng-click = "removeTimeoutModal(); init();"> Retry Sync </button>
+		<button style = " line-height: 2em; height: 7em" class= "button button-large button-block main-menu-button" ng-click = " notifyOfServicesError();">
+			Notify Administrator of Error
+		</button>
+		<button style = " line-height: 2em; height: 7em" class= "button button-large button-block main-menu-button" ng-click = "removeTimeoutModal();">
+			Continue Unsynced
+		</button>
+	</ion-content>
+</ion-modal-view>
