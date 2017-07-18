@@ -291,7 +291,7 @@ angular.module('app.directives', [])
         template: "<div class='app-header-container'></div>",
         replace: true,
         
-        controller: ['$scope', 'LazyLoad', function lazyLoadImageController($scope, LazyLoad){
+        controller: ['$scope', 'LazyLoad', 'File', function lazyLoadImageController($scope, LazyLoad){
             
             //Executable Code
             onLoad();
@@ -307,7 +307,6 @@ angular.module('app.directives', [])
               */
             function onLoad(){
 
-                console.log($scope.image);
 
                 //variables
                 var imageRequest = {};
@@ -315,7 +314,6 @@ angular.module('app.directives', [])
                 imageRequest[$scope.context] = $scope.id
 
                 LazyLoad.fetchImage(imageRequest)
-
                 .then(
                     function sucess(response){
                         $scope.image = response;
@@ -325,6 +323,11 @@ angular.module('app.directives', [])
 
                     }
                 );
+
+
+                File.SaveImageToFile($scope.context, $scope.id, $scope.image)
+                .then(function suecess(){}, function failure(){});
+
 
 
             }

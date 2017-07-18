@@ -642,6 +642,61 @@ angular.module('app.services', [])
 			})
 		})
 	}
+
+	/**
+	  * Function: SaveImageToFile
+	  * purpose: save's an image to a specified file for later retrieval
+	  * args: context (String): view context of element (system, component, etc.)
+	  * args: uuid (string): uuid of spcific element for searcing and comparing
+	  * args: image (16bit string): encoded string contatining image data
+	  * return: promise
+	  */
+
+	function SaveImageToFile(context, uuid, image){
+		//return promise for later
+		// resolution
+		return $q( function(resolve, reject){
+			//variables
+			var FileJSON;
+
+			//read file from context
+			//and store resoponse in FileJSON holder
+			readFile(context)
+			.then(
+				function(response){
+					FileJSON = response;
+				}
+			);
+
+			console.log(FileJSON);
+
+			//scan in returned info for uuid
+
+				//store image in specific item matched by uuid
+
+			//write json to file
+
+			resolve();
+
+		});
+	}
+
+
+	/**
+	  * Function: DeleteImageFromFile
+	  * purpose: deletes a previously saved image from the file system
+	  * args: context (String): view context of element (system, component, etc.)
+	  * args: uuid (string): uuid of spcific element for searcing and comparing
+	  * return: promise
+	  */
+
+
+	/**
+	  * Function: ReadImageFromFile
+	  * purpose: read an image from the file system (used on load of data)
+	  * args: 
+	  * return: promise
+	  */
 	
 	//return
 	return {createDirectory: createDirectory,
