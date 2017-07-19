@@ -288,10 +288,9 @@ angular.module('app.directives', [])
         scope: { image: '=', //im not sure if image is needed, we'll see?
                  id: '=',
                  context: '@'},
-        template: "<div class='app-header-container'></div>",
+        templateUrl: 'templates/directive_templates/image-display.html',
         replace: true,
-        
-        controller: ['$scope', 'LazyLoad', 'File', function lazyLoadImageController($scope, LazyLoad){
+        controller: ['$scope', 'LazyLoad', 'File', function lazyLoadImageController($scope, LazyLoad, File){
             
             //Executable Code
             onLoad();
@@ -307,7 +306,6 @@ angular.module('app.directives', [])
               */
             function onLoad(){
 
-
                 //variables
                 var imageRequest = {};
 
@@ -315,20 +313,15 @@ angular.module('app.directives', [])
 
                 LazyLoad.fetchImage(imageRequest)
                 .then(
-                    function sucess(response){
+                    function success(response){
                         $scope.image = response;
+                        File.SaveImageToFile($scope.context, $scope.id, $scope.image);
                     },
                     function failure(response){
                         console.warn("Failure to retrieve image: " + response);
 
                     }
                 );
-
-
-                File.SaveImageToFile($scope.context, $scope.id, $scope.image)
-                .then(function suecess(){}, function failure(){});
-
-
 
             }
 

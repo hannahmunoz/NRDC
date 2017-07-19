@@ -1,5 +1,47 @@
 angular.module('app.services', [])
 
+
+/** Factory: Utility
+  * Description: Provides utility functions for other parts of the app.
+  *  Try to avoid feature bloat on this one. 
+  *
+  *
+  */
+.factory('Utility', function(){
+	
+	/** function: Pluralize
+	  * Description: Given a string detialing the context of our current
+	  * 	working entity (i.e. Site, Site Netrwork, Component, etc.) it will
+	  *		pluralize that string for compatibility with how the data is
+	  *		downloaded from the service
+	  *
+	  *	arg: context (String) - string to pluralize
+	  * return: string - pluralized form of passed context
+	  *
+	  */
+	function Pluralize(context){
+
+		//service entries requires unique customization
+		if(context == 'Service Entry'){
+			return 'Service Entries'
+		} 
+
+		//people is going to be same
+		else if (context == 'People'){
+			return context;
+		}
+
+		//append an s under all other circumstances
+		else {
+			return context + 's';
+		}
+
+	}
+
+	return {Pluralize:Pluralize};
+})
+
+
 // factory: sync
 // fucntion(s): 
 //		read
@@ -16,11 +58,8 @@ angular.module('app.services', [])
 		var promise = $q (function (resolve, reject){  
 			// get from the given url, timeout given in ms
 			$http.get (url, {timeout: 10000}).then (function Success (response){
-				//console.log (url + " " + response.status +": " + response.statusText);
 				// fills synced json
 				syncedJSON = response.data;
-
-				console.log(response);
 
 				// gives return data
 				ret = response.data;
@@ -42,7 +81,6 @@ angular.module('app.services', [])
 		// once promise is returned	
 		return (promise.then (function (success){
 			// fill JSONlist
-			console.log (syncedJSON, title);
 			for (var i = 0; i < syncedJSON[title+'s'].length; i++){
 				JSON [syncedJSON[title+'s'][i][title]] =  syncedJSON[title+'s'][i]['Name']; 
 			}
@@ -205,57 +243,6 @@ angular.module('app.services', [])
 	return {
 		adminLogin:adminLogin
 	}
-})
-
-// factory: LazyLoad
-// function(s):
-//		fetchImage
-//
-.factory('LazyLoad', function($q, $http){
-
-	return{
-		fetchImage: fetchImage
-	};
-
-
-	function fetchImage(uuidObj){
-		return $q (function (resolve, reject) {
-			$http.post("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Photo", uuidObj, {timeout: 10000})
-			
-			//evaluate after post
-			.then(
-				function sucess(response){
-					var base64 = baseSwap_16_to_64(response.data);
-					resolve (base64);
-				},
-
-				function failute (error){
-					console.log(error);
-				}
-			)
-
-		})
-
-	}
-
-
-    //converts hex to base64
-	function baseSwap_16_to_64 (hexImage){
-
-        //take hexidemal and conver to base string
-        var result = "";
-		for (var i = 0; i < hexImage.length; i += 2){
-        	result += String.fromCharCode(parseInt(hexImage.substr(i, 2), 16));
-		}
-
-		//rencode string as base 64
-        var image = btoa(result);
-
-
-        return image;
-    } 
-
-
 })
 
 
@@ -508,7 +495,7 @@ angular.module('app.services', [])
 // 		createFile
 //		checkandWriteFile
 // 		readFile
-.factory ('File', function($cordovaFile, $q, $cordovaToast){
+.factory ('File', function($cordovaFile, $q, $cordovaToast, Utility){
 
 // function: createDirectory
 // 	purpose: checks to see if the NRDC directory exists. If not, creates it
@@ -588,8 +575,6 @@ angular.module('app.services', [])
 				// write to file
 				$cordovaFile.writeFile (cordova.file.externalDataDirectory, 'NRDC/'+title, JSON, true);
 
-				console.log(cordova.file.externalDataDirectory);
-
 			}, function Failure (error){
 				if (error.code == 1){
 					$cordovaFile.createFile (cordova.file.externalDataDirectory, 'NRDC/'+title, JSON,  true).then (function (){		
@@ -605,6 +590,83 @@ angular.module('app.services', [])
 				}
 			})
 		})
+	}
+
+
+// function: PhotoSafeWriteFile
+// 	purpose: checks that file exists, read and preserve photos before new write
+// 	var: title, JSON
+//	return: n/a
+	function PhotoSafeWriteFile (title, JSON){
+		//variables
+		SavedJSON = [];
+		
+		$cordovaFile.checkFile(cordova.file.externalDataDirectory, 'NRDC/'+title)
+		.then( 
+			function(response){
+				//if file doesn't exist just write and return
+				if(response == false){
+					checkandWriteFile(title, JSON);
+				} 
+				//if file exists
+				else {
+					//read file
+					// (I hate how nested this bs gets)
+					readFile(title)
+					.then(
+						function(response){
+							//if file exists but there is no data
+							if(response == null){
+								console.log("Is this calling a lot?");
+								checkandWriteFile(title, JSON);
+								return;
+							}
+
+							//scan through each element from returned file
+							SavedJSON = response[ Utility.Pluralize(title) ];
+							console.log(response);
+
+							//check for an existing object in the data
+							// returned from the file
+							// Uses uuids as princiapl comparator and breaks 
+							JSON[ Utility.Pluralize(title) ]
+							.forEach(
+								function(object){
+									//for each object in new JSON
+									//scan through saved file for
+									//match
+									for(savedObject in SavedJSON){
+										if(object['Unique Identifier'] == SavedJSON[savedObject]['Unique Identifier']){
+											object['Photo'] = SavedJSON[savedObject]['Photo'];
+											break;
+										}
+									}
+								}
+							);
+
+
+							//write file
+							console.log(JSON);
+							checkandWriteFile(title, JSON);
+
+
+						},
+						function(error){
+							console.log(error);
+						}
+
+					)
+
+				}
+
+			},
+			function(error){
+				console.log(error);
+			}
+		)
+
+		
+
 	}
 
 // function: readFile
@@ -657,26 +719,36 @@ angular.module('app.services', [])
 		// resolution
 		return $q( function(resolve, reject){
 			//variables
-			var FileJSON;
+			var FileJSON = [];
+			var writeObj = {};
 
 			//read file from context
 			//and store resoponse in FileJSON holder
+			// all processing must be in processing block
 			readFile(context)
 			.then(
 				function(response){
-					FileJSON = response;
+					//extract array of objects from returned json object
+					FileJSON = response[ Utility.Pluralize(context) ];
+
+					//scan in returned info for uuid
+					// use loop to seek and load image
+					for(item in FileJSON){
+						if(FileJSON[item]['Unique Identifier'] == uuid){
+							FileJSON[item]['Photo'] = image;
+						}
+					}
+
+					//write json to file
+					writeObj[Utility.Pluralize(context)] = FileJSON;
+					checkandWriteFile(context, writeObj);
+
+					resolve();	
+				},
+				function(error){
+
 				}
 			);
-
-			console.log(FileJSON);
-
-			//scan in returned info for uuid
-
-				//store image in specific item matched by uuid
-
-			//write json to file
-
-			resolve();
 
 		});
 	}
@@ -689,7 +761,45 @@ angular.module('app.services', [])
 	  * args: uuid (string): uuid of spcific element for searcing and comparing
 	  * return: promise
 	  */
+	function DeleteImageFromFile(context, uuid){
+		//return promise for later
+		// resolution
+		return $q( function(resolve, reject){
+			//variables
+			var FileJSON = [];
+			var writeObj = {};
 
+			//read file from context
+			//and store resoponse in FileJSON holder
+			// all processing must be in processing block
+			readFile(context)
+			.then(
+				function(response){
+					FileJSON = response[ Utility.Pluralize(context) ];
+
+
+					//scan in returned info for uuid
+					// if they match just delete the one image
+					// by setting photo to null
+					for(item in FileJSON){
+						if(FileJSON[item]['Unique Identifier'] == uuid){
+							FileJSON[item]['Photo'] = null;
+						}
+					}
+
+					//write json to file
+					writeObj[ Utility.Pluralize(context) ] = FileJSON;
+					checkandWriteFile(context, writeObj);
+
+					resolve();	
+				},
+				function(error){
+
+				}
+			);
+
+		});
+	}
 
 	/**
 	  * Function: ReadImageFromFile
@@ -697,14 +807,139 @@ angular.module('app.services', [])
 	  * args: 
 	  * return: promise
 	  */
+	function ReadImageFromFile(context, uuid){
+		//return promise for async return
+		return $q( function(resolve, reject){
+			//variables
+			var FileJSON = [];
+			var image;
+
+			//read file using context
+			// store response in FileJSON holder
+			// all processing must be contained in
+			// .then() processing block
+			readFile(context)
+			.then(
+				function(response){
+					FileJSON = response[ Utility.Pluralize(context) ];
+
+					//scan in returned info for uuid
+					// resolve image for async return
+					for(item in FileJSON){
+						if(FileJSON[item]['Unique Identifier'] == uuid){
+							image = FileJSON[item]['Photo'];
+							
+							resolve(image);
+
+						}
+					}
+
+					//in case of not found
+					//reutrn null
+					resolve(null);
+
+				},
+				function(error){
+					reject(error);
+				}
+			);
+		});
+
+	}
 	
 	//return
 	return {createDirectory: createDirectory,
 			checkFile: checkFile,
 			createFile: createFile,
 			checkandWriteFile: checkandWriteFile,
-			readFile: readFile};
+			PhotoSafeWriteFile:PhotoSafeWriteFile,
+			readFile: readFile,
+			SaveImageToFile: SaveImageToFile,
+			DeleteImageFromFile: DeleteImageFromFile,
+			ReadImageFromFile: ReadImageFromFile};
 })
+
+
+// factory: LazyLoad
+// function(s):
+//		fetchImage
+//
+.factory('LazyLoad', function($q, $http, File){
+
+	return{
+		fetchImage: fetchImage
+	};
+
+
+	function fetchImage(uuidObj){
+		return $q (function (resolve, reject) {
+			/** This loop is just a way to access
+			  * the context and the uuid from object passed into this function.
+			  * The uuidObj should have one member of form { context : uuid }
+			  * It will only loop one time.
+			  */
+			for(context in uuidObj){
+				if( uuidObj.hasOwnProperty(context) ){
+
+					File.ReadImageFromFile(context, uuidObj[context])
+					.then(
+						function success(response){
+							//does not resolve if response
+							// is null
+							if(response != null){
+								resolve(response);
+							}
+						},
+
+						function failure(error){
+							console.log(error);
+						}
+					);
+
+				}
+			}
+
+			//query for photo service
+			// if no image is saved
+			// on the device
+			$http.post("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Photo", uuidObj, {timeout: 10000})
+
+			//evaluate after post
+			.then(
+				function success(response){
+					var base64 = baseSwap_16_to_64(response.data);
+					resolve (base64);
+				},
+
+				function failure(error){
+					console.log(error);
+				}
+			)
+
+		})
+
+	}
+
+
+    //converts hex to base64
+	function baseSwap_16_to_64 (hexImage){
+
+        //take hexidemal and conver to base string
+        var result = "";
+		for (var i = 0; i < hexImage.length; i += 2){
+        	result += String.fromCharCode(parseInt(hexImage.substr(i, 2), 16));
+		}
+
+		//rencode string as base 64
+        var image = btoa(result);
+
+
+        return image;
+    } 
+
+
+})
+
 
 
 // factory: SaveNew
@@ -989,6 +1224,3 @@ angular.module('app.services', [])
     
 })
 
-.factory('ContextHolder', function(){
-
-});

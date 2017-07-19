@@ -635,7 +635,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	// component read
     	sync.read($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[5]+"/", $rootScope.componentSyncedJSON, 'Component', $rootScope.componentJSON).then (function(result){
     		$rootScope.componentSyncedJSON = result;
-    		File.checkandWriteFile('Component', $rootScope.componentSyncedJSON);
+    		File.PhotoSafeWriteFile('Component', $rootScope.componentSyncedJSON);
     		resolve();
     	});
     }).then (function () {
