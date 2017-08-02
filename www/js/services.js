@@ -3,12 +3,12 @@ angular.module('app.services', [])
 
 /** Factory: Utility
   * Description: Provides utility functions for other parts of the app.
-  *  Try to avoid feature bloat on this one. 
+  *  Try to avoid feature bloat on this one.
   *
   *
   */
 .factory('Utility', function(){
-	
+
 	/** function: Pluralize
 	  * Description: Given a string detialing the context of our current
 	  * 	working entity (i.e. Site, Site Netrwork, Component, etc.) it will
@@ -24,7 +24,7 @@ angular.module('app.services', [])
 		//service entries requires unique customization
 		if(context == 'Service Entry'){
 			return 'Service Entries'
-		} 
+		}
 
 		//people is going to be same
 		else if (context == 'People'){
@@ -38,24 +38,45 @@ angular.module('app.services', [])
 
 	}
 
-	return {Pluralize:Pluralize};
+	//gets size of a string
+	// in bytes
+	function LengthInUtf8Bytes(str) {
+		// Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
+		var m = encodeURIComponent(str).match(/%[89ABab]/g);
+		return str.length + (m ? m.length : 0);
+	}
+
+	/**
+	 * Check to see if a string is a hex or not
+	 * @param  {string}  string String to check if is hex or not
+	 * @return {Boolean}        True if hex, false if not
+	 */
+	function IsHex(string){
+			return  string.match("^[0-9a-fA-F]+$");
+	}
+
+	return {
+			Pluralize: Pluralize,
+			LengthInUtf8Bytes: LengthInUtf8Bytes,
+			IsHex: IsHex
+	};
 })
 
 
 // factory: sync
-// fucntion(s): 
+// fucntion(s):
 //		read
 //		post
 .factory ('sync', function($q, $http, $cordovaFile, File, ObjectCounter, $cordovaToast){
 
 // function: read
-// purpose:  retreive info from http link 
+// purpose:  retreive info from http link
 // var: string (url)
 // return: filled syncedJSON
 	function read (url, syncedJSON, title, JSON){
 		var ret;
-		// returns a promise 
-		var promise = $q (function (resolve, reject){  
+		// returns a promise
+		var promise = $q (function (resolve, reject){
 			// get from the given url, timeout given in ms
 			$http.get (url, {timeout: 10000}).then (function Success (response){
 				// fills synced json
@@ -77,28 +98,28 @@ angular.module('app.services', [])
 					resolve (success);
 				})
 		})})
-			
-		// once promise is returned	
+
+		// once promise is returned
 		return (promise.then (function (success){
 			// fill JSONlist
 			for (var i = 0; i < syncedJSON[title+'s'].length; i++){
-				JSON [syncedJSON[title+'s'][i][title]] =  syncedJSON[title+'s'][i]['Name']; 
+				JSON [syncedJSON[title+'s'][i][title]] =  syncedJSON[title+'s'][i]['Name'];
 			}
 			// return
 			return ret;
 		}));
-	}	
+	}
 
 // function: post
-// purpose: post request to http link 
+// purpose: post request to http link
 // var: string (url), JSON
 // return: promise
 	function post (url, JSON, loggedIn){
 		// return promise
-		return $q (function (resolve, reject){ 
+		return $q (function (resolve, reject){
 			if (loggedIn){
 
-				
+
 
 						console.log("Unsynched JSON before put in edit:", JSON);
 
@@ -136,14 +157,14 @@ angular.module('app.services', [])
 	}
 
 // function: edit
-// purpose: edit request to http link 
+// purpose: edit request to http link
 // var: string (url), JSON
 // return: promise
 	function edit (url, JSON, loggedIn){
 		var types = ["people", "networks", "sites", "systems", "deployments", "components", "documents","serviceentries"];
 		var titles = ["People", "Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"]
 		// return promise
-		return $q (function (resolve, reject){ 
+		return $q (function (resolve, reject){
 			if (loggedIn){
 				// for (var i = 0; i < types.length; i++){
 				// 	for (var j = 0; j < JSON[titles[i]].length; j++){
@@ -160,7 +181,7 @@ angular.module('app.services', [])
 							resolve (response.status);
 						}, function Error (response){
 							// log error
-							console.warn ("Post Error :" + response.statusText);
+							console.warn ("Post Error :", response);
 							// write to unsynced file
 							File.checkandWriteFile ('Edit', JSON);
 							// toast failure
@@ -178,7 +199,7 @@ angular.module('app.services', [])
 				$cordovaToast.showLongBottom ("Not Logged In");
 				// reject promise
 				reject ();
-			}	
+			}
 		})
 	}
 	// return factories
@@ -188,7 +209,7 @@ angular.module('app.services', [])
 })
 
 // factory: Login
-// function(s): 
+// function(s):
 //		adminLogin
 .factory ('Login', function($q, $http, $cordovaToast, File, $cordovaFile){
 // function: adminLogin
@@ -196,11 +217,11 @@ angular.module('app.services', [])
 // 	var: string, string
 //	return: n/a
 	function adminLogin(JSON){
-		return $q (function (resolve, reject){  
+		return $q (function (resolve, reject){
 			$http.post ("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Login/", JSON, {timeout: 10000}).then (function Success (response){
 				console.log(response);
 				if (response.data.length != 0){
-					var promise = $q (function (resolve, reject){ 
+					var promise = $q (function (resolve, reject){
 						File.checkFile ('Logins').then (function Success (){
 							File.readFile ('Logins').then (function Success (json){
 								if (response != null){
@@ -216,12 +237,12 @@ angular.module('app.services', [])
 								File.checkandWriteFile ('Logins', array);
 							});
 							resolve (true);
-						})	
+						})
 					})
 
 					promise.then (function Success (){
 						$cordovaToast.showLongBottom ("Login Successful");
-			 			resolve (response.data);	
+			 			resolve (response.data);
 					})
 				}
 
@@ -249,18 +270,18 @@ angular.module('app.services', [])
 
 
 // factory: Camera
-// function(s): 
+// function(s):
 //		checkPermissions
 // 		setOptions
 //		openCamera
 //		openGallery
 .factory('Camera', function( $q, $cordovaCamera, $cordovaToast) {
-    
+
 // function: checkPermissions
 // purpose:  checks and asks for camera permissions
 // var: n/a
 // return: n/a
-	function checkPermissions (){       
+	function checkPermissions (){
 		// add event listener
     	document.addEventListener("deviceready", onDeviceReady, false);
       	// wait for device to be ready
@@ -287,7 +308,7 @@ angular.module('app.services', [])
 	}
 
 // function: setOptions
-// purpose:  set the parameters for the camera options 
+// purpose:  set the parameters for the camera options
 // var: source type (camera or image gallery)
 // return: camera options
 	function setOptions (source){
@@ -310,19 +331,19 @@ angular.module('app.services', [])
 	function openCamera() {
 
 		// return promise
-		return $q (function (resolve, reject){ 
+		return $q (function (resolve, reject){
 			// wait for device to be ready
 			document.addEventListener ("deviceready", function(){
 				// get camera options
     			var options = setOptions(Camera.PictureSourceType.CAMERA);
     			// get the picture
-				navigator.camera.getPicture( function Success (imageData){        
+				navigator.camera.getPicture( function Success (imageData){
    					// convert to hexidecimal string
                     result = encode(imageData);
-                    
+
     				// resolve promise
 					resolve(
-                        {result: result, 
+                        {result: result,
                              raw: imageData});
 				}, function Failure (error){
 					if (error != "Camera cancelled."){
@@ -351,7 +372,7 @@ angular.module('app.services', [])
 				var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
 				// get the picture
     			navigator.camera.getPicture( function Success(imageData) {
-    			
+
 
 
                 //encode image data into hex string
@@ -362,9 +383,9 @@ angular.module('app.services', [])
 
                 // resolve promise
                 // pass raw value back for rendering
-				resolve ({result: result, 
+				resolve ({result: result,
                              raw: imageData});
-                    
+
     		}, function Failure (error) {
     			if (error != "Selection cancelled."){
     				// show/log error
@@ -389,9 +410,9 @@ angular.module('app.services', [])
             result += (hex.length==2? hex:'0'+hex ); //data is lost without this
         }
         return result;
-    } 
+    }
 
-    
+
 // return values
 	return {checkPermissions: checkPermissions,
 			setOptions: setOptions,
@@ -402,7 +423,7 @@ angular.module('app.services', [])
 })
 
 // factory: DynamicPage
-// function(s): 
+// function(s):
 //		getTitle
 // 		setTitle
 //		getRoute
@@ -423,7 +444,7 @@ angular.module('app.services', [])
 })
 
 // factory: ObjectCounter
-// function(s): 
+// function(s):
 //		count
 .factory ('ObjectCounter', function(){
 	// returns the number of items in an object
@@ -440,7 +461,7 @@ angular.module('app.services', [])
 })
 
 // factory: GPS
-// function(s): 
+// function(s):
 //		checkPermissions
 //		getLocation
 .factory('GPS', function($cordovaToast) {
@@ -458,7 +479,7 @@ angular.module('app.services', [])
 				// show/log error
     			console.error("GPS Permissions Request Error:" + error);
     			$cordovaToast.showLongBottom ("GPS Permissions Request Error:" + error);
-			}); 
+			});
 			}}, function Failure (error){
 				// show/log error
     			console.error("GPS Permissions Request Check Error:" + error);
@@ -489,7 +510,7 @@ angular.module('app.services', [])
 })
 
 // factory: File
-// function(s): 
+// function(s):
 //		createDiretory
 //		checkFile
 // 		createFile
@@ -509,12 +530,12 @@ angular.module('app.services', [])
 				// if the error is file does not exist
 				if (error.code == 1){
 					// create file
-					$cordovaFile.createDir (cordova.file.externalDataDirectory,'NRDC', false);	
+					$cordovaFile.createDir (cordova.file.externalDataDirectory,'NRDC', false);
 				}
 				else{
 					// show/ log error
 			   		console.error ('Create Directory Error:' + error);
-    				$cordovaToast.showLongBottom ("Unable to use local storage");	
+    				$cordovaToast.showLongBottom ("Unable to use local storage");
 				}
 			})
 		})
@@ -546,7 +567,7 @@ angular.module('app.services', [])
 // 	var: title
 //	return: promise
 	function createFile (title){
-		return $q (function (resolve, reject){ 
+		return $q (function (resolve, reject){
 		// wait for device to be ready
 		document.addEventListener ("deviceready", function(){
 			// make sure the file exists
@@ -577,7 +598,7 @@ angular.module('app.services', [])
 
 			}, function Failure (error){
 				if (error.code == 1){
-					$cordovaFile.createFile (cordova.file.externalDataDirectory, 'NRDC/'+title, JSON,  true).then (function (){		
+					$cordovaFile.createFile (cordova.file.externalDataDirectory, 'NRDC/'+title, JSON,  true).then (function (){
 						$cordovaFile.writeFile (cordova.file.externalDataDirectory, 'NRDC/'+title, JSON, true).then (function () {
 							return error;
 						});
@@ -600,14 +621,14 @@ angular.module('app.services', [])
 	function PhotoSafeWriteFile (title, JSON){
 		//variables
 		SavedJSON = [];
-		
+
 		$cordovaFile.checkFile(cordova.file.externalDataDirectory, 'NRDC/'+title)
-		.then( 
+		.then(
 			function(response){
 				//if file doesn't exist just write and return
 				if(response == false){
 					checkandWriteFile(title, JSON);
-				} 
+				}
 				//if file exists
 				else {
 					//read file
@@ -628,7 +649,7 @@ angular.module('app.services', [])
 
 							//check for an existing object in the data
 							// returned from the file
-							// Uses uuids as princiapl comparator and breaks 
+							// Uses uuids as princiapl comparator and breaks
 							JSON[ Utility.Pluralize(title) ]
 							.forEach(
 								function(object){
@@ -643,30 +664,19 @@ angular.module('app.services', [])
 									}
 								}
 							);
-
-
 							//write file
-							console.log(JSON);
 							checkandWriteFile(title, JSON);
-
-
 						},
 						function(error){
 							console.log(error);
 						}
-
 					)
-
 				}
-
 			},
 			function(error){
 				console.log(error);
 			}
 		)
-
-		
-
 	}
 
 // function: readFile
@@ -743,7 +753,7 @@ angular.module('app.services', [])
 					writeObj[Utility.Pluralize(context)] = FileJSON;
 					checkandWriteFile(context, writeObj);
 
-					resolve();	
+					resolve();
 				},
 				function(error){
 
@@ -791,7 +801,7 @@ angular.module('app.services', [])
 					writeObj[ Utility.Pluralize(context) ] = FileJSON;
 					checkandWriteFile(context, writeObj);
 
-					resolve();	
+					resolve();
 				},
 				function(error){
 
@@ -804,7 +814,7 @@ angular.module('app.services', [])
 	/**
 	  * Function: ReadImageFromFile
 	  * purpose: read an image from the file system (used on load of data)
-	  * args: 
+	  * args:
 	  * return: promise
 	  */
 	function ReadImageFromFile(context, uuid){
@@ -828,7 +838,7 @@ angular.module('app.services', [])
 					for(item in FileJSON){
 						if(FileJSON[item]['Unique Identifier'] == uuid){
 							image = FileJSON[item]['Photo'];
-							
+
 							resolve(image);
 
 						}
@@ -846,7 +856,7 @@ angular.module('app.services', [])
 		});
 
 	}
-	
+
 	//return
 	return {createDirectory: createDirectory,
 			checkFile: checkFile,
@@ -867,10 +877,21 @@ angular.module('app.services', [])
 .factory('LazyLoad', function($q, $http, File){
 
 	return{
-		fetchImage: fetchImage
+		fetchImage: fetchImage,
+		saveSessionImage: saveSessionImage,
+		getSessionImage: getSessionImage
 	};
 
+	//Public Function Defintions
 
+	/**
+	 * Retrives image saved on remote database or local harddrive storage.
+	 * Locally saved image has priority. This may be problematic.
+	 * @param  {object} uuidObj An object which maps a uuid to a specified context.
+	 *                          The context is used to find the specific file containing the object.
+	 * @return {promise}        Returned promise resolves with object containing image and boolean indicating the origin of the image
+	 *                          Rejects in case of error.
+	 */
 	function fetchImage(uuidObj){
 		return $q (function (resolve, reject) {
 			/** This loop is just a way to access
@@ -887,12 +908,13 @@ angular.module('app.services', [])
 							//does not resolve if response
 							// is null
 							if(response != null){
-								resolve(response);
+								resolve({"image": response, "fromFile": true});
 							}
 						},
-
 						function failure(error){
-							console.log(error);
+							//this may cause problems of returning too soon
+							//***FIX***
+							reject(error);
 						}
 					);
 
@@ -902,40 +924,70 @@ angular.module('app.services', [])
 			//query for photo service
 			// if no image is saved
 			// on the device
-			$http.post("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Photo", uuidObj, {timeout: 10000})
-
-			//evaluate after post
+			$http.post("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Photo", uuidObj, {timeout: 20000})
 			.then(
 				function success(response){
 					var base64 = baseSwap_16_to_64(response.data);
-					resolve (base64);
+					resolve ({"image": base64, "fromFile": false});
 				},
 
 				function failure(error){
-					console.log(error);
+					reject(error);
 				}
 			)
 
 		})
+	}
 
+	/**
+	 * Saves a copy of a retirieved to a localStorage dict. (mapped by its uuid)
+	 * used to prevent unnecessary server queries and promote faster loading
+	 * @param  {string} uuid  The uuid of the object associated with the image
+	 * @param  {string} image Base64 representation of the image to be stored
+	 * @return {null}
+	 */
+	function saveSessionImage(uuid, image){
+			sessionStorage[uuid] = image;
+	}
+
+	/**
+	 * Retrieves an image from our localStorage dict. for use. Looks up image by uuid.
+	 * @param  {string} uuid The uuid of the object associated with a given image
+	 * @return {string}      Base64 represenation of a shared image
+	 */
+	function getSessionImage(uuid){
+			return sessionStorage[uuid];
+	}
+
+	/**
+	 * Removes a session image from local session-storage.
+	 * @param  {string} uuid uuid of image to be removed
+	 * @return {null}
+	 */
+	function clearSessionImage(uuid){
+			sessionStorage[uuid] = null;
 	}
 
 
-    //converts hex to base64
+  /**
+   * Swaps the base of a retrieved encoded image from base 16 to base 64
+   *  for display as a jpg
+   * @param  {string} hexImage A hex encoded string representing an image retireved from remote server
+   * @return {string}          A base 64 encoded string representing an image for display
+   */
 	function baseSwap_16_to_64 (hexImage){
 
-        //take hexidemal and conver to base string
-        var result = "";
-		for (var i = 0; i < hexImage.length; i += 2){
-        	result += String.fromCharCode(parseInt(hexImage.substr(i, 2), 16));
-		}
+      //take hexidemal and conveter to base string
+      var result = "";
+			for (var i = 0; i < hexImage.length; i += 2){
+      		result += String.fromCharCode(parseInt(hexImage.substr(i, 2), 16));
+			}
 
-		//rencode string as base 64
-        var image = btoa(result);
-
-
-        return image;
-    } 
+			//rencode string as base 64
+			//and return
+      var image = btoa(result);
+      return image;
+  }
 
 
 })
@@ -943,7 +995,7 @@ angular.module('app.services', [])
 
 
 // factory: SaveNew
-// function(s): 
+// function(s):
 //		save
 //		deleteJSON
 //		deletePeople
@@ -956,12 +1008,12 @@ angular.module('app.services', [])
 	function save (type, isitNew, JSON, finalJSON, imageData, related){
 		// all entries need a modification date
 		JSON ["Modification Date"] = new Date();
-		
+
 
 		// if new (for possible future synced edits)
 		if (isitNew){
 			JSON ['Delete'] = false;
-			JSON ["Creation Date"] = new Date();		
+			JSON ["Creation Date"] = new Date();
 			JSON ["Unique Identifier"] = uuid2.newuuid();
 		}
 
@@ -987,7 +1039,7 @@ angular.module('app.services', [])
 				// timezones for site
 				var TZAJSON = {10:'HST', 9: 'AKST', 8: 'PST', 7: 'MST', 6: 'CST', 5: 'EST', 4: 'AST'};
 				var TZJSON = {10:'Hawaii-Aleutian Standard Time', 9: 'Alaska Standard Time', 8: 'Pacific Standard Time', 7: 'Mountain Standard Time', 6: 'Central Standard Time', 5: ' Eastern Standard Time', 4: 'Atlantic Standard Time'};
-				
+
 				JSON ['Network'] = related;
 				if (angular.isUndefined (JSON ['Permit Holder']))
 					JSON ['Permit Holder'] = null;
@@ -1012,7 +1064,7 @@ angular.module('app.services', [])
 				if (angular.isUndefined (JSON ['Power']))
 					JSON ['Power'] = null;
 				if (angular.isUndefined (JSON ['Installation Location']))
-					JSON ['Installation Location'] = null;				 				 			
+					JSON ['Installation Location'] = null;
 				JSON ['Manager'] = parseInt (JSON ['Manager']);
 				JSON ["Site"] = related;
 				JSON ["Photo"] = imageData;
@@ -1042,11 +1094,11 @@ angular.module('app.services', [])
 				if (angular.isUndefined (JSON ['Parent Logger']))
 					JSON ['Parent Logger'] = null;
 				if (angular.isUndefined (JSON ['Notes']))
-					JSON ['Notes'] = null; 	
+					JSON ['Notes'] = null;
 				if (angular.isUndefined (JSON ['Established Date']))
 					JSON ['Established Date'] = null;
 			 	if (angular.isUndefined (JSON ['Abandoned Date']))
-					JSON ['Abandoned Date'] = null;			 				 				 			
+					JSON ['Abandoned Date'] = null;
 				JSON ["System"] = related;
 			break;
 
@@ -1089,11 +1141,11 @@ angular.module('app.services', [])
         // print json to console for debugging
 		console.log (JSON);
 		console.log (finalJSON);
-		
+
 		if (!isitNew){
 			for (var i = 0; i < finalJSON.length; i ++){
 				if (finalJSON[i]["Unique Identifier"] == JSON["Unique Identifier"]){
-					finalJSON.splice (i, 1);	
+					finalJSON.splice (i, 1);
 				}
 			}
 		}
@@ -1113,7 +1165,7 @@ angular.module('app.services', [])
 			for (var i = 0; i < unsyncedJSON.length; i ++){
 				if (name == unsyncedJSON[i]['Name']){
 					// remove
-					unsyncedJSON.splice (i, 1);	
+					unsyncedJSON.splice (i, 1);
 				}
 			}
 
@@ -1123,7 +1175,7 @@ angular.module('app.services', [])
 			for (var i = 0; i < JSONlist.length; i ++){
 				if (angular.isDefined (JSONlist[i]) && name == JSONlist[i]['Name']){
 					// remove
-					JSONlist.splice (i, 1);	
+					JSONlist.splice (i, 1);
 				}
 			}
 
@@ -1134,20 +1186,20 @@ angular.module('app.services', [])
 					for (var i = 0; i < json[title].length; i ++){
 						if (json[title][i]['Name']){
 							// remove
-							json[title].splice (i, 1);	
+							json[title].splice (i, 1);
 						}
 					}
 				resolve (json);
 			}, function failure (){
 				resolve ();
 			})
-		})	
+		})
 		}).then ( function Success (json){
 			// write jon back to file
 			File.checkandWriteFile ('Unsynced', json);
 		})
 
-        
+
 	}
 
 // function: deletePeople
@@ -1158,7 +1210,7 @@ angular.module('app.services', [])
 
 		for (var i = 0; i < unsyncedJSON.length; i ++){
 			if (name == (unsyncedJSON[i]['First Name'] + unsyncedJSON[i]['Last Name'])){
-				unsyncedJSON.splice (i, 1);	
+				unsyncedJSON.splice (i, 1);
 			}
 		}
 
@@ -1166,7 +1218,7 @@ angular.module('app.services', [])
 
 		for (var i = 0; i < JSONlist.length; i ++){
 			if (name == (unsyncedJSON[i]['First Name'] + unsyncedJSON[i]['Last Name'])){
-				JSONlist.splice (i, 1);	
+				JSONlist.splice (i, 1);
 			}
 		}
 
@@ -1177,43 +1229,43 @@ angular.module('app.services', [])
 	return {save: save,
 			deleteJSON: deleteJSON,
 			deletePeople: deletePeople}
-    
+
 	})
 
 .factory('ListNavService', function(){
         var tieredTitles = ["Networks", "Sites", "Systems", "Deployments", "Components"];
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
         var tieredParents = ["Unique Identifier", "Network", "Site", "System", "Deployment"];
-    
+
         var getParentTitle = getParentTitle;
         var getChildTitle = getChildTitle;
 
 
 
         /**
-		  * 
 		  *
 		  *
-		  *	
+		  *
+		  *
           */
         function getParentTitle(title){
             var titleNdx = tieredTitles.indexOf(title);
             var parentNdx = titleNdx - 1;
-            
+
             return tieredTitles[parentNdx];
         };
-    
+
         function getChildTitle(title){
             var titleNdx = tieredTitles.indexOf(title);
             var parentNdx = titleNdx++;
-            
+
             return tieredTitles[parentNdx];
         }
 
 
-    
-        
-    
+
+
+
         return{
             titles: tieredTitles,
             routes: tieredRoutes,
@@ -1221,6 +1273,5 @@ angular.module('app.services', [])
             getParentTitle: getParentTitle,
             getChildTitle: getChildTitle
         };
-    
-})
 
+})

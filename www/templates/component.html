@@ -1,28 +1,28 @@
 <ion-view  title="{{JSON['Name']}} Info" id="page7" style="" class=" ">
-        <ion-nav-buttons class="" side="left">          
-             <button class="button button-icon button-clear ion-chevron-left" ng-click="back(); componentForm.reset()"></button>
-        </ion-nav-buttons>
-        <ion-nav-buttons side="right">
-        <div deletable 
-             ng-init="isDeletable();" 
-             ng-show="deletable" 
+    <ion-nav-buttons class="" side="left">
+        <button class="button button-icon button-clear ion-chevron-left" ng-click="back(); componentForm.reset()"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <div deletable
+             ng-init="isDeletable();"
+             ng-show="deletable"
              ng-click="deleteView();">
-            <button class="button-clear center-text" 
+            <button class="button-clear center-text"
                     style="padding-right: 1em; padding-left: .5em;">
                 <h4>Delete</h4>
             </button>
         </div>
     </ion-nav-buttons>
-    
-   <!--Scrollable Content; Calls function to check visibility of translucent down arrow.-->
-    <ion-content 
-      delegate-handle="scrollable" 
+
+    <!--Scrollable Content; Calls function to check visibility of translucent down arrow.-->
+    <ion-content
+      delegate-handle="scrollable"
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
 
-    <image-display image="imageData" context='Component' id="JSON['Unique Identifier']"></image-display>
-    
-    <form name ="componentForm">
+      <image-display image="imageData" context='Component' id="JSON['Unique Identifier']"></image-display>
+
+      <form name ="componentForm">
             <label>
                 <ion-md-input type="text" maxlength="50" placeholder="Name" name="componentName" ng-model = "JSON['Name']" required/>
             </label>
@@ -57,26 +57,28 @@
             </div>
        </form>
 
-        <span>
-            <image-button
-                image="imageData"
-                funct="choosePicture" 
-                icon="images"></image-button>
-            <image-button
-                image="imageData" 
-                funct="takePicture" 
-                icon="camera"></image-button>
-        </span>
+       <span>
+           <image-button
+               image="imageData"
+               funct="choosePicture"
+               icon="images"
+               form="componentForm"></image-button>
+           <image-button
+               image="imageData"
+               funct="takePicture"
+               icon="camera"
+               form="componentForm"></image-button>
+       </span>
 
 
-        <a  class=" button button-positive button-large button-block wide" 
-            ng-disabled = "componentForm.$invalid || !componentForm.modified" 
+        <a  class=" button button-positive button-large button-block wide"
+            ng-disabled = "componentForm.$invalid || !componentForm.modified"
             ng-click = "saveJSON(deletable); back(); destroyModal();">
             Save
         </a>
 
         <div class = "overscroll"></div>
-        
+
     </ion-content>
 
     <fab-cluster></fab-cluster>

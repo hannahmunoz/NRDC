@@ -1,7 +1,7 @@
 angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova', 'angularUUID2', 'ngStorage', 'ngInputModified'])
 
    // used to view JSONs that have already been created.
-.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, $q, $ionicLoading, SaveNew, Camera, GPS, 
+.controller('viewCtrl', function($scope, DynamicPage, ObjectCounter, $rootScope, $ionicHistory, $sce, $q, $ionicLoading, SaveNew, Camera, GPS,
                                  $ionicPlatform) {
 
 	// get the JSON
@@ -10,8 +10,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 	$scope.document = false;
 	$scope.service = false;
-    $scope.images = 'ion-images';
-    $scope.camera = "ion-android-camera";
+  $scope.images = 'ion-images';
+  $scope.camera = "ion-android-camera";
 
 
 	//http://stackoverflow.com/questions/4878756/javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
@@ -20,7 +20,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 	$scope.JSON = DynamicPage.getJSON();
 	if ( angular.isDefined ($scope.JSON ['Photo'])){
-		$scope.imageData = $scope.JSON ['Photo'];
+		  $scope.imageData = $scope.JSON ['Photo'];
 	}
 
 	// loads the data into the page based on the title of the page
@@ -29,7 +29,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 				$scope.service = true;
 				$scope.JSON['Principal Investigator'] = JSON.stringify($scope.JSON['Principal Investigator']);
 			break;
-				
+
 		case 'Sites':
                 related = $scope.JSON['Network'];
 				$scope.JSON ['Permit Holder'] = JSON.stringify($scope.JSON['Permit Holder']);
@@ -52,13 +52,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 		case 'Serviceentriess':
 				$scope.service = true;
-			break;	
+			break;
 
 	}
 
-    $scope.check = function (deletable){
-    }
-    
     // save JSON button
 	$scope.saveJSON = function (deletable){
         if (!angular.isDefined (deletable) || deletable == false){
@@ -72,7 +69,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 }
                 if (bool == false)
                     SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON[$scope.title], $scope.imageData, related);
-             }  
+             }
              else{
                 for (var i = 0; i < $rootScope.editJSON.ServiceEntries.length; i ++){
                     if ($scope.JSON["Unique Identifier"] == $rootScope.editJSON.ServiceEntries[i]["Unique Identifier"]){
@@ -83,14 +80,14 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             if (bool == false)
                 SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.editJSON.ServiceEntries, $scope.imageData, related);
              }
-        }    
+        }
         else{
             if ($scope.title != "Serviceentriess"){
                 SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON[$scope.title], $scope.imageData, related);
             }
             else{
                SaveNew.save ($scope.title, false, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, related);
-            }	
+            }
         }
 	};
 
@@ -139,8 +136,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                         $ionicLoading.hide();
                 });
             });
- 
-    };    
+
+    };
 
 })
 
@@ -164,7 +161,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     //creates a new modal if one has not been instantiated
     //elsewise opens the old modal
     $scope.openModal = function() {
-        
+
         //clear variable on modal open and that's it
         initialize();
 
@@ -182,19 +179,19 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
         }
         else {
-           $scope.modal.show(); 
+           $scope.modal.show();
         }
     };
-    
+
     //close Modal
     $scope.closeModal = function() {
         $scope.modal.remove().then (function (){
                 $scope.modal = null;
         });
     };
-    
+
     //destroy modal to prevent memory leaks
-    $scope.destroyModal = function() {       
+    $scope.destroyModal = function() {
         return $q(function (resolve, reject){
         	$rootScope.modalHidden = true;
         	$scope.modal.remove().then (function (){
@@ -203,7 +200,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         	});
         })
 
-    }; 
+    };
 
      $scope.resolveLogin = function(){
         return $q(function(resolve, reject){
@@ -213,8 +210,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 
     $scope.login = function (){
-        
-       var promise = $q (function (resolve, reject){  
+
+       var promise = $q (function (resolve, reject){
         	Login.adminLogin ($scope.loginJSON).then (function Success (response){
         		$rootScope.associatedNetworks = response;
             	$rootScope.loggedIn = true;
@@ -234,19 +231,19 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     }
 })
-  
- // controller for the main menu  
-.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, Login, $http, $ionicModal, DynamicPage, ObjectCounter, 
+
+ // controller for the main menu
+.controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, Login, $http, $ionicModal, DynamicPage, ObjectCounter,
                                      File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams, $timeout, $ionicPlatform) {
-	
+
 
 
     function onDeviceReady() {
 		$rootScope.platform = device.platform;
 	}
-		
+
     DynamicPage.setTitle ("Networks");
-	
+
     // create global variables,could probably be cut down but that would mean changing everything
 	$rootScope.peopleSyncedJSON = {};
 	$rootScope.peopleJSON = {};
@@ -278,7 +275,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     // posting JSONs
 	$rootScope.editJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], "Service Entries": [] };
 	$rootScope.unsyncedJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], "Service Entries": [] };
-    
+
     //levels for tiered traversal of
     //lists
     $rootScope.listLevel = 0;
@@ -302,10 +299,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     $scope.randomTimingOffset = [];
     $scope.progressiveTimingOffset = [];
-    
+
     //randomizes the appearance of tile buttons on main page
     $scope.setRndTimingOffsets = function(){
-        
+
         for( tile = 0; tile < 10; tile++ ){
             $scope.randomTimingOffset[tile] = {};
             $scope.randomTimingOffset[tile]["-webkit-animation-delay"] = (Math.random()/2) + 's';
@@ -332,14 +329,14 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     }
 
 
-  	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
+  	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
 		// for when user hits the back bottom arrow to head back to the main menu
 	    if (fromState.name == "list" && toState.name == "mainMenu"){
             $rootScope.itemLevel =  0;
             $rootScope.listLevel =  0;
 		}
-	})  
-    
+	})
+
 
     /************************************
     Handles uploading of all unsynched
@@ -352,15 +349,15 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	   // posts the unsynced json to edge
            console.log ($rootScope.loggedIn,$rootScope.unsyncedJSON, $rootScope.editJSON);
            console.log(JSON.stringify($rootScope.unsyncedJSON.Components[0]));
-    	   
+
            sync.post ($rootScope.baseURL+'Update/', $rootScope.unsyncedJSON, $rootScope.loggedIn).then ( function (){
                 $rootScope.unsyncedJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], "Service Entries":[] };
             });
-           
+
            sync.edit ($rootScope.baseURL+'Update/', $rootScope.editJSON, $rootScope.loggedIn).then (function (){
                  $rootScope.editJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], "Service Entries":[] };
                 // the menu is reinitiated
-                $scope.init (); 
+                $scope.init ();
     	   });
     }
 
@@ -375,7 +372,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         var tieredRoutes = ["network", "site", "system", "deployment", "component"];
         var tieredJSON = [$rootScope.networkJSON,$rootScope.siteJSON,$rootScope.systemJSON,$rootScope.deploymentJSON,$rootScope.componentJSON];
         var tieredSyncedJSON = [$rootScope.networkSyncedJSON,$rootScope.siteSyncedJSON,$rootScope.systemSyncedJSON,$rootScope.deploymentSyncedJSON,$rootScope.componentSyncedJSON];
-           	
+
 
 
         // should work to sort list based on log in
@@ -408,28 +405,28 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         }
 
         tieredSyncedJSON[0] = $rootScope.networkSyncedJSON;
-    
 
 
-        $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);       	
-               
+
+        $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
+
         DynamicPage.setJSON();
 
         //store the json of the
         //list item clicked
         $scope.clickedJSON = DynamicPage.getJSON();
-        
+
         //set the route of dynamic page one level back
         //so we can view the info of what we just clicked
         DynamicPage.setTitle(tieredTitles[$rootScope.listLevel]);
         DynamicPage.setRoute(tieredRoutes[$rootScope.itemLevel]);
-         
+
         $scope.route = DynamicPage.getRoute();
         $scope.title = DynamicPage.getTitle();
-        
+
     }
-    
-    
+
+
     $scope.listSwitch = function(syncedJSONs, titles, level){
     	$scope.unsyncedListJSON = {};
         var title = titles[level];
@@ -451,7 +448,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 }
 
 
-                $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]); 
+                $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);
                 for (var i = 0; i < $rootScope.editJSON[title].length; i++){
                     for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
                         if ($rootScope.editJSON[title][i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
@@ -474,13 +471,13 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                         }
                     }
                 }
-            
+
             }
             resolve ($rootScope.chosenJSONlist);
 
         })
 
-            //return promise 
+            //return promise
         promise.then ( function success (){
             $rootScope.listJSON = $scope.filter($rootScope.chosenJSONlist, level);
         });
@@ -508,7 +505,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                  return filteredList;
             }
         }
-        
+
         //helper function
         function belongsToParent(parent, presentJSON){
             return function(object){
@@ -520,10 +517,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     }
 
-// only runs the first time the program is called. 
+// only runs the first time the program is called.
 // Reads from the server and inputs into array
     $scope.init = function (){
-        
+
         $scope.show();
         $scope.timeout = true;
 
@@ -531,7 +528,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
          $timeout(function () {
             if($scope.timeout == true){
                 $ionicLoading.hide();
-                $scope.makeTimeoutModal();          
+                $scope.makeTimeoutModal();
             }
         }, 20000);
 
@@ -540,7 +537,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	//unblock before packaging
     	//Camera.checkPermissions();
         $q (function (resolve, reject){
-        // gets unsynced data back from local storage and puts in unsyncedJSON 
+        // gets unsynced data back from local storage and puts in unsyncedJSON
         var list = ["People","Site Networks", "Sites", "Systems", "Deployments", "Components", "Documents","Service Entries"];
 
         if (File.checkFile ('Edit')){
@@ -553,12 +550,12 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             })
             if (!angular.isDefined ($rootScope.editJSON['Last Sync Date'])){
                  $rootScope.editJSON['Last Sync Date'] = new Date();
-            } 
+            }
             resolve();
         }
     }).then (function () {
 	$q (function (resolve, reject){
-    	// gets unsynced data back from local storage and puts in unsyncedJSON 
+    	// gets unsynced data back from local storage and puts in unsyncedJSON
 		var list = ["People", "Site Networks", "Sites", "Systems", "Deployments", "Components", "Documents", "Service Entries"];
     	if (File.checkFile ('Unsynced')){
 			File.readFile ('Unsynced').then (function Success (response){
@@ -586,7 +583,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
      	})})
    		promise.then (function(result){
     		for (var i = 0; i < $rootScope.peopleSyncedJSON.People.length; i++){
-				$rootScope.peopleJSON [$rootScope.peopleSyncedJSON.People[i]['Person']] =  $rootScope.peopleSyncedJSON.People[i]['First Name'] + " " + $rootScope.peopleSyncedJSON.People[i]['Last Name']; 
+				$rootScope.peopleJSON [$rootScope.peopleSyncedJSON.People[i]['Person']] =  $rootScope.peopleSyncedJSON.People[i]['First Name'] + " " + $rootScope.peopleSyncedJSON.People[i]['Last Name'];
 			}
 			resolve ();
     	})
@@ -598,7 +595,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     		// redudant, but nessecary.  Doesnt work otherwise for some reason
     		$rootScope.networkSyncedJSON = result;
     		// writes to local storage
-    		File.checkandWriteFile('Network', $rootScope.networkSyncedJSON);
+    		File.checkandWriteFile('Site Network', $rootScope.networkSyncedJSON);
     		resolve ();
     	})
     }).then (function () {
@@ -652,21 +649,21 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
    		// service Entries read. Seperate due to service enteries having a space
     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[7]+"/", {timeout: 10000}).then (function(result){
-    		
-            $rootScope.serviceSyncedJSON = result.data;
-    		File.checkandWriteFile ( 'ServiceEntries', $rootScope.serviceSyncedJSON);
+
+        $rootScope.serviceSyncedJSON = result.data;
+    		File.checkandWriteFile ( 'Service Entry', $rootScope.serviceSyncedJSON);
     		resolve ($rootScope.serviceSyncedJSON);
     		}, function (result){
-    			File.readFile('ServiceEntries').then (function(success){
+    			File.readFile('Service Entry').then (function(success){
     			$rootScope.serviceSyncedJSON = success;
     			resolve ($rootScope.serviceSyncedJSON);
     		});
      		})})
   	 	promise.then (function(result){
             $rootScope.unsyncedJSON ["Last Sync Date"] = new Date ();
-            
+
             for (var i = 0; i < $rootScope.serviceSyncedJSON["Service Entries"].length; i++){
-				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON["Service Entries"][i]['Service Entry']] =  $rootScope.serviceSyncedJSON["Service Entries"][i]['Name']; 
+				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON["Service Entries"][i]['Service Entry']] =  $rootScope.serviceSyncedJSON["Service Entries"][i]['Name'];
 			}
 
             //HACK FIX BECAUSE I DONT KNOW HOW THIS WORKS
@@ -675,7 +672,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             resolve();
     	})
   	 }).then(function (){
-        
+
          //hide loading screen
          $ionicLoading.hide();
 
@@ -729,7 +726,7 @@ app administrator.
         if(window.plugins && window.plugins.emailComposer) {
             window.plugins.emailComposer.showEmailComposerWithCallback(function(result) {
                 console.log("Response -> " + result);
-            }, 
+            },
             "Services Are Down", // Subject
             "This is an automated email notification to the administrator of the NRDC QA app that the data download and upload services are down and need to be fixed.",  // Body
             ["cscully-allison@nevada.unr.edu"],    // To
@@ -746,7 +743,7 @@ app administrator.
     //initalize
     $scope.init();
 
-    
+
 })
 
 /**
@@ -756,18 +753,18 @@ app administrator.
 */
 .controller('scrollController', function($scope, $state, $ionicScrollDelegate) {
     $scope.isBottom = false;
-    smoothnessOffset = 15;  //ensures smooth dissapearnce of arrow 
-    
+    smoothnessOffset = 15;  //ensures smooth dissapearnce of arrow
+
     //scrolls the content window to the bottom
     $scope.scrlBot = function(){
         $ionicScrollDelegate.$getByHandle('scrollable').scrollBottom(true);
     }
-    
+
     //hide arrow when user scrolls nearly to bottom
     //hides using angular logic
     //updates bool evaluated by ng-hide
     $scope.cndHideArrow = function(){
-        $scope.isBottom = ($ionicScrollDelegate.getScrollPosition().top >= 
+        $scope.isBottom = ($ionicScrollDelegate.getScrollPosition().top >=
                             $ionicScrollDelegate.getScrollView().__maxScrollTop - smoothnessOffset)
         $scope.$apply();
     }
@@ -782,7 +779,7 @@ app administrator.
     var tieredRoutes = ["network", "site", "system", "deployment", "component"];
     var parent = ["Unique Identifier", "Site Network", "Site", "System", "Deployment"];
     var tieredSyncedJSON =[$rootScope.networkSyncedJSON, $rootScope.siteSyncedJSON, $rootScope.systemSyncedJSON, $rootScope.deploymentSyncedJSON, $rootScope.componentSyncedJSON];
-        
+
     $scope.clickedJSONHist = [];
 
 
@@ -805,6 +802,7 @@ app administrator.
             $scope.regressiveListSwitch();
         }
 
+
         //if we are in at the network level
         //of our list
         else{
@@ -812,7 +810,7 @@ app administrator.
 
             //reset list levels
             $rootScope.itemLevel =  0;
-            $rootScope.listLevel =  0;         
+            $rootScope.listLevel =  0;
         }
     }
 
@@ -821,7 +819,7 @@ app administrator.
     // 101 - Priority just above "100 - return to previous view"
     $ionicPlatform.registerBackButtonAction( $rootScope.back, 101);
 
-    
+
 
 
 
@@ -842,7 +840,7 @@ app administrator.
 
 
 
-	$rootScope.$on('$stateChangeSuccess', function(){ 
+	$rootScope.$on('$stateChangeSuccess', function(){
 		// works on every load after
 		$scope.title = DynamicPage.getTitle();
 		$scope.route = DynamicPage.getRoute();
@@ -866,14 +864,14 @@ app administrator.
 		DynamicPage.getRoute();
         DynamicPage.setJSON(JSON);
 	}
-      
+
     function storePrevJSON(){
         var previousViewJSON = $scope.clickedJSON;
-        if($scope.clickedJSONHist.length < 5){    
+        if($scope.clickedJSONHist.length < 5){
             $scope.clickedJSONHist.push(previousViewJSON);
         }
     }
-    
+
     //calls for the next tier of
     //items in the site network hierarchy
     $scope.progressiveListSwitch = function(){
@@ -889,24 +887,24 @@ app administrator.
 
             	for (var i = 0; i < $rootScope.unsyncedJSON[DynamicPage.getTitle()].length; i ++){
         			if ($scope.UUID == $rootScope.unsyncedJSON[DynamicPage.getTitle()][i]['Unique Identifier']){
-        		
+
                 		$scope.modalCheck = false;
-        		
+
                 	}
         		}
         	}
-            
+
             //increment the level of my list and of my
             //item clicked until we hit the bottom list
             //presently components
             if($rootScope.listLevel < (tieredTitles.length - 1)){
                 $rootScope.listLevel++;
             }
-            
+
             //determine the level of our selected route
             if($rootScope.itemLevel < 3){
                 $rootScope.itemLevel = $rootScope.listLevel - 1;
-            } 
+            }
             else{
                 $rootScope.itemLevel = 4;
             }
@@ -914,7 +912,7 @@ app administrator.
 
             //call the fucntion which swtiches out switch view data
             $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
-    		
+
 
             $rootScope.listLevel = $scope.temp;
 
@@ -928,8 +926,8 @@ app administrator.
             //so we can view the info of what we just clicked
             DynamicPage.setTitle(tieredTitles[$rootScope.listLevel]);
             DynamicPage.setRoute(tieredRoutes[$rootScope.itemLevel]);
-            
-            
+
+
             $scope.route = DynamicPage.getRoute();
             $scope.title = DynamicPage.getTitle();
 
@@ -958,7 +956,7 @@ app administrator.
             $rootScope.itemLevel--;
         }
     }
-    
+
 
     //navigate in the opposite direction
     $scope.regressiveListSwitch = function(){
@@ -980,7 +978,7 @@ app administrator.
         	if($rootScope.listLevel != $rootScope.itemLevel){
             	$rootScope.listLevel--;
         	}
-        
+
        		 //determine the level of our selected route
        		 if($rootScope.itemLevel != 4){
            		 $rootScope.itemLevel = $rootScope.listLevel - 1;
@@ -995,16 +993,16 @@ app administrator.
         //store the json of the
         //list item clicked
         $scope.clickedJSON = DynamicPage.getJSON();
-        
+
         //set the route of dynamic page one level back
         //so we can view the info of what we just clicked
         DynamicPage.setTitle(tieredTitles[$rootScope.listLevel]);
         DynamicPage.setRoute(tieredRoutes[$rootScope.itemLevel]);
-        
-        
+
+
         $scope.route = DynamicPage.getRoute();
         $scope.title = DynamicPage.getTitle();
-      
+
         //sends data to the scope so view
         // knows to hide FAB button on networks
         if ($scope.title.localeCompare("Networks")){
@@ -1012,16 +1010,16 @@ app administrator.
         }
         else
             $scope.networkListFlag = false;
-         
-    }
-    
 
-    
+    }
+
+
+
     $scope.listSwitch = function(syncedJSONs, titles, level){
     	$scope.unsyncedListJSON = {};
         var title = titles[level];
         var syncedJSON = syncedJSONs[level];
-        
+
         //reset the title with every call
 		$scope.title = title;
 
@@ -1039,7 +1037,7 @@ app administrator.
         			}
     			}
 
-    		    $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);	
+    		    $rootScope.chosenJSONlist = $rootScope.unsyncedJSON[title].concat(syncedJSON[title]);
                 for (var i = 0; i < $rootScope.editJSON[title].length; i++){
                     for (var j = 0; j < $rootScope.chosenJSONlist.length; j++){
                         if ($rootScope.editJSON[title][i]["Unique Identifier"] == $rootScope.chosenJSONlist[j]["Unique Identifier"]){
@@ -1050,7 +1048,7 @@ app administrator.
 		    }
 
 		else {
-			
+
             for (var i = 0; i < $rootScope.unsyncedJSON.ServiceEntries.length; i++){
             	$scope.unsyncedListJSON[i] = $rootScope.unsyncedJSON.ServiceEntries[i]['Name'];
             }
@@ -1064,20 +1062,20 @@ app administrator.
                     }
                 }
             }
-        
+
 		}
 		resolve ($rootScope.chosenJSONlist);
 	});
-    
-    //return promise 
+
+    //return promise
     promise.then ( function success (){
         $rootScope.listJSON = $scope.filter($rootScope.chosenJSONlist, level);
     })
 
    }
-    
-    
-    
+
+
+
     //filter out list according to a specific criteria of a parent at a given level
     $scope.filter = function (unfilteredList, listLevel){
         var parentName = parent[listLevel];
@@ -1093,13 +1091,13 @@ app administrator.
         	else{
                 $rootScope.related = lastClickedJSON [parentName];
          	}
-            
+
             $rootScope.relatedTitle = parentName;
     	    filteredList = unfilteredList.filter(belongsToParent(parentName, lastClickedJSON));
     	    return filteredList;
         }
     }
-    
+
     //helper function
     //uses callback to filter according to weither a
     //item belongs to filter
@@ -1199,18 +1197,18 @@ app administrator.
 	$scope.imageData = null;
 	// allow saves
 	$scope.checked = false;
-    
+
     //start with modal hidden and
     //modal nonexistant
     $rootScope.modalHidden = true;
     $scope.modal = null;
-    
+
     // create JSON
     $scope.JSON = {};
-    
+
     $scope.images = 'ion-images';
     $scope.camera = "ion-android-camera";
-    
+
     $scope.clear = function(){
         if($scope.JSON['Name'] == "New " + DynamicPage.getTitle()){
             $scope.JSON['Name'] = "";
@@ -1228,8 +1226,8 @@ app administrator.
         }
 		$rootScope.chosenJSONlist.push($scope.JSON);
 	};
-    
-    
+
+
 
 
 	//wrapper for the openGallery factory so we can call it from the choosePicture button.
@@ -1275,7 +1273,7 @@ app administrator.
                         $ionicLoading.hide();
                 });
             });
-        
+
 	}
 
 
@@ -1285,7 +1283,7 @@ app administrator.
 		GPS.checkPermissions();
 		GPS.getLocation(JSON);
 	}
-    
+
     $scope.back = function(){
         //conditional to fix problem of double
         //back when modal closed
@@ -1302,8 +1300,8 @@ app administrator.
 .controller('DocumentModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter ) {
 	$scope.checked = false;
     $scope.JSON = {};
-    
-    
+
+
 	$scope.saveJSON = function (){
 		// nulls entries that may not have any data
 		$scope.JSON ['Network'] = null;
@@ -1315,7 +1313,7 @@ app administrator.
 
         $scope.JSON [$rootScope.relatedTitle] = $rootScope.related;
 
-		// adds data for the entry the document is related to 
+		// adds data for the entry the document is related to
 		//$scope.JSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)] = $rootScope.docJSON [DynamicPage.getRoute().charAt(0).toUpperCase() + DynamicPage.getRoute().slice(1)];
 		// SaveNew factory
 		SaveNew.save ("Documents", true, $scope.JSON, $rootScope.unsyncedJSON['Documents'], $scope.imageData, $rootScope.related);
@@ -1338,24 +1336,24 @@ app administrator.
 //Controls the behavior of the service modals for particular networks, sites, sysyems etc
 .controller('ServiceModalController', function($scope, $rootScope, $state, $ionicModal, DynamicPage, SaveNew, $cordovaCamera, Camera, GPS, $sce, $ionicHistory, ObjectCounter) {
 	$scope.imageData = null;
-	$scope.checked = false;   
+	$scope.checked = false;
     $scope.JSON = {};
 
-    
+
     $scope.images = 'ion-images';
     $scope.camera = "ion-android-camera";
 
 
-    
+
 	$scope.saveJSON = function (){
 		// nulls entries that may not have any data
 		$scope.JSON ['Site'] = null;
 		$scope.JSON ['System'] = null;
 		$scope.JSON ['Deployment'] = null;
 
-		// adds data for the entry the service entry is related to 
+		// adds data for the entry the service entry is related to
 		var JSON = DynamicPage.getJSON();
-		
+
         $scope.JSON [$rootScope.relatedTitle] = $rootScope.related;
 		SaveNew.save ('Service Entries', true, $scope.JSON, $rootScope.unsyncedJSON.ServiceEntries, $scope.imageData, $rootScope.related);
 		// pushes into list
@@ -1378,9 +1376,8 @@ app administrator.
 /* Will be used to refactor current expandable text :/
 
 .controller('TextAreaController', function($scope, $rootScope){
-    
+
 })
 
 
 */
-

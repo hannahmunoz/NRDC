@@ -1,5 +1,5 @@
 /***************************************
-****Custom Stylesheet for NRDC QA app*** 
+****Custom Stylesheet for NRDC QA app***
 ****************************************/
 
 
@@ -76,14 +76,65 @@ button.main-menu-button:active{
 /*Adds a 75 vertical pixels of whitespace to the bottom of pages with FABs so that the FAB does
 not rest on the save button with max scroll*/
 .overscroll{
-    opacity:0; 
-    background-color:yellow; 
-    height: 35px; 
+    opacity:0;
+    background-color:yellow;
+    height: 35px;
     width: auto;
 }
 
+.scrollable{
+  overflow: scroll;
+}
+
+
+
+.zoom-pane {
+  width: 100%;
+  height: 100%;
+}
+
+
+.zoom-pane .scroll {
+  min-height: 100%;
+  /* Vertical align */
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-content: stretch;
+  -ms-flex-line-pack: stretch;
+  align-content: stretch;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.zoom-pane img {
+  width: 100%;
+  vertical-align: middle;
+}
+
+
 .right-header-btn{
-    
+
 }
 
 
@@ -142,7 +193,7 @@ not rest on the save button with max scroll*/
 /*overrides item content backgrounds*/
 .item .item-content {
     background-color: #FFFFFF !important;
-    
+
 }
 
 .button-positive {
@@ -156,11 +207,9 @@ not rest on the save button with max scroll*/
 .app-header-container{
     min-height: 20em;
     width: 100%;
-/*    background-image: url(../img/bg1.jpg);*/
     background-size: 160%;
     background-position: center;
     padding-top: 8em;
-
 }
 
 .app-title-container{
@@ -169,38 +218,81 @@ not rest on the save button with max scroll*/
    background-image: url(../img/subtle_bg/subtle_dots/subtle_dots.png) !important;
 }
 
+
+/* Image directive related css
+============================*/
+
+.app-image-container{
+    min-height: 20em;
+    width: 100%;
+    background-size: 100%;
+    background-position: center;
+    position:relative;
+}
+
+.app-image-fab{
+    position: absolute;
+    top:auto;
+    right: 10px;
+    bottom: 10px;
+    left:auto;
+}
+
+.app-image-fab-container{
+    z-index: 9999;
+    position: absolute;
+    display:inline;
+
+    top: auto;
+    right: 10px;
+    bottom: 10px;
+    left: auto;
+}
+
+
+
 /* CSS objects
 ============================/
 /*    make a css arrow
-    -- adapted from stack overflow-- 
+    -- adapted from stack overflow--
 */
 .arrow-down {
-    border-right: 10px solid; 
+    border-right: 10px solid;
     border-bottom: 10px solid;
-    width: 30px; 
-    height: 30px;    
+    width: 30px;
+    height: 30px;
     transform: rotate(45deg);
 }
 
 .arrow-up {
-    border-right: 10px solid; 
+    border-right: 10px solid;
     border-bottom: 10px solid;
-    width: 30px; 
-    height: 30px;    
-    transform: rotate(-135deg);    
+    width: 30px;
+    height: 30px;
+    transform: rotate(-135deg);
 }
 
 
 .nrdc-fab-container-lower-right{
     z-index: 9999;
     position: absolute;
-    
+
     top: auto;
     right: 16px;
     bottom: 16px;
     left: auto;
 }
 
+
+.nrdc-fab-lower-right{
+    z-index: 9999;
+    position: relative;
+
+    top: auto;
+    right: 16px;
+    bottom: 16px;
+    left: auto;
+}
 
 /*tile style button
 used on main page
@@ -220,10 +312,10 @@ eventual deletion*/
   height: 80px;
   width: 80px;
   background-color: rgba(0,0,0,0);
-  border: dotted 5px #003366;
+  border: dotted 2px #003366;
   border-radius: 100px;
 
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -251,14 +343,14 @@ of the text area*/
 .text-format-mirror{
     position: absolute;
     visibility: hidden;
-    
+
     color: black;
     padding: .5em;
     line-height: 1em;
     height: auto;
     font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
     font-size: 18px;
-    
+
     word-wrap: break-word;
     white-space: pre-line;
 }
@@ -311,7 +403,7 @@ of the text area*/
     padding: .5em;
     line-height: 1em;
 
-    
+
     border-bottom: 2px solid rgba( 0, 0, 0, .05);
 }
 
@@ -330,12 +422,12 @@ select{
     border-left: 2px solid rgba( 0, 0, 0, .1) !important;
     border-right: 2px solid rgba( 0, 0, 0, .1) !important;
 
-    
+
     padding-top: 1em;
     padding-bottom: 1em;
-    
+
     font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
-    font-size: 18px; 
+    font-size: 18px;
 }
 
 .select-container{
@@ -367,17 +459,17 @@ input[date-input]{
     border-left: 2px solid rgba( 0, 0, 0, .1) !important;
     border-right: 2px solid rgba( 0, 0, 0, .1) !important;
 
-    
+
     padding-top: 1em;
     padding-left: 1em;
     padding-bottom: 1em;
 
     margin-bottom: 1em;
     margin-top: .5em;
-    
+
     font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
     font-size: 18px;
-    
+
     width: 100%;
 }
 

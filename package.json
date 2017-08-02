@@ -6,7 +6,8 @@
         "angular-input-modified": "^2.3.3",
         "cordova-android": "^6.2.3",
         "cordova-custom-config": "*",
-        "cordova-plugin-camera": "*",
+        "cordova-plugin-camera": "^2.4.1",
+        "cordova-plugin-compat": "^1.1.0",
         "cordova-plugin-console": "~1.0.3",
         "cordova-plugin-device": "~1.1.5",
         "cordova-plugin-geolocation": "*",
@@ -48,7 +49,6 @@
     "cordova": {
         "plugins": {
             "cordova-custom-config": {},
-            "cordova-plugin-camera": {},
             "cordova-plugin-console": {},
             "cordova-plugin-device": {},
             "cordova-plugin-geolocation": {},
@@ -56,7 +56,9 @@
             "cordova-plugin-statusbar": {},
             "cordova-plugin-whitelist": {},
             "cordova.plugins.diagnostic": {},
-            "ionic-plugin-keyboard": {}
+            "ionic-plugin-keyboard": {},
+            "cordova-plugin-compat": {},
+            "cordova-plugin-camera": {}
         },
         "platforms": [
             "android"
