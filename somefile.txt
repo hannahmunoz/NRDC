@@ -1,0 +1,880 @@
+commit 6df119d55d45610ce718aa99c27adbb0539bd954
+Merge: e01ded6 234f676
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Aug 8 10:44:00 2016 -0700
+
+    fixed merege conflicts
+
+commit e01ded66f28f9c15741badfe058dd8f8249ba0f6
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Aug 8 09:59:24 2016 -0700
+
+    development of back button
+
+commit 234f6763625a9b43c86badd214d549b5fac8a53c
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Mon Aug 8 09:54:19 2016 -0700
+
+    delete function working
+
+commit 724a46082239418e09a041f5920c411c0c32accd
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Fri Aug 5 14:23:24 2016 -0700
+
+    removed unused plugins
+
+commit 498f1a45672874b06680961ed2b0871120092ebd
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Fri Aug 5 13:58:15 2016 -0700
+
+    completed error handling in services, beginning to remoove unused plugins
+
+commit c87837767dd7c22e4fe88b11a77b4ccce44736f6
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Fri Aug 5 12:27:13 2016 -0700
+
+    photos post in hexidecimal. fixed save error on view pages. sync list work when server cannot be reached
+
+commit f935dde54c30b51dc32000f39e46a49d2d6166fe
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Aug 4 14:45:40 2016 -0700
+
+    sites and deployments now post, fixed view error regarding nulls. merged with connor
+
+commit 79e46617c39557647f5d98923d68f3797ab98333
+Merge: 09e09c3 1108140
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Aug 4 14:32:34 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit 09e09c35aa7d41b9f447dee9b69047bedf0d0689
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Aug 4 14:32:17 2016 -0700
+
+    everything pushes unless it has photos
+
+commit 110814038dbfcf12b517195f2ff88ff30b254690
+Merge: fc01c45 95eb281
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Aug 4 13:49:28 2016 -0700
+
+    fixed merge conflicts:
+
+commit fc01c45c30e48b48fc7c39efbd9e0de765be7597
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Aug 4 13:47:55 2016 -0700
+
+    Fixed sideways modal error and optimized modals
+
+commit 95eb281946b30a59f0b2d017da791c287f6f3fe1
+Merge: d54e2ef 53b6a4c
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Aug 4 12:14:11 2016 -0700
+
+    sites and deployments now post, fixed view error regarding nulls
+
+commit d54e2ef6105ea2bcf6b6f3899d96b3ab84c8e43c
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Aug 3 14:54:24 2016 -0700
+
+    added max lengths to html pages, people, networks, components all post. Working on adding time zones to sites
+
+commit 53b6a4cdaf550b93ba86e39d4443cf197a0506cd
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Aug 3 14:36:18 2016 -0700
+
+    made some minor JS changes
+
+commit a0bfa85cdcfde161604de8c7f358c54088b8c3df
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Aug 3 11:43:41 2016 -0700
+
+    one more merge fix
+
+commit fe30dd772b84df6cc67003af2b0ae5c68ad917af
+Merge: fb9c3ff 926c68b
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Aug 3 11:42:03 2016 -0700
+
+    fixed conflicts
+
+commit fb9c3ffb20dc7e64e1c20e8ec31f1ecd2fd5c4a1
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Aug 3 11:39:19 2016 -0700
+
+    pull
+
+commit e149e4bdf1d8a0c67933b4ef586b0811fee67dc5
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Aug 3 11:38:25 2016 -0700
+
+    changes to buttons, spinners, icons etc.
+
+commit 926c68b58aa201847b6b81196a05f9ed062aadf7
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Aug 3 10:07:26 2016 -0700
+
+    fix view errors in people and service entries
+
+commit 74347cb1b6ffe93492f298b0e6087b5ee18e7692
+Merge: 2f9fda5 ed2d36f
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Aug 3 09:39:13 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit 2f9fda51e258bf7d98462ac2280d2383a1c07aef
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Aug 3 09:39:01 2016 -0700
+
+    unsynced data editing working, added list refresh to other modal controllers
+
+commit ed2d36f5503047270ae3c16b383063ce01dc69c3
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Aug 3 09:38:16 2016 -0700
+
+    added directive templates
+
+commit d8ba331dffa85e1cc9823abf6c2ba1f4d907046f
+Merge: 388699a f2e7d90
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Aug 2 14:46:43 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit 388699a3848673af122e2d0cd98253545659cb8a
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Aug 2 14:46:39 2016 -0700
+
+    grabbing connors work
+
+commit f2e7d90d4d1b1d50b5e7a63497d5401b716e635f
+Merge: ab8697e 12976a0
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Aug 2 14:30:12 2016 -0700
+
+    fixed merge conflicts
+
+commit ab8697ef870db34386a6c8b82fb7b3390a0d33b1
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Aug 2 14:29:12 2016 -0700
+
+    fixes to service and document modals
+
+commit 12976a0003325bf9dccc8cc352b964cc00f91729
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Aug 2 14:25:34 2016 -0700
+
+    all lists working with new and unsynced entries
+
+commit 301b448221885f1a18c01f02d3c7963ff0be6def
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Aug 2 12:42:58 2016 -0700
+
+    fix local storage issue
+
+commit 30efe5b51c7fcd92d0bf955ef2cfacac4cc6f03f
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Aug 2 11:32:57 2016 -0700
+
+    pushed fabcluster to persons at present
+
+commit d5f120905f73369366ce305a845f0f39af003f1e
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Aug 2 11:21:20 2016 -0700
+
+    unsynced enteries added to list
+
+commit a8a4459d0f0b6b0bb9445519b2cef5d51d9890cf
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Aug 2 08:00:53 2016 -0700
+
+    got camera working
+
+commit f7a53bf6bf3410cff7bc1a95bfdf2b8987ad0e57
+Merge: dfe1b54 6ded29c
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jul 28 12:15:37 2016 -0700
+
+    fix new entry controller issue in modules. Some of the new pages are still not working. I hope I didnt screw them up.  Getting error for fab cluster, but it says it was halfway implemented
+
+commit dfe1b54e58a1f3479b8d9d663c6b0cefe4880899
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jul 28 11:57:42 2016 -0700
+
+    fix new entry controller issue in modules. Some of the new pages are still not working. I hope I didnt screw them up
+
+commit 6ded29c5709bb45a2ae04e2044d8eb1fe3393a91
+Merge: 007b68f ea0240c
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Jul 27 15:03:52 2016 -0700
+
+    fixed merge conflicts
+
+commit ea0240c2bdc24b02892e3bc1fe93af146df01daf
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Jul 27 14:59:43 2016 -0700
+
+    fab-cluster operational
+
+commit 007b68f38b251f2a28885259a1d22ff69139531b
+Merge: 25f24b2 6bbfcf7
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Jul 27 12:45:08 2016 -0700
+
+    Merge branch 'fab-cluster' into features
+
+commit 25f24b2b03c5cce79ff3cc218fdceb43967f80a5
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Jul 27 12:19:11 2016 -0700
+
+    changed projects to networks
+
+commit e5cb1225795705fe4e631c5cfd2dddaf4dd76052
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Jul 27 11:23:31 2016 -0700
+
+    unsynced data merge working
+
+commit c0303c6ebb5574a7a7f83e8628ad53421432ff4f
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Jul 26 15:23:15 2016 -0700
+
+    file checking works, trying to get unsynced lists to acutally merge now
+
+commit 301af993775125ffe888a5eee7b0a4b4cdd0164f
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Jul 26 13:21:44 2016 -0700
+
+    working on unsynced merging
+
+commit 6bbfcf7430cdc3b21ae2e18065b1bcb883687d8d
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jul 21 14:02:54 2016 -0700
+
+    partially implimented fab cluster
+
+commit aa1472d68cd052b4d57933e64a9ae5220ccea39c
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Jul 19 15:49:07 2016 -0700
+
+    added some loading screebs to main menu and list controller
+
+commit cd4b061af5ea9436262aa299b583bf82f1ca619e
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Jul 19 14:32:45 2016 -0700
+
+    Changes to UI all pages updated with blue and white look
+
+commit 945a1adbc7773129d4ea92dcc3e52380d9a7abb0
+Merge: 64a56aa 1ae0ca9
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jul 18 15:57:09 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit 64a56aa2f3a57b6de938320da2af638252082686
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jul 18 15:55:59 2016 -0700
+
+    Expandable Input Fully Operational
+
+commit 78e8952d698b1ceedef3f819a822b8f01bcdc35b
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jul 14 15:54:12 2016 -0700
+
+    Made text boxes autoresize
+
+commit 1ae0ca9edafbb60b1fd6ab544a4546dad4b401ee
+Merge: be50b29 89ff46a
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jul 14 12:04:05 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit be50b29b05c1e82d07498d72148279753fd3bb67
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jul 14 12:03:58 2016 -0700
+
+    working on storage for unsynced files
+
+commit 89ff46a74a659286f8d09ddd7e8c742286d82032
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Jul 13 15:36:44 2016 -0700
+
+    fixed merge conflic again
+
+commit f887e719e94d3ff4d439336fb599e4d86410eead
+Merge: 69962b0 2f66a32
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Jul 13 15:35:52 2016 -0700
+
+    fixed merge conflict
+
+commit 69962b09a3d353586207871ff2fb289620b31901
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Jul 13 15:34:20 2016 -0700
+
+    Changes to ion-md-input library
+
+commit 2f66a328be4333d44753ae4868e22b0260207d65
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Jul 13 12:13:22 2016 -0700
+
+    internal storage working
+
+commit b41b85e2be4a2167ac2a2002cdddb75f9fa4b5e1
+Merge: 2364dc1 e5fc141
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Jul 13 10:21:36 2016 -0700
+
+    internal storage working
+
+commit 2364dc13d730d308d7ef646962a2cc64fba20733
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Jul 13 10:12:51 2016 -0700
+
+    internal storage working
+
+commit e5fc141d9b4a945e960dbe524d7bd34d87b5cccc
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Jul 12 15:41:24 2016 -0700
+
+    Made UI more uniform looking
+
+commit af82a16c7e6fac84d6061b471dbbc78a9326abd3
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jul 7 10:10:42 2016 -0700
+
+    Some minor front end changes
+
+commit 6936cc885e3a7ab5579c312276645ed712cc84fe
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Jul 5 15:55:51 2016 -0700
+
+    Signifigant updates to UI and some small controller changes
+
+commit 163398cb60064fae3a7af3578c6706d2e326f90f
+Merge: 32f4926 373ff92
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 30 15:57:42 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit 32f492626229b377a1cd854507998a124b8dd81b
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 30 15:57:38 2016 -0700
+
+    plugin for material input fields added
+
+commit 373ff928ed4ef0d5b21921cd3770d36daa76fce6
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jun 30 15:05:39 2016 -0700
+
+    working on getting local storage to work
+
+commit 8fd0f3b87500eafeaa1e553fc2d65b948257ddf8
+Merge: 81eba62 1e2b876
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jun 30 14:28:54 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit 81eba625b41c64d24918e5a6a2b00040dcddbb6d
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jun 30 14:28:19 2016 -0700
+
+    merging
+
+commit 1e2b876363707f0790a3a8541ec680b65888e8b2
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 30 14:26:12 2016 -0700
+
+    fixed merge conflict
+
+commit 67a12a5b21ee901af97e76785829351c06c5b4a3
+Merge: 5269577 de3da48
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 30 14:22:18 2016 -0700
+
+    fixed merge conflict
+
+commit 5269577d5f3c660c03428125cf63d8a655f8ccc3
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 30 14:17:07 2016 -0700
+
+    dependicies for material design
+
+commit 6c7667a6d2bcceedacc96b3ecac33369f2b33a71
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 30 14:14:46 2016 -0700
+
+    visual tweaks on multiple pages
+
+commit de3da4871ae72506f1bdb1c93dc87233be8eea76
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jun 30 11:59:22 2016 -0700
+
+    changed listctrl, now works will all modules
+
+commit ca1c604b74f1b43fa8d515f2accd671f0c9497bd
+Merge: 7045597 ed8e7bf
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jun 30 10:10:29 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit 7045597a29e220f8e32a27147479fa00b916ba50
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jun 30 10:10:23 2016 -0700
+
+    fixed http get calls, working on refractor code
+
+commit ed8e7bfbac8c59c6350e3243149c284675794ba2
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 30 09:54:49 2016 -0700
+
+    got material plugin working
+
+commit 74ad944473b54be44c89e3c1b03a80517edeaecc
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Jun 29 10:16:58 2016 -0700
+
+    made main menu flip like blinds
+
+commit 626a29d7407922650289d6204e520cd6b2f1a42e
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Jun 29 09:57:37 2016 -0700
+
+    merge
+
+commit 86d7523f8be20ab2305250e5b3d9ab76b6fee88d
+Merge: eba8015 8a0cb05
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Jun 28 14:56:42 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit eba8015ccb7a8fb875f61e2b47317a5d4cc08def
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Jun 28 14:56:18 2016 -0700
+
+    GPS working, now working on getting local storage to work
+
+commit 8a0cb05c61891efab28652903cd1cdebadd31c28
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Jun 28 14:30:15 2016 -0700
+
+    Most modals fully implimented.
+
+commit 699bd4f6a8ec89868a933e3601825bfb630248a7
+Merge: 7585595 1f097f2
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Jun 28 09:05:28 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit 7585595e68bf42c7ed1d9b996d698b3a627b7c3d
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Jun 28 09:05:08 2016 -0700
+
+    pictures are workign now, I think
+
+commit 1f097f2abc0ee93fa32ca1f5f5d6fb399b8623b6
+Merge: 83146a1 54fe2a6
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 27 16:16:26 2016 -0700
+
+    fixed merge conflicts
+
+commit 83146a10c2022bf23dbc3e81b3bba355b6228e70
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 27 16:13:05 2016 -0700
+
+    dynamic modals for new entries now working with all lists
+
+commit 54fe2a6bf4d48c3577f37a0ca007a057ae7ef9b8
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Mon Jun 27 13:42:11 2016 -0700
+
+    all spinners working execpt in documents and service enteries
+
+commit 77762233c0f8f49fbafc541467471685a2be54be
+Merge: 0ae3b03 051a9f6
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 27 09:40:56 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit 0ae3b031008c6d2b8852f7a3e506e84cd160e07b
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 27 09:40:49 2016 -0700
+
+    Work on controllers for dynamic modals
+
+commit 051a9f621d4a5c816fa2c04d2ad0db51d7107785
+Merge: 36a7796 5ebbfc7
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Mon Jun 27 09:05:18 2016 -0700
+
+    morning merge
+
+commit 36a77964dcd1e3af168f2bc2224ca10964f0473d
+Merge: 704e57f aad723f
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Fri Jun 24 11:14:43 2016 -0700
+
+    merging to fix button problem
+
+commit 5ebbfc755284610699755be415fef7c350976528
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Fri Jun 24 11:13:49 2016 -0700
+
+    Fixed bug where save button does not work with scroll icon.
+
+commit aad723fad084b6ce82cfca37d4a6cf46fe92def0
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Fri Jun 24 09:16:43 2016 -0700
+
+    made front page work with Hannah's links
+
+commit 704e57f141cba808049c0124b34cfd0424e8b2bc
+Merge: 074a520 43064b4
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Fri Jun 24 09:14:58 2016 -0700
+
+    merge
+
+commit 074a520a0f74d45d4c15dd7331a78060f07133ae
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Fri Jun 24 09:13:39 2016 -0700
+
+    merging
+
+commit 43064b4b27a272d9866504ac73638bb0450fe17d
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 23 11:15:26 2016 -0700
+
+    Fixed problem with main menu buttons not displaying. Keeping all buttons on main menu for the present for dev purposes.
+
+commit 76f22cea08df0c1a5b051071a07142e16b3512f7
+Merge: e59403f 85a38d6
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 23 10:59:32 2016 -0700
+
+    recovered working main menu page
+
+commit 85a38d65a554b0c684be0c2cd89d0fcfbe90586a
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 23 10:55:20 2016 -0700
+
+    working first page
+
+commit e59403f06ebf372214b9f0ed6e92937188084033
+Merge: 9c4c455 fe6b166
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 23 10:13:59 2016 -0700
+
+    fixed merge conflict
+
+commit 9c4c45542feb4ad5fecdbac0bac176ced9249418
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 23 10:10:15 2016 -0700
+
+    typo in viewProject fixed
+
+commit fe6b166be519261984d7297e5d9b3338a8e39ea4
+Merge: 112977e e45be8d
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Jun 22 16:33:58 2016 -0700
+
+    dynamic lists working for all pages now. Can click through to view edit page on the information. not all edit pages are working yet. Refractored to delete redundant view pages and controllers. Front page not showing buttons after merge, but connor is working on changing the front page anyways
+
+commit 112977e14c0a1b62b8c492f1a5cf5b721ec14839
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Wed Jun 22 16:16:28 2016 -0700
+
+    dynamic lists working for all pages now. Can click through to view edit page on the information. not all edit pages are working yet. Refractored to delete redundant view pages and controllers
+
+commit e45be8d93f0cd9f7a1bcb60af2071630a9a522d2
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Wed Jun 22 15:18:01 2016 -0700
+
+    Changed Some Link Hierarchies; Implimeted new project page as a modal
+
+commit 83720aee91af784490c1e2ebbcb1c67e5e3b1901
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Jun 21 15:58:24 2016 -0700
+
+    made header more distinct with border
+
+commit 07c95888957d3515e667d9faa68c0cb07465ad0a
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Jun 21 14:42:34 2016 -0700
+
+    splash screen implimented android only
+
+commit b9c1420c13cd31693a626dae9b717c6924257dd3
+Merge: 497d416 2ef289d
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Jun 21 11:46:47 2016 -0700
+
+    merged
+
+commit 497d416eceb4d91b1eaac1eb912005f78944a57b
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Tue Jun 21 11:42:58 2016 -0700
+
+    working on createNew pages
+
+commit 2ef289d5d4b0ace477d29d8ebd5d14ada015276e
+Merge: b0ea639 1ed2355
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Jun 21 10:46:11 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit b0ea639c40e9abd8ba2cce8858668c5b28138ebb
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 20 16:14:42 2016 -0700
+
+    Intgrated light themeing.
+
+commit 1ed2355f7946d07ddaeaf1ce5907c0c64e0d13d9
+Merge: e7de404 4a4b4fa
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Mon Jun 20 15:48:24 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit e7de40409568f56398424135ad73297fa0fdb363
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Mon Jun 20 15:48:00 2016 -0700
+
+    http gets working, people list working, working on viewPeople page
+
+commit 41c626d0600bd6273737616738382a3625f88a4f
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 20 15:43:12 2016 -0700
+
+    Lightened up and polished look on main page and side menu.
+
+commit 4a4b4fa4fc3a383e95faa0f627bb32074ab18d5e
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 20 11:13:48 2016 -0700
+
+    debugged external linking to css files
+
+commit 71fff0afb2f55bf0dccf9de9d9608ff94a22cd39
+Merge: 42faf97 7db2007
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Jun 14 09:18:42 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit 42faf97d870f3db145b3e204c3498891ef4d2ab8
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Tue Jun 14 09:18:06 2016 -0700
+
+    fixed issue in iconic.project:
+
+commit 7db200706dcdd7384440bd34b957abdc60bdf8c1
+Merge: 39b0745 dc75d38
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Mon Jun 13 16:32:12 2016 -0700
+
+    started working on dynamic list for display
+
+commit 39b074518fde665dc1ecce26265fabdba89987dd
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Mon Jun 13 16:30:20 2016 -0700
+
+    started working on dynamic list for display
+
+commit dc75d388b9886ea7acd83c74c113ff549cf39c2a
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 13 16:29:08 2016 -0700
+
+    Compliled into apk
+
+commit ed10ac6323df6cf8721a16357a1d39386d88f689
+Merge: c3031d1 796fb88
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 13 15:54:52 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit c3031d1620de8acf920e55a369c12ef1c066bec0
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 13 15:54:35 2016 -0700
+
+    Added placeholder words to each tile button
+
+commit 796fb88bfc13bf172a2ea0c49fbc7dee67f0dc5b
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Mon Jun 13 15:52:42 2016 -0700
+
+    Camera permissions working and you can now take photos from the camera or the gallery. no encoding for the image, only returns file path
+
+commit 280868fb05fda069c8d90379bb223e3d7dd22279
+Merge: 0caf570 43af88c
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Mon Jun 13 15:52:31 2016 -0700
+
+    Camera permissions working and you can now take photos from the camera or the gallery. no encoding for the image, only returns file path
+
+commit 0caf5705cccff1012ce2b260fc692ed667b374bf
+Merge: 43562dd a95fef1
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Mon Jun 13 15:50:31 2016 -0700
+
+    Camera permissions working and you can now take photos from the camera or the gallery. no encoding for the image, only returns file path
+
+commit 43af88cbaac053a9db1dcaffc7fef34507aa0fe1
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 13 14:38:03 2016 -0700
+
+    Basic tile buttons for main menu implemented with animations
+
+commit 2fd7858a72d748bcef2c1c7d91de8a4f8a33cb06
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Mon Jun 13 09:48:13 2016 -0700
+
+    Scroll arrow implemented on all scrollable content areas.
+
+commit 76bf0c2a69d16b10e7cf0c8987ddd435f4281a80
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Fri Jun 10 14:04:14 2016 -0700
+
+    scroll controller hides arrow on reaching bottom of content area - with angular.js logic
+
+commit ad2a5fbe976b3668d5e5e3a2bdb539b0d076b83f
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Fri Jun 10 13:39:37 2016 -0700
+
+    scroll controller hides arrow on reaching bottom of content area
+
+commit 43562ddc50964b558ec175570855a04eef069c8b
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Fri Jun 10 09:20:55 2016 -0700
+
+    morning pull
+
+commit a95fef1ed23fefa38e9d5740cd80d71f5987d218
+Merge: e463cd4 8a9f994
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 9 16:16:46 2016 -0700
+
+    Merge branch 'features' of https://github.com/hannahmunoz/NRDC into features
+
+commit e463cd445fbbf88e27f02095eb5de7d821e4ce3c
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 9 16:16:08 2016 -0700
+
+    arrow on scroll goes to bottom
+
+commit 8a9f994cac7318910c0f147d7025effacc0d997a
+Merge: 5272452 918c03d
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jun 9 15:14:10 2016 -0700
+
+    merging
+
+commit 5272452a6ca48f3c2b86916ee903bf04db7e63d0
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jun 9 15:13:24 2016 -0700
+
+    merging
+
+commit 9528a1f5600befc8e522637b49925bd39b6315ac
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jun 9 15:12:24 2016 -0700
+
+    merging:
+
+commit 918c03de222ca552a84a7c08b4595b326cffb922
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 9 15:11:21 2016 -0700
+
+    some cheanges to controller and deplouyment
+
+commit 67ccf65b976253622d44ed42f9345963331226ac
+Merge: 1c0c489 53332ba
+Author: Hannah Munoz <hannah.munoz92@gmail.com>
+Date:   Thu Jun 9 14:08:28 2016 -0700
+
+    People working, images can be picked from gallery, but not from camera. Images are not in proper format. JSON for People and Projects can be created. Projects spinner is still not implemented
+
+commit 1c0c4899c1e05869e35afc98a2d3000d1e2f00e4
+Author: Hannah J Munoz <hmunoz@unr.edu>
+Date:   Thu Jun 9 14:05:24 2016 -0700
+
+    People working, images can be picked from gallery, but not from camera. Images are not in proper format. JSON for People and Projects can be created. Projects spinner is still not implemented
+
+commit 53332ba4740b609e0844a5a390fa8ee0831d2f80
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 9 14:01:49 2016 -0700
+
+    Upload Btn only on main menu
+
+commit 78e66730ade03338b37b056b7d5ff6af7513fbad
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 9 13:58:35 2016 -0700
+
+    added css file
+
+commit d4e77e89889d3c3472356243017c2d2772b0ce07
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 9 13:57:55 2016 -0700
+
+    added upload button and scroll arrow
+
+commit f412cf28b75f2cc7d6b8b5276e730c05f22ef3b2
+Author: Connor Scully-allison <cscully-allison@nevada.unr.edu>
+Date:   Thu Jun 9 10:34:34 2016 -0700
+
+    resolving more conflicts
+
+commit 8b3e6692b4d722cbaeba1a43d5c20aee34837348
+Merge: be7323f ac5ea5e
+Author: Connor Scully-allison <cscully-allison@unr.edu>
+Date:   Thu Jun 9 10:31:03 2016 -0700
+
+    fixed conflicts
+
+commit be7323fbf88c7e79ac0d192d3e06fb802e5a2f59
+Author: Connor Scully-allison <cscully-allison@unr.edu>
+Date:   Thu Jun 9 10:28:09 2016 -0700
+
+    seeking js solution for scrollbar
+
+commit 976aa446ea475d5aadb1ed3589bccf292bc213bd
+Author: Hannah J Munoz <hmunoz@unr.edu>
+Date:   Wed Jun 8 16:47:33 2016 -0700
+
+    People View getting user input and inputting into JSON. Working on implementing plugin for UUID. TODO: implement photos
+
+commit ac5ea5ec93367436775b2321c5824ef4500ef488
+Author: Connor Scully-allison <cscully-allison@unr.edu>
+Date:   Wed Jun 8 15:31:26 2016 -0700
+
+    removed lame universal scrollbar
+
+commit b71d7ad593edb9192fc6b7b5d0e008a215a4d95c
+Author: Connor Scully-allison <cscully-allison@unr.edu>
+Date:   Wed Jun 8 11:14:42 2016 -0700
+
+    small changes to ui
+
+commit 7f0290c4f29c41313ef08d394cbe7958ad0d4462
+Author: Hannah J Munoz <hmunoz@unr.edu>
+Date:   Tue Jun 7 14:26:28 2016 -0700
+
+    Inital push, basic GUI done
+
+commit ecf3fd486166968b42c87690f700192ae8e4e530
+Author: Hannah J Munoz <hmunoz@unr.edu>
+Date:   Tue Jun 7 13:53:35 2016 -0700
+
+    initial push, basic GUI finished

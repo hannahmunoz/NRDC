@@ -1,0 +1,11 @@
+<ion-modal-view style="" class=" ">
+    <ion-header-bar class="bar-dark">
+        <div class="title header-item">{{context}} Image View</div>
+    </ion-header-bar>
+
+    <ion-content class="has-header grey">
+      <h1>Are you sure you wish to delete this image from local storage?</h1>
+      <button ng-click="verifyDelete();"> YES </button>
+      <button ng-click="closeModal();"> NO </button>
+    </ion-content>
+</ion-modal-view>

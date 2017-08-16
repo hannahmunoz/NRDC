@@ -1,0 +1,13 @@
+<ion-modal-view style="" class=" ">
+    <ion-header-bar class="bar-dark">
+        <div class="title header-item">{{context}} Image View</div>
+    </ion-header-bar>
+
+    <ion-content
+      class="has-header grey">
+      <ion-scroll zooming="true" direction="xy" delegate-handle="zoom-pane" class="zoom-pane" min-zoom="1" overflow-scroll="false" scrollbar-x="false" scrollbar-y="false">
+        <image src="data:image/jpeg;base64,{{image}}"/>
+      </ion-scroll>
+
+    </ion-content>
+</ion-modal-view>

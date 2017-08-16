@@ -1,0 +1,23 @@
+<ion-scroll direction="y">
+    <h1>{{category}}</h1>
+    <h2>{{name}}</h2>
+    <br/>
+    <br/>
+    <ul>
+        <li ng-repeat="(key, property) in conflictRenderer">
+            <div class="conflict-resolution-line-item">
+                <h3>{{key}}</h3>
+                <select ng-model="resolutionItem[key]">
+                    <option value="{{property.local}}">Local: {{property.local}}</option>
+                    <option value="{{property.conflict}}">Remote: {{property.conflict}}</option>
+                </select>
+            </div>
+        </li>
+    </ul>
+    <button class= "button button-large button-block main-menu-button accent"
+            ng-hide="finished"
+            ng-click="populateNextConflict();">{{conflictButtonText}}</button>
+    <button class= "button button-large button-block main-menu-button accent"
+            ng-show="finished"
+            ng-click="saveAndReturn();">Save and Return</button>
+</ion-scroll>

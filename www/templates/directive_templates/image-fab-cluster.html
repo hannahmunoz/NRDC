@@ -1,0 +1,41 @@
+<button deletable
+ 		ng-click="toggleActive();"
+        ng-hide="active || deletable"
+        class="button button-fab compliment">
+    <i class="icon ion-plus" style="color:white;"></i>
+</button>
+<div ng-hide="!active">
+
+
+    <!-- Delte Image From Database -->
+    <button class="button button-fab tertiary animated fadeIn" ng-click="deleteFromDB()">
+        <i class="icon ion-close-circled" style="color: white;"></i>
+    </button>
+
+    <!-- Delte Image From Database -->
+    <button class="button button-fab tertiary animated fadeIn" ng-click="fetchFromServer()">
+        <i class="icon ion-arrow-down-a" style="color: white;"></i>
+    </button>
+
+    <!--Save Image to File-->
+    <button class="button button-fab tertiary animated fadeIn" ng-hide="saved" ng-click="saveLocal()">
+        <i class="icon ion-archive" style="color: white;"></i>
+    </button>
+
+    <!-- Delete Image From File -->
+    <button class="button button-fab tertiary animated fadeIn" ng-show="saved" ng-click="deleteLocal()">
+        <i class="icon ion-trash-b" style="color: white;"></i>
+    </button>
+
+
+    <!-- View Full Sized Image -->
+    <button class="button button-fab tertiary animated fadeIn" ng-click="viewImage()">
+        <i class="icon ion-eye" style="color: white;"></i>
+    </button>
+
+    <!--Hide Fab Cluster-->
+    <button  class="button button-fab tertiary" ng-click="toggleInactive()">
+        <i class="icon ion-minus" style="color: white;"></i>
+    </button>
+
+</div>
