@@ -430,6 +430,29 @@ select{
     font-size: 18px;
 }
 
+.conflict-resolution-line-item > select {
+    border: 0px;
+    border-left: 2px solid rgba( 0, 0, 0, .1) !important;
+    border-right: 2px solid rgba( 0, 0, 0, .1) !important;
+
+    padding-top: 1em;
+    padding-bottom: 1em;
+
+    font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    font-size: 18px;
+
+    width: 83%;
+    white-space: pre-wrap;
+}
+
+.conflict-resolution-line-item{
+    padding: 1em;
+    margin-bottom: 2em;
+
+    background: rgba(140,0,0,.3);
+    border: 3px solid rgba(200,0,0,.9);
+}
+
 .select-container{
     padding-top: 1em;
     margin-left: 2em;

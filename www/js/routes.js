@@ -9,6 +9,11 @@ angular.module('app.routes', [])
 
   $stateProvider
 
+  .state('conflict', {
+    url:'/conflict/{response:json}/{modified:json}',
+    templateUrl:'templates/conflict-resolution-view.html'
+  })
+
   .state('people', {
    url: '/people',
     templateUrl: 'templates/people.html',
@@ -67,7 +72,7 @@ angular.module('app.routes', [])
     url: '/network',
     templateUrl: 'templates/network.html',
     controller: 'networkCtrl'
-  }) 
+  })
 
   .state('createNewNetworks', {
     url: '/createNetwork',
@@ -115,18 +120,9 @@ angular.module('app.routes', [])
     controller: 'ServiceModalController'
   })
 
-  // .state('createNew.mainMenu', {
-  //   url: '/mainMenu',
-  //   views: {
-  //     'side-menu21': {
-  //       templateUrl: 'templates/mainMenu.html',
-  //       controller: 'mainMenuCtrl'
-  //     }
-  //   }
-  // })
 
   .state('mainMenu', {
-    url: '/mainMenu',
+    url: '/mainMenu?{resolved:json}',
      templateUrl: 'templates/mainMenu.html',
      controller: 'mainMenuCtrl'
   })

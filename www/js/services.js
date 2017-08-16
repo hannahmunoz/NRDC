@@ -55,10 +55,35 @@ angular.module('app.services', [])
 			return  string.match("^[0-9a-fA-F]+$");
 	}
 
+
+    /**
+     * Swaps the base of a retrieved encoded image from base 16 to base 64
+     *  for display as a jpg
+     * @param  {string} hexImage A hex encoded string representing an image retireved from remote server
+     * @return {string}          A base 64 encoded string representing an image for display
+     */
+      function baseSwap_16_to_64 (hexImage){
+
+        if(IsHex(hexImage)){
+            //take hexidemal and conveter to base string
+            var result = "";
+            for (var i = 0; i < hexImage.length; i += 2){
+            result += String.fromCharCode(parseInt(hexImage.substr(i, 2), 16));
+            }
+
+            //rencode string as base 64
+            //and return
+            var image = btoa(result);
+        }
+        return image || hexImage;
+    }
+
+
 	return {
 			Pluralize: Pluralize,
 			LengthInUtf8Bytes: LengthInUtf8Bytes,
-			IsHex: IsHex
+			IsHex: IsHex,
+            baseSwap_16_to_64: baseSwap_16_to_64
 	};
 })
 
@@ -119,9 +144,7 @@ angular.module('app.services', [])
 		return $q (function (resolve, reject){
 			if (loggedIn){
 
-
-
-						console.log("Unsynched JSON before put in edit:", JSON);
+                console.log("Unsynched JSON before put in edit:", JSON);
 
 				// post to url, timeout in ms
 				$http.post (url, JSON, {timeout: 10000}).then (function Success (response){
@@ -161,51 +184,136 @@ angular.module('app.services', [])
 // var: string (url), JSON
 // return: promise
 	function edit (url, JSON, loggedIn){
-		var types = ["people", "networks", "sites", "systems", "deployments", "components", "documents","serviceentries"];
-		var titles = ["People", "Networks", "Sites", "Systems", "Deployments", "Components", "Documents","ServiceEntries"]
 		// return promise
 		return $q (function (resolve, reject){
 			if (loggedIn){
-				// for (var i = 0; i < types.length; i++){
-				// 	for (var j = 0; j < JSON[titles[i]].length; j++){
+				$http.post (url , JSON, {timeout: 10000}).then (function Success (response){
+					// check if there is edit data saved
+					if (File.checkFile ('Edit')){
+						// remove it
+						$cordovaFile.removeFile (cordova.file.externalDataDirectory, 'NRDC/Edit');
+					}
 
-						$http.post (url , JSON, {timeout: 10000}).then (function Success (response){
-							// check if there is edit data saved
-							if (File.checkFile ('Edit')){
-								// remove it
-								$cordovaFile.removeFile (cordova.file.externalDataDirectory, 'NRDC/Edit');
-							}
-							// show success
-							$cordovaToast.showLongBottom ("Post Successful");
-							// resolve promise
-							resolve (response.status);
-						}, function Error (response){
-							// log error
-							console.warn ("Post Error :", response);
-							// write to unsynced file
-							File.checkandWriteFile ('Edit', JSON);
-							// toast failure
-							$cordovaToast.showLongBottom ("Post Error: " + response.statusText);
-							// reject promise
-							reject (response.status);
-						})
-				// 	}
-				// }
-			}
-		else{
-				// write to edit file
-				File.checkandWriteFile ('Edit', JSON);
-				// toast failure
-				$cordovaToast.showLongBottom ("Not Logged In");
-				// reject promise
-				reject ();
+					// show success
+					$cordovaToast.showLongBottom ("Post Successful");
+					// resolve promise
+					resolve (response.status);
+				}, function Error (response) {
+					// log error
+					console.warn ("Post Error :", response);
+					// write to unsynced file
+					File.checkandWriteFile ('Edit', JSON);
+					// toast failure
+					$cordovaToast.showLongBottom ("Post Error: " + response.statusText);
+					// reject promise
+					reject (response.status);
+				})
+		    }
+		    else {
+    			// write to edit file
+    			File.checkandWriteFile ('Edit', JSON);
+    			// toast failure
+    			$cordovaToast.showLongBottom ("Not Logged In");
+    			// reject promise
+    			reject ();
 			}
 		})
 	}
+
+    /**
+     * Performs conflict check on uploaded JSONs recieves
+     * a list of conflicted
+     * @param  {string}  url         The url to the conflict check service!
+     * @param  {object}  checkValues An object containing all the values reuqired for checking for conflicts
+     * @param  {boolean} loggedIn    A boolean transferred from rootScope indicating that a user is logged in
+     * @return {none}
+     */
+    function conflictCheck(url, categoryMap, loggedIn){
+        //variables
+        var checkMap;
+
+        //strip away all info in unsynced data except
+        //for uuids and mod-dates
+        checkMap = stripEntities(categoryMap);
+
+        return $q(function(resolve, reject){
+            if(loggedIn){
+                console.log(JSON.stringify(checkMap));
+                $http.post(url, checkMap, {timeout:10000})
+                .then(
+                    function success(response){
+                        //if response inidcateds no conflicts
+                        //resolve with flag
+                        //!!!!!!!!!!!!REMEBER TO ASK IF VINH CAN GIVE MORE MEANINGFUL RESPONSE ON THIS!!!!!!!!!!!!
+
+                        //if there are conflicts
+                            //resolve flat list of conflicts back to calling controller
+                        if(true){ //true while I consider flags for if this list is empty or not
+                            resolve(response.data);
+                        }
+                    }, function error(response){
+                        // log error
+                        console.warn ("Conflict Check Error :", response);
+                        // toast failure
+                        $cordovaToast.showLongBottom ("Post Error: " + response.statusText);
+                        //reject promise
+                        reject(response.status);
+                    }
+                );
+            }
+            else {
+                // toast failure
+                $cordovaToast.showLongBottom ("Not Logged In");
+                // reject promise
+                reject();
+            }
+        })
+    }
+
+
+    /**
+     * helper function to strip full jsons down only id/md pairs
+     * @param  {object} categoryMap A object containing all the edited items staged for sync
+     *                              organized by thier respective categories
+     * @return {object}             An object containing only the uuid and modified date only
+     *                              of the passed edited items
+     */
+    function stripEntities(categoryMap){
+        var checkMap = {};
+
+        for(var object in categoryMap){
+            if(Array.isArray(categoryMap[object])){
+                if(categoryMap.hasOwnProperty(object)){
+                    //create space for an array if undefined
+                    checkMap[object] = [];
+
+                    //for each item in a specific category of edit data
+                    //push only the unique identifier and mod date into
+                    //array to be returned and posted to microservice
+                    categoryMap[object].forEach(
+                        function(categoryItem){
+                            checkMap[object].push({
+                                "Unique Identifier": categoryItem["Unique Identifier"],
+                                "Modification Date": categoryItem["Modification Date"]
+                            })
+                        }
+                    );
+                }
+            }
+            else {
+                checkMap[object] = "";
+                checkMap[object] = categoryMap[object];
+            }
+        }
+
+        return checkMap;
+    }
+
 	// return factories
 	return{read: read,
 		   post: post,
-		   edit: edit};
+		   edit: edit,
+           conflictCheck: conflictCheck};
 })
 
 // factory: Login
@@ -373,13 +481,8 @@ angular.module('app.services', [])
 				// get the picture
     			navigator.camera.getPicture( function Success(imageData) {
 
-
-
                 //encode image data into hex string
                 result = encode(imageData);
-
-                console.log(result.substr(0,100));
-
 
                 // resolve promise
                 // pass raw value back for rendering
@@ -625,56 +728,54 @@ angular.module('app.services', [])
 		$cordovaFile.checkFile(cordova.file.externalDataDirectory, 'NRDC/'+title)
 		.then(
 			function(response){
-				//if file doesn't exist just write and return
-				if(response == false){
-					checkandWriteFile(title, JSON);
-				}
-				//if file exists
-				else {
-					//read file
-					// (I hate how nested this bs gets)
-					readFile(title)
-					.then(
-						function(response){
-							//if file exists but there is no data
-							if(response == null){
-								console.log("Is this calling a lot?");
-								checkandWriteFile(title, JSON);
-								return;
-							}
+				//read file
+				// (I hate how nested this bs gets)
+				readFile(title)
+				.then(
+					function(response){
+						//if file exists but there is no data
+						if(response == null){
+							checkandWriteFile(title, JSON);
+							return;
+						}
 
-							//scan through each element from returned file
-							SavedJSON = response[ Utility.Pluralize(title) ];
-							console.log(response);
+						//scan through each element from returned file
+						SavedJSON = response[ Utility.Pluralize(title) ];
+						console.log(response);
 
-							//check for an existing object in the data
-							// returned from the file
-							// Uses uuids as princiapl comparator and breaks
-							JSON[ Utility.Pluralize(title) ]
-							.forEach(
-								function(object){
-									//for each object in new JSON
-									//scan through saved file for
-									//match
-									for(savedObject in SavedJSON){
-										if(object['Unique Identifier'] == SavedJSON[savedObject]['Unique Identifier']){
-											object['Photo'] = SavedJSON[savedObject]['Photo'];
-											break;
-										}
+						//check for an existing object in the data
+						// returned from the file
+						// Uses uuids as princiapl comparator and breaks
+						JSON[ Utility.Pluralize(title) ]
+						.forEach(
+							function(object){
+								//for each object in new JSON
+								//scan through saved file for
+								//match
+								for(savedObject in SavedJSON){
+									if(object['Unique Identifier'] == SavedJSON[savedObject]['Unique Identifier']){
+										object['Photo'] = SavedJSON[savedObject]['Photo'];
+										break;
 									}
 								}
-							);
-							//write file
-							checkandWriteFile(title, JSON);
-						},
-						function(error){
-							console.log(error);
-						}
-					)
-				}
+							}
+						);
+						//write file
+						checkandWriteFile(title, JSON);
+					},
+					function(error){
+						console.error("File read error: " + title, error.message);
+					}
+				)
 			},
 			function(error){
-				console.log(error);
+                if(error.message === "NOT_FOUND_ERR"){
+                    createFile(title);
+                    checkandWriteFile(title, JSON);
+                }
+                else{
+                    console.error("File read error: " + title, error.message);
+                }
 			}
 		)
 	}
@@ -701,13 +802,13 @@ angular.module('app.services', [])
 						}
 					}, function Failure (error){
 						// log error
-						console.error("File Read Error:" + title + " " + error.code);
+						console.error("File Read Error:" + title + " ", error.message);
 						// reject promise
 						reject (error);
 					})
 				}, function Failure (error){
 					// log error
-					console.error ("File Not Found: " + title + " " + error.code);
+					console.error ("File Not Found: " + title + " ", error.message);
 					// reject promise
 					reject (error);
 				})
@@ -804,7 +905,8 @@ angular.module('app.services', [])
 					resolve();
 				},
 				function(error){
-
+                    console.log("File error", error.message);
+                    reject(error);
 				}
 			);
 
@@ -874,12 +976,16 @@ angular.module('app.services', [])
 // function(s):
 //		fetchImage
 //
-.factory('LazyLoad', function($q, $http, File){
+.factory('LazyLoad', function($q, $http, File, Utility){
 
 	return{
 		fetchImage: fetchImage,
 		saveSessionImage: saveSessionImage,
-		getSessionImage: getSessionImage
+		getSessionImage: getSessionImage,
+        clearSessionImage: clearSessionImage,
+        forceDownloadImage: forceDownloadImage,
+        setLocalSaveState: setLocalSaveState,
+        getBooleanLocalSaveState: getBooleanLocalSaveState
 	};
 
 	//Public Function Defintions
@@ -901,43 +1007,68 @@ angular.module('app.services', [])
 			  */
 			for(context in uuidObj){
 				if( uuidObj.hasOwnProperty(context) ){
-
 					File.ReadImageFromFile(context, uuidObj[context])
 					.then(
 						function success(response){
 							//does not resolve if response
 							// is null
 							if(response != null){
-								resolve({"image": response, "fromFile": true});
-							}
+                                var image;
+                                image = Utility.baseSwap_16_to_64(response);
+
+								resolve({"image": image, "fromFile": true});
+							} else {
+                                dbCall();
+                            }
+
 						},
 						function failure(error){
-							//this may cause problems of returning too soon
-							//***FIX***
-							reject(error);
+                            console.log("Does this return too soon?");
+							//this may cause problems of returning too
+							dbCall();
 						}
 					);
-
 				}
 			}
 
 			//query for photo service
 			// if no image is saved
 			// on the device
-			$http.post("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Photo", uuidObj, {timeout: 20000})
-			.then(
-				function success(response){
-					var base64 = baseSwap_16_to_64(response.data);
-					resolve ({"image": base64, "fromFile": false});
-				},
+			function dbCall(){
+    			$http.post("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Photo", uuidObj, {timeout: 20000})
+    			.then(
+    				function success(response){
+                        var image;
+                        image = Utility.baseSwap_16_to_64(response.data);
 
-				function failure(error){
-					reject(error);
-				}
-			)
+    					resolve ({"image": image, "fromFile": false});
+    				},
 
-		})
+    				function failure(error){
+    					reject(error);
+    				}
+    			)
+            }
+        })
 	}
+
+    function forceDownloadImage(uuidObj){
+        return $q (function (resolve, reject) {
+            //query for photo service for image
+            $http.post("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Photo", uuidObj, {timeout: 20000})
+            .then(
+                function success(response){
+                    var image;
+                    image = Utility.baseSwap_16_to_64(response.data);
+
+                    resolve ( {"image": image, "fromFile": false} );
+                },
+                function failure(error){
+                    reject(error);
+                }
+            )
+        })
+    }
 
 	/**
 	 * Saves a copy of a retirieved to a localStorage dict. (mapped by its uuid)
@@ -953,9 +1084,12 @@ angular.module('app.services', [])
 	/**
 	 * Retrieves an image from our localStorage dict. for use. Looks up image by uuid.
 	 * @param  {string} uuid The uuid of the object associated with a given image
-	 * @return {string}      Base64 represenation of a shared image
+	 * @return {string}      Base64 represenation of a shared image or null if empty
 	 */
 	function getSessionImage(uuid){
+            if (sessionStorage[uuid] === ""){
+                return null;
+            }
 			return sessionStorage[uuid];
 	}
 
@@ -968,26 +1102,19 @@ angular.module('app.services', [])
 			sessionStorage[uuid] = null;
 	}
 
+    function setLocalSaveState(uuid, state){
+        sessionStorage[uuid + " saved"] = state;
+    }
 
-  /**
-   * Swaps the base of a retrieved encoded image from base 16 to base 64
-   *  for display as a jpg
-   * @param  {string} hexImage A hex encoded string representing an image retireved from remote server
-   * @return {string}          A base 64 encoded string representing an image for display
-   */
-	function baseSwap_16_to_64 (hexImage){
+    function getBooleanLocalSaveState(uuid){
+        if(sessionStorage[uuid + " saved"] === "true"){
+            return true;
+        }
+        return false;
+    }
 
-      //take hexidemal and conveter to base string
-      var result = "";
-			for (var i = 0; i < hexImage.length; i += 2){
-      		result += String.fromCharCode(parseInt(hexImage.substr(i, 2), 16));
-			}
 
-			//rencode string as base 64
-			//and return
-      var image = btoa(result);
-      return image;
-  }
+
 
 
 })

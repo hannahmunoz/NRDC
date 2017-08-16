@@ -10,8 +10,8 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
 	$scope.document = false;
 	$scope.service = false;
-  $scope.images = 'ion-images';
-  $scope.camera = "ion-android-camera";
+    $scope.images = 'ion-images';
+    $scope.camera = "ion-android-camera";
 
 
 	//http://stackoverflow.com/questions/4878756/javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
@@ -234,7 +234,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
  // controller for the main menu
 .controller('mainMenuCtrl', function($scope, $rootScope, $q, $window, sync, Login, $http, $ionicModal, DynamicPage, ObjectCounter,
-                                     File, $cordovaFile, $cordovaNetwork, $ionicLoading, $routeParams, $timeout, $ionicPlatform) {
+                                     File, $cordovaFile, $cordovaNetwork, $ionicLoading, $stateParams, $timeout, $ionicPlatform) {
 
 
 
@@ -521,11 +521,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 // Reads from the server and inputs into array
     $scope.init = function (){
 
-        $scope.show();
+        showLoading();
         $scope.timeout = true;
 
         //start timeout
-         $timeout(function () {
+        $timeout(function () {
             if($scope.timeout == true){
                 $ionicLoading.hide();
                 $scope.makeTimeoutModal();
@@ -536,7 +536,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	//get permissions
     	//unblock before packaging
     	//Camera.checkPermissions();
-        $q (function (resolve, reject){
+    $q (function (resolve, reject){
         // gets unsynced data back from local storage and puts in unsyncedJSON
         var list = ["People","Site Networks", "Sites", "Systems", "Deployments", "Components", "Documents","Service Entries"];
 
@@ -557,6 +557,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	$q (function (resolve, reject){
     	// gets unsynced data back from local storage and puts in unsyncedJSON
 		var list = ["People", "Site Networks", "Sites", "Systems", "Deployments", "Components", "Documents", "Service Entries"];
+
     	if (File.checkFile ('Unsynced')){
 			File.readFile ('Unsynced').then (function Success (response){
 				if (response != null){
@@ -679,11 +680,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
          //throw flag for timeout function
          $scope.timeout = false;
 
-  	})
-    })})})})})})})})})
-	}
+  	})})})})})})})})})})
+    }
 
-    $scope.show = function(){
+    function showLoading(){
     	//Indicating Initilaize is loading
     	$ionicLoading.show({
         	templateUrl: 'templates/directive_templates/loading-spinner.html',
@@ -741,7 +741,10 @@ app administrator.
 
 
     //initalize
-    $scope.init();
+    //hacky workaround to prevent data from being loaded from file after conflict resolution
+    if(!angular.isDefined($stateParams.resolved)){
+        $scope.init();
+    }
 
 
 })
@@ -912,10 +915,7 @@ app administrator.
 
             //call the fucntion which swtiches out switch view data
             $scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
-
-
             $rootScope.listLevel = $scope.temp;
-
 
             //store the json of the
             //list item clicked
@@ -937,13 +937,13 @@ app administrator.
     		if ($scope.title.localeCompare("Networks")){
     			$scope.networkListFlag = true;
     		}
-    		else
+    		else{
     			$scope.networkListFlag = false;
+            }
         }
         //this else statmenet makes it so compoanents are a button
         // that shows component info
         else{
-
             $rootScope.itemLevel++;
             DynamicPage.setRoute(tieredRoutes[$rootScope.itemLevel]);
             $scope.route = DynamicPage.getRoute();
