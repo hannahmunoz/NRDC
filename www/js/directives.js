@@ -657,10 +657,10 @@ angular.module('app.directives', [])
                     // then set scope variable
                     // that hides conflictChecker and unhides sync options
                     if(countConflicts(response) === 0){
-                        console.log("No Conflicts We Good!");
+                        $cordovaToast.showLongBottom ("No conflicts found. Sync now.");
+                        $rootScope.canSync = true;
                     }
                     else{
-
                         // resolve conflicts by changing states and resolving the conflicts
                         $state.go( 'conflict', {response: response, modified: modified} );
 
@@ -670,16 +670,21 @@ angular.module('app.directives', [])
                             //fromState in the state the router is coming fromState
                             // toParams are the params coming to the destination state
                             if(fromState.name == 'conflict' && angular.isDefined(toParams.resolved)){
+                                //write user resolution selections to file
                                 if (File.checkFile ('Edit')){
                                     File.checkandWriteFile('Edit', toParams.resolved);
                                 }
+                                //copy resolved data into editJSON
                                 $rootScope.editJSON = angular.copy(toParams.resolved);
+
+                                //set global flag on syncability of data
+                                $rootScope.canSync = true;
                             }
                         })
                     }
                 },
                 function failure(error){
-
+                    $cordovaToast.showLongBottom ("Check Error: " + error.message);
                 }
             );
         }

@@ -19,12 +19,15 @@
         </li>
     </ul>
 
+    <!--Appears if there are conflicts in need of resolution-->
     <button class= "button button-large button-block accent conflict-resolution-button"
             ng-hide="finished || !valid"
-            ng-click="populateNextConflict();"><h4 class="text">{{conflictButtonText}}</h3></button>
+            ng-click="populateNextConflict();"><h4 class="text">{{conflictButtonText}}</h4></button>
+
+    <!--Appears if all conflicts have been resolved and we are on our final view-->
     <button class= "button button-large button-block accent conflict-resolution-button"
             ng-show="finished"
-            ng-click="saveAndReturn();"><h4 class="text">Save and Return</h3></button>
+            ng-click="saveAndReturn();"><h4 class="text">Save and Return</h4></button>
     <br/>
     <br/>
     <br/>

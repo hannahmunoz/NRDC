@@ -292,6 +292,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	File.createDirectory();
 
 
+
     /**************************************
      Does some fanciness for randomizing
      and displaying data on app title screen

@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services', 'app.directives', 'ionic-material', 'ionMdInput'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,5 +20,11 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
       StatusBar.styleDefault();
     }
 
+  });
+
+  //register rootScope watchers and configs
+  //I think there is a place for some more stuff here
+  $rootScope.$watchCollection('editJSON', function(){
+      $rootScope.canSync = false;
   });
 })
