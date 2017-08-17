@@ -646,8 +646,7 @@ angular.module('app.directives', [])
     // all returned, conflicted json
     function conflictCheckerController($scope, $rootScope, $state){
 
-
-        //binding functions to
+        //binding functions to scope
         $scope.check = check;
 
         function check(modified){
@@ -657,7 +656,7 @@ angular.module('app.directives', [])
                     //if response indicates that all is well
                     // then set scope variable
                     // that hides conflictChecker and unhides sync options
-                    if(countConflicts()){
+                    if(countConflicts(response) === 0){
                         console.log("No Conflicts We Good!");
                     }
                     else{
@@ -674,9 +673,7 @@ angular.module('app.directives', [])
                                 if (File.checkFile ('Edit')){
                                     File.checkandWriteFile('Edit', toParams.resolved);
                                 }
-                                $rootScope.editJSON = toParams.resolved;
-
-                                console.log($rootScope.editJSON);
+                                $rootScope.editJSON = angular.copy(toParams.resolved);
                             }
                         })
                     }
@@ -687,6 +684,12 @@ angular.module('app.directives', [])
             );
         }
 
+        /**
+         * Counts the conflicts returned by the server to ensure that there are
+         * conflicts in need of resolution.
+         * @param  {[type]} response [description]
+         * @return {[type]}          [description]
+         */
         function countConflicts(response){
             var count = 0;
             for(category in response){
@@ -695,21 +698,12 @@ angular.module('app.directives', [])
             return count;
         }
 
-        /**
-         * This function is used to copy the returned conflict resolved
-         * JSON into the rootScope.editJSON container
-         * I have to do this becuase of an odd problem where the assignment is appending
-         * values instead of overwriting
-         * @return {object} [description]
-         */
-        function shallowCopy(){
-
-        }
 
 
     }
 
 }])
+
 
 .directive('comparisonPopulator', [function(){
     return{
@@ -729,15 +723,47 @@ angular.module('app.directives', [])
         var localValues = [];
 
 
-        //IIFE: performs the setup of the controller
+        //performs the setup of the controller
         setupScope();
-        $rootScope.$on('$stateChangeSuccess', resetScope);
 
         //bind functions to the scope
         $scope.populateNextConflict = populateNextConflict;
         $scope.saveAndReturn = saveAndReturn;
+        $scope.throwSelectionFlag = throwSelectionFlag;
 
 
+        //watchers and handlers
+        $scope.$watchCollection('resolutionItem', validateForm);
+        $rootScope.$on('$stateChangeSuccess', resetScope);
+
+        /**
+         * Checks fot validity of the form so that the save and continue button will show.
+         * @return {[type]} [description]
+         */
+        function validateForm(){
+            for(property in $scope.resolutionItem){
+                if( property != "Photo" && $scope.resolutionItem[property] == null ){
+                    return;
+                }
+            }
+            $scope.valid = true;
+            return;
+        }
+
+        /**
+         * Throws a flag everytime that a selection has been made on
+         * a dropdown so that the directive can update the dom
+         * @param  {string} lineItem the name of the line item which was just selected
+         * @return {[type]}            [description]
+         */
+        function throwSelectionFlag(lineItem){
+            $scope.selectionMade = lineItem;
+            $scope.selected[lineItem] = true;
+        }
+
+
+
+        //Primary Functions and Helper Functions
 
         /**
          * THis function only sets up the view and calls a
@@ -762,7 +788,7 @@ angular.module('app.directives', [])
             if(conflicts.length > 0){
                 //set the category for the scope
                 $scope.category = category;
-                $scope.conflictButtonText = "Save Choices and Continue";
+                $scope.conflictButtonText = "Save Selections and Continue";
 
                 //reregister next button functionality
                 //and populate item view of first item
@@ -772,9 +798,35 @@ angular.module('app.directives', [])
             //end everything
             else {
                 clearWorkingScope();
-                $scope.category = "All Issues Resolved! Press the save and continue button to save your choices. Or use your hardware back button to discard changes.";
+                $scope.category = "All Issues Resolved!";
+                $scope.name = "Press the save and continue button to save your choices or use your hardware back button to discard changes."
                 $scope.finished = true;
             }
+        }
+
+        /**
+         * Sets up the model so that any input will be a change for throwing a
+         * flag. Also gives me a metric by which values can be compared for
+         * a form validation.
+         * @return {object} The sanitized resolution item model
+         */
+        function setupModel(conflictItem, localItem){
+            var resolutionItem = angular.copy(localItem);
+
+            for(property in resolutionItem){
+                if(resolutionItem == "Location" ){
+                    //parse later
+                }
+                else if(localItem[property] != conflictItem[property] &&
+                    property != "Modification Date" &&
+                    property != "Established Date" &&
+                    property != "Photo" &&
+                    property != "Started Date"){
+                    resolutionItem[property] = null;
+                }
+            }
+
+            return resolutionItem;
         }
 
 
@@ -790,6 +842,7 @@ angular.module('app.directives', [])
 
             var conflictItem = conflicts.shift();
             var localItem = localValues.shift();
+            var resolveModel = {};
             $scope.name = localItem['Name'];
             $scope.conflictRenderer = {};
 
@@ -801,13 +854,15 @@ angular.module('app.directives', [])
                 }
                 else if(localItem[property] != conflictItem[property] &&
                     property != "Modification Date" &&
-                    property != "Established Date"){
+                    property != "Established Date" &&
+                    property != "Photo"){
                         $scope.conflictRenderer[property] = { local: localItem[property], conflict: conflictItem[property] };
                 }
-
             }
 
-            return localItem;
+            resolveModel = setupModel(conflictItem, localItem);
+
+            return resolveModel;
         }
 
 
@@ -831,8 +886,12 @@ angular.module('app.directives', [])
                         $scope.resolved[category][item] = resolutionItem;
                     }
                 }
+
+                //reset the validity of the form for next round
+                $scope.valid = false;
             }
         }
+
 
         /**
          * Return to the main menu carrying the user slections of
@@ -858,6 +917,7 @@ angular.module('app.directives', [])
             $scope.name = null;
         }
 
+
         /**
          * Counts all the conflicts in need of resolution
          * @return {null} [description]
@@ -872,26 +932,72 @@ angular.module('app.directives', [])
             return count;
         }
 
+        /**
+         * Abstracts out the necessary set up of the socpe for this directive.
+         * @return {[type]} [description]
+         */
         function setupScope(){
+
             categories = Object.keys($stateParams.response);
+
             $scope.resolved = angular.copy($stateParams.modified);
+
             $scope.resolutionItem = {};
             $scope.conflictButtonText = "Resolve Conflicts";
             $scope.category = "There are " + countConflicts() + " conflict(s) in need of resolution, before sync is allowed.";
             $scope.finished = false;
+            $scope.valid = false;
+            $scope.selected = {};
         }
 
+        /**
+         * Resets the scope upon return to this module from the main page
+         * @param {object} event      Object describing the triggering event which this handler handles
+         * @param {object} toState    Object describing the destination state from the state change which called this handler
+         * @param {object} toParams   Unused
+         * @param {object} fromState  Object describing
+         * @param {[type]} fromParams [description]
+         * @param {[type]} options    [description]
+         */
         function resetScope(event, toState, toParams, fromState, fromParams, options){
             if(toState.name == 'conflict' && fromState.name == 'mainMenu'){
+
                 categories = Object.keys($stateParams.response);
+
                 $scope.resolved = angular.copy($stateParams.modified);
+
                 $scope.resolutionItem = {};
                 $scope.conflictButtonText = "Resolve Conflicts";
                 $scope.category = "There are " + countConflicts() + " conflict(s) in need of resolution, before sync is allowed.";
                 $scope.finished = false;
+                $scope.valid = false;
+                $scope.selected = {};
             }
         }
 
+    }
+
+}])
+
+.directive('showValidSelection', [function(){
+    return{
+        restrict: 'A',
+        scope: {
+            showValidSelection : '='
+        },
+        link: link
+    };
+
+    function link(scope, el, attrs){
+        scope.$watch('showValidSelection', handleChange);
+
+        function handleChange(){
+            if(scope.showValidSelection == true){
+                el.removeClass('unresolved');
+                el.addClass('resolved');
+            }
+        }
 
     }
+
 }])

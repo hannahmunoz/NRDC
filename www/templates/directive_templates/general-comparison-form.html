@@ -1,23 +1,31 @@
 <ion-scroll direction="y">
-    <h1>{{category}}</h1>
-    <h2>{{name}}</h2>
+    <div class="header">
+        <h1 class="text">{{category}}</h1>
+    </div>
+    <div ng-hide="name == null" class="subheader">
+        <h2 class="text">{{name}}</h2>
+    </div>
     <br/>
-    <br/>
+
     <ul>
         <li ng-repeat="(key, property) in conflictRenderer">
-            <div class="conflict-resolution-line-item">
+            <div show-valid-selection="selected[key]" class="conflict-resolution-line-item unresolved">
                 <h3>{{key}}</h3>
-                <select ng-model="resolutionItem[key]">
+                <select ng-model="resolutionItem[key]" ng-change="throwSelectionFlag(key);">
                     <option value="{{property.local}}">Local: {{property.local}}</option>
                     <option value="{{property.conflict}}">Remote: {{property.conflict}}</option>
                 </select>
             </div>
         </li>
     </ul>
-    <button class= "button button-large button-block main-menu-button accent"
-            ng-hide="finished"
-            ng-click="populateNextConflict();">{{conflictButtonText}}</button>
-    <button class= "button button-large button-block main-menu-button accent"
+
+    <button class= "button button-large button-block accent conflict-resolution-button"
+            ng-hide="finished || !valid"
+            ng-click="populateNextConflict();"><h4 class="text">{{conflictButtonText}}</h3></button>
+    <button class= "button button-large button-block accent conflict-resolution-button"
             ng-show="finished"
-            ng-click="saveAndReturn();">Save and Return</button>
+            ng-click="saveAndReturn();"><h4 class="text">Save and Return</h3></button>
+    <br/>
+    <br/>
+    <br/>
 </ion-scroll>
