@@ -1,12 +1,12 @@
 <ion-view title="Site Networks" >
-    <ion-nav-buttons class="" side="left">          
+    <ion-nav-buttons class="" side="left">
         <button class="button button-icon button-clear ion-chevron-left" ng-click="back(); componentForm.reset()"></button>
-    </ion-nav-buttons> 
+    </ion-nav-buttons>
     <ion-header-bar class="bar-dark">
         <div class="title header-item" ng-bind="JSON['Name']">does this change</div>
     </ion-header-bar>
-    
-  
+
+
     <ion-content class="has-header content-bg padding">
 
         <form name ="nameForm" class="list" >
@@ -14,6 +14,7 @@
                 <ion-md-input type="text"  placeholder="Name" maxlength="50" name="projectName" ng-model = "JSON['Name']" ng-click="clear()" required/>
             </label>
         </form>
+
 
         <form name ="institutionForm" class="list " novalidate>
             <label class="item item-input " id="project-input64" >
@@ -33,25 +34,24 @@
             </label>
         </form>
 
-        <form name ="investigatorForm" class="list" novalidate> 
+        <form name ="investigatorForm" class="list" novalidate>
             <div class="select-container">
                  <select class="wide"
-                         ng-model = "JSON ['Principal Investigator']" 
+                         ng-model = "JSON ['Principal Investigator']"
                          ng-options="key as people for (key, people) in peopleJSON" required>
                     <option value=""> Prinicipal Investigator</option>
                  </select>
              </div>
-        </form> 
+        </form>
 
-        <a class=" button button-large button-block button-positive wide" 
-           ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid" 
+        <a class=" button button-large button-block button-positive wide"
+           ng-disabled="nameForm.$invalid || institutionForm.$invalid || fundingForm.$invalid || grantForm.$invalid || investigatorForm.$invalid"
            ng-click="saveJSON(); back(); destroyModal();">
            Save</a>
     </ion-content>
-    
+
     <!--FAB Link for the addition of documents-->
 <!--     <button class="button button-fab button-fab-bottom-right compliment"  ng-controller='DocumentModalController' ng-click="openModal();" ng-show="modalHidden"> -->
         <i class="icon ion-android-document" style="color:white;"></i>
     </button>
 </ion-view>
-    

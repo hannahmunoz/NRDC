@@ -20,7 +20,27 @@
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
 
-      <image-display form="componentForm" image="imageData" context='Component' id="JSON['Unique Identifier']"></image-display>
+    <image-display
+        form="componentForm"
+        image="imageData"
+        context='Component'
+        id="JSON['Unique Identifier']">
+    </image-display>
+    <br/>
+    <span>
+         <image-button
+             image="imageData"
+             funct="choosePicture"
+             icon="images"
+             form="componentForm"></image-button>
+         <image-button
+             image="imageData"
+             funct="takePicture"
+             icon="camera"
+             form="componentForm"></image-button>
+     </span>
+     <br/>
+
 
       <form name ="componentForm">
             <label>
@@ -56,19 +76,6 @@
                 <input date-input type="date" name="caliDate" ng-model = "JSON['Last Calibrated Date']"/>
             </div>
        </form>
-
-       <span>
-           <image-button
-               image="imageData"
-               funct="choosePicture"
-               icon="images"
-               form="componentForm"></image-button>
-           <image-button
-               image="imageData"
-               funct="takePicture"
-               icon="camera"
-               form="componentForm"></image-button>
-       </span>
 
 
         <a  class=" button button-positive button-large button-block wide"

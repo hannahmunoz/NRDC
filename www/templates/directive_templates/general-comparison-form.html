@@ -11,9 +11,13 @@
         <li ng-repeat="(key, property) in conflictRenderer">
             <div show-valid-selection="selected[key]" class="conflict-resolution-line-item unresolved">
                 <h3>{{key}}</h3>
-                <select ng-model="resolutionItem[key]" ng-change="throwSelectionFlag(key);">
-                    <option value="{{property.local}}">Local: {{property.local}}</option>
-                    <option value="{{property.conflict}}">Remote: {{property.conflict}}</option>
+                <select ng-if="!isDateField(key)" ng-model=resolutionItem[key] ng-change="throwSelectionFlag(key);">
+                    <option value={{property.local}}>Local: {{property.local}}</option>
+                    <option value={{property.conflict}}>Remote: {{property.conflict}}</option>
+                </select>
+                <select ng-if="isDateField(key)" ng-model=resolutionItem[key] ng-change="throwSelectionFlag(key);">
+                    <option value={{property.local}}>Local: {{property.local | date}}</option>
+                    <option value={{property.conflict}}>Remote: {{property.conflict | date}}</option>
                 </select>
             </div>
         </li>

@@ -143,9 +143,6 @@ angular.module('app.services', [])
 		// return promise
 		return $q (function (resolve, reject){
 			if (loggedIn){
-
-                console.log("Unsynched JSON before put in edit:", JSON);
-
 				// post to url, timeout in ms
 				$http.post (url, JSON, {timeout: 10000}).then (function Success (response){
 					// check if there is unsynced data saved
@@ -187,13 +184,15 @@ angular.module('app.services', [])
 		// return promise
 		return $q (function (resolve, reject){
 			if (loggedIn){
+                console.log("JSON staged for upload (Immediately before http post call)", JSON);
 				$http.post (url , JSON, {timeout: 10000}).then (function Success (response){
+                    console.log("Response from server", response);
+
 					// check if there is edit data saved
 					if (File.checkFile ('Edit')){
 						// remove it
 						$cordovaFile.removeFile (cordova.file.externalDataDirectory, 'NRDC/Edit');
 					}
-
 					// show success
 					$cordovaToast.showLongBottom ("Post Successful");
 					// resolve promise
@@ -236,24 +235,21 @@ angular.module('app.services', [])
         //for uuids and mod-dates
         checkMap = stripEntities(categoryMap);
 
+        console.log("Times being checked against", checkMap);
+
         return $q(function(resolve, reject){
             if(loggedIn){
-                console.log(JSON.stringify(checkMap));
                 $http.post(url, checkMap, {timeout:10000})
                 .then(
                     function success(response){
-                        //if response inidcateds no conflicts
-                        //resolve with flag
-                        //!!!!!!!!!!!!REMEBER TO ASK IF VINH CAN GIVE MORE MEANINGFUL RESPONSE ON THIS!!!!!!!!!!!!
-
                         //if there are conflicts
-                            //resolve flat list of conflicts back to calling controller
-                        if(true){ //true while I consider flags for if this list is empty or not
-                            resolve(response.data);
-                        }
+                        //resolve flat list of conflicts back to calling controller
+                        console.log("Returned from check: ", response);
+                        resolve(response.data);
+
                     }, function error(response){
                         // log error
-                        console.warn ("Conflict Check Error :", response);
+                        console.warn ("Conflict Check Error: ", response);
                         // toast failure
                         $cordovaToast.showLongBottom ("Post Error: " + response.statusText);
                         //reject promise
@@ -725,59 +721,61 @@ angular.module('app.services', [])
 		//variables
 		SavedJSON = [];
 
-		$cordovaFile.checkFile(cordova.file.externalDataDirectory, 'NRDC/'+title)
-		.then(
-			function(response){
-				//read file
-				// (I hate how nested this bs gets)
-				readFile(title)
-				.then(
-					function(response){
-						//if file exists but there is no data
-						if(response == null){
-							checkandWriteFile(title, JSON);
-							return;
-						}
+        document.addEventListener("deviceready", function (){
+    		$cordovaFile.checkFile(cordova.file.externalDataDirectory, 'NRDC/'+title)
+    		.then(
+    			function(response){
+    				//read file
+    				// (I hate how nested this bs gets)
+    				readFile(title)
+    				.then(
+    					function(response){
+    						//if file exists but there is no data
+    						if(response == null){
+    							checkandWriteFile(title, JSON);
+    							return;
+    						}
 
-						//scan through each element from returned file
-						SavedJSON = response[ Utility.Pluralize(title) ];
-						console.log(response);
+    						//scan through each element from returned file
+    						SavedJSON = response[ Utility.Pluralize(title) ];
+    						//console.log(response);
 
-						//check for an existing object in the data
-						// returned from the file
-						// Uses uuids as princiapl comparator and breaks
-						JSON[ Utility.Pluralize(title) ]
-						.forEach(
-							function(object){
-								//for each object in new JSON
-								//scan through saved file for
-								//match
-								for(savedObject in SavedJSON){
-									if(object['Unique Identifier'] == SavedJSON[savedObject]['Unique Identifier']){
-										object['Photo'] = SavedJSON[savedObject]['Photo'];
-										break;
-									}
-								}
-							}
-						);
-						//write file
-						checkandWriteFile(title, JSON);
-					},
-					function(error){
-						console.error("File read error: " + title, error.message);
-					}
-				)
-			},
-			function(error){
-                if(error.message === "NOT_FOUND_ERR"){
-                    createFile(title);
-                    checkandWriteFile(title, JSON);
-                }
-                else{
-                    console.error("File read error: " + title, error.message);
-                }
-			}
-		)
+    						//check for an existing object in the data
+    						// returned from the file
+    						// Uses uuids as princiapl comparator and breaks
+    						JSON[ Utility.Pluralize(title) ]
+    						.forEach(
+    							function(object){
+    								//for each object in new JSON
+    								//scan through saved file for
+    								//match
+    								for(savedObject in SavedJSON){
+    									if(object['Unique Identifier'] == SavedJSON[savedObject]['Unique Identifier']){
+    										object['Photo'] = SavedJSON[savedObject]['Photo'];
+    										break;
+    									}
+    								}
+    							}
+    						);
+    						//write file
+    						checkandWriteFile(title, JSON);
+    					},
+    					function(error){
+    						console.error("File read error: " + title, error.message);
+    					}
+    				)
+    			},
+    			function(error){
+                    if(error.message === "NOT_FOUND_ERR"){
+                        createFile(title);
+                        checkandWriteFile(title, JSON);
+                    }
+                    else{
+                        console.error("Photo Safe File Write Error: " + title, error.message);
+                    }
+    			}
+            )
+        })
 	}
 
 // function: readFile
@@ -985,7 +983,9 @@ angular.module('app.services', [])
         clearSessionImage: clearSessionImage,
         forceDownloadImage: forceDownloadImage,
         setLocalSaveState: setLocalSaveState,
-        getBooleanLocalSaveState: getBooleanLocalSaveState
+        getBooleanLocalSaveState: getBooleanLocalSaveState,
+        setLocalDeletedState: setLocalDeletedState,
+        getBooleanLocalDeletedState: getBooleanLocalDeletedState
 	};
 
 	//Public Function Defintions
@@ -1023,7 +1023,6 @@ angular.module('app.services', [])
 
 						},
 						function failure(error){
-                            console.log("Does this return too soon?");
 							//this may cause problems of returning too
 							dbCall();
 						}
@@ -1113,6 +1112,17 @@ angular.module('app.services', [])
         return false;
     }
 
+    function setLocalDeletedState(uuid, state){
+        sessionStorage[uuid + " deleted"] = state;
+    }
+
+    function getBooleanLocalDeletedState(uuid){
+        if(sessionStorage[uuid + " deleted"] === "true"){
+            return true;
+        }
+        return false;
+    }
+
 
 
 
@@ -1147,6 +1157,9 @@ angular.module('app.services', [])
 		// switch based on type, fills the JSON with the needed data
 		switch (type){
 			case 'Networks':
+                if(angular.isUndefined(JSON['Alias'])){
+                    JSON['Alias'] = null;
+                }
 				JSON ["Started Date"] = new Date();
 				JSON ["Principal Investigator"] = parseInt (JSON ["Principal Investigator"]);
 			break;
@@ -1266,8 +1279,8 @@ angular.module('app.services', [])
         }
 
         // print json to console for debugging
-		console.log (JSON);
-		console.log (finalJSON);
+	    //console.log (JSON);
+		//console.log (finalJSON);
 
 		if (!isitNew){
 			for (var i = 0; i < finalJSON.length; i ++){
@@ -1279,7 +1292,7 @@ angular.module('app.services', [])
 
 		// pushes into unsyncedJSON
 		finalJSON.push (JSON);
-		console.log (finalJSON);
+		//console.log (finalJSON);
 		JSON = {};
 	}
 

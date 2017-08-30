@@ -1,13 +1,13 @@
 <ion-view  title="Component" id="page7" style="" class=" ">
-    <ion-nav-buttons class="" side="left">          
+    <ion-nav-buttons class="" side="left">
         <button class="button button-icon button-clear ion-chevron-left" ng-click="back(); componentForm.reset()"></button>
     </ion-nav-buttons>
     <ion-header-bar class="bar-dark">
         <div class="title header-item" ng-bind="JSON['Name']"></div>
     </ion-header-bar>
-    
 
-    <ion-content 
+
+    <ion-content
       class="has-header content-bg padding"
       on-scroll="cndHideArrow()">
         <form name = "nameForm" class="list">
@@ -72,27 +72,25 @@
             </div>
        </form>
 
-<!--         <form name = "deploymentForm"  class="list ">
-            <div class="select-container">
-                <select class="wide" ng-model = "JSON['Deployment']" ng-options = "key as deployment for (key, deployment) in deploymentJSON" required>
-                    <option value>Deployment</option>
-                </select>
-            </div>
-        </form>
- -->
         <span>
-            <image-button funct="choosePicture" icon="images"></image-button>
-            <image-button funct="takePicture" icon="camera"></image-button>
+            <image-button
+                funct="choosePicture"
+                icon="images"
+                image="imageData"></image-button>
+            <image-button
+                funct="takePicture"
+                icon="camera"
+                image="imageData"></image-button>
         </span>
 
 
-        <a  class=" button button-positive button-large button-block wide" 
-            ng-disabled = "nameForm.$invalid || vendorForm.$invalid || supplierForm.$invalid || installationForm.$invalid || wiringForm.$invalid || serialForm.$invalid || modelForm.$invalid || manufacturerForm.$invalid || deploymentForm.$invalid" 
+        <a  class=" button button-positive button-large button-block wide"
+            ng-disabled = "nameForm.$invalid || vendorForm.$invalid || supplierForm.$invalid || installationForm.$invalid || wiringForm.$invalid || serialForm.$invalid || modelForm.$invalid || manufacturerForm.$invalid || deploymentForm.$invalid"
             ng-click = "saveJSON(); back(); destroyModal();">
             Save
         </a>
     <div class = "overscroll"></div>
-        
+
     </ion-content>
 
 

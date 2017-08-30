@@ -1,23 +1,44 @@
 <ion-view title="{{JSON['Name']}} Info" id="page5" style="" class=" ">
-    <ion-nav-buttons class="" side="left">          
+    <ion-nav-buttons class="" side="left">
              <button class="button button-icon button-clear ion-chevron-left" ng-click="back(); systemForm.reset()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <div deletable 
-             ng-init="isDeletable();" 
-             ng-show="deletable" 
+        <div deletable
+             ng-init="isDeletable();"
+             ng-show="deletable"
              ng-click="deleteView();">
-            <button class="button-clear center-text" 
+            <button class="button-clear center-text"
                     style="padding-right: 1em; padding-left: .5em;">
                 <h4>Delete</h4>
             </button>
         </div>
     </ion-nav-buttons>
-    
-    
+
+
     <ion-content class="has-header content-bg padding">
-        <image-display image="imageData" context='System' id="JSON['Unique Identifier']"></image-display>
- 
+
+        <image-display
+            image="imageData"
+            context='System'
+            id="JSON['Unique Identifier']"
+            form='systemForm'>
+        </image-display>
+        <br/>
+        <span class="photo-button-holder">
+            <image-button
+                funct="choosePicture"
+                icon="images"
+                form="systemForm"
+                image="imageData"></image-button>
+            <image-button
+                funct="takePicture"
+                icon="camera"
+                form="systemForm"
+                image="imageData"></image-button>
+        </span>
+        <br/>
+
+
         <form name = "systemForm">
             <label >
                 <ion-md-input type="text" maxlength="50" placeholder="Name"  name="systemName" ng-model = "JSON['Name']" required/>
@@ -38,21 +59,17 @@
             </div>
         </form>
 
-        <span class="photo-button-holder">
-            <image-button funct="choosePicture" icon="images"></image-button>
-            <image-button funct="takePicture" icon="camera"></image-button>
-        </span>
 
 
-        <a class=" button button-positive wide button-block " 
-           ng-disabled="systemForm.$invalid || !systemForm.modified" 
+        <a class=" button button-positive wide button-block "
+           ng-disabled="systemForm.$invalid || !systemForm.modified"
            ng-click = "saveJSON(deletable); back();">
            Save</a>
-        
+
         <div class="overscroll"></div>
-    
+
     </ion-content>
-         
+
     <fab-cluster></fab-cluster>
-    
+
 </ion-view>

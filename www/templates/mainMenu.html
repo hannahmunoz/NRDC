@@ -4,7 +4,7 @@
         <!--Only one of the following 2 options can be shown at a time based off of requirement of syncability
             defined in rootScope variable canSync-->
         <button conflict-checker ng-hide="canSync" id="conflict" class="button button-icon button-clear ion-checkmark-circled" ng-click="check(editJSON);"></button>
-        <button id="upload-btn" ng-show="canSync" class="button button-icon button-clear ion-loop" ng-click = "uploadJSONS()" ></button>
+        <button id="upload-btn"  ng-show="canSync" class="button button-icon button-clear ion-loop" ng-click = "uploadJSONS()" ></button>
 
         <button id="upload-btn" class="button-clear center-text" ng-controller = 'LoginController' ng-click = 'openModal();' ng-show = "!loggedIn" style = "padding-right: 1em; padding-left: .5em;">Login</button>
 

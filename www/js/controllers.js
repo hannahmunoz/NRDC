@@ -58,6 +58,14 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     // save JSON button
 	$scope.saveJSON = function (deletable){
+        //pretty hacky
+        //but we need to update mod dates with edit
+        $scope.JSON["Modification Date"] = new Date();
+
+        if(angular.isDefined($scope.imageData)){
+            $scope.JSON["Photo"] = $scope.imageData;
+        }
+
         if (!angular.isDefined (deletable) || deletable == false){
             var bool = false;
             if ($scope.title != "Serviceentriess"){
@@ -244,33 +252,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     DynamicPage.setTitle ("Networks");
 
-    // create global variables,could probably be cut down but that would mean changing everything
-	$rootScope.peopleSyncedJSON = {};
-	$rootScope.peopleJSON = {};
-	$rootScope.networkSyncedJSON = {};
-	$rootScope.networkJSON = {};
-	$rootScope.siteSyncedJSON = {};
-	$rootScope.siteJSON = {};
-	$rootScope.systemSyncedJSON = {};
-	$rootScope.systemJSON = {};
-	$rootScope.deploymentSyncedJSON = {};
-	$rootScope.deploymentJSON = {};
-	$rootScope.componentSyncedJSON = {};
-	$rootScope.componentJSON = {};
-	$rootScope.documentSyncedJSON = {};
-	$rootScope.documentJSON = {};
-	$rootScope.serviceSyncedJSON = {};
-	$rootScope.serviceJSON = {};
 
-	// special lists for service entries for list
-	$rootScope.servicelistJSON = {};
-	$rootScope.serviceJSONlist = [];
-	$rootScope.serviceEntryListJSON = [];
-
-	// special lists for documents for listView
-	$rootScope.documentlistJSON = {};
-	$rootScope.documentJSONlist = [];
-	$rootScope.docListJSON = [];
 
     // posting JSONs
 	$rootScope.editJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents: [], "Service Entries": [] };
@@ -348,15 +330,14 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     // upload button
     $scope.uploadJSONS = function(){
     	   // posts the unsynced json to edge
-           console.log ($rootScope.loggedIn,$rootScope.unsyncedJSON, $rootScope.editJSON);
-           console.log(JSON.stringify($rootScope.unsyncedJSON.Components[0]));
-
            sync.post ($rootScope.baseURL+'Update/', $rootScope.unsyncedJSON, $rootScope.loggedIn).then ( function (){
                 $rootScope.unsyncedJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], "Service Entries":[] };
             });
 
            sync.edit ($rootScope.baseURL+'Update/', $rootScope.editJSON, $rootScope.loggedIn).then (function (){
                  $rootScope.editJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], "Service Entries":[] };
+
+                 $rootScope.unsyncedJSON ["Last Sync Date"] = new Date ();
                 // the menu is reinitiated
                 $scope.init ();
     	   });
@@ -533,6 +514,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             }
         }, 20000);
 
+        //setupVars
+       variableSetup();
+
 
     	//get permissions
     	//unblock before packaging
@@ -545,7 +529,15 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
             File.readFile ('Edit').then (function Success (response){
                 if (response != null){
                     for (var i = 0; i < list.length; i++){
-                        $rootScope.editJSON[list[i]] = $rootScope.editJSON[list[i]].concat(response[list[i]]);
+                            $rootScope.editJSON[list[i]] = $rootScope.editJSON[list[i]].concat(response[list[i]]);
+                    }
+
+                    if( angular.isDefined($rootScope.editJSON["Last Sync Date"]) &&
+                        $rootScope.editJSON["Last Sync Date"] > response["Last Sync Date"]) {
+                        //do nothing
+                    }
+                    else {
+                        $rootScope.editJSON["Last Sync Date"] = new Date(response["Last Sync Date"]);
                     }
                 }
             })
@@ -574,7 +566,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	// people read. Same as sync.read factory, but has to be seperated because we need first and last name
     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[0]+"/", {timeout: 10000}).then (function(result){
     		$rootScope.peopleSyncedJSON = result.data;
-    		File.checkandWriteFile ( 'People', $rootScope.peopleSyncedJSON);
+    		File.PhotoSafeWriteFile( 'People', $rootScope.peopleSyncedJSON);
     		resolve ($rootScope.peopleSyncedJSON);
     	}, function (result){
     		File.readFile('People').then (function(success){
@@ -616,7 +608,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	// system read
     	sync.read($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[3]+"/", $rootScope.systemSyncedJSON, 'System', $rootScope.systemJSON).then (function(result){
     		$rootScope.systemSyncedJSON = result;
-    		File.checkandWriteFile('System', $rootScope.systemSyncedJSON);
+    		File.PhotoSafeWriteFile('System', $rootScope.systemSyncedJSON);
     		resolve();
     	})
     }).then (function () {
@@ -653,7 +645,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     	var promise = $q (function (resolve, reject){$http.get($rootScope.baseURL + "Retrieve/" + $rootScope.urlPaths[7]+"/", {timeout: 10000}).then (function(result){
 
         $rootScope.serviceSyncedJSON = result.data;
-    		File.checkandWriteFile ( 'Service Entry', $rootScope.serviceSyncedJSON);
+    		File.PhotoSafeWriteFile( 'Service Entry', $rootScope.serviceSyncedJSON);
     		resolve ($rootScope.serviceSyncedJSON);
     		}, function (result){
     			File.readFile('Service Entry').then (function(success){
@@ -662,7 +654,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     		});
      		})})
   	 	promise.then (function(result){
-            $rootScope.unsyncedJSON ["Last Sync Date"] = new Date ();
 
             for (var i = 0; i < $rootScope.serviceSyncedJSON["Service Entries"].length; i++){
 				$rootScope.serviceJSON [$rootScope.serviceSyncedJSON["Service Entries"][i]['Service Entry']] =  $rootScope.serviceSyncedJSON["Service Entries"][i]['Name'];
@@ -740,12 +731,45 @@ app administrator.
     }
 
 
+    function variableSetup(){
+
+            // create global variables,could probably be cut down but that would mean changing everything
+        	$rootScope.peopleSyncedJSON = {};
+        	$rootScope.peopleJSON = {};
+        	$rootScope.networkSyncedJSON = {};
+        	$rootScope.networkJSON = {};
+        	$rootScope.siteSyncedJSON = {};
+        	$rootScope.siteJSON = {};
+        	$rootScope.systemSyncedJSON = {};
+        	$rootScope.systemJSON = {};
+        	$rootScope.deploymentSyncedJSON = {};
+        	$rootScope.deploymentJSON = {};
+        	$rootScope.componentSyncedJSON = {};
+        	$rootScope.componentJSON = {};
+        	$rootScope.documentSyncedJSON = {};
+        	$rootScope.documentJSON = {};
+        	$rootScope.serviceSyncedJSON = {};
+        	$rootScope.serviceJSON = {};
+
+        	// special lists for service entries for list
+        	$rootScope.servicelistJSON = {};
+        	$rootScope.serviceJSONlist = [];
+        	$rootScope.serviceEntryListJSON = [];
+
+        	// special lists for documents for listView
+        	$rootScope.documentlistJSON = {};
+        	$rootScope.documentJSONlist = [];
+        	$rootScope.docListJSON = [];
+    }
 
     //initalize
     //hacky workaround to prevent data from being loaded from file after conflict resolution
-    if(!angular.isDefined($stateParams.resolved)){
+    if(angular.isUndefined($stateParams.resolved)){
+        $scope.init();
+    } else if($stateParams.resolved == null){
         $scope.init();
     }
+
 
 
 })

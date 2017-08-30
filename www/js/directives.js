@@ -239,7 +239,8 @@ angular.module('app.directives', [])
         scope: {
             funct: '=funct',
             icon: '=icon',
-            form: '='
+            form: '=',
+            image: '='
         },
         templateUrl: 'templates/directive_templates/image-button.html',
         replace: true,
@@ -257,8 +258,9 @@ angular.module('app.directives', [])
             // funct should be either camera or gallery retrival
             scope.funct()
             .then(function(image){
-                //indicate form modification
-                scope.form.modified = true
+                if(angular.isDefined(scope.form)){
+                    scope.form.modified = true;
+                }
                 scope.image = image;
 
                 clearSiblingCSS(element);
@@ -386,9 +388,10 @@ angular.module('app.directives', [])
         function verifyDelete(){
             //perform delete functionality
             File.DeleteImageFromFile($scope.context, $scope.id);
+            LazyLoad.setLocalDeletedState($scope.id, true);
             LazyLoad.setLocalSaveState($scope.id, false);
             $scope.saved = false;
-            $scope.image = null;
+
 
             closeModal();
         }
@@ -476,12 +479,8 @@ angular.module('app.directives', [])
          */
         function initialize(){
             $scope.active = false;
-            //this will likely change
-            $scope.saved = LazyLoad.getBooleanLocalSaveState();
+            $scope.deleted = LazyLoad.getBooleanLocalDeletedState($scope.id);
         };
-
-
-
     };
 }])
 
@@ -511,16 +510,22 @@ angular.module('app.directives', [])
      */
     function link(scope, element, attrs, ctrl){
         //ambient watching
-        scope.$watch('image', bindElement, true);
+        scope.$watch('image', updateDisplay, true);
 
 
         /*** Function Defintions ***/
 
         //display the image retrieved from the database
         // or device
-        function bindElement(){
-            if(scope.image === null || scope.image === ""){
+        function updateDisplay(){
+            //console.log(scope.image.slice(0,10));
+            if(scope.image === null ||
+                scope.image === "" ||
+                !angular.isDefined(scope.image)){
                 clearElement(element);
+            }
+            else if (scope.image === "loading") {
+                setLoadingSpinner(element);
             }
             else {
                 updateThumbnail(element);
@@ -536,15 +541,39 @@ angular.module('app.directives', [])
             //only add information text if it does not already exist
             // double calls happen when image updates with data from
             // server
-            if(typeof(element.children()[1]) === 'undefined'){
-                element.css({
-                  'background-image':'none',
-                  'background-color':'steelblue'
-                });
-                element.append("<h1 class='msg' style='color:rgba(255,255,255,.6); padding-top:20%; padding-left:10%;'> No Image Saved To <br/> Device or Database </h1>");
+            if(typeof(element.children()[1]) !== 'undefined'){
+              element.children()[1].remove();
             }
+
+            element.css({
+              'background-image':'none',
+              'background-color':'#003366',
+              'padding-top': '0.0px',
+              'padding-left': '0.0px'
+            });
+            element.append("<h1 class='msg' style='color:rgba(255,255,255,.6); padding-top:20%; padding-left:10%;'> No Image Saved To <br/> Device or Database </h1>");
         }
 
+        /**
+         * Sets a loading spinner in the place of image or error message
+         * while we wait for image to populate
+         * @param {object} element
+         */
+        function setLoadingSpinner(element){
+            if(typeof(element.children()[1]) !== 'undefined'){
+              element.children()[1].remove();
+            }
+
+            element.css({
+              'background-image':'none',
+              'background-color':'#DDDDDD',
+              'padding-top': '30%',
+              'padding-left': '39%'
+            });
+
+            element.append("<div class='loading-spinner spinner'><div class='loading-spinner-inner spinner-rev'></div></div>");
+
+        }
 
         /**
          * Updates the thumbnail in response to changes in the image in the local
@@ -577,7 +606,9 @@ angular.module('app.directives', [])
         //Executable Code
         onLoad();
 
+
         /*** Function Definitions ***/
+
 
         /**
          * Runs on load of image-display directive.
@@ -586,29 +617,24 @@ angular.module('app.directives', [])
          * @return {Null} [description]
          */
         function onLoad(){
-
             //variables
             var imageRequest = {};
 
             //only do this if there is nothing in session memory
-            if( true ){               // can be a returned null
+            if(!angular.isDefined($scope.image) || $scope.image === null || $scope.image === ""){               // can be a returned null
                 //delibrate formatting for http query reqs
                 imageRequest[$scope.context] = $scope.id;
 
+                //set loading flag
+                $scope.image = "loading";
+
                 //fetch image from hdd or server
                 LazyLoad.fetchImage(imageRequest)
-                .then(
-                    $ionicLoading.show({
-                        templateUrl: 'templates/directive_templates/loading-spinner.html',
-                        noBackdrop: true
-                    })
-                )
                 .then(
                     //on sucessful response update scope image for view
                     //save image to session memory
                     //indicate weither image was retrieved from file or not
                     function success(response){
-                        $ionicLoading.hide();
                         $scope.image = response.image;
 
                         //cleanup and flag setting
@@ -617,15 +643,20 @@ angular.module('app.directives', [])
                         }
                     },
                     function failure(error){
-                        $ionicLoading.hide();
                         $scope.saved = false;
+                        $scope.image = null;
                         console.warn("Failure to retrieve image: ", error);
                     }
                 );
             }
-            //draw from the session image, because it exists
+            //this is to account for case when we delete
+            // image but it remains in runtime memory
+            else if($scope.deleted === true){
+                $scope.saved = false;
+            }
+            //else set saved state to true if image is there in memory
             else {
-                $scope.image = LazyLoad.getSessionImage($scope.id);
+                $scope.saved = true;
             }
         }
     }
@@ -644,7 +675,7 @@ angular.module('app.directives', [])
 
     //this controller will handle the routing of
     // all returned, conflicted json
-    function conflictCheckerController($scope, $rootScope, $state){
+    function conflictCheckerController($scope, $rootScope, $state, $cordovaToast, $q){
 
         //binding functions to scope
         $scope.check = check;
@@ -657,28 +688,29 @@ angular.module('app.directives', [])
                     // then set scope variable
                     // that hides conflictChecker and unhides sync options
                     if(countConflicts(response) === 0){
-                        $cordovaToast.showLongBottom ("No conflicts found. Sync now.");
-                        $rootScope.canSync = true;
+                        $cordovaToast.showLongBottom ("No conflicts found. Now syncing.");
+                        $scope.uploadJSONS();
                     }
                     else{
                         // resolve conflicts by changing states and resolving the conflicts
+                        //File.checkandWriteFile('Edit', modified);
+
+                        console.log("Edit JSON Pre Resolution:", $rootScope.editJSON);
+
                         $state.go( 'conflict', {response: response, modified: modified} );
 
                         //regesiter fucntionality that picks up data from the confilct resolution module\
                         $rootScope.$on('$stateChangeSuccess',
                         function(event, toState, toParams, fromState, fromParams, options){
                             //fromState in the state the router is coming fromState
-                            // toParams are the params coming to the destination state
+                            // toParams are the params coming to the destination stat
                             if(fromState.name == 'conflict' && angular.isDefined(toParams.resolved)){
-                                //write user resolution selections to file
-                                if (File.checkFile ('Edit')){
-                                    File.checkandWriteFile('Edit', toParams.resolved);
-                                }
-                                //copy resolved data into editJSON
-                                $rootScope.editJSON = angular.copy(toParams.resolved);
-
-                                //set global flag on syncability of data
-                                $rootScope.canSync = true;
+                                copyForUpload(fromState, toParams)
+                                .then(
+                                    function success(){
+                                        $scope.uploadJSONS();
+                                    }
+                                );
                             }
                         })
                     }
@@ -687,6 +719,19 @@ angular.module('app.directives', [])
                     $cordovaToast.showLongBottom ("Check Error: " + error.message);
                 }
             );
+
+            //i think this stuff is not happening sequentially so
+            //i am using this promise to force it
+            function copyForUpload(fromState, toParams){
+                return $q(function(resolve, reject){
+
+                    //copy resolved data into editJSON
+                    $rootScope.editJSON = angular.copy(toParams.resolved);
+                    toParams.resolved = null;
+
+                    resolve();
+                });
+            }
         }
 
         /**
@@ -735,6 +780,7 @@ angular.module('app.directives', [])
         $scope.populateNextConflict = populateNextConflict;
         $scope.saveAndReturn = saveAndReturn;
         $scope.throwSelectionFlag = throwSelectionFlag;
+        $scope.isDateField = isDateField;
 
 
         //watchers and handlers
@@ -742,18 +788,29 @@ angular.module('app.directives', [])
         $rootScope.$on('$stateChangeSuccess', resetScope);
 
         /**
-         * Checks fot validity of the form so that the save and continue button will show.
-         * @return {[type]} [description]
+         * Checks for validity of the form so that the save and continue button will show.
+         * Will only check for potential nulls among the properties already found to be in conflict
+         * @return {null} [description]
          */
-        function validateForm(){
-            for(property in $scope.resolutionItem){
+        function validateForm(conflicts, localValues){
+
+            for(property in $scope.conflictRenderer){
                 if( property != "Photo" && $scope.resolutionItem[property] == null ){
+                    //not every problem has been resolved
                     return;
                 }
             }
             $scope.valid = true;
             return;
         }
+
+        function isDateField(field){
+    		if( field.search(/Date/) > 0 ){
+            	return true;
+            }
+            return false;
+        }
+
 
         /**
          * Throws a flag everytime that a selection has been made on
@@ -765,6 +822,7 @@ angular.module('app.directives', [])
             $scope.selectionMade = lineItem;
             $scope.selected[lineItem] = true;
         }
+
 
 
 
@@ -798,6 +856,9 @@ angular.module('app.directives', [])
                 //reregister next button functionality
                 //and populate item view of first item
                 $scope.resolutionItem = populateItemView(conflicts, localValues);
+
+                console.log("resolutionItem: ", $scope.resolutionItem);
+                console.log("confilctRenderer: ", $scope.conflictRenderer);
             }
             //we are at the end of the categories and need to clean up and
             //end everything
@@ -851,6 +912,8 @@ angular.module('app.directives', [])
             $scope.name = localItem['Name'];
             $scope.conflictRenderer = {};
 
+            console.log(localItem);
+
             //set up conflict renderer with
             //the information for both items
             for(property in conflictItem){
@@ -861,8 +924,18 @@ angular.module('app.directives', [])
                     property != "Modification Date" &&
                     property != "Established Date" &&
                     property != "Photo"){
-                        $scope.conflictRenderer[property] = { local: localItem[property], conflict: conflictItem[property] };
+                        //we need to check if the value is a date so we can convert
+                        //it to a string so the {{}} things in the html don't auto-convert it and
+                        //mess everything up
+                        if(isDateField(property)){
+                            $scope.conflictRenderer[property] = { local: localItem[property].toUTCString(), conflict: conflictItem[property] };
+                        } else {
+                            $scope.conflictRenderer[property] = { local: localItem[property], conflict: conflictItem[property] };
+                        }
+
                 }
+
+
             }
 
             resolveModel = setupModel(conflictItem, localItem);
@@ -881,9 +954,6 @@ angular.module('app.directives', [])
         function saveUserSelections(category, resolutionItem){
 
             if(category != ""){
-                //update the modification date of the resolution item
-                resolutionItem["Modification Date"] = new Date();
-
                 //find the location of the resolution item in
                 //our resolved item store and save it there
                 for( item in $scope.resolved[category]){
@@ -904,6 +974,9 @@ angular.module('app.directives', [])
          * @return {[type]} [description]
          */
         function saveAndReturn(){
+
+            console.log($scope.resolved);
+
             //variables
             var resolvedSelections = {resolved: $scope.resolved};
 
@@ -977,6 +1050,7 @@ angular.module('app.directives', [])
                 $scope.finished = false;
                 $scope.valid = false;
                 $scope.selected = {};
+                $scope.name = null;
             }
         }
 
