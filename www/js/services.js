@@ -151,7 +151,7 @@ angular.module('app.services', [])
 						$cordovaFile.removeFile (cordova.file.externalDataDirectory, 'NRDC/Unsynced');
 					}
 					// show success
-					$cordovaToast.showLongBottom ("Post Successful");
+					$cordovaToast.showLongBottom ("New Items Successfully Uploaded");
 					// resolve promise
 					resolve (response.status);
 				}, function Error (response){
@@ -194,7 +194,7 @@ angular.module('app.services', [])
 						$cordovaFile.removeFile (cordova.file.externalDataDirectory, 'NRDC/Edit');
 					}
 					// show success
-					$cordovaToast.showLongBottom ("Post Successful");
+					$cordovaToast.showLongBottom ("Edited Entries Successfully Uploaded");
 					// resolve promise
 					resolve (response.status);
 				}, function Error (response) {
@@ -259,9 +259,9 @@ angular.module('app.services', [])
             }
             else {
                 // toast failure
-                $cordovaToast.showLongBottom ("Not Logged In");
+                // $cordovaToast.showLongBottom ("Not Logged In");
                 // reject promise
-                reject();
+                reject( {"message":"Not Logged In"} );
             }
         })
     }

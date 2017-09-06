@@ -681,7 +681,7 @@ angular.module('app.directives', [])
         $scope.check = check;
 
         function check(modified){
-            sync.conflictCheck($rootScope.baseURL + 'Verify/', modified, true)
+            sync.conflictCheck($rootScope.baseURL + 'Verify/', modified, $rootScope.loggedIn)
             .then(
                 function success(response){
                     //if response indicates that all is well
@@ -804,6 +804,12 @@ angular.module('app.directives', [])
             return;
         }
 
+        /**
+         * Checks if the field string input contains the word "date" anywhere
+         * within it
+         * @param  {[type]}  field [description]
+         * @return {Boolean}       [description]
+         */
         function isDateField(field){
     		if( field.search(/Date/) > 0 ){
             	return true;
@@ -963,7 +969,9 @@ angular.module('app.directives', [])
                 }
 
                 //reset the validity of the form for next round
+                //and clear slected object to reset view
                 $scope.valid = false;
+                $scope.selected = {};
             }
         }
 
@@ -1074,6 +1082,9 @@ angular.module('app.directives', [])
             if(scope.showValidSelection == true){
                 el.removeClass('unresolved');
                 el.addClass('resolved');
+            } else {
+                el.removeClass('resolved');
+                el.addClass('unresolved');
             }
         }
 
