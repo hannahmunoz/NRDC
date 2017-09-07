@@ -346,6 +346,7 @@ angular.module('app.directives', [])
 
         function deleteFromDB(){
             $scope.image = null;
+            $scope.JSON['Photo Delete'] = true;
 
             //indicate form modification for save
             $scope.form.modified = true
@@ -936,7 +937,7 @@ angular.module('app.directives', [])
                         if(isDateField(property)){
                             $scope.conflictRenderer[property] = { local: localItem[property].toUTCString(), conflict: conflictItem[property] };
                         } else {
-                            $scope.conflictRenderer[property] = { local: localItem[property], conflict: conflictItem[property] };
+                            $scope.conflictRenderer[property] = { local: localItem[property].toString(), conflict: conflictItem[property] };
                         }
 
                 }
