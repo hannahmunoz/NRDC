@@ -346,7 +346,7 @@ angular.module('app.directives', [])
 
         function deleteFromDB(){
             $scope.image = null;
-            $scope.JSON['Photo Delete'] = true;
+            $scope.imageDelete = true;
 
             //indicate form modification for save
             $scope.form.modified = true
@@ -492,7 +492,8 @@ angular.module('app.directives', [])
         scope: { image: '=',
                  id: '=',
                  context: '@',
-                 form: '='},
+                 form: '=',
+                 imageDelete: '=' },
         templateUrl: 'templates/directive_templates/image-display.html',
         replace: true,
         controller: lazyLoadImageController,
