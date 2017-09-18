@@ -83,20 +83,6 @@ angular.module('app.directives', [])
 
     function HideController($scope, $rootScope, $ionicModal){
 
-        initialize();
-
-        function initialize(){
-            $scope.active = false;
-        }
-
-        $scope.toggleActive = function(){
-                $scope.active = true;
-        };
-
-        $scope.toggleInactive = function(){
-                $scope.active = false;
-        };
-
     }
 
 
@@ -391,6 +377,8 @@ angular.module('app.directives', [])
             File.DeleteImageFromFile($scope.context, $scope.id);
             LazyLoad.setLocalDeletedState($scope.id, true);
             LazyLoad.setLocalSaveState($scope.id, false);
+            $scope.image = null;
+            $scope.deleted = true;
             $scope.saved = false;
 
 
@@ -520,7 +508,6 @@ angular.module('app.directives', [])
         //display the image retrieved from the database
         // or device
         function updateDisplay(){
-            //console.log(scope.image.slice(0,10));
             if(scope.image === null ||
                 scope.image === "" ||
                 !angular.isDefined(scope.image)){
@@ -697,8 +684,6 @@ angular.module('app.directives', [])
                         // resolve conflicts by changing states and resolving the conflicts
                         //File.checkandWriteFile('Edit', modified);
 
-                        console.log("Edit JSON Pre Resolution:", $rootScope.editJSON);
-
                         $state.go( 'conflict', {response: response, modified: modified} );
 
                         //regesiter fucntionality that picks up data from the confilct resolution module\
@@ -864,9 +849,6 @@ angular.module('app.directives', [])
                 //reregister next button functionality
                 //and populate item view of first item
                 $scope.resolutionItem = populateItemView(conflicts, localValues);
-
-                console.log("resolutionItem: ", $scope.resolutionItem);
-                console.log("confilctRenderer: ", $scope.conflictRenderer);
             }
             //we are at the end of the categories and need to clean up and
             //end everything
@@ -919,8 +901,6 @@ angular.module('app.directives', [])
             var resolveModel = {};
             $scope.name = localItem['Name'];
             $scope.conflictRenderer = {};
-
-            console.log(localItem);
 
             //set up conflict renderer with
             //the information for both items
@@ -984,9 +964,6 @@ angular.module('app.directives', [])
          * @return {[type]} [description]
          */
         function saveAndReturn(){
-
-            console.log($scope.resolved);
-
             //variables
             var resolvedSelections = {resolved: $scope.resolved};
 

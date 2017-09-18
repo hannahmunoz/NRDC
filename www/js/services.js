@@ -52,6 +52,10 @@ angular.module('app.services', [])
 	 * @return {Boolean}        True if hex, false if not
 	 */
 	function IsHex(string){
+            if(string === null){
+                return false;
+            }
+
 			return  string.match("^[0-9a-fA-F]+$");
 	}
 
@@ -64,11 +68,15 @@ angular.module('app.services', [])
      */
       function baseSwap_16_to_64 (hexImage){
 
+        if(hexImage === null){
+            return hexImage;
+        }
+
         if(IsHex(hexImage)){
             //take hexidemal and conveter to base string
             var result = "";
             for (var i = 0; i < hexImage.length; i += 2){
-            result += String.fromCharCode(parseInt(hexImage.substr(i, 2), 16));
+                result += String.fromCharCode(parseInt(hexImage.substr(i, 2), 16));
             }
 
             //rencode string as base 64
@@ -78,12 +86,30 @@ angular.module('app.services', [])
         return image || hexImage;
     }
 
+    function baseSwap_64_to_16 (rawImage){
+        if(rawImage === null){
+            return rawImage;
+        }
+
+        // convert image
+        var image = atob(rawImage);
+
+        // to hexidecimal
+        var result = "";
+        for (var i = 0; i < image.length; i++) {
+            var hex = image.charCodeAt(i).toString(16);
+            result += (hex.length==2? hex:'0'+hex ); //data is lost without this
+        }
+        return result;
+    }
+
 
 	return {
 			Pluralize: Pluralize,
 			LengthInUtf8Bytes: LengthInUtf8Bytes,
 			IsHex: IsHex,
-            baseSwap_16_to_64: baseSwap_16_to_64
+            baseSwap_16_to_64: baseSwap_16_to_64,
+            baseSwap_64_to_16: baseSwap_64_to_16
 	};
 })
 
@@ -184,9 +210,7 @@ angular.module('app.services', [])
 		// return promise
 		return $q (function (resolve, reject){
 			if (loggedIn){
-                console.log("JSON staged for upload (Immediately before http post call)", JSON);
 				$http.post (url , JSON, {timeout: 10000}).then (function Success (response){
-                    console.log("Response from server", response);
 
 					// check if there is edit data saved
 					if (File.checkFile ('Edit')){
@@ -235,8 +259,6 @@ angular.module('app.services', [])
         //for uuids and mod-dates
         checkMap = stripEntities(categoryMap);
 
-        console.log("Times being checked against", checkMap);
-
         return $q(function(resolve, reject){
             if(loggedIn){
                 $http.post(url, checkMap, {timeout:10000})
@@ -244,7 +266,6 @@ angular.module('app.services', [])
                     function success(response){
                         //if there are conflicts
                         //resolve flat list of conflicts back to calling controller
-                        console.log("Returned from check: ", response);
                         resolve(response.data);
 
                     }, function error(response){
@@ -323,7 +344,6 @@ angular.module('app.services', [])
 	function adminLogin(JSON){
 		return $q (function (resolve, reject){
 			$http.post ("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Login/", JSON, {timeout: 10000}).then (function Success (response){
-				console.log(response);
 				if (response.data.length != 0){
 					var promise = $q (function (resolve, reject){
 						File.checkFile ('Logins').then (function Success (){
@@ -738,7 +758,6 @@ angular.module('app.services', [])
 
     						//scan through each element from returned file
     						SavedJSON = response[ Utility.Pluralize(title) ];
-    						//console.log(response);
 
     						//check for an existing object in the data
     						// returned from the file
@@ -903,7 +922,7 @@ angular.module('app.services', [])
 					resolve();
 				},
 				function(error){
-                    console.log("File error", error.message);
+                    console.warn("File error", error.message);
                     reject(error);
 				}
 			);
@@ -1278,10 +1297,6 @@ angular.module('app.services', [])
 			break;
         }
 
-        // print json to console for debugging
-	    //console.log (JSON);
-		//console.log (finalJSON);
-
 		if (!isitNew){
 			for (var i = 0; i < finalJSON.length; i ++){
 				if (finalJSON[i]["Unique Identifier"] == JSON["Unique Identifier"]){
@@ -1291,8 +1306,7 @@ angular.module('app.services', [])
 		}
 
 		// pushes into unsyncedJSON
-		finalJSON.push (JSON);
-		//console.log (finalJSON);
+		finalJSON.push(JSON);
 		JSON = {};
 	}
 

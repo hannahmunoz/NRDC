@@ -5,7 +5,7 @@
             </button>
          </ion-nav-buttons>
         <ion-nav-buttons class="" side="right">
-            <button class="button-clear" style="padding-right:10px;" ng-click="viewItem()">
+            <button ng-show="title != 'Site Networks'" class="button-clear" style="padding-right:10px;" ng-click="viewItem()">
                 <h4>Info</h4>
             </button>
         </ion-nav-buttons>
@@ -23,7 +23,5 @@
             </li>
           </ul>
     </ion-content>
-    <button ng-show="networkListFlag" class="button button-fab button-fab-bottom-right pane compliment" ng-click="newItem();">
-        <i class="icon ion-plus" style="color: #FFFFFF;"></i>
-    </button>
+    <fab-cluster></fab-cluster>
 </ion-view>

@@ -1,24 +1,16 @@
-<button deletable
- 		ng-click="toggleActive();"
-        ng-hide="active || deletable"
-        class="button button-fab compliment button-fab-bottom-right">
-    <i class="icon ion-plus" style="color:white;"></i>
-</button>
-<div ng-hide="!active"
-     class="nrdc-fab-container-lower-right"
-     >
+<div ng-show="networkListFlag" class="nrdc-fab-container-lower-right">
     <!--Documents-->
-    <button class="button button-fab tertiary animated fadeIn" ui-sref="docList" ng-controller= "documentListCtrl" ng-hide = "document" ng-click = "documentList (title.slice (0, -1), JSON);">
+    <button class="button button-fab tertiary animated fadeIn" ui-sref="docList" ng-controller= "documentListCtrl" ng-hide = "document" ng-click = "documentList (title.slice (0, -1));">
         <i class="icon ion-android-document" style="color: white;"></i>
     </button>
 
     <!--Service Entries-->
-    <button class="button button-fab tertiary animated fadeIn" ui-sref="seList" ng-controller= "ServiceListCtrl" ng-hide = "service" ng-click = "serviceList (title.slice (0, -1), JSON);">
+    <button class="button button-fab tertiary animated fadeIn" ui-sref="seList" ng-controller= "ServiceListCtrl" ng-show = "service" ng-click = "serviceList (title.slice (0, -1));">
         <i class="icon ion-wrench" style="color: white;"></i>
     </button>
 
-    <!--Hide Fab Cluster-->
-    <button  class="button button-fab compliment" ng-click="toggleInactive()">
-        <i class="icon ion-minus" style="color: white;"></i>
+    <!--CreateNewEntry-->
+    <button class="button button-fab tertiary animated fadeIn" ng-click="newItem();">
+        <i class="icon ion-plus" style="color: #FFFFFF;"></i>
     </button>
 </div>

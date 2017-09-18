@@ -21,7 +21,8 @@
             image="imageData"
             context='System'
             id="JSON['Unique Identifier']"
-            form='systemForm'>
+            form='systemForm'
+            image-delete="JSON['Photo Delete']">
         </image-display>
         <br/>
         <span class="photo-button-holder">
@@ -36,7 +37,9 @@
                 form="systemForm"
                 image="imageData"></image-button>
         </span>
-        <br/>
+        <br>
+        <br>
+        <br>
 
 
         <form name = "systemForm">
@@ -53,8 +56,8 @@
                 <ion-md-input type="text" maxlength="200" placeholder="Installation Location" name="installLocation" ng-model = "JSON['Installation Location']" />
             </label>
             <div class="select-container">
+                <h4>Manager</h4>
                 <select class="wide" ng-model = "JSON['Manager']" ng-options = "key as people for (key, people) in peopleJSON" required>
-                    <option value="">Manager</option>
                 </select>
             </div>
         </form>
