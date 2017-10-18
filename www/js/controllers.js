@@ -7,11 +7,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 	// get the JSON
 	var related;
 
-
 	$scope.document = false;
 	$scope.service = false;
     $scope.images = 'ion-images';
     $scope.camera = "ion-android-camera";
+
 
 
 	//http://stackoverflow.com/questions/4878756/javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
@@ -118,7 +118,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                     Camera.openGallery()
                     .then(function (image){
                         $ionicLoading.hide();
-                        $scope.imageData = image.result;
+                        Utility.compressImage(image.raw)
+                        .then(function(compressedImage){
+                            $scope.imageData = compressedImage;
+                            resolve(compressedImage);
+                        });
                         resolve(image.raw);
                     })
                     .catch(function(error){
@@ -141,7 +145,7 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 }))
                 .then(function (image){
                     $ionicLoading.hide();
-                    $scope.imageData =  image.result;
+                    $scope.imageData = image.result;
                     resolve(image.raw);
                 })
                 .catch(function(error){
@@ -832,7 +836,7 @@ app administrator.
          $scope.title = DynamicPage.getTitle();
          $scope.route = DynamicPage.getRoute();
          $scope.modalCheck = true;
-+
+
          if(fromState.name == "component" && toState.name == "list"){
              console.log(toState, fromState);
 

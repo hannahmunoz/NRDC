@@ -576,6 +576,7 @@ angular.module('app.directives', [])
             //convert image into base64
             dispImage = Utility.baseSwap_16_to_64(scope.image);
 
+
             //update view with image data
             element.css({
               'background-image': 'url(data:image/jpeg;base64,' + dispImage + ')',
@@ -586,6 +587,8 @@ angular.module('app.directives', [])
             if(typeof(element.children()[1]) !== 'undefined'){
               element.children()[1].remove();
             }
+
+            //element.append()
         }
 
     }
@@ -609,8 +612,9 @@ angular.module('app.directives', [])
             //variables
             var imageRequest = {};
 
-            //only do this if there is nothing in session memory
+            //only do this if there is no other image in session memory
             if(!angular.isDefined($scope.image) || $scope.image === null || $scope.image === ""){               // can be a returned null
+
                 //delibrate formatting for http query reqs
                 imageRequest[$scope.context] = $scope.id;
 

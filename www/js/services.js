@@ -1,13 +1,12 @@
 angular.module('app.services', [])
 
-
 /** Factory: Utility
   * Description: Provides utility functions for other parts of the app.
   *  Try to avoid feature bloat on this one.
   *
   *
   */
-.factory('Utility', function(){
+.factory('Utility', function($q){
 
 	/** function: Pluralize
 	  * Description: Given a string detialing the context of our current
@@ -38,13 +37,18 @@ angular.module('app.services', [])
 
 	}
 
-	//gets size of a string
-	// in bytes
+    /**
+     * Returns the size of a sring in bytes (used for measring the size of an image)
+     * @param       {[type]} str [description]
+     * @return      {number}
+     * @constructor
+     */
 	function LengthInUtf8Bytes(str) {
 		// Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
 		var m = encodeURIComponent(str).match(/%[89ABab]/g);
 		return str.length + (m ? m.length : 0);
 	}
+
 
 	/**
 	 * Check to see if a string is a hex or not
@@ -104,12 +108,66 @@ angular.module('app.services', [])
     }
 
 
+
+    /**
+     *
+     * @param  {string} bitestring  A bytestring representing an uncompressed image
+     * @param  {Image}  image         An image object
+     * @return {string}            The reized string represeting an image
+     */
+    function compressImage(bitestring){
+        return $q( function(resolve, reject){
+
+            //declare up front vars
+            var compCanvas = document.createElement('canvas');
+            var compCtx = compCanvas.getContext('2d');
+            var image = new Image();
+            var imageHeight, imageWidth;
+
+
+            //set the image src
+            image.src = 'data:image/png;base64,' + bitestring;
+
+            image.onload = function(){
+                imageHeight = image.naturalHeight;
+                imageWidth = image.naturalWidth;
+
+                //use computation canvas to "draw image" for
+                // and extract the compressed bytestring
+                compCanvas.width = imageWidth;
+                compCanvas.height = imageHeight;
+                compCtx.drawImage(image, 0, 0, imageWidth, imageHeight);
+                uri = compCanvas.toDataURL('image/jpeg', 0.70);
+
+                uri = stripLeadingURIData(uri);
+
+                resolve(uri);
+            }
+        });
+    }
+
+    function stripLeadingURIData(uri){
+    	//ensure that there is a leading info encoded
+        //and then strip it away
+        if(uri.substring(0, 4) == 'data'){
+		 	for(var i = 0; i < uri.length; i++){
+    			if(uri[i] == ','){
+        			uri = uri.substring(i+1, uri.length);
+            		break;
+        		}
+    		}
+        }
+        return uri;
+    }
+
+
 	return {
 			Pluralize: Pluralize,
 			LengthInUtf8Bytes: LengthInUtf8Bytes,
 			IsHex: IsHex,
             baseSwap_16_to_64: baseSwap_16_to_64,
-            baseSwap_64_to_16: baseSwap_64_to_16
+            baseSwap_64_to_16: baseSwap_64_to_16,
+            compressImage: compressImage
 	};
 })
 
@@ -332,6 +390,7 @@ angular.module('app.services', [])
 		   edit: edit,
            conflictCheck: conflictCheck};
 })
+
 
 // factory: Login
 // function(s):
@@ -1396,12 +1455,6 @@ angular.module('app.services', [])
 
 
 
-        /**
-		  *
-		  *
-		  *
-		  *
-          */
         function getParentTitle(title){
             var titleNdx = tieredTitles.indexOf(title);
             var parentNdx = titleNdx - 1;
