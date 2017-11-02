@@ -247,6 +247,7 @@ angular.module('app.directives', [])
                 if(angular.isDefined(scope.form)){
                     scope.form.modified = true;
                 }
+
                 scope.image = image;
 
                 clearSiblingCSS(element);

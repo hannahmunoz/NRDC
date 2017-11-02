@@ -65,8 +65,10 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
         //store the photo in image data
         //handles case where image in imageData is base64
         if(angular.isDefined($scope.imageData) && Utility.IsHex($scope.imageData)){
+            console.log("Path A: is hex already");
             $scope.JSON["Photo"] = $scope.imageData;
         } else if( angular.isDefined($scope.imageData)) {
+            console.log("Path B: needs converison");
             $scope.JSON["Photo"] = Utility.baseSwap_64_to_16($scope.imageData);
         }
 
@@ -110,20 +112,16 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     $rootScope.choosePicture = function (){
         return $q (
             function (resolve, reject){
-                    $ionicLoading.show({
-                        templateUrl: 'templates/directive_templates/loading-spinner.html',
-                        noBackdrop: true
-                    })
                     Camera.checkPermissions();
                     Camera.openGallery()
+                    .then($ionicLoading.show({
+                        templateUrl: 'templates/directive_templates/loading-spinner.html',
+                        noBackdrop: false
+                    }))
                     .then(function (image){
                         $ionicLoading.hide();
-                        Utility.compressImage(image.raw)
-                        .then(function(compressedImage){
-                            $scope.imageData = compressedImage;
-                            resolve(compressedImage);
-                        });
-                        resolve(image.raw);
+                        $scope.imageData =image;
+                        resolve(image);
                     })
                     .catch(function(error){
                         $ionicLoading.hide();
@@ -145,11 +143,11 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
                 }))
                 .then(function (image){
                     $ionicLoading.hide();
-                    $scope.imageData = image.result;
-                    resolve(image.raw);
+                    $scope.imageData =image;
+                    resolve(image);
                 })
                 .catch(function(error){
-                        $ionicLoading.hide();
+                    $ionicLoading.hide();
                 });
             });
 
@@ -317,15 +315,6 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
     }
 
 
-  	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
-		// for when user hits the back bottom arrow to head back to the main menu
-	    if (fromState.name == "list" && toState.name == "mainMenu"){
-            $rootScope.itemLevel =  0;
-            $rootScope.listLevel =  0;
-		}
-	})
-
-
     /************************************
     Handles uploading of all unsynched
     JSON to edge services
@@ -334,6 +323,9 @@ angular.module('app.controllers', ['ngRoute','ionic', 'app.services', 'ngCordova
 
     // upload button
     $scope.uploadJSONS = function(){
+
+            console.log("Posting data:", $rootScope.unsyncedJSON,  $rootScope.editJSON);
+
     	   // posts the unsynced json to edge
            sync.post ($rootScope.baseURL+'Update/', $rootScope.unsyncedJSON, $rootScope.loggedIn).then ( function (){
                 $rootScope.unsyncedJSON = {People:[], "Site Networks":[], Sites:[], Systems:[], Deployments:[], Components:[], Documents:[], "Service Entries":[] };
@@ -830,26 +822,37 @@ app administrator.
      // 101 - Priority just above "100 - return to previous view"
      $ionicPlatform.registerBackButtonAction( $rootScope.back, 101);
 
-    //does thing on state change success
-     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+    //performs actions only on state change success
+    var stateChangeListener = $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
          // works on every load after
          $scope.title = DynamicPage.getTitle();
          $scope.route = DynamicPage.getRoute();
          $scope.modalCheck = true;
 
+         console.log(tieredRoutes[$rootScope.itemLevel]);
+
          if(fromState.name == "component" && toState.name == "list"){
              console.log(toState, fromState);
+             console.log($scope.clickedJSONHist);
 
              //reset the item route to our deployments level
              $rootScope.itemLevel--;
-             console.log($scope.clickedJSONHist);
              DynamicPage.setJSON($scope.clickedJSONHist.pop());
              DynamicPage.setRoute(tieredRoutes[$rootScope.itemLevel]);
-             $scope.route = DynamicPage.getRoute();
 
+             $scope.route = DynamicPage.getRoute();
+         }
+
+         if (fromState.name == "list" && toState.name == "mainMenu"){
+              $rootScope.itemLevel =  0;
+              $rootScope.listLevel =  0;
          }
 
      })
+
+     $scope.$on('$destroy', function() {
+        stateChangeListener();
+     });
 
 
 
@@ -1036,13 +1039,15 @@ app administrator.
        		 //determine the level of our selected route
        		 if($rootScope.itemLevel != 4){
            		 $rootScope.itemLevel = $rootScope.listLevel - 1;
-        		} else {
+        	 }
+             else {
            		 $rootScope.itemLevel--;
        		 }
 
         	$scope.listSwitch(tieredSyncedJSON, tieredTitles, $rootScope.listLevel);
         	$scope.select($scope.clickedJSONHist.pop());
         }
+
 
         //store the json of the
         //list item clicked
@@ -1061,8 +1066,9 @@ app administrator.
         if ($scope.title.localeCompare("Networks")){
             $scope.networkListFlag = true;
         }
-        else
+        else{
             $scope.networkListFlag = false;
+        }
 
     }
 
@@ -1161,7 +1167,7 @@ app administrator.
 
 
     function setServiceFlag(title){
-        console.log(title);
+
         switch (title){
             case 'Site Networks':
                     return false;
@@ -1329,8 +1335,8 @@ app administrator.
                     Camera.openGallery()
                     .then(function (image){
                         $ionicLoading.hide();
-                        $scope.imageData = image.result;
-                        resolve(image.raw);
+                        $scope.imageData =image;
+                        resolve(image);
                     })
                     .catch(function(error){
                         $ionicLoading.hide();
@@ -1352,8 +1358,8 @@ app administrator.
                 }))
                 .then(function (image){
                     $ionicLoading.hide();
-                    $scope.imageData =  image.result;
-                    resolve(image.raw);
+                    $scope.imageData =image;
+                    resolve(image);
                 })
                 .catch(function(error){
                         $ionicLoading.hide();

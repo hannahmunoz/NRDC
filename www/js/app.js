@@ -22,6 +22,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
 
   });
 
+
   //register rootScope watchers and configs
   //I think there is a place for some more stuff here
   $rootScope.$watch('editJSON', function(){

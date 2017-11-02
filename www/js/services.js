@@ -458,7 +458,7 @@ angular.module('app.services', [])
 // 		setOptions
 //		openCamera
 //		openGallery
-.factory('Camera', function( $q, $cordovaCamera, $cordovaToast) {
+.factory('Camera', function( $q, $cordovaCamera, $cordovaToast, Utility) {
 
 // function: checkPermissions
 // purpose:  checks and asks for camera permissions
@@ -521,13 +521,17 @@ angular.module('app.services', [])
     			var options = setOptions(Camera.PictureSourceType.CAMERA);
     			// get the picture
 				navigator.camera.getPicture( function Success (imageData){
-   					// convert to hexidecimal string
-                    result = encode(imageData);
 
-    				// resolve promise
-					resolve(
-                        {result: result,
-                             raw: imageData});
+                    Utility.compressImage(imageData)
+                    .then(function(compressedImage){
+                        // convert to hexidecimal string
+                        result = encode(compressedImage);
+
+        				// resolve promise
+    					resolve(result);
+                    });
+
+
 				}, function Failure (error){
 					if (error != "Camera cancelled."){
 						// show/log error
@@ -555,14 +559,14 @@ angular.module('app.services', [])
 				var options = setOptions(Camera.PictureSourceType.SAVEDPHOTOALBUM);
 				// get the picture
     			navigator.camera.getPicture( function Success(imageData) {
+                    Utility.compressImage(imageData)
+                    .then(function(compressedImage){
+                        // convert to hexidecimal string
+                        result = encode(compressedImage);
 
-                //encode image data into hex string
-                result = encode(imageData);
-
-                // resolve promise
-                // pass raw value back for rendering
-				resolve ({result: result,
-                             raw: imageData});
+                        // resolve promise
+                        resolve(result);
+                    });
 
     		}, function Failure (error) {
     			if (error != "Selection cancelled."){
