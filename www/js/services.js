@@ -1059,6 +1059,7 @@ angular.module('app.services', [])
 .factory('LazyLoad', function($q, $http, File, Utility){
 
 	return{
+        fetchThumbnail: fetchThumbnail,
 		fetchImage: fetchImage,
 		saveSessionImage: saveSessionImage,
 		getSessionImage: getSessionImage,
@@ -1072,11 +1073,30 @@ angular.module('app.services', [])
 
 	//Public Function Defintions
 
+    function fetchThumbnail(uuidObj){
+        return $q (function (resolve, reject) {
+            //query for photo service for image
+            $http.post("http://sensor.nevada.edu/services/QAEdge/Edge.svc/ProtoNRDC/Photo/Thumbnail", uuidObj, {timeout: 20000})
+            .then(
+                function success(response){
+                    console.log("Request: ", uuidObj, "Response: ", response)
+                    var image;
+                    image = Utility.baseSwap_16_to_64(response.data);
+                    resolve ( {"image": image, "fromFile": false} );
+                },
+                function failure(error){
+                    reject(error);
+                }
+            )
+        })
+    }
+
 	/**
 	 * Retrives image saved on remote database or local harddrive storage.
 	 * Locally saved image has priority. This may be problematic.
 	 * @param  {object} uuidObj An object which maps a uuid to a specified context.
 	 *                          The context is used to find the specific file containing the object.
+	 *                          Structure: {"context"[string]:"uuid"[string]}
 	 * @return {promise}        Returned promise resolves with object containing image and boolean indicating the origin of the image
 	 *                          Rejects in case of error.
 	 */

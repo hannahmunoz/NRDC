@@ -502,6 +502,7 @@ angular.module('app.directives', [])
     function link(scope, element, attrs, ctrl){
         //ambient watching
         scope.$watch('image', updateDisplay, true);
+        scope.$watch('thumbnail', updateDisplay, true);
 
 
         /*** Function Defintions ***/
@@ -514,7 +515,7 @@ angular.module('app.directives', [])
                 !angular.isDefined(scope.image)){
                 clearElement(element);
             }
-            else if (scope.image === "loading") {
+            else if (scope.image === "loading" && scope.thumbnail === null) {
                 setLoadingSpinner(element);
             }
             else {
@@ -561,7 +562,7 @@ angular.module('app.directives', [])
               'padding-left': '39%'
             });
 
-            element.append("<div class='loading-spinner spinner'><div class='loading-spinner-inner spinner-rev'></div></div>");
+            //element.append("<div class='loading-spinner spinner'><div class='loading-spinner-inner spinner-rev'></div></div>");
 
         }
 
@@ -572,23 +573,39 @@ angular.module('app.directives', [])
          * @return {null}         [description]
          */
         function updateThumbnail(element){
-            var dispImage;
+            var dispImage = scope.thumbnail;
 
-            //convert image into base64
-            dispImage = Utility.baseSwap_16_to_64(scope.image);
+            if(scope.image === "loading"){
 
+                console.log("Does thumbnail load?");
 
-            //update view with image data
-            element.css({
-              'background-image': 'url(data:image/jpeg;base64,' + dispImage + ')',
-              'background-position': 'center',
-              'background-size': element[0].offsetWidth  + 'px ' + element[0].offsetHeight + 'px'
-            });
-            //delete information text (if it exists)
-            if(typeof(element.children()[1]) !== 'undefined'){
-              element.children()[1].remove();
+                element.css({
+                  'background-image': 'url(data:image/jpeg;base64,' + dispImage + ')',
+                  'background-position': 'center',
+                  'background-size': element[0].offsetWidth  + 'px ' + element[0].offsetHeight + 'px'
+                });
+
+                //delete information text (if it exists)
+                if(typeof(element.children()[1]) !== 'undefined'){
+                  element.children()[1].remove();
+                }
             }
+            else {
+                //convert image into base64
+                dispImage = Utility.baseSwap_16_to_64(scope.image);
 
+                //update view with image data
+                element.css({
+                  'background-image': 'url(data:image/jpeg;base64,' + dispImage + ')',
+                  'background-position': 'center',
+                  'background-size': element[0].offsetWidth  + 'px ' + element[0].offsetHeight + 'px'
+                });
+
+                //delete information text (if it exists)
+                if(typeof(element.children()[1]) !== 'undefined'){
+                  element.children()[1].remove();
+                }
+            }
             //element.append()
         }
 
@@ -612,6 +629,7 @@ angular.module('app.directives', [])
         function onLoad(){
             //variables
             var imageRequest = {};
+            $scope.thumbnail = null; //this holds a refrence to the thumbnail
 
             //only do this if there is no other image in session memory
             if(!angular.isDefined($scope.image) || $scope.image === null || $scope.image === ""){               // can be a returned null
@@ -622,6 +640,18 @@ angular.module('app.directives', [])
                 //set loading flag
                 $scope.image = "loading";
 
+                LazyLoad.fetchThumbnail(imageRequest).
+                then(
+                    function sucess(response){
+                        console.log("thumbnail");
+                        $scope.thumbnail = response.image;
+                    },
+                    function failure(error){
+                        $scope.thumbnail = null;
+                        console.warn("Failure to retrieve thumbnail: ", error);
+                    }
+                );
+
                 //fetch image from hdd or server
                 LazyLoad.fetchImage(imageRequest)
                 .then(
@@ -629,6 +659,8 @@ angular.module('app.directives', [])
                     //save image to session memory
                     //indicate weither image was retrieved from file or not
                     function success(response){
+
+                        console.log("image");
                         $scope.image = response.image;
 
                         //cleanup and flag setting
